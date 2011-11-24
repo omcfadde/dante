@@ -1194,26 +1194,63 @@ static void RB_T_Shadow(const drawSurf_t *surf)
 		return;
 	}
 
-	// patent-free work around
-	if (!external) {
-		// "preload" the stencil buffer with the number of volumes
-		// that get clipped by the near or far clip plane
-		qglStencilOp(GL_KEEP, tr.stencilDecr, tr.stencilDecr);
-		GL_Cull(CT_FRONT_SIDED);
-		RB_DrawShadowElementsWithCounters(tri, numIndexes);
-		qglStencilOp(GL_KEEP, tr.stencilIncr, tr.stencilIncr);
-		GL_Cull(CT_BACK_SIDED);
-		RB_DrawShadowElementsWithCounters(tri, numIndexes);
+	if (glConfig.twoSidedStencilAvailable && r_useTwoSidedStencil.GetBool()) {
+		// depth-fail stencil shadows
+		if (!external) {
+			qglActiveStencilFaceEXT(backEnd.viewDef->isMirror ? GL_FRONT : GL_BACK);
+			qglStencilOp(GL_KEEP, tr.stencilDecr, GL_KEEP);
+			qglActiveStencilFaceEXT(backEnd.viewDef->isMirror ? GL_BACK : GL_FRONT);
+			qglStencilOp(GL_KEEP, tr.stencilIncr, GL_KEEP);
+
+			GL_Cull(CT_TWO_SIDED);
+			RB_DrawShadowElementsWithCounters(tri, numIndexes);
+		} else {
+			// traditional depth-pass stencil shadows
+			qglActiveStencilFaceEXT(backEnd.viewDef->isMirror ? GL_FRONT : GL_BACK);
+			qglStencilOp(GL_KEEP, GL_KEEP, tr.stencilIncr);
+			qglActiveStencilFaceEXT(backEnd.viewDef->isMirror ? GL_BACK : GL_FRONT);
+			qglStencilOp(GL_KEEP, GL_KEEP, tr.stencilDecr);
+
+			GL_Cull(CT_TWO_SIDED);
+			RB_DrawShadowElementsWithCounters(tri, numIndexes);
+		}
+	} else if (glConfig.atiTwoSidedStencilAvailable && r_useTwoSidedStencil.GetBool()) {
+		// depth-fail stencil shadows
+		if (!external) {
+			qglStencilOpSeparateATI(backEnd.viewDef->isMirror ? GL_FRONT : GL_BACK, GL_KEEP, tr.stencilDecr, GL_KEEP);
+			qglStencilOpSeparateATI(backEnd.viewDef->isMirror ? GL_BACK : GL_FRONT, GL_KEEP, tr.stencilIncr, GL_KEEP);
+
+			GL_Cull(CT_TWO_SIDED);
+			RB_DrawShadowElementsWithCounters(tri, numIndexes);
+		} else {
+			// traditional depth-pass stencil shadows
+			qglStencilOpSeparateATI(backEnd.viewDef->isMirror ? GL_FRONT : GL_BACK, GL_KEEP, GL_KEEP, tr.stencilIncr);
+			qglStencilOpSeparateATI(backEnd.viewDef->isMirror ? GL_BACK : GL_FRONT, GL_KEEP, GL_KEEP, tr.stencilDecr);
+
+			GL_Cull(CT_TWO_SIDED);
+			RB_DrawShadowElementsWithCounters(tri, numIndexes);
+		}
+	} else {
+		// depth-fail stencil shadows
+		if (!external) {
+			qglStencilOp(GL_KEEP, tr.stencilIncr, GL_KEEP);
+			GL_Cull(CT_BACK_SIDED);
+			RB_DrawShadowElementsWithCounters(tri, numIndexes);
+
+			qglStencilOp(GL_KEEP, tr.stencilDecr, GL_KEEP);
+			GL_Cull(CT_FRONT_SIDED);
+			RB_DrawShadowElementsWithCounters(tri, numIndexes);
+		} else {
+			// traditional depth-pass stencil shadows
+			qglStencilOp(GL_KEEP, GL_KEEP, tr.stencilIncr);
+			GL_Cull(CT_FRONT_SIDED);
+			RB_DrawShadowElementsWithCounters(tri, numIndexes);
+
+			qglStencilOp(GL_KEEP, GL_KEEP, tr.stencilDecr);
+			GL_Cull(CT_BACK_SIDED);
+			RB_DrawShadowElementsWithCounters(tri, numIndexes);
+		}
 	}
-
-	// traditional depth-pass stencil shadows
-	qglStencilOp(GL_KEEP, GL_KEEP, tr.stencilIncr);
-	GL_Cull(CT_FRONT_SIDED);
-	RB_DrawShadowElementsWithCounters(tri, numIndexes);
-
-	qglStencilOp(GL_KEEP, GL_KEEP, tr.stencilDecr);
-	GL_Cull(CT_BACK_SIDED);
-	RB_DrawShadowElementsWithCounters(tri, numIndexes);
 }
 
 /*
@@ -1264,6 +1301,10 @@ void RB_StencilShadowPass(const drawSurf_t *drawSurfs)
 		qglEnable(GL_DEPTH_BOUNDS_TEST_EXT);
 	}
 
+	if (glConfig.twoSidedStencilAvailable && r_useTwoSidedStencil.GetBool()) {
+		qglEnable(GL_STENCIL_TEST_TWO_SIDE_EXT);
+	}
+
 	RB_RenderDrawSurfChainWithFunction(drawSurfs, RB_T_Shadow);
 
 	GL_Cull(CT_FRONT_SIDED);
@@ -1274,6 +1315,10 @@ void RB_StencilShadowPass(const drawSurf_t *drawSurfs)
 
 	if (glConfig.depthBoundsTestAvailable && r_useDepthBoundsTest.GetBool()) {
 		qglDisable(GL_DEPTH_BOUNDS_TEST_EXT);
+	}
+
+	if (glConfig.twoSidedStencilAvailable && r_useTwoSidedStencil.GetBool()) {
+		qglDisable(GL_STENCIL_TEST_TWO_SIDE_EXT);
 	}
 
 	qglEnableClientState(GL_TEXTURE_COORD_ARRAY);
