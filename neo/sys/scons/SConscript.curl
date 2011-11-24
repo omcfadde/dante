@@ -20,7 +20,7 @@ class idBuildCurl( scons_utils.idSetupBase ):
 		else:
 			cmd += '--disable-debug'
 		os.system( cmd )
-		os.system( 'cd curl ; make' )
+		os.system( 'cd curl ; make CFLAGS=-m32' )
 		if ( self.debug ):
 			os.system( 'cd curl ; mv ./lib/.libs/libcurl.a ./lib/.libs/libcurl-debug.a' )
 		else:
@@ -37,5 +37,5 @@ else:
 
 g_env.Command( target_name, None, Action( build.Compile ) )
 
-curl_libs = [ target_name, '/usr/lib/libz.a' ]
+curl_libs = [ target_name, '/usr/lib32/libz.so' ]
 Return( 'curl_libs' )
