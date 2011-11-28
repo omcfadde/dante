@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -36,17 +36,20 @@ If you have questions concerning this license or the applicable additional terms
 
 
 CZClip::CZClip()
-{	
-	LONG 
+{
+	LONG
 	lSize = sizeof(m_bEnabled);
+
 	if (!LoadRegistryInfo("radiant_ZClipEnabled",	&m_bEnabled, &lSize))
 		m_bEnabled = false;
 
 	lSize = sizeof(m_iZClipTop);
+
 	if (!LoadRegistryInfo("radiant_ZClipTop",		&m_iZClipTop, &lSize))
 		m_iZClipTop = 64;
 
 	lSize = sizeof(m_iZClipBottom);
+
 	if (!LoadRegistryInfo("radiant_ZClipBottom",	&m_iZClipBottom, &lSize))
 		m_iZClipBottom = -64;
 
@@ -86,11 +89,10 @@ void CZClip::Legalise(void)
 {
 	// need swapping?
 	//
-	if (m_iZClipTop < m_iZClipBottom)
-	{
+	if (m_iZClipTop < m_iZClipBottom) {
 		int iTemp = m_iZClipTop;
-					m_iZClipTop = m_iZClipBottom;
-								  m_iZClipBottom = iTemp;
+		m_iZClipTop = m_iZClipBottom;
+		m_iZClipBottom = iTemp;
 	}
 
 	// too close together?
@@ -106,7 +108,7 @@ void CZClip::SetTop(int iNewZ)
 {
 	m_iZClipTop = iNewZ;
 
-	Legalise();		
+	Legalise();
 }
 
 void CZClip::SetBottom(int iNewZ)
@@ -136,61 +138,64 @@ void CZClip::Paint(void)
 	float	x, y;
 	int	xCam = z.width/4;	// hmmm, a rather unpleasant and obscure global name, but it was already called that so...
 
-	qglColor3f (ZCLIP_COLOUR);//1.0, 0.0, 1.0);
+	qglColor3f(ZCLIP_COLOUR); //1.0, 0.0, 1.0);
 
 	// draw TOP marker...
 	//
 	x = 0;
 	y = m_iZClipTop;
 
-	if (m_bEnabled)	
+	if (m_bEnabled)
 		qglBegin(GL_QUADS);
 	else
 		qglBegin(GL_LINE_LOOP);
 
-	qglVertex3f (x-xCam,y,0);
-	qglVertex3f (x-xCam,y+ZCLIP_BAR_THICKNESS,0);
-	qglVertex3f (x+xCam,y+ZCLIP_BAR_THICKNESS,0);
-	qglVertex3f (x+xCam,y,0);
-	qglEnd ();
+	qglVertex3f(x-xCam,y,0);
+	qglVertex3f(x-xCam,y+ZCLIP_BAR_THICKNESS,0);
+	qglVertex3f(x+xCam,y+ZCLIP_BAR_THICKNESS,0);
+	qglVertex3f(x+xCam,y,0);
+	qglEnd();
 
-	qglColor3f (ZCLIP_COLOUR_DIM);//0.8, 0.0, 0.8);
+	qglColor3f(ZCLIP_COLOUR_DIM); //0.8, 0.0, 0.8);
 
 	if (m_bEnabled)
 		qglBegin(GL_TRIANGLES);
 	else
-		qglBegin(GL_LINE_LOOP);	
-	qglVertex3f (x,(y+ZCLIP_BAR_THICKNESS),0);
-	qglVertex3f (x-xCam,(y+ZCLIP_BAR_THICKNESS)+(ZCLIP_ARROWHEIGHT/2),0);
-	qglVertex3f (x+xCam,(y+ZCLIP_BAR_THICKNESS)+(ZCLIP_ARROWHEIGHT/2),0);
-	qglEnd ();
+		qglBegin(GL_LINE_LOOP);
+
+	qglVertex3f(x,(y+ZCLIP_BAR_THICKNESS),0);
+	qglVertex3f(x-xCam,(y+ZCLIP_BAR_THICKNESS)+(ZCLIP_ARROWHEIGHT/2),0);
+	qglVertex3f(x+xCam,(y+ZCLIP_BAR_THICKNESS)+(ZCLIP_ARROWHEIGHT/2),0);
+	qglEnd();
 
 	// draw bottom marker...
 	//
-	qglColor3f (ZCLIP_COLOUR);//1.0, 0.0, 1.0);
+	qglColor3f(ZCLIP_COLOUR); //1.0, 0.0, 1.0);
 	x = 0;
 	y = m_iZClipBottom;
 
-	if (m_bEnabled)	
+	if (m_bEnabled)
 		qglBegin(GL_QUADS);
 	else
 		qglBegin(GL_LINE_LOOP);
-	qglVertex3f (x-xCam,y,0);
-	qglVertex3f (x-xCam,y-ZCLIP_BAR_THICKNESS,0);
-	qglVertex3f (x+xCam,y-ZCLIP_BAR_THICKNESS,0);
-	qglVertex3f (x+xCam,y,0);
-	qglEnd ();
 
-	qglColor3f (ZCLIP_COLOUR_DIM);//0.8, 0.0, 0.8);
+	qglVertex3f(x-xCam,y,0);
+	qglVertex3f(x-xCam,y-ZCLIP_BAR_THICKNESS,0);
+	qglVertex3f(x+xCam,y-ZCLIP_BAR_THICKNESS,0);
+	qglVertex3f(x+xCam,y,0);
+	qglEnd();
+
+	qglColor3f(ZCLIP_COLOUR_DIM); //0.8, 0.0, 0.8);
 
 	if (m_bEnabled)
 		qglBegin(GL_TRIANGLES);
 	else
-		qglBegin(GL_LINE_LOOP);	
-	qglVertex3f (x,(y-ZCLIP_BAR_THICKNESS),0);
-	qglVertex3f (x-xCam,(y-ZCLIP_BAR_THICKNESS)-(ZCLIP_ARROWHEIGHT/2),0);
-	qglVertex3f (x+xCam,(y-ZCLIP_BAR_THICKNESS)-(ZCLIP_ARROWHEIGHT/2),0);
-	qglEnd ();
+		qglBegin(GL_LINE_LOOP);
+
+	qglVertex3f(x,(y-ZCLIP_BAR_THICKNESS),0);
+	qglVertex3f(x-xCam,(y-ZCLIP_BAR_THICKNESS)-(ZCLIP_ARROWHEIGHT/2),0);
+	qglVertex3f(x+xCam,(y-ZCLIP_BAR_THICKNESS)-(ZCLIP_ARROWHEIGHT/2),0);
+	qglEnd();
 }
 
 

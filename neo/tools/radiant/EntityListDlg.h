@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -41,42 +41,42 @@ If you have questions concerning this license or the applicable additional terms
 class CEntityListDlg : public CDialog
 {
 // Construction
-public:
-	CEntityListDlg(CWnd* pParent = NULL);   // standard constructor
-	void UpdateList();
-	static void ShowDialog();
+	public:
+		CEntityListDlg(CWnd *pParent = NULL);   // standard constructor
+		void UpdateList();
+		static void ShowDialog();
 
 // Dialog Data
-	//{{AFX_DATA(CEntityListDlg)
-	enum { IDD = IDD_DLG_ENTITYLIST };
-	CListCtrl	m_lstEntity;
-	//}}AFX_DATA
+		//{{AFX_DATA(CEntityListDlg)
+		enum { IDD = IDD_DLG_ENTITYLIST };
+		CListCtrl	m_lstEntity;
+		//}}AFX_DATA
 
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CEntityListDlg)
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CEntityListDlg)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+		virtual void DoDataExchange(CDataExchange *pDX);    // DDX/DDV support
+		//}}AFX_VIRTUAL
 
 // Implementation
-protected:
+	protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CEntityListDlg)
-	afx_msg void OnSelect();
-	afx_msg void OnClose();
-	virtual void OnCancel();
-	virtual BOOL OnInitDialog();
-	afx_msg void OnSysCommand(UINT nID,  LPARAM lParam);
+		// Generated message map functions
+		//{{AFX_MSG(CEntityListDlg)
+		afx_msg void OnSelect();
+		afx_msg void OnClose();
+		virtual void OnCancel();
+		virtual BOOL OnInitDialog();
+		afx_msg void OnSysCommand(UINT nID,  LPARAM lParam);
 
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
-public:
-	CListBox listEntities;
-	afx_msg void OnLbnSelchangeListEntities();
-	afx_msg void OnLbnDblclkListEntities();
+		//}}AFX_MSG
+		DECLARE_MESSAGE_MAP()
+	public:
+		CListBox listEntities;
+		afx_msg void OnLbnSelchangeListEntities();
+		afx_msg void OnLbnDblclkListEntities();
 };
 
 //{{AFX_INSERT_LOCATION}}

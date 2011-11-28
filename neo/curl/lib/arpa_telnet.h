@@ -1,10 +1,10 @@
 #ifndef __ARPA_TELNET_H
 #define __ARPA_TELNET_H
 /***************************************************************************
- *                                  _   _ ____  _     
- *  Project                     ___| | | |  _ \| |    
- *                             / __| | | | |_) | |    
- *                            | (__| |_| |  _ <| |___ 
+ *                                  _   _ ____  _
+ *  Project                     ___| | | |  _ \| |
+ *                             / __| | | | |_) | |
+ *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
  * Copyright (C) 1998 - 2004, Daniel Stenberg, <daniel@haxx.se>, et al.
@@ -12,7 +12,7 @@
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
  * are also available at http://curl.haxx.se/docs/copyright.html.
- * 
+ *
  * You may opt to use, copy, modify, merge, publish, distribute and/or sell
  * copies of the Software, and permit persons to whom the Software is
  * furnished to do so, under the terms of the COPYING file.
@@ -39,18 +39,17 @@
 /*
  * The telnet options represented as strings
  */
-static const char *telnetoptions[]=
-{
-  "BINARY",      "ECHO",           "RCP",           "SUPPRESS GO AHEAD",
-  "NAME",        "STATUS",         "TIMING MARK",   "RCTE",
-  "NAOL",        "NAOP",           "NAOCRD",        "NAOHTS",
-  "NAOHTD",      "NAOFFD",         "NAOVTS",        "NAOVTD",
-  "NAOLFD",      "EXTEND ASCII",   "LOGOUT",        "BYTE MACRO",
-  "DE TERMINAL", "SUPDUP",         "SUPDUP OUTPUT", "SEND LOCATION",
-  "TERM TYPE",   "END OF RECORD",  "TACACS UID",    "OUTPUT MARKING",
-  "TTYLOC",      "3270 REGIME",    "X3 PAD",        "NAWS",
-  "TERM SPEED",  "LFLOW",          "LINEMODE",      "XDISPLOC",
-  "OLD-ENVIRON", "AUTHENTICATION", "ENCRYPT",       "NEW-ENVIRON"
+static const char *telnetoptions[]= {
+	"BINARY",      "ECHO",           "RCP",           "SUPPRESS GO AHEAD",
+	"NAME",        "STATUS",         "TIMING MARK",   "RCTE",
+	"NAOL",        "NAOP",           "NAOCRD",        "NAOHTS",
+	"NAOHTD",      "NAOFFD",         "NAOVTS",        "NAOVTD",
+	"NAOLFD",      "EXTEND ASCII",   "LOGOUT",        "BYTE MACRO",
+	"DE TERMINAL", "SUPDUP",         "SUPDUP OUTPUT", "SEND LOCATION",
+	"TERM TYPE",   "END OF RECORD",  "TACACS UID",    "OUTPUT MARKING",
+	"TTYLOC",      "3270 REGIME",    "X3 PAD",        "NAWS",
+	"TERM SPEED",  "LFLOW",          "LINEMODE",      "XDISPLOC",
+	"OLD-ENVIRON", "AUTHENTICATION", "ENCRYPT",       "NEW-ENVIRON"
 };
 
 #define CURL_TELOPT_MAXIMUM CURL_TELOPT_NEW_ENVIRON
@@ -58,12 +57,12 @@ static const char *telnetoptions[]=
 #define CURL_TELOPT_OK(x) ((x) <= CURL_TELOPT_MAXIMUM)
 #define CURL_TELOPT(x)    telnetoptions[x]
 
-#define CURL_NTELOPTS 40 
+#define CURL_NTELOPTS 40
 
 /*
  * First some defines
  */
-#define CURL_xEOF 236 /* End Of File */ 
+#define CURL_xEOF 236 /* End Of File */
 #define CURL_SE   240 /* Sub negotiation End */
 #define CURL_NOP  241 /* No OPeration */
 #define CURL_DM   242 /* Data Mark */
@@ -78,12 +77,11 @@ static const char *telnetoptions[]=
 /*
  * Then those numbers represented as strings:
  */
-static const char *telnetcmds[]=
-{
-  "EOF",  "SUSP",  "ABORT", "EOR",  "SE",
-  "NOP",  "DMARK", "BRK",   "IP",   "AO",
-  "AYT",  "EC",    "EL",    "GA",   "SB",
-  "WILL", "WONT",  "DO",    "DONT", "IAC"
+static const char *telnetcmds[]= {
+	"EOF",  "SUSP",  "ABORT", "EOR",  "SE",
+	"NOP",  "DMARK", "BRK",   "IP",   "AO",
+	"AYT",  "EC",    "EL",    "GA",   "SB",
+	"WILL", "WONT",  "DO",    "DONT", "IAC"
 };
 
 #define CURL_TELCMD_MINIMUM CURL_xEOF /* the first one */

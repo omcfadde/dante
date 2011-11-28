@@ -39,7 +39,8 @@ static unsigned long crctable[256];
    combinations of CRC register values and incoming bytes.
 */
 
-void make_crc_table( void ) {
+void make_crc_table(void)
+{
 	int i, j;
 	unsigned long c, poly;
 	/* terms of polynomial defining this crc (except x^32): */
@@ -47,15 +48,18 @@ void make_crc_table( void ) {
 
 	/* make exclusive-or pattern from polynomial (0xedb88320L) */
 	poly = 0L;
-	for ( i = 0; i < sizeof( p ) / sizeof( byte ); i++ ) {
-		poly |= 1L << ( 31 - p[i] );
+
+	for (i = 0; i < sizeof(p) / sizeof(byte); i++) {
+		poly |= 1L << (31 - p[i]);
 	}
 
-	for ( i = 0; i < 256; i++ ) {
+	for (i = 0; i < 256; i++) {
 		c = (unsigned long)i;
-		for ( j = 0; j < 8; j++ ) {
-			c = ( c & 1 ) ? poly ^ ( c >> 1 ) : ( c >> 1 );
+
+		for (j = 0; j < 8; j++) {
+			c = (c & 1) ? poly ^(c >> 1) : (c >> 1);
 		}
+
 		crctable[i] = c;
 	}
 }
@@ -134,34 +138,41 @@ static unsigned long crctable[256] = {
 
 #endif
 
-void CRC32_InitChecksum( unsigned long &crcvalue ) {
+void CRC32_InitChecksum(unsigned long &crcvalue)
+{
 	crcvalue = CRC32_INIT_VALUE;
 }
 
-void CRC32_Update( unsigned long &crcvalue, const byte data ) {
-	crcvalue = crctable[ ( crcvalue ^ data ) & 0xff ] ^ ( crcvalue >> 8 );
+void CRC32_Update(unsigned long &crcvalue, const byte data)
+{
+	crcvalue = crctable[(crcvalue ^ data) & 0xff ] ^(crcvalue >> 8);
 }
 
-void CRC32_UpdateChecksum( unsigned long &crcvalue, const void *data, int length ) {
+void CRC32_UpdateChecksum(unsigned long &crcvalue, const void *data, int length)
+{
 	unsigned long crc;
 	const unsigned char *buf = (const unsigned char *) data;
 
 	crc = crcvalue;
-	while( length-- ) {
-		crc = crctable[ ( crc ^ ( *buf++ ) ) & 0xff ] ^ ( crc >> 8 );
+
+	while (length--) {
+		crc = crctable[(crc ^(*buf++)) & 0xff ] ^(crc >> 8);
 	}
+
 	crcvalue = crc;
 }
 
-void CRC32_FinishChecksum( unsigned long &crcvalue ) {
+void CRC32_FinishChecksum(unsigned long &crcvalue)
+{
 	crcvalue ^= CRC32_XOR_VALUE;
 }
 
-unsigned long CRC32_BlockChecksum( const void *data, int length ) {
+unsigned long CRC32_BlockChecksum(const void *data, int length)
+{
 	unsigned long crc;
 
-	CRC32_InitChecksum( crc );
-	CRC32_UpdateChecksum( crc, data, length );
-	CRC32_FinishChecksum( crc );
+	CRC32_InitChecksum(crc);
+	CRC32_UpdateChecksum(crc, data, length);
+	CRC32_FinishChecksum(crc);
 	return crc;
 }

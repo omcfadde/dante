@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -31,24 +31,25 @@ If you have questions concerning this license or the applicable additional terms
 #include "Window.h"
 
 
-class idFieldWindow : public idWindow {
-public:
-	idFieldWindow(idUserInterfaceLocal *gui);
-	idFieldWindow(idDeviceContext *d, idUserInterfaceLocal *gui);
-	virtual ~idFieldWindow();
+class idFieldWindow : public idWindow
+{
+	public:
+		idFieldWindow(idUserInterfaceLocal *gui);
+		idFieldWindow(idDeviceContext *d, idUserInterfaceLocal *gui);
+		virtual ~idFieldWindow();
 
-	virtual void Draw(int time, float x, float y);
-	
-private:
-	virtual bool ParseInternalVar(const char *name, idParser *src);
-	void CommonInit();
-	void CalcPaintOffset(int len);
-	int cursorPos;
-	int lastTextLength;
-	int lastCursorPos;
-	int paintOffset;
-	bool showCursor;
-	idStr cursorVar;
+		virtual void Draw(int time, float x, float y);
+
+	private:
+		virtual bool ParseInternalVar(const char *name, idParser *src);
+		void CommonInit();
+		void CalcPaintOffset(int len);
+		int cursorPos;
+		int lastTextLength;
+		int lastCursorPos;
+		int paintOffset;
+		bool showCursor;
+		idStr cursorVar;
 };
 
 #endif // __FIELDWINDOW_H

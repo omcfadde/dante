@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -40,40 +40,40 @@ If you have questions concerning this license or the applicable additional terms
 class CWaitDlg : public CDialog
 {
 // Construction
-public:
-	CWaitDlg(CWnd* pParent = NULL, const char *msg = "Wait...");   // standard constructor
-	~CWaitDlg();
-	void SetText(const char *msg, bool append = false);
-	void AllowCancel( bool enable );
-	bool CancelPressed( void );
+	public:
+		CWaitDlg(CWnd *pParent = NULL, const char *msg = "Wait...");   // standard constructor
+		~CWaitDlg();
+		void SetText(const char *msg, bool append = false);
+		void AllowCancel(bool enable);
+		bool CancelPressed(void);
 
 // Dialog Data
-	//{{AFX_DATA(CWaitDlg)
-	enum { IDD = IDD_DLG_WAIT };
-	CString	waitStr;
-	//}}AFX_DATA
+		//{{AFX_DATA(CWaitDlg)
+		enum { IDD = IDD_DLG_WAIT };
+		CString	waitStr;
+		//}}AFX_DATA
 
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWaitDlg)
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CWaitDlg)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+		virtual void DoDataExchange(CDataExchange *pDX);    // DDX/DDV support
+		//}}AFX_VIRTUAL
 
 // Implementation
-protected:
+	protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CWaitDlg)
-	virtual BOOL OnInitDialog();
-	virtual void OnCancel();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+		// Generated message map functions
+		//{{AFX_MSG(CWaitDlg)
+		virtual BOOL OnInitDialog();
+		virtual void OnCancel();
+		//}}AFX_MSG
+		DECLARE_MESSAGE_MAP()
 
-private:
-	idStr	text;
-	bool	cancelPressed;
+	private:
+		idStr	text;
+		bool	cancelPressed;
 };
 
 //{{AFX_INSERT_LOCATION}}

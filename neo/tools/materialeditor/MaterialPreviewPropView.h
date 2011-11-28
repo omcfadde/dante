@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,35 +34,35 @@ If you have questions concerning this license or the applicable additional terms
 
 class MaterialPreviewPropView : public CPropTreeView
 {
-	DECLARE_DYNCREATE(MaterialPreviewPropView)
+		DECLARE_DYNCREATE(MaterialPreviewPropView)
 
-protected:
-	MaterialPreviewPropView();           // protected constructor used by dynamic creation
-	virtual ~MaterialPreviewPropView();
+	protected:
+		MaterialPreviewPropView();           // protected constructor used by dynamic creation
+		virtual ~MaterialPreviewPropView();
 
-public:
-	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
+	public:
+		virtual void OnDraw(CDC *pDC);      // overridden to draw this view
 
-	afx_msg void OnPropertyChangeNotification( NMHDR *nmhdr, LRESULT *lresult );
-	afx_msg void OnPropertyButtonClick( NMHDR *nmhdr, LRESULT *lresult );
+		afx_msg void OnPropertyChangeNotification(NMHDR *nmhdr, LRESULT *lresult);
+		afx_msg void OnPropertyButtonClick(NMHDR *nmhdr, LRESULT *lresult);
 
 #ifdef _DEBUG
-	virtual void AssertValid() const;
-	virtual void Dump(CDumpContext& dc) const;
+		virtual void AssertValid() const;
+		virtual void Dump(CDumpContext &dc) const;
 #endif
 
-	void AddLight( void );
-	void InitializePropTree( void );
+		void AddLight(void);
+		void InitializePropTree(void);
 
-	void RegisterPreviewView( MaterialPreviewView *view );
+		void RegisterPreviewView(MaterialPreviewView *view);
 
-protected:
+	protected:
 
-	int		numLights;
+		int		numLights;
 
-	MaterialPreviewView	*materialPreview;
+		MaterialPreviewView	*materialPreview;
 
-	DECLARE_MESSAGE_MAP()
+		DECLARE_MESSAGE_MAP()
 };
 
 

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -40,32 +40,32 @@ If you have questions concerning this license or the applicable additional terms
 class CDialogThick : public CDialog
 {
 // Construction
-public:
-	CDialogThick(CWnd* pParent = NULL);   // standard constructor
+	public:
+		CDialogThick(CWnd *pParent = NULL);   // standard constructor
 
 // Dialog Data
-	//{{AFX_DATA(CDialogThick)
-	enum { IDD = IDD_DIALOG_THICKEN };
-	BOOL	m_bSeams;
-	int		m_nAmount;
-	//}}AFX_DATA
+		//{{AFX_DATA(CDialogThick)
+		enum { IDD = IDD_DIALOG_THICKEN };
+		BOOL	m_bSeams;
+		int		m_nAmount;
+		//}}AFX_DATA
 
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDialogThick)
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CDialogThick)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+		virtual void DoDataExchange(CDataExchange *pDX);    // DDX/DDV support
+		//}}AFX_VIRTUAL
 
 // Implementation
-protected:
+	protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CDialogThick)
+		// Generated message map functions
+		//{{AFX_MSG(CDialogThick)
 		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+		//}}AFX_MSG
+		DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,22 +34,26 @@ If you have questions concerning this license or the applicable additional terms
 #include "UserInterfaceLocal.h"
 #include "RenderWindow.h"
 
-idRenderWindow::idRenderWindow(idDeviceContext *d, idUserInterfaceLocal *g) : idWindow(d, g) {
+idRenderWindow::idRenderWindow(idDeviceContext *d, idUserInterfaceLocal *g) : idWindow(d, g)
+{
 	dc = d;
 	gui = g;
 	CommonInit();
 }
 
-idRenderWindow::idRenderWindow(idUserInterfaceLocal *g) : idWindow(g) {
+idRenderWindow::idRenderWindow(idUserInterfaceLocal *g) : idWindow(g)
+{
 	gui = g;
 	CommonInit();
 }
 
-idRenderWindow::~idRenderWindow() {
-	renderSystem->FreeRenderWorld( world ); 
+idRenderWindow::~idRenderWindow()
+{
+	renderSystem->FreeRenderWorld(world);
 }
 
-void idRenderWindow::CommonInit() {
+void idRenderWindow::CommonInit()
+{
 	world = renderSystem->AllocRenderWorld();
 	needsRender = true;
 	lightOrigin = idVec4(-128.0f, 0.0f, 0.0f, 1.0f);
@@ -64,73 +68,86 @@ void idRenderWindow::CommonInit() {
 }
 
 
-void idRenderWindow::BuildAnimation(int time) {
-	
+void idRenderWindow::BuildAnimation(int time)
+{
+
 	if (!updateAnimation) {
 		return;
 	}
 
 	if (animName.Length() && animClass.Length()) {
 		worldEntity.numJoints = worldEntity.hModel->NumJoints();
-		worldEntity.joints = ( idJointMat * )Mem_Alloc16( worldEntity.numJoints * sizeof( *worldEntity.joints ) );
+		worldEntity.joints = (idJointMat *)Mem_Alloc16(worldEntity.numJoints * sizeof(*worldEntity.joints));
 		modelAnim = gameEdit->ANIM_GetAnimFromEntityDef(animClass, animName);
+
 		if (modelAnim) {
 			animLength = gameEdit->ANIM_GetLength(modelAnim);
 			animEndTime = time + animLength;
 		}
 	}
+
 	updateAnimation = false;
 
 }
 
-void idRenderWindow::PreRender() {
+void idRenderWindow::PreRender()
+{
 	if (needsRender) {
-		world->InitFromMap( NULL );
+		world->InitFromMap(NULL);
 		idDict spawnArgs;
 		spawnArgs.Set("classname", "light");
 		spawnArgs.Set("name", "light_1");
 		spawnArgs.Set("origin", lightOrigin.ToVec3().ToString());
 		spawnArgs.Set("_color", lightColor.ToVec3().ToString());
-		gameEdit->ParseSpawnArgsToRenderLight( &spawnArgs, &rLight );
-		lightDef = world->AddLightDef( &rLight );
-		if ( !modelName[0] ) {
-			common->Warning( "Window '%s' in gui '%s': no model set", GetName(), GetGui()->GetSourceFile() );
+		gameEdit->ParseSpawnArgsToRenderLight(&spawnArgs, &rLight);
+		lightDef = world->AddLightDef(&rLight);
+
+		if (!modelName[0]) {
+			common->Warning("Window '%s' in gui '%s': no model set", GetName(), GetGui()->GetSourceFile());
 		}
-		memset( &worldEntity, 0, sizeof( worldEntity ) );
+
+		memset(&worldEntity, 0, sizeof(worldEntity));
 		spawnArgs.Clear();
 		spawnArgs.Set("classname", "func_static");
 		spawnArgs.Set("model", modelName);
 		spawnArgs.Set("origin", modelOrigin.c_str());
-		gameEdit->ParseSpawnArgsToRenderEntity( &spawnArgs, &worldEntity );
-		if ( worldEntity.hModel ) {
+		gameEdit->ParseSpawnArgsToRenderEntity(&spawnArgs, &worldEntity);
+
+		if (worldEntity.hModel) {
 			idVec3 v = modelRotate.ToVec3();
 			worldEntity.axis = v.ToMat3();
 			worldEntity.shaderParms[0] = 1;
 			worldEntity.shaderParms[1] = 1;
 			worldEntity.shaderParms[2] = 1;
 			worldEntity.shaderParms[3] = 1;
-			modelDef = world->AddEntityDef( &worldEntity );
+			modelDef = world->AddEntityDef(&worldEntity);
 		}
+
 		needsRender = false;
 	}
 }
 
-void idRenderWindow::Render( int time ) {
+void idRenderWindow::Render(int time)
+{
 	rLight.origin = lightOrigin.ToVec3();
 	rLight.shaderParms[SHADERPARM_RED] = lightColor.x();
 	rLight.shaderParms[SHADERPARM_GREEN] = lightColor.y();
 	rLight.shaderParms[SHADERPARM_BLUE] = lightColor.z();
 	world->UpdateLightDef(lightDef, &rLight);
-	if ( worldEntity.hModel ) {
+
+	if (worldEntity.hModel) {
 		if (updateAnimation) {
 			BuildAnimation(time);
 		}
+
 		if (modelAnim) {
 			if (time > animEndTime) {
 				animEndTime = time + animLength;
 			}
-			gameEdit->ANIM_CreateAnimFrame(worldEntity.hModel, modelAnim, worldEntity.numJoints, worldEntity.joints, animLength - (animEndTime - time), vec3_origin, false );
+
+			gameEdit->ANIM_CreateAnimFrame(worldEntity.hModel, modelAnim, worldEntity.numJoints, worldEntity.joints, animLength - (animEndTime - time), vec3_origin, false);
 		}
+
 		worldEntity.axis = idAngles(modelRotate.x(), modelRotate.y(), modelRotate.z()).ToMat3();
 		world->UpdateEntityDef(modelDef, &worldEntity);
 	}
@@ -139,11 +156,12 @@ void idRenderWindow::Render( int time ) {
 
 
 
-void idRenderWindow::Draw(int time, float x, float y) {
+void idRenderWindow::Draw(int time, float x, float y)
+{
 	PreRender();
 	Render(time);
 
-	memset( &refdef, 0, sizeof( refdef ) );
+	memset(&refdef, 0, sizeof(refdef));
 	refdef.vieworg = viewOffset.ToVec3();;
 	//refdef.vieworg.Set(-128, 0, 0);
 
@@ -164,49 +182,60 @@ void idRenderWindow::Draw(int time, float x, float y) {
 	world->RenderScene(&refdef);
 }
 
-void idRenderWindow::PostParse() {
+void idRenderWindow::PostParse()
+{
 	idWindow::PostParse();
 }
 
-// 
-//  
-idWinVar *idRenderWindow::GetWinVarByName(const char *_name, bool fixup, drawWin_t** owner ) {
-// 
+//
+//
+idWinVar *idRenderWindow::GetWinVarByName(const char *_name, bool fixup, drawWin_t **owner)
+{
+//
 	if (idStr::Icmp(_name, "model") == 0) {
 		return &modelName;
 	}
+
 	if (idStr::Icmp(_name, "anim") == 0) {
 		return &animName;
 	}
+
 	if (idStr::Icmp(_name, "lightOrigin") == 0) {
 		return &lightOrigin;
 	}
+
 	if (idStr::Icmp(_name, "lightColor") == 0) {
 		return &lightColor;
 	}
+
 	if (idStr::Icmp(_name, "modelOrigin") == 0) {
 		return &modelOrigin;
 	}
+
 	if (idStr::Icmp(_name, "modelRotate") == 0) {
 		return &modelRotate;
 	}
+
 	if (idStr::Icmp(_name, "viewOffset") == 0) {
 		return &viewOffset;
 	}
+
 	if (idStr::Icmp(_name, "needsRender") == 0) {
 		return &needsRender;
 	}
 
-// 
-//  
+//
+//
 	return idWindow::GetWinVarByName(_name, fixup, owner);
-// 
+//
 }
 
-bool idRenderWindow::ParseInternalVar(const char *_name, idParser *src) {
+bool idRenderWindow::ParseInternalVar(const char *_name, idParser *src)
+{
 	if (idStr::Icmp(_name, "animClass") == 0) {
 		ParseString(src, animClass);
 		return true;
 	}
+
 	return idWindow::ParseInternalVar(_name, src);
 }

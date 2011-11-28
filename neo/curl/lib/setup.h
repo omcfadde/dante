@@ -1,10 +1,10 @@
 #ifndef __SETUP_H
 #define __SETUP_H
 /***************************************************************************
- *                                  _   _ ____  _     
- *  Project                     ___| | | |  _ \| |    
- *                             / __| | | | |_) | |    
- *                            | (__| |_| |  _ <| |___ 
+ *                                  _   _ ____  _
+ *  Project                     ___| | | |  _ \| |
+ *                             / __| | | | |_) | |
+ *                            | (__| |_| |  _ <| |___
  *                             \___|\___/|_| \_\_____|
  *
  * Copyright (C) 1998 - 2004, Daniel Stenberg, <daniel@haxx.se>, et al.
@@ -12,7 +12,7 @@
  * This software is licensed as described in the file COPYING, which
  * you should have received as part of this distribution. The terms
  * are also available at http://curl.haxx.se/docs/copyright.html.
- * 
+ *
  * You may opt to use, copy, modify, merge, publish, distribute and/or sell
  * copies of the Software, and permit persons to whom the Software is
  * furnished to do so, under the terms of the COPYING file.
@@ -119,16 +119,16 @@ typedef unsigned char bool;
 #if defined(HAVE_X509_H) && defined(HAVE_SSL_H) && defined(HAVE_RSA_H) && \
 defined(HAVE_PEM_H) && defined(HAVE_ERR_H) && defined(HAVE_CRYPTO_H) && \
 defined(HAVE_LIBSSL) && defined(HAVE_LIBCRYPTO)
-  /* the six important includes files all exist and so do both libs,
-     defined SSLeay usage */
+/* the six important includes files all exist and so do both libs,
+   defined SSLeay usage */
 #define USE_SSLEAY 1
 #endif
 #if defined(HAVE_OPENSSL_X509_H) && defined(HAVE_OPENSSL_SSL_H) && \
 defined(HAVE_OPENSSL_RSA_H) && defined(HAVE_OPENSSL_PEM_H) && \
 defined(HAVE_OPENSSL_ERR_H) && defined(HAVE_OPENSSL_CRYPTO_H) && \
 defined(HAVE_LIBSSL) && defined(HAVE_LIBCRYPTO)
-  /* the six important includes files all exist and so do both libs,
-     defined SSLeay usage */
+/* the six important includes files all exist and so do both libs,
+   defined SSLeay usage */
 #define USE_SSLEAY 1
 #define USE_OPENSSL 1
 #endif
@@ -186,7 +186,7 @@ defined(HAVE_LIBSSL) && defined(HAVE_LIBCRYPTO)
 #define swrite(x,y,z) (size_t)send(x,y,z, SEND_4TH_ARG)
 #undef HAVE_ALARM
 #else
-     /* gcc-for-win is still good :) */
+/* gcc-for-win is still good :) */
 #define sclose(x) close(x)
 #define sread(x,y,z) recv(x,y,z, SEND_4TH_ARG)
 #define swrite(x,y,z) send(x,y,z, SEND_4TH_ARG)
@@ -241,7 +241,7 @@ defined(HAVE_LIBSSL) && defined(HAVE_LIBCRYPTO)
 #endif
 
 #ifndef fileno /* sunos 4 have this as a macro! */
-int fileno( FILE *stream);
+int fileno(FILE *stream);
 #endif
 
 #endif

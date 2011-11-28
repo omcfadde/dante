@@ -30,10 +30,10 @@
 #include <sys/types.h>
 #endif
 
-void *_decoder_malloc( size_t size );
-void *_decoder_calloc( size_t num, size_t size );
-void *_decoder_realloc( void *memblock, size_t size );
-void _decoder_free( void *memblock );
+void *_decoder_malloc(size_t size);
+void *_decoder_calloc(size_t num, size_t size);
+void *_decoder_realloc(void *memblock, size_t size);
+void _decoder_free(void *memblock);
 
 #define _ogg_malloc		_decoder_malloc
 #define _ogg_calloc		_decoder_calloc
@@ -49,15 +49,15 @@ void _decoder_free( void *memblock );
 
 #endif
 
-#ifdef _WIN32 
+#ifdef _WIN32
 
 #  ifndef __GNUC__
-   /* MSVC/Borland */
-   typedef __int64 ogg_int64_t;
-   typedef __int32 ogg_int32_t;
-   typedef unsigned __int32 ogg_uint32_t;
-   typedef __int16 ogg_int16_t;
-   typedef unsigned __int16 ogg_uint16_t;
+/* MSVC/Borland */
+typedef __int64 ogg_int64_t;
+typedef __int32 ogg_int32_t;
+typedef unsigned __int32 ogg_uint32_t;
+typedef __int16 ogg_int16_t;
+typedef unsigned __int16 ogg_uint16_t;
 
 #pragma warning(disable : 4018)		// signed/unsigned mismatch
 #pragma warning(disable : 4146)		// unary minus operator applied to unsigned type, result still unsigned
@@ -65,67 +65,67 @@ void _decoder_free( void *memblock );
 #pragma warning(disable : 4305)		// truncation from 'double' to 'float'
 
 #  else
-   /* Cygwin */
-   #include <_G_config.h>
-   typedef _G_int64_t ogg_int64_t;
-   typedef _G_int32_t ogg_int32_t;
-   typedef _G_uint32_t ogg_uint32_t;
-   typedef _G_int16_t ogg_int16_t;
-   typedef _G_uint16_t ogg_uint16_t;
+/* Cygwin */
+#include <_G_config.h>
+typedef _G_int64_t ogg_int64_t;
+typedef _G_int32_t ogg_int32_t;
+typedef _G_uint32_t ogg_uint32_t;
+typedef _G_int16_t ogg_int16_t;
+typedef _G_uint16_t ogg_uint16_t;
 #  endif
 
 #elif defined(MACOS_X) /* MacOS X Framework build */
 
 #  include <sys/types.h>
-   typedef int16_t ogg_int16_t;
-   typedef u_int16_t ogg_uint16_t;
-   typedef int32_t ogg_int32_t;
-   typedef u_int32_t ogg_uint32_t;
-   typedef int64_t ogg_int64_t;
+typedef int16_t ogg_int16_t;
+typedef u_int16_t ogg_uint16_t;
+typedef int32_t ogg_int32_t;
+typedef u_int32_t ogg_uint32_t;
+typedef int64_t ogg_int64_t;
 
 #elif defined(__MACOS__)
 
 #  include <types.h>
-   typedef SInt16 ogg_int16_t;
-   typedef UInt16 ogg_uint16_t;
-   typedef SInt32 ogg_int32_t;
-   typedef UInt32 ogg_uint32_t;
-   typedef SInt64 ogg_int64_t;
+typedef SInt16 ogg_int16_t;
+typedef UInt16 ogg_uint16_t;
+typedef SInt32 ogg_int32_t;
+typedef UInt32 ogg_uint32_t;
+typedef SInt64 ogg_int64_t;
 
 #elif defined(__BEOS__)
 
-   /* Be */
+/* Be */
 #  include <inttypes.h>
-   typedef int16_t ogg_int16_t;
-   typedef u_int16_t ogg_uint16_t;
-   typedef int32_t ogg_int32_t;
-   typedef u_int32_t ogg_uint32_t;
-   typedef int64_t ogg_int64_t;
+typedef int16_t ogg_int16_t;
+typedef u_int16_t ogg_uint16_t;
+typedef int32_t ogg_int32_t;
+typedef u_int32_t ogg_uint32_t;
+typedef int64_t ogg_int64_t;
 
 #elif defined (__EMX__)
 
-   /* OS/2 GCC */
-   typedef short ogg_int16_t;
-   typedef unsigned short ogg_uint16_t;
-   typedef int ogg_int32_t;
-   typedef unsigned int ogg_uint32_t;
-   typedef long long ogg_int64_t;
+/* OS/2 GCC */
+typedef short ogg_int16_t;
+typedef unsigned short ogg_uint16_t;
+typedef int ogg_int32_t;
+typedef unsigned int ogg_uint32_t;
+typedef long long ogg_int64_t;
 
 #elif defined (DJGPP)
 
-   /* DJGPP */
-   typedef short ogg_int16_t;
-   typedef int ogg_int32_t;
-   typedef unsigned int ogg_uint32_t;
-   typedef long long ogg_int64_t;
+/* DJGPP */
+typedef short ogg_int16_t;
+typedef int ogg_int32_t;
+typedef unsigned int ogg_uint32_t;
+typedef long long ogg_int64_t;
 
 #elif defined(R5900)
 
-   /* PS2 EE */
-   typedef long ogg_int64_t;
-   typedef int ogg_int32_t;
-   typedef unsigned ogg_uint32_t;
-   typedef short ogg_int16_t;
+/* PS2 EE */
+typedef long ogg_int64_t;
+typedef int ogg_int32_t;
+typedef unsigned ogg_uint32_t;
+typedef short ogg_int16_t;
 
 #else
 

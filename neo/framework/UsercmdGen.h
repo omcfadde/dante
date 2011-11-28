@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -86,25 +86,26 @@ const int IMPULSE_40			= 40;			// use vehicle
 // usercmd_t->flags
 const int UCF_IMPULSE_SEQUENCE	= 0x0001;		// toggled every time an impulse command is sent
 
-class usercmd_t {
-public:
-	int			gameFrame;						// frame number
-	int			gameTime;						// game time
-	int			duplicateCount;					// duplication count for networking
-	byte		buttons;						// buttons
-	signed char	forwardmove;					// forward/backward movement
-	signed char	rightmove;						// left/right movement
-	signed char	upmove;							// up/down movement
-	short		angles[3];						// view angles
-	short		mx;								// mouse delta x
-	short		my;								// mouse delta y
-	signed char impulse;						// impulse command
-	byte		flags;							// additional flags
-	int			sequence;						// just for debugging
+class usercmd_t
+{
+	public:
+		int			gameFrame;						// frame number
+		int			gameTime;						// game time
+		int			duplicateCount;					// duplication count for networking
+		byte		buttons;						// buttons
+		signed char	forwardmove;					// forward/backward movement
+		signed char	rightmove;						// left/right movement
+		signed char	upmove;							// up/down movement
+		short		angles[3];						// view angles
+		short		mx;								// mouse delta x
+		short		my;								// mouse delta y
+		signed char impulse;						// impulse command
+		byte		flags;							// additional flags
+		int			sequence;						// just for debugging
 
-public:
-	void		ByteSwap();						// on big endian systems, byte swap the shorts and ints
-	bool		operator==( const usercmd_t &rhs ) const;
+	public:
+		void		ByteSwap();						// on big endian systems, byte swap the shorts and ints
+		bool		operator==(const usercmd_t &rhs) const;
 };
 
 typedef enum {
@@ -114,55 +115,56 @@ typedef enum {
 
 const int MAX_BUFFERED_USERCMD = 64;
 
-class idUsercmdGen {
-public:
-	virtual				~idUsercmdGen( void ) {}
+class idUsercmdGen
+{
+	public:
+		virtual				~idUsercmdGen(void) {}
 
-	// Sets up all the cvars and console commands.
-	virtual	void		Init( void ) = 0;
+		// Sets up all the cvars and console commands.
+		virtual	void		Init(void) = 0;
 
-	// Prepares for a new map.
-	virtual void		InitForNewMap( void ) = 0;
+		// Prepares for a new map.
+		virtual void		InitForNewMap(void) = 0;
 
-	// Shut down.
-	virtual void		Shutdown( void ) = 0;
+		// Shut down.
+		virtual void		Shutdown(void) = 0;
 
-	// Clears all key states and face straight.
-	virtual	void		Clear( void ) = 0;
+		// Clears all key states and face straight.
+		virtual	void		Clear(void) = 0;
 
-	// Clears view angles.
-	virtual void		ClearAngles( void ) = 0;
+		// Clears view angles.
+		virtual void		ClearAngles(void) = 0;
 
-	// When the console is down or the menu is up, only emit default usercmd, so the player isn't moving around.
-	// Each subsystem (session and game) may want an inhibit will OR the requests.
-	virtual void		InhibitUsercmd( inhibit_t subsystem, bool inhibit ) = 0;
+		// When the console is down or the menu is up, only emit default usercmd, so the player isn't moving around.
+		// Each subsystem (session and game) may want an inhibit will OR the requests.
+		virtual void		InhibitUsercmd(inhibit_t subsystem, bool inhibit) = 0;
 
-	// Returns a buffered command for the given game tic.
-	virtual usercmd_t	TicCmd( int ticNumber ) = 0;
+		// Returns a buffered command for the given game tic.
+		virtual usercmd_t	TicCmd(int ticNumber) = 0;
 
-	// Called async at regular intervals.
-	virtual	void		UsercmdInterrupt( void ) = 0;
+		// Called async at regular intervals.
+		virtual	void		UsercmdInterrupt(void) = 0;
 
-	// Set a value that can safely be referenced by UsercmdInterrupt() for each key binding.
-	virtual	int			CommandStringUsercmdData( const char *cmdString ) = 0;
+		// Set a value that can safely be referenced by UsercmdInterrupt() for each key binding.
+		virtual	int			CommandStringUsercmdData(const char *cmdString) = 0;
 
-	// Returns the number of user commands.
-	virtual int			GetNumUserCommands( void ) = 0;
+		// Returns the number of user commands.
+		virtual int			GetNumUserCommands(void) = 0;
 
-	// Returns the name of a user command via index.
-	virtual const char *GetUserCommandName( int index ) = 0;
+		// Returns the name of a user command via index.
+		virtual const char *GetUserCommandName(int index) = 0;
 
-	// Continuously modified, never reset. For full screen guis.
-	virtual void		MouseState( int *x, int *y, int *button, bool *down ) = 0;
+		// Continuously modified, never reset. For full screen guis.
+		virtual void		MouseState(int *x, int *y, int *button, bool *down) = 0;
 
-	// Directly sample a button.
-	virtual int			ButtonState( int key ) = 0;
+		// Directly sample a button.
+		virtual int			ButtonState(int key) = 0;
 
-	// Directly sample a keystate.
-	virtual int			KeyState( int key ) = 0;
+		// Directly sample a keystate.
+		virtual int			KeyState(int key) = 0;
 
-	// Directly sample a usercmd.
-	virtual usercmd_t	GetDirectUsercmd( void ) = 0;
+		// Directly sample a usercmd.
+		virtual usercmd_t	GetDirectUsercmd(void) = 0;
 };
 
 extern idUsercmdGen	*usercmdGen;

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -60,7 +60,8 @@ END_MESSAGE_MAP()
 /**
 * Constructor for StageView.
 */
-StageView::StageView() {
+StageView::StageView()
+{
 	currentMaterial = NULL;
 	bDragging = false;
 	internalChange = false;
@@ -69,31 +70,34 @@ StageView::StageView() {
 /**
 * Destructor for StageView.
 */
-StageView::~StageView() {
+StageView::~StageView()
+{
 }
 
 /**
 * Called when the selected material has changed.
 * @param pMaterial The newly selected material.
 */
-void StageView::MV_OnMaterialSelectionChange(MaterialDoc* pMaterial) {
+void StageView::MV_OnMaterialSelectionChange(MaterialDoc *pMaterial)
+{
 
 	currentMaterial = pMaterial;
 
-	RefreshStageList();	
+	RefreshStageList();
 }
 
 /**
-* Called when the material changes have been saved. 
+* Called when the material changes have been saved.
 * @param pMaterial The saved material.
 */
-void StageView::MV_OnMaterialSaved(MaterialDoc* pMaterial) {
+void StageView::MV_OnMaterialSaved(MaterialDoc *pMaterial)
+{
 
-	CListCtrl& list = GetListCtrl();
+	CListCtrl &list = GetListCtrl();
 
 	//Saving a material reenables all of the stages
-	if(pMaterial == currentMaterial) {
-		for(int i = 1; i < list.GetItemCount(); i++) {
+	if (pMaterial == currentMaterial) {
+		for (int i = 1; i < list.GetItemCount(); i++) {
 			SetToggleState(i, ToggleListView::TOGGLE_STATE_ON);
 		}
 	}
@@ -104,9 +108,10 @@ void StageView::MV_OnMaterialSaved(MaterialDoc* pMaterial) {
 * @param pMaterial The material that was affected.
 * @param stageNum The index of the stage that was added
 */
-void StageView::MV_OnMaterialStageAdd(MaterialDoc* pMaterial, int stageNum) {
+void StageView::MV_OnMaterialStageAdd(MaterialDoc *pMaterial, int stageNum)
+{
 
-	CListCtrl& list = GetListCtrl();
+	CListCtrl &list = GetListCtrl();
 
 	idStr name = pMaterial->GetAttribute(stageNum, "name");
 
@@ -119,8 +124,9 @@ void StageView::MV_OnMaterialStageAdd(MaterialDoc* pMaterial, int stageNum) {
 * @param pMaterial The material that was affected.
 * @param stageNum The index of the stage that was deleted
 */
-void StageView::MV_OnMaterialStageDelete(MaterialDoc* pMaterial, int stageNum) {
-	CListCtrl& list = GetListCtrl();
+void StageView::MV_OnMaterialStageDelete(MaterialDoc *pMaterial, int stageNum)
+{
+	CListCtrl &list = GetListCtrl();
 	list.DeleteItem(stageNum+1);
 }
 
@@ -130,13 +136,14 @@ void StageView::MV_OnMaterialStageDelete(MaterialDoc* pMaterial, int stageNum) {
 * @param from The from index
 * @param to The to index
 */
-void StageView::MV_OnMaterialStageMove(MaterialDoc* pMaterial, int from, int to) {
+void StageView::MV_OnMaterialStageMove(MaterialDoc *pMaterial, int from, int to)
+{
 
-	if(!internalChange) {
+	if (!internalChange) {
 		from++;
 		to++;
 
-		CListCtrl& list = GetListCtrl();
+		CListCtrl &list = GetListCtrl();
 
 		char szLabel[256];
 		LV_ITEM lvi;
@@ -158,13 +165,14 @@ void StageView::MV_OnMaterialStageMove(MaterialDoc* pMaterial, int from, int to)
 		int type = -1;
 
 		int stageType = currentMaterial->GetAttributeInt(to-1, "stagetype");
-		switch(stageType) {
-				case MaterialDoc::STAGE_TYPE_NORMAL:
-					type = MaterialDefManager::MATERIAL_DEF_STAGE;
-					break;
-				case MaterialDoc::STAGE_TYPE_SPECIALMAP:
-					type = MaterialDefManager::MATERIAL_DEF_SPECIAL_STAGE;
-					break;
+
+		switch (stageType) {
+			case MaterialDoc::STAGE_TYPE_NORMAL:
+				type = MaterialDefManager::MATERIAL_DEF_STAGE;
+				break;
+			case MaterialDoc::STAGE_TYPE_SPECIALMAP:
+				type = MaterialDefManager::MATERIAL_DEF_SPECIAL_STAGE;
+				break;
 		}
 
 		m_propView->SetPropertyListType(type, to-1);
@@ -180,11 +188,12 @@ void StageView::MV_OnMaterialStageMove(MaterialDoc* pMaterial, int from, int to)
 * @param stage The stage that contains the change.
 * @param attribName The attribute that has changed.
 */
-void StageView::MV_OnMaterialAttributeChanged(MaterialDoc* pMaterial, int stage, const char* attribName) {
+void StageView::MV_OnMaterialAttributeChanged(MaterialDoc *pMaterial, int stage, const char *attribName)
+{
 
 	//Refresh this stage list if a material name has changed
-	if(!internalChange && currentMaterial == pMaterial && stage >= 0 && attribName && !strcmp(attribName, "name") ) {
-		CListCtrl& list = GetListCtrl();
+	if (!internalChange && currentMaterial == pMaterial && stage >= 0 && attribName && !strcmp(attribName, "name")) {
+		CListCtrl &list = GetListCtrl();
 		list.SetItemText(stage+1, 0, currentMaterial->GetAttribute(stage, attribName));
 	}
 }
@@ -192,15 +201,17 @@ void StageView::MV_OnMaterialAttributeChanged(MaterialDoc* pMaterial, int stage,
 /**
 * Returns true if the current state of the stage view will allow a copy operation
 */
-bool StageView::CanCopy() {
+bool StageView::CanCopy()
+{
 
-	CListCtrl& list = GetListCtrl();
+	CListCtrl &list = GetListCtrl();
 	POSITION pos = list.GetFirstSelectedItemPosition();
 	int nItem = -1;
-	if(pos)
+
+	if (pos)
 		nItem = list.GetNextSelectedItem(pos);
 
-	if(nItem > 0) {
+	if (nItem > 0) {
 		return true;
 	} else {
 		return false;
@@ -210,14 +221,16 @@ bool StageView::CanCopy() {
 /**
 * Returns true if the current state of the stage view will allow a paste operation
 */
-bool StageView::CanPaste() {
+bool StageView::CanPaste()
+{
 	return materialDocManager->IsCopyStage();
 }
 
 /**
 * Cut is not supported for stages.
 */
-bool StageView::CanCut() {
+bool StageView::CanCut()
+{
 	//No cut for stages
 	return false;
 }
@@ -225,15 +238,17 @@ bool StageView::CanCut() {
 /**
 * Returns true if the current state of the stage view will allow a delete operation
 */
-bool StageView::CanDelete() {
-	CListCtrl& list = GetListCtrl();
+bool StageView::CanDelete()
+{
+	CListCtrl &list = GetListCtrl();
 	POSITION pos = list.GetFirstSelectedItemPosition();
 	int nItem = -1;
-	if(pos) {
+
+	if (pos) {
 		nItem = list.GetNextSelectedItem(pos);
 	}
 
-	if(nItem > 0)
+	if (nItem > 0)
 		return true;
 
 	return false;
@@ -242,18 +257,21 @@ bool StageView::CanDelete() {
 /**
 * Returns true if the current state of the stage view will allow a rename operation
 */
-bool StageView::CanRename() {
-	CListCtrl& list = GetListCtrl();
+bool StageView::CanRename()
+{
+	CListCtrl &list = GetListCtrl();
 
 	POSITION pos = list.GetFirstSelectedItemPosition();
 	int nItem = -1;
-	if(pos) {
+
+	if (pos) {
 		nItem = list.GetNextSelectedItem(pos);
 	}
 
-	if(nItem > 0) {
-		MaterialDoc* material = materialDocManager->GetCurrentMaterialDoc();
-		if(nItem > 0 && material->GetAttributeInt(nItem-1, "stagetype") == MaterialDoc::STAGE_TYPE_NORMAL) {
+	if (nItem > 0) {
+		MaterialDoc *material = materialDocManager->GetCurrentMaterialDoc();
+
+		if (nItem > 0 && material->GetAttributeInt(nItem-1, "stagetype") == MaterialDoc::STAGE_TYPE_NORMAL) {
 			return true;
 		}
 	}
@@ -264,18 +282,20 @@ bool StageView::CanRename() {
 /**
 * Rebuilds the list of stages based on the currently selected material
 */
-void StageView::RefreshStageList() {
-	
-	CListCtrl& list = GetListCtrl();
+void StageView::RefreshStageList()
+{
+
+	CListCtrl &list = GetListCtrl();
 
 	POSITION pos = list.GetFirstSelectedItemPosition();
 	int selectedItem = -1;
-	if(pos)
+
+	if (pos)
 		selectedItem = list.GetNextSelectedItem(pos);
 
 	list.DeleteAllItems();
 
-	if(currentMaterial) {
+	if (currentMaterial) {
 
 		//Always add the material item for the main material properties
 		list.InsertItem(0, "Material");
@@ -283,19 +303,20 @@ void StageView::RefreshStageList() {
 
 		//Get the stage info
 		int stageCount = currentMaterial->GetStageCount();
-		for(int i = 0; i < stageCount; i++) {
-			const char* name = currentMaterial->GetAttribute(i, "name");
+
+		for (int i = 0; i < stageCount; i++) {
+			const char *name = currentMaterial->GetAttribute(i, "name");
 
 			int itemNum = list.InsertItem(list.GetItemCount(), name);
 
-			if(currentMaterial->IsStageEnabled(i)) {
+			if (currentMaterial->IsStageEnabled(i)) {
 				SetToggleState(itemNum, ToggleListView::TOGGLE_STATE_ON);
 			} else {
 				SetToggleState(itemNum, ToggleListView::TOGGLE_STATE_OFF);
 			}
 		}
 
-		if(selectedItem < 0) {
+		if (selectedItem < 0) {
 			//Select the material
 			list.SetItemState(0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 		} else {
@@ -304,10 +325,11 @@ void StageView::RefreshStageList() {
 	}
 }
 
-/** 
+/**
 * Called by the MFC framework when the view is being created.
 */
-int StageView::OnCreate(LPCREATESTRUCT lpCreateStruct) {
+int StageView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
 	if (ToggleListView::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
@@ -316,26 +338,28 @@ int StageView::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	return 0;
 }
 
-/** 
-* Called when the user changes the selection in the list box. This method will notify the 
+/**
+* Called when the user changes the selection in the list box. This method will notify the
 * property view of the change so that it can display the appropriate properties.
 */
-void StageView::OnLvnItemchanged(NMHDR *pNMHDR, LRESULT *pResult) {
+void StageView::OnLvnItemchanged(NMHDR *pNMHDR, LRESULT *pResult)
+{
 	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 
-	if(!bDragging) {
+	if (!bDragging) {
 
 		//The state has changed and changed to selected
-		if(pNMLV->uChanged && LVIF_STATE && pNMLV->uNewState & LVIS_SELECTED) {
+		if (pNMLV->uChanged && LVIF_STATE && pNMLV->uNewState & LVIS_SELECTED) {
 
 			int type = -1;
 
-			if(pNMLV->iItem >= 0) {
-				if(pNMLV->iItem == 0)
+			if (pNMLV->iItem >= 0) {
+				if (pNMLV->iItem == 0)
 					type = MaterialDefManager::MATERIAL_DEF_MATERIAL;
 				else {
 					int stageType = currentMaterial->GetAttributeInt(pNMLV->iItem-1, "stagetype");
-					switch(stageType) {
+
+					switch (stageType) {
 						case MaterialDoc::STAGE_TYPE_NORMAL:
 							type = MaterialDefManager::MATERIAL_DEF_STAGE;
 							break;
@@ -349,22 +373,25 @@ void StageView::OnLvnItemchanged(NMHDR *pNMHDR, LRESULT *pResult) {
 			m_propView->SetPropertyListType(type, pNMLV->iItem-1);
 		}
 
-		if(pNMLV->uChanged && LVIF_STATE && pNMLV->uOldState & LVIS_SELECTED && !(pNMLV->uNewState & LVIS_SELECTED)) {
+		if (pNMLV->uChanged && LVIF_STATE && pNMLV->uOldState & LVIS_SELECTED && !(pNMLV->uNewState & LVIS_SELECTED)) {
 			//This item was deselected.
 			//If there is no item selected then clear the prop list
-			CListCtrl& list = GetListCtrl();
+			CListCtrl &list = GetListCtrl();
 			POSITION pos = list.GetFirstSelectedItemPosition();
-			if(!pos)
+
+			if (!pos)
 				m_propView->SetPropertyListType(-1);
 		}
 	}
+
 	*pResult = 0;
 }
 
-/** 
+/**
 * Notifies the property view that all stages have been removed.
 */
-void StageView::OnLvnDeleteallitems(NMHDR *pNMHDR, LRESULT *pResult) {
+void StageView::OnLvnDeleteallitems(NMHDR *pNMHDR, LRESULT *pResult)
+{
 	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 
 	//The list has been cleared so clear the prop view
@@ -373,16 +400,17 @@ void StageView::OnLvnDeleteallitems(NMHDR *pNMHDR, LRESULT *pResult) {
 	*pResult = 0;
 }
 
-/** 
+/**
 * Starts the stage drag operation.
 */
-void StageView::OnLvnBegindrag(NMHDR *pNMHDR, LRESULT *pResult) {
+void StageView::OnLvnBegindrag(NMHDR *pNMHDR, LRESULT *pResult)
+{
 	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 
-	CListCtrl& list = GetListCtrl();
+	CListCtrl &list = GetListCtrl();
 
 	//Start a drag if the item isn't the material
-	if(pNMLV->iItem > 0) {
+	if (pNMLV->iItem > 0) {
 
 
 		dragIndex = pNMLV->iItem;
@@ -395,7 +423,7 @@ void StageView::OnLvnBegindrag(NMHDR *pNMHDR, LRESULT *pResult) {
 		pt.x = 8;
 		pt.y = 8;
 		dragImage = list.CreateDragImage(dragIndex, &pt);
-		dragImage->BeginDrag(0, CPoint (8, 8));
+		dragImage->BeginDrag(0, CPoint(8, 8));
 		dragImage->DragEnter(GetDesktopWindow(), pNMLV->ptAction);
 
 		//Turn the owner draw back on
@@ -413,11 +441,12 @@ void StageView::OnLvnBegindrag(NMHDR *pNMHDR, LRESULT *pResult) {
 	*pResult = 0;
 }
 
-/** 
+/**
 * Finishes a stage drag operation of the user was dragging a stage.
 */
-void StageView::OnLButtonUp(UINT nFlags, CPoint point) {
-	if( bDragging ) {
+void StageView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	if (bDragging) {
 		//Release mouse capture
 		ReleaseCapture();
 
@@ -430,7 +459,7 @@ void StageView::OnLButtonUp(UINT nFlags, CPoint point) {
 		ClientToScreen(&pt);
 		dropWnd = WindowFromPoint(pt);
 
-		if( dropWnd->IsKindOf(RUNTIME_CLASS(StageView)) )
+		if (dropWnd->IsKindOf(RUNTIME_CLASS(StageView)))
 			DropItemOnList();
 
 		bDragging = false;
@@ -439,11 +468,12 @@ void StageView::OnLButtonUp(UINT nFlags, CPoint point) {
 	ToggleListView::OnLButtonUp(nFlags, point);
 }
 
-/** 
+/**
 * Handles drawing the drag image when a user is draging a stage.
 */
-void StageView::OnMouseMove(UINT nFlags, CPoint point) {
-	if( bDragging ) {
+void StageView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	if (bDragging) {
 		dropPoint = point;
 		ClientToScreen(&dropPoint);
 
@@ -456,134 +486,152 @@ void StageView::OnMouseMove(UINT nFlags, CPoint point) {
 
 		dragImage->DragShowNolock(TRUE);
 	}
+
 	ToggleListView::OnMouseMove(nFlags, point);
 }
 
-/** 
+/**
 * Displays the popup menu when the user performs a right mouse click.
 */
-void StageView::OnNMRclick(NMHDR *pNMHDR, LRESULT *pResult) {
-	if(materialDocManager->GetCurrentMaterialDoc()) {
-		CListCtrl& list = GetListCtrl();
+void StageView::OnNMRclick(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	if (materialDocManager->GetCurrentMaterialDoc()) {
+		CListCtrl &list = GetListCtrl();
 
 		DWORD dwPos = GetMessagePos();
 
-		CPoint pt( LOWORD( dwPos ), HIWORD ( dwPos ) );
+		CPoint pt(LOWORD(dwPos), HIWORD(dwPos));
 
 		CPoint spt = pt;
-		list.ScreenToClient( &spt );
+		list.ScreenToClient(&spt);
 
 		PopupMenu(&spt);
 	}
+
 	*pResult = 0;
 }
 
-/** 
+/**
 * Begins a label edit when the user selects the rename menu option.
 */
-void StageView::OnRenameStage() {
+void StageView::OnRenameStage()
+{
 
-	CListCtrl& list = GetListCtrl();
+	CListCtrl &list = GetListCtrl();
 	POSITION pos = list.GetFirstSelectedItemPosition();
 	int nItem = -1;
-	if(pos) {
+
+	if (pos) {
 		nItem = list.GetNextSelectedItem(pos);
 		list.EditLabel(nItem);
 	}
 }
 
-/** 
+/**
 * Deletes the selected stage when the user selects the delete menu option.
 */
-void StageView::OnDeleteStage() {
+void StageView::OnDeleteStage()
+{
 
-	CListCtrl& list = GetListCtrl();
+	CListCtrl &list = GetListCtrl();
 	POSITION pos = list.GetFirstSelectedItemPosition();
 	int nItem = -1;
-	if(pos) {
-		nItem = list.GetNextSelectedItem(pos);
-		if(nItem > 0) {
-			int result = MessageBox("Are you sure you want to delete this stage?", "Delete?", MB_ICONQUESTION | MB_YESNO);
-			if(result == IDYES) {
 
-				MaterialDoc* material = materialDocManager->GetCurrentMaterialDoc();
+	if (pos) {
+		nItem = list.GetNextSelectedItem(pos);
+
+		if (nItem > 0) {
+			int result = MessageBox("Are you sure you want to delete this stage?", "Delete?", MB_ICONQUESTION | MB_YESNO);
+
+			if (result == IDYES) {
+
+				MaterialDoc *material = materialDocManager->GetCurrentMaterialDoc();
 				material->RemoveStage(nItem-1);
 			}
 		}
 	}
 }
 
-/** 
+/**
 * Conforms the user wants to delete all stages and then performs the operation.
 */
-void StageView::OnDeleteAllStages() {
+void StageView::OnDeleteAllStages()
+{
 	int result = MessageBox("Are you sure you want to delete all stages?", "Delete?", MB_ICONQUESTION | MB_YESNO);
-	if(result == IDYES) {
-		MaterialDoc* material = materialDocManager->GetCurrentMaterialDoc();
+
+	if (result == IDYES) {
+		MaterialDoc *material = materialDocManager->GetCurrentMaterialDoc();
 		material->ClearStages();
 	}
 }
 
-/** 
+/**
 * Adds a new stage when the user selects the menu option.
 */
-void StageView::OnAddStage() {
-	MaterialDoc* material = materialDocManager->GetCurrentMaterialDoc();
+void StageView::OnAddStage()
+{
+	MaterialDoc *material = materialDocManager->GetCurrentMaterialDoc();
 
 	idStr name = va("Stage %d", material->GetStageCount()+1);
 	material->AddStage(MaterialDoc::STAGE_TYPE_NORMAL, name.c_str());
 }
 
-/** 
+/**
 * Adds a new bumpmap stage when the user selects the menu option.
 */
-void StageView::OnAddBumpmapStage() {
-	MaterialDoc* material = materialDocManager->GetCurrentMaterialDoc();
+void StageView::OnAddBumpmapStage()
+{
+	MaterialDoc *material = materialDocManager->GetCurrentMaterialDoc();
 	material->AddStage(MaterialDoc::STAGE_TYPE_SPECIALMAP, "bumpmap");
 }
 
-/** 
+/**
 * Adds a new diffusemap stage when the user selects the menu option.
 */
-void StageView::OnAddDiffuseStage() {
-	MaterialDoc* material = materialDocManager->GetCurrentMaterialDoc();
+void StageView::OnAddDiffuseStage()
+{
+	MaterialDoc *material = materialDocManager->GetCurrentMaterialDoc();
 	material->AddStage(MaterialDoc::STAGE_TYPE_SPECIALMAP, "diffusemap");
 }
 
-/** 
+/**
 * Adds a new specularmap stage when the user selects the menu option.
 */
-void StageView::OnAddSpecualarStage() {
-	MaterialDoc* material = materialDocManager->GetCurrentMaterialDoc();
+void StageView::OnAddSpecualarStage()
+{
+	MaterialDoc *material = materialDocManager->GetCurrentMaterialDoc();
 	material->AddStage(MaterialDoc::STAGE_TYPE_SPECIALMAP, "specularmap");
 }
 
-/** 
+/**
 * Performs a copy operation when the user selects the menu option.
 */
-void StageView::OnCopy() {
+void StageView::OnCopy()
+{
 
-	MaterialDoc* material = materialDocManager->GetCurrentMaterialDoc();
+	MaterialDoc *material = materialDocManager->GetCurrentMaterialDoc();
 
-	CListCtrl& list = GetListCtrl();
+	CListCtrl &list = GetListCtrl();
 
 	POSITION pos = list.GetFirstSelectedItemPosition();
 	int nItem = -1;
-	if(pos)
+
+	if (pos)
 		nItem = list.GetNextSelectedItem(pos);
 
-	if(nItem > 0) {
+	if (nItem > 0) {
 		materialDocManager->CopyStage(material, nItem-1);
 	}
 }
 
-/** 
+/**
 * Performs a paste operation when the user selects the menu option.
 */
-void StageView::OnPaste() {
-	if(materialDocManager->IsCopyStage()) {
+void StageView::OnPaste()
+{
+	if (materialDocManager->IsCopyStage()) {
 
-		MaterialDoc* material = materialDocManager->GetCurrentMaterialDoc();
+		MaterialDoc *material = materialDocManager->GetCurrentMaterialDoc();
 
 		int type;
 		idStr name;
@@ -592,10 +640,10 @@ void StageView::OnPaste() {
 
 		int existingIndex = material->FindStage(type, name);
 
-		if(type != MaterialDoc::STAGE_TYPE_SPECIALMAP || existingIndex == -1) {
+		if (type != MaterialDoc::STAGE_TYPE_SPECIALMAP || existingIndex == -1) {
 			materialDocManager->PasteStage(material);
 		} else {
-			if(MessageBox(va("Do you want to replace '%s' stage?", name.c_str()), "Replace?", MB_ICONQUESTION | MB_YESNO) == IDYES) {
+			if (MessageBox(va("Do you want to replace '%s' stage?", name.c_str()), "Replace?", MB_ICONQUESTION | MB_YESNO) == IDYES) {
 				material->RemoveStage(existingIndex);
 				materialDocManager->PasteStage(material);
 			}
@@ -603,18 +651,19 @@ void StageView::OnPaste() {
 	}
 }
 
-/** 
+/**
 * Determines is a label edit can be performed on the selected stage.
 */
-void StageView::OnLvnBeginlabeledit(NMHDR *pNMHDR, LRESULT *pResult) {
-	NMLVDISPINFO *pDispInfo = reinterpret_cast<NMLVDISPINFO*>(pNMHDR);
+void StageView::OnLvnBeginlabeledit(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	NMLVDISPINFO *pDispInfo = reinterpret_cast<NMLVDISPINFO *>(pNMHDR);
 
 	//if this is a special stage then don't allow edit
 	int index = pDispInfo->item.iItem;
 
-	MaterialDoc* material = materialDocManager->GetCurrentMaterialDoc();
-	if(index <= 0 || material->GetAttributeInt(index-1, "stagetype") != MaterialDoc::STAGE_TYPE_NORMAL)
-	{
+	MaterialDoc *material = materialDocManager->GetCurrentMaterialDoc();
+
+	if (index <= 0 || material->GetAttributeInt(index-1, "stagetype") != MaterialDoc::STAGE_TYPE_NORMAL) {
 		*pResult = 1;
 		return;
 	}
@@ -632,14 +681,15 @@ void StageView::OnLvnBeginlabeledit(NMHDR *pNMHDR, LRESULT *pResult) {
 	*pResult = 0;
 }
 
-/** 
+/**
 * Performs the stage name change after the label edit is done.
 */
-void StageView::OnLvnEndlabeledit(NMHDR *pNMHDR, LRESULT *pResult) {
-	NMLVDISPINFO *pDispInfo = reinterpret_cast<NMLVDISPINFO*>(pNMHDR);
+void StageView::OnLvnEndlabeledit(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	NMLVDISPINFO *pDispInfo = reinterpret_cast<NMLVDISPINFO *>(pNMHDR);
 
-	if(pDispInfo->item.pszText) {
-		MaterialDoc* material = materialDocManager->GetCurrentMaterialDoc();
+	if (pDispInfo->item.pszText) {
+		MaterialDoc *material = materialDocManager->GetCurrentMaterialDoc();
 		internalChange = true;
 		material->SetAttribute(pDispInfo->item.iItem-1, "name", pDispInfo->item.pszText);
 		internalChange = false;
@@ -649,15 +699,16 @@ void StageView::OnLvnEndlabeledit(NMHDR *pNMHDR, LRESULT *pResult) {
 	}
 }
 
-/** 
+/**
 * Handles keyboard shortcuts for copy and paste operations.
 */
-void StageView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	if(nChar == 3 && GetKeyState(VK_CONTROL)) {
+void StageView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	if (nChar == 3 && GetKeyState(VK_CONTROL)) {
 		OnCopy();
 	}
 
-	if(nChar == 22 && GetKeyState(VK_CONTROL)) {
+	if (nChar == 22 && GetKeyState(VK_CONTROL)) {
 		OnPaste();
 	}
 
@@ -665,12 +716,14 @@ void StageView::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) {
 	ToggleListView::OnChar(nChar, nRepCnt, nFlags);
 }
 
-/** 
+/**
 * Handles keyboard shortcut for the delete operations.
 */
-BOOL StageView::PreTranslateMessage(MSG* pMsg) {
+BOOL StageView::PreTranslateMessage(MSG *pMsg)
+{
 
-	CListCtrl& list = GetListCtrl();
+	CListCtrl &list = GetListCtrl();
+
 	if (pMsg->hwnd == list.GetSafeHwnd()) {
 
 		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_DELETE) {
@@ -678,25 +731,29 @@ BOOL StageView::PreTranslateMessage(MSG* pMsg) {
 			return TRUE;
 		}
 	}
+
 	return FALSE;
 }
 
-/** 
+/**
 * Sets window styles before the window is created.
 */
-BOOL StageView::PreCreateWindow(CREATESTRUCT& cs) {
+BOOL StageView::PreCreateWindow(CREATESTRUCT &cs)
+{
 	cs.style &= ~LVS_TYPEMASK;
 	cs.style |= LVS_SINGLESEL | LVS_EDITLABELS;
 
 	return ToggleListView::PreCreateWindow(cs);
 }
 
-/** 
+/**
 * Called by the ToggleListView when the toggle state has changed.
 */
-void StageView::OnStateChanged(int index, int toggleState) {
-	MaterialDoc* material = materialDocManager->GetCurrentMaterialDoc();
-	if(material && index > 0) {
+void StageView::OnStateChanged(int index, int toggleState)
+{
+	MaterialDoc *material = materialDocManager->GetCurrentMaterialDoc();
+
+	if (material && index > 0) {
 		if (toggleState == ToggleListView::TOGGLE_STATE_ON) {
 			material->EnableStage(index-1, true);
 		} else if (toggleState == ToggleListView::TOGGLE_STATE_OFF) {
@@ -705,85 +762,93 @@ void StageView::OnStateChanged(int index, int toggleState) {
 	}
 }
 
-/** 
+/**
 * Dispalys the popup menu with the appropriate menu items enabled.
 */
-void StageView::PopupMenu(CPoint* pt) {
+void StageView::PopupMenu(CPoint *pt)
+{
 
 	//Determine the type of object clicked on
-	CListCtrl& list = GetListCtrl();
+	CListCtrl &list = GetListCtrl();
 
 
-	ClientToScreen (pt);
+	ClientToScreen(pt);
 
 	CMenu FloatingMenu;
 	VERIFY(FloatingMenu.LoadMenu(IDR_ME_STAGELIST_POPUP));
-	CMenu* pPopupMenu = FloatingMenu.GetSubMenu (0);
+	CMenu *pPopupMenu = FloatingMenu.GetSubMenu(0);
 	ASSERT(pPopupMenu != NULL);
 
 	POSITION pos = list.GetFirstSelectedItemPosition();
 	int nItem = -1;
-	if(pos)
+
+	if (pos)
 		nItem = list.GetNextSelectedItem(pos);
 
-	if(nItem <= 0) {
+	if (nItem <= 0) {
 		pPopupMenu->EnableMenuItem(ID_STAGEPOPUP_RENAMESTAGE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 		pPopupMenu->EnableMenuItem(ID_STAGEPOPUP_DELETESTAGE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 
 		pPopupMenu->EnableMenuItem(ID_STAGEPOPUP_CUT, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 		pPopupMenu->EnableMenuItem(ID_STAGEPOPUP_COPY, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 	} else {
-		MaterialDoc* material = materialDocManager->GetCurrentMaterialDoc();
-		if(material->GetAttributeInt(nItem-1, "stagetype") != MaterialDoc::STAGE_TYPE_NORMAL) {
+		MaterialDoc *material = materialDocManager->GetCurrentMaterialDoc();
+
+		if (material->GetAttributeInt(nItem-1, "stagetype") != MaterialDoc::STAGE_TYPE_NORMAL) {
 			pPopupMenu->EnableMenuItem(ID_STAGEPOPUP_RENAMESTAGE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 		}
 	}
 
-	MaterialDoc* material = materialDocManager->GetCurrentMaterialDoc();
-	if(material->FindStage(MaterialDoc::STAGE_TYPE_SPECIALMAP, "bumpmap") >= 0) {
+	MaterialDoc *material = materialDocManager->GetCurrentMaterialDoc();
+
+	if (material->FindStage(MaterialDoc::STAGE_TYPE_SPECIALMAP, "bumpmap") >= 0) {
 		pPopupMenu->EnableMenuItem(ID_STAGEPOPUP_ADDBUMPMAP, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 	}
-	if(material->FindStage(MaterialDoc::STAGE_TYPE_SPECIALMAP, "diffusemap") >= 0) {
+
+	if (material->FindStage(MaterialDoc::STAGE_TYPE_SPECIALMAP, "diffusemap") >= 0) {
 		pPopupMenu->EnableMenuItem(ID_STAGEPOPUP_ADDDIFFUSEMAP, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 	}
-	if(material->FindStage(MaterialDoc::STAGE_TYPE_SPECIALMAP, "specularmap") >= 0) {
+
+	if (material->FindStage(MaterialDoc::STAGE_TYPE_SPECIALMAP, "specularmap") >= 0) {
 		pPopupMenu->EnableMenuItem(ID_STAGEPOPUP_ADDSPECULAR, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 	}
 
-	if(materialDocManager->IsCopyStage()) {
+	if (materialDocManager->IsCopyStage()) {
 		pPopupMenu->EnableMenuItem(ID_STAGEPOPUP_PASTE, MF_BYCOMMAND | MF_ENABLED);
 	} else {
 		pPopupMenu->EnableMenuItem(ID_STAGEPOPUP_PASTE, MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 	}
 
-	pPopupMenu->TrackPopupMenu (TPM_LEFTALIGN | TPM_RIGHTBUTTON, pt->x, pt->y, &list);
+	pPopupMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, pt->x, pt->y, &list);
 }
 
-/** 
+/**
 * Performs the stage move when the user has dragged and dropped a stage.
 */
-void StageView::DropItemOnList() {
-	CListCtrl& list = GetListCtrl();
+void StageView::DropItemOnList()
+{
+	CListCtrl &list = GetListCtrl();
 
 	int toStage;
 
 	//Get and adjust the drop index based on the direction of the move
 	dropIndex = list.HitTest(dropPoint);
-	if(dropIndex < 0) dropIndex = list.GetItemCount()-1;
+
+	if (dropIndex < 0) dropIndex = list.GetItemCount()-1;
 
 	//Ignore the drop if the index is the same or they are droping on the material
-	if(dropIndex == dragIndex || dropIndex == 0)
+	if (dropIndex == dragIndex || dropIndex == 0)
 		return;
 
 	//Move the stage data
-	MaterialDoc* material = materialDocManager->GetCurrentMaterialDoc();
-	
+	MaterialDoc *material = materialDocManager->GetCurrentMaterialDoc();
+
 	internalChange = true;
 	toStage = dropIndex-1;
 	material->MoveStage(dragIndex-1, dropIndex-1);
 	internalChange = false;
-		
-	if(dragIndex < dropIndex) {
+
+	if (dragIndex < dropIndex) {
 		dropIndex++;
 	}
 
@@ -803,7 +868,7 @@ void StageView::DropItemOnList() {
 	list.InsertItem(&lvi);
 
 	//Adjust the drag index if the move was up in the list
-	if(dragIndex > dropIndex) {
+	if (dragIndex > dropIndex) {
 		dragIndex++;
 	}
 
@@ -812,7 +877,8 @@ void StageView::DropItemOnList() {
 
 	int type = -1;
 	int stageType = currentMaterial->GetAttributeInt(toStage, "stagetype");
-	switch(stageType) {
+
+	switch (stageType) {
 		case MaterialDoc::STAGE_TYPE_NORMAL:
 			type = MaterialDefManager::MATERIAL_DEF_STAGE;
 			break;
@@ -820,6 +886,7 @@ void StageView::DropItemOnList() {
 			type = MaterialDefManager::MATERIAL_DEF_SPECIAL_STAGE;
 			break;
 	}
+
 	m_propView->SetPropertyListType(type, toStage);
 }
 

@@ -6,13 +6,13 @@
 //
 //  This material is provided "as is", with absolutely no warranty expressed
 //  or implied. Any use is at your own risk.
-// 
-//  Permission to use or copy this software for any purpose is hereby granted 
+//
+//  Permission to use or copy this software for any purpose is hereby granted
 //  without fee, provided the above notices are retained on all copies.
 //  Permission to modify the code and to distribute modified code is granted,
 //  provided the above notices are retained, and a notice that the code was
 //  modified is included with the above copyright notice.
-// 
+//
 //	If you use this code, drop me an email.  I'd like to know if you find the code
 //	useful.
 
@@ -57,13 +57,12 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CPropTreeItemCombo message handlers
 
-void CPropTreeItemCombo::DrawAttribute(CDC* pDC, const RECT& rc)
+void CPropTreeItemCombo::DrawAttribute(CDC *pDC, const RECT &rc)
 {
 	ASSERT(m_pProp!=NULL);
 
 	// verify the window has been created
-	if (!IsWindow(m_hWnd))
-	{
+	if (!IsWindow(m_hWnd)) {
 		TRACE0("CPropTreeItemCombo::DrawAttribute() - The window has not been created\n");
 		return;
 	}
@@ -117,7 +116,7 @@ void CPropTreeItemCombo::OnRefresh()
 void CPropTreeItemCombo::OnCommit()
 {
 	LONG idx;
-	
+
 	// store combo box item data
 	if ((idx = GetCurSel())==CB_ERR)
 		m_lComboData = 0;
@@ -149,8 +148,7 @@ BOOL CPropTreeItemCombo::CreateComboBox(DWORD dwStyle)
 	// force as not visible child window
 	dwStyle = (WS_CHILD|WS_VSCROLL|dwStyle) & ~WS_VISIBLE;
 
-	if (!Create(dwStyle, CRect(0,0,0,0), m_pProp->GetCtrlParent(), GetCtrlID()))
-	{
+	if (!Create(dwStyle, CRect(0,0,0,0), m_pProp->GetCtrlParent(), GetCtrlID())) {
 		TRACE0("CPropTreeItemCombo::CreateComboBox() - failed to create combo box\n");
 		return FALSE;
 	}
@@ -171,8 +169,7 @@ BOOL CPropTreeItemCombo::CreateComboBoxBool()
 	// force as a non-visible child window
 	DWORD dwStyle = WS_CHILD|WS_VSCROLL|CBS_SORT|CBS_DROPDOWNLIST;
 
-	if (!Create(dwStyle, CRect(0,0,0,0), m_pProp->GetCtrlParent(), GetCtrlID()))
-	{
+	if (!Create(dwStyle, CRect(0,0,0,0), m_pProp->GetCtrlParent(), GetCtrlID())) {
 		TRACE0("CPropTreeItemCombo::CreateComboBoxBool() - failed to create combo box\n");
 		return FALSE;
 	}
@@ -198,9 +195,8 @@ BOOL CPropTreeItemCombo::CreateComboBoxBool()
 LONG CPropTreeItemCombo::FindCBData(LPARAM lParam)
 {
 	LONG idx;
-	
-	for (idx = 0; idx < GetCount(); idx++)
-	{
+
+	for (idx = 0; idx < GetCount(); idx++) {
 		if (GetItemData(idx)==(DWORD)lParam)
 			return idx;
 	}
@@ -209,13 +205,13 @@ LONG CPropTreeItemCombo::FindCBData(LPARAM lParam)
 }
 
 
-void CPropTreeItemCombo::OnSelchange() 
+void CPropTreeItemCombo::OnSelchange()
 {
 	CommitChanges();
 }
 
 
-void CPropTreeItemCombo::OnKillfocus() 
+void CPropTreeItemCombo::OnKillfocus()
 {
 	CommitChanges();
 }

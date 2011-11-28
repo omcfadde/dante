@@ -138,7 +138,7 @@
 /*
  * NV_CTRL_FSAA_MODE - the FSAA setting for OpenGL clients; possible
  * FSAA modes:
- * 
+ *
  * NV_CTRL_FSAA_MODE_2x     "2x Bilinear Multisampling"
  * NV_CTRL_FSAA_MODE_2x_5t  "2x Quincunx Multisampling"
  * NV_CTRL_FSAA_MODE_15x15  "1.5 x 1.5 Supersampling"
@@ -646,7 +646,7 @@
 /*
  * NV_CTRL_PBUFFER_SCANOUT_SUPPORTED - returns whether this X screen
  * supports scanout of FP pbuffers;
- * 
+ *
  * if this screen does not support PBUFFER_SCANOUT, then all other
  * PBUFFER_SCANOUT attributes are unavailable.
  */
@@ -708,7 +708,7 @@
  */
 
 #define NV_CTRL_STRING_TV_ENCODER_NAME                          5  /* R-D */
- 
+
 #define NV_CTRL_STRING_LAST_ATTRIBUTE NV_CTRL_STRING_TV_ENCODER_NAME
 
 
@@ -765,17 +765,17 @@
 #define ATTRIBUTE_TYPE_DISPLAY   0x4
 
 typedef struct _NVCTRLAttributeValidValues {
-    int type;
-    union {
-        struct {
-            int min;
-            int max;
-        } range;
-        struct {
-            unsigned int ints;
-        } bits;
-    } u;
-    unsigned int permissions;
+	int type;
+	union {
+		struct {
+			int min;
+			int max;
+		} range;
+		struct {
+			unsigned int ints;
+		} bits;
+	} u;
+	unsigned int permissions;
 } NVCTRLAttributeValidValuesRec;
 
 

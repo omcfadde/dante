@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -40,33 +40,35 @@ If you have questions concerning this license or the applicable additional terms
 class CCapDialog : public CDialog
 {
 // Construction
-public:
-  static enum {BEVEL = 0, ENDCAP, IBEVEL, IENDCAP};
-	CCapDialog(CWnd* pParent = NULL);   // standard constructor
+	public:
+		static enum {BEVEL = 0, ENDCAP, IBEVEL, IENDCAP};
+		CCapDialog(CWnd *pParent = NULL);   // standard constructor
 
-  int getCapType() {return m_nCap;};
+		int getCapType() {
+			return m_nCap;
+		};
 // Dialog Data
-	//{{AFX_DATA(CCapDialog)
-	enum { IDD = IDD_DIALOG_CAP };
-	int		m_nCap;
-	//}}AFX_DATA
+		//{{AFX_DATA(CCapDialog)
+		enum { IDD = IDD_DIALOG_CAP };
+		int		m_nCap;
+		//}}AFX_DATA
 
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CCapDialog)
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CCapDialog)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+		virtual void DoDataExchange(CDataExchange *pDX);    // DDX/DDV support
+		//}}AFX_VIRTUAL
 
 // Implementation
-protected:
+	protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CCapDialog)
+		// Generated message map functions
+		//{{AFX_MSG(CCapDialog)
 		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+		//}}AFX_MSG
+		DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

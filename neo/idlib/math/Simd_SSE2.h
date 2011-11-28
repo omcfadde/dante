@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -37,19 +37,20 @@ If you have questions concerning this license or the applicable additional terms
 ===============================================================================
 */
 
-class idSIMD_SSE2 : public idSIMD_SSE {
-public:
+class idSIMD_SSE2 : public idSIMD_SSE
+{
+	public:
 #if defined(MACOS_X) && defined(__i386__)
-	virtual const char * VPCALL GetName( void ) const;
-	virtual void VPCALL CmpLT( byte *dst,			const byte bitNum,		const float *src0,		const float constant,	const int count );		
+		virtual const char *VPCALL GetName(void) const;
+		virtual void VPCALL CmpLT(byte *dst,			const byte bitNum,		const float *src0,		const float constant,	const int count);
 
 #elif defined(_WIN32)
-	virtual const char * VPCALL GetName( void ) const;
+		virtual const char *VPCALL GetName(void) const;
 
-	//virtual void VPCALL MatX_LowerTriangularSolve( const idMatX &L, float *x, const float *b, const int n, int skip = 0 );
-	//virtual void VPCALL MatX_LowerTriangularSolveTranspose( const idMatX &L, float *x, const float *b, const int n );
+		//virtual void VPCALL MatX_LowerTriangularSolve( const idMatX &L, float *x, const float *b, const int n, int skip = 0 );
+		//virtual void VPCALL MatX_LowerTriangularSolveTranspose( const idMatX &L, float *x, const float *b, const int n );
 
-	virtual void VPCALL MixedSoundToSamples( short *samples, const float *mixBuffer, const int numSamples );
+		virtual void VPCALL MixedSoundToSamples(short *samples, const float *mixBuffer, const int numSamples);
 
 #endif
 };

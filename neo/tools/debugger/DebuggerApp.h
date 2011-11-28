@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -53,53 +53,53 @@ const int MAX_MSGLEN = 1400;
 
 class rvDebuggerApp
 {
-public:
+	public:
 
-	rvDebuggerApp ( );
+		rvDebuggerApp();
 
-	bool				Initialize				( HINSTANCE hInstance );
-	int					Run						( void );
-	
-	rvRegistryOptions&	GetOptions				( void );
-	rvDebuggerClient&	GetClient				( void );
-	rvDebuggerWindow&	GetWindow				( void );
-	
-	HINSTANCE			GetInstance				( void );
+		bool				Initialize(HINSTANCE hInstance);
+		int					Run(void);
 
-	bool				TranslateAccelerator	( LPMSG msg );
-		
-protected:
+		rvRegistryOptions	&GetOptions(void);
+		rvDebuggerClient	&GetClient(void);
+		rvDebuggerWindow	&GetWindow(void);
 
-	rvRegistryOptions	mOptions;
-	rvDebuggerWindow*	mDebuggerWindow;
-	HINSTANCE			mInstance;
-	rvDebuggerClient	mClient;
-	HACCEL				mAccelerators;
-	
-private:
+		HINSTANCE			GetInstance(void);
 
-	bool	ProcessNetMessages		( void );
-	bool	ProcessWindowMessages	( void );
+		bool				TranslateAccelerator(LPMSG msg);
+
+	protected:
+
+		rvRegistryOptions	mOptions;
+		rvDebuggerWindow	*mDebuggerWindow;
+		HINSTANCE			mInstance;
+		rvDebuggerClient	mClient;
+		HACCEL				mAccelerators;
+
+	private:
+
+		bool	ProcessNetMessages(void);
+		bool	ProcessWindowMessages(void);
 };
 
-ID_INLINE HINSTANCE rvDebuggerApp::GetInstance ( void )
+ID_INLINE HINSTANCE rvDebuggerApp::GetInstance(void)
 {
 	return mInstance;
 }
 
-ID_INLINE rvDebuggerClient& rvDebuggerApp::GetClient ( void )
+ID_INLINE rvDebuggerClient &rvDebuggerApp::GetClient(void)
 {
 	return mClient;
 }
 
-ID_INLINE rvRegistryOptions& rvDebuggerApp::GetOptions ( void )
+ID_INLINE rvRegistryOptions &rvDebuggerApp::GetOptions(void)
 {
 	return mOptions;
 }
 
-ID_INLINE rvDebuggerWindow& rvDebuggerApp::GetWindow ( void )
+ID_INLINE rvDebuggerWindow &rvDebuggerApp::GetWindow(void)
 {
-	assert ( mDebuggerWindow );
+	assert(mDebuggerWindow);
 	return *mDebuggerWindow;
 }
 

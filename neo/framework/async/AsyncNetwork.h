@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ DOOM III gold:	33
 1.3.1:			41
 */
 const int ASYNC_PROTOCOL_MINOR		= 41;
-const int ASYNC_PROTOCOL_VERSION	= ( ASYNC_PROTOCOL_MAJOR << 16 ) + ASYNC_PROTOCOL_MINOR;
+const int ASYNC_PROTOCOL_VERSION	= (ASYNC_PROTOCOL_MAJOR << 16) + ASYNC_PROTOCOL_MINOR;
 #define MAJOR_VERSION(v) ( v >> 16 )
 
 const int MAX_ASYNC_CLIENTS			= 32;
@@ -134,86 +134,89 @@ enum {
 };
 
 typedef struct master_s {
-	idCVar *		var;
+	idCVar 		*var;
 	netadr_t		address;
 	bool			resolved;
 } master_t;
 
 
-class idAsyncNetwork {
-public:
-							idAsyncNetwork();
+class idAsyncNetwork
+{
+	public:
+		idAsyncNetwork();
 
-	static void				Init( void );
-	static void				Shutdown( void );
-	static bool				IsActive( void ) { return ( server.IsActive() || client.IsActive() ); }
-	static void				RunFrame( void );
+		static void				Init(void);
+		static void				Shutdown(void);
+		static bool				IsActive(void) {
+			return (server.IsActive() || client.IsActive());
+		}
+		static void				RunFrame(void);
 
-	static void				WriteUserCmdDelta( idBitMsg &msg, const usercmd_t &cmd, const usercmd_t *base );
-	static void				ReadUserCmdDelta( const idBitMsg &msg, usercmd_t &cmd, const usercmd_t *base );
+		static void				WriteUserCmdDelta(idBitMsg &msg, const usercmd_t &cmd, const usercmd_t *base);
+		static void				ReadUserCmdDelta(const idBitMsg &msg, usercmd_t &cmd, const usercmd_t *base);
 
-	static bool				DuplicateUsercmd( const usercmd_t &previousUserCmd, usercmd_t &currentUserCmd, int frame, int time );
-	static bool				UsercmdInputChanged( const usercmd_t &previousUserCmd, const usercmd_t &currentUserCmd );
+		static bool				DuplicateUsercmd(const usercmd_t &previousUserCmd, usercmd_t &currentUserCmd, int frame, int time);
+		static bool				UsercmdInputChanged(const usercmd_t &previousUserCmd, const usercmd_t &currentUserCmd);
 
-							// returns true if the corresponding master is set to something (and could be resolved)
-	static bool				GetMasterAddress( int index, netadr_t &adr );
-							// get the hardcoded idnet master, equivalent to GetMasterAddress( 0, .. )
-	static netadr_t			GetMasterAddress( void );
-	
-	static void				GetNETServers( );
-	
-	static void				ExecuteSessionCommand( const char *sessCmd );
+		// returns true if the corresponding master is set to something (and could be resolved)
+		static bool				GetMasterAddress(int index, netadr_t &adr);
+		// get the hardcoded idnet master, equivalent to GetMasterAddress( 0, .. )
+		static netadr_t			GetMasterAddress(void);
 
-	static idAsyncServer	server;
-	static idAsyncClient	client;
-	
-	static idCVar			verbose;						// verbose output
-	static idCVar			allowCheats;					// allow cheats
-	static idCVar			serverDedicated;				// if set run a dedicated server
-	static idCVar			serverSnapshotDelay;			// number of milliseconds between snapshots
-	static idCVar			serverMaxClientRate;			// maximum outgoing rate to clients
-	static idCVar			clientMaxRate;					// maximum rate from server requested by client
-	static idCVar			serverMaxUsercmdRelay;			// maximum number of usercmds relayed to other clients
-	static idCVar			serverZombieTimeout;			// time out in seconds for zombie clients
-	static idCVar			serverClientTimeout;			// time out in seconds for connected clients
-	static idCVar			clientServerTimeout;			// time out in seconds for server
-	static idCVar			serverDrawClient;				// the server draws the view of this client
-	static idCVar			serverRemoteConsolePassword;	// remote console password
-	static idCVar			clientPrediction;				// how many additional milliseconds the clients runs ahead
-	static idCVar			clientMaxPrediction;			// max milliseconds into the future a client can run prediction
-	static idCVar			clientUsercmdBackup;			// how many usercmds the client sends from previous frames
-	static idCVar			clientRemoteConsoleAddress;		// remote console address
-	static idCVar			clientRemoteConsolePassword;	// remote console password
-	static idCVar			master0;						// idnet master server
-	static idCVar			master1;						// 1st master server
-	static idCVar			master2;						// 2nd master server
-	static idCVar			master3;						// 3rd master server
-	static idCVar			master4;						// 4th master server
-	static idCVar			LANServer;						// LAN mode
-	static idCVar			serverReloadEngine;				// reload engine on map change instead of growing the referenced paks
-	static idCVar			serverAllowServerMod;			// let a pure server start with a different game code than what is referenced in game code
-	static idCVar			idleServer;						// serverinfo reply, indicates all clients are idle
-	static idCVar			clientDownload;					// preferred download policy
+		static void				GetNETServers();
 
-	// same message used for offline check and network reply
-	static void				BuildInvalidKeyMsg( idStr &msg, bool valid[ 2 ] );
+		static void				ExecuteSessionCommand(const char *sessCmd);
 
-private:
-	static int				realTime;
-	static master_t			masters[ MAX_MASTER_SERVERS];	// master1 etc.
+		static idAsyncServer	server;
+		static idAsyncClient	client;
 
-	static void				SpawnServer_f( const idCmdArgs &args );
-	static void				NextMap_f( const idCmdArgs &args );
-	static void				Connect_f( const idCmdArgs &args );
-	static void				Reconnect_f( const idCmdArgs &args );
-	static void				GetServerInfo_f( const idCmdArgs &args );
-	static void				GetLANServers_f( const idCmdArgs &args );
-	static void				ListServers_f( const idCmdArgs &args );
-	static void				RemoteConsole_f( const idCmdArgs &args );
-	static void				Heartbeat_f( const idCmdArgs &args );
-	static void				Kick_f( const idCmdArgs &args );
-	static void				CheckNewVersion_f( const idCmdArgs &args );
-	static void				UpdateUI_f( const idCmdArgs &args );
+		static idCVar			verbose;						// verbose output
+		static idCVar			allowCheats;					// allow cheats
+		static idCVar			serverDedicated;				// if set run a dedicated server
+		static idCVar			serverSnapshotDelay;			// number of milliseconds between snapshots
+		static idCVar			serverMaxClientRate;			// maximum outgoing rate to clients
+		static idCVar			clientMaxRate;					// maximum rate from server requested by client
+		static idCVar			serverMaxUsercmdRelay;			// maximum number of usercmds relayed to other clients
+		static idCVar			serverZombieTimeout;			// time out in seconds for zombie clients
+		static idCVar			serverClientTimeout;			// time out in seconds for connected clients
+		static idCVar			clientServerTimeout;			// time out in seconds for server
+		static idCVar			serverDrawClient;				// the server draws the view of this client
+		static idCVar			serverRemoteConsolePassword;	// remote console password
+		static idCVar			clientPrediction;				// how many additional milliseconds the clients runs ahead
+		static idCVar			clientMaxPrediction;			// max milliseconds into the future a client can run prediction
+		static idCVar			clientUsercmdBackup;			// how many usercmds the client sends from previous frames
+		static idCVar			clientRemoteConsoleAddress;		// remote console address
+		static idCVar			clientRemoteConsolePassword;	// remote console password
+		static idCVar			master0;						// idnet master server
+		static idCVar			master1;						// 1st master server
+		static idCVar			master2;						// 2nd master server
+		static idCVar			master3;						// 3rd master server
+		static idCVar			master4;						// 4th master server
+		static idCVar			LANServer;						// LAN mode
+		static idCVar			serverReloadEngine;				// reload engine on map change instead of growing the referenced paks
+		static idCVar			serverAllowServerMod;			// let a pure server start with a different game code than what is referenced in game code
+		static idCVar			idleServer;						// serverinfo reply, indicates all clients are idle
+		static idCVar			clientDownload;					// preferred download policy
+
+		// same message used for offline check and network reply
+		static void				BuildInvalidKeyMsg(idStr &msg, bool valid[ 2 ]);
+
+	private:
+		static int				realTime;
+		static master_t			masters[ MAX_MASTER_SERVERS];	// master1 etc.
+
+		static void				SpawnServer_f(const idCmdArgs &args);
+		static void				NextMap_f(const idCmdArgs &args);
+		static void				Connect_f(const idCmdArgs &args);
+		static void				Reconnect_f(const idCmdArgs &args);
+		static void				GetServerInfo_f(const idCmdArgs &args);
+		static void				GetLANServers_f(const idCmdArgs &args);
+		static void				ListServers_f(const idCmdArgs &args);
+		static void				RemoteConsole_f(const idCmdArgs &args);
+		static void				Heartbeat_f(const idCmdArgs &args);
+		static void				Kick_f(const idCmdArgs &args);
+		static void				CheckNewVersion_f(const idCmdArgs &args);
+		static void				UpdateUI_f(const idCmdArgs &args);
 };
 
 #endif /* !__ASYNCNETWORK_H__ */

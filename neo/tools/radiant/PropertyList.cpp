@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -44,12 +44,14 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // CPropertyList
 
-CPropertyList::CPropertyList() {
+CPropertyList::CPropertyList()
+{
 	measureItem = NULL;
 	updateInspectors = false;
 }
 
-CPropertyList::~CPropertyList() {
+CPropertyList::~CPropertyList()
+{
 }
 
 
@@ -72,7 +74,8 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CPropertyList message handlers
 
-BOOL CPropertyList::PreCreateWindow(CREATESTRUCT& cs) {
+BOOL CPropertyList::PreCreateWindow(CREATESTRUCT &cs)
+{
 	if (!CListBox::PreCreateWindow(cs)) {
 		return FALSE;
 	}
@@ -87,15 +90,18 @@ BOOL CPropertyList::PreCreateWindow(CREATESTRUCT& cs) {
 	return TRUE;
 }
 
-void CPropertyList::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct) {
+void CPropertyList::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
+{
 	if (measureItem && !measureItem->m_curValue.IsEmpty()) {
 		CRect rect;
 		GetClientRect(rect);
+
 		if (m_nDivider==0) {
 			m_nDivider = rect.Width() / 2;
 		}
+
 		rect.left = m_nDivider;
-		CDC * dc = GetDC();
+		CDC *dc = GetDC();
 		dc->DrawText(measureItem->m_curValue, rect, DT_CALCRECT | DT_LEFT | DT_WORDBREAK);
 		ReleaseDC(dc);
 		lpMeasureItemStruct->itemHeight = (rect.Height() >= 20) ? rect.Height() : 20; //pixels
@@ -105,14 +111,17 @@ void CPropertyList::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct) {
 }
 
 
-void CPropertyList::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
+void CPropertyList::DrawItem(LPDRAWITEMSTRUCT lpDIS)
+{
 	CDC dc;
 	dc.Attach(lpDIS->hDC);
 	CRect rectFull = lpDIS->rcItem;
 	CRect rect = rectFull;
+
 	if (m_nDivider==0) {
 		m_nDivider = rect.Width() / 2;
 	}
+
 	rect.left = m_nDivider;
 	CRect rect2 = rectFull;
 	rect2.right = rect.left - 1;
@@ -120,16 +129,18 @@ void CPropertyList::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 
 	if (nIndex != (UINT) -1) {
 		//get the CPropertyItem for the current row
-		CPropertyItem* pItem = (CPropertyItem*) GetItemDataPtr(nIndex);
+		CPropertyItem *pItem = (CPropertyItem *) GetItemDataPtr(nIndex);
+
 		//draw two rectangles, one for each row column
 		if (pItem->m_nItemType == PIT_VAR) {
 			dc.FillSolidRect(rect2,RGB(220,220,220));
 		} else {
 			dc.FillSolidRect(rect2,RGB(192,192,192));
 		}
+
 		dc.DrawEdge(rect2,EDGE_SUNKEN,BF_BOTTOMRIGHT);
 		dc.DrawEdge(rect,EDGE_SUNKEN,BF_BOTTOM);
-		
+
 		if (lpDIS->itemState == ODS_SELECTED) {
 			dc.DrawFocusRect(rect2);
 		}
@@ -137,34 +148,39 @@ void CPropertyList::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		//write the property name in the first rectangle
 		dc.SetBkMode(TRANSPARENT);
 		dc.DrawText(pItem->m_propName,CRect(rect2.left+3,rect2.top+3,
-											rect2.right-3,rect2.bottom+3),
-					DT_LEFT | DT_SINGLELINE);
+		                                    rect2.right-3,rect2.bottom+3),
+		            DT_LEFT | DT_SINGLELINE);
 
 		//write the initial property value in the second rectangle
 		dc.DrawText(pItem->m_curValue,CRect(rect.left+3,rect.top+3, rect.right+3,rect.bottom+3), DT_LEFT | (pItem->m_nItemType == PIT_VAR) ? DT_WORDBREAK : DT_SINGLELINE);
 	}
+
 	dc.Detach();
 }
 
-int CPropertyList::AddItem(CString txt) {
+int CPropertyList::AddItem(CString txt)
+{
 	measureItem = NULL;
 	int nIndex = AddString(txt);
 	return nIndex;
 }
 
-int CPropertyList::AddPropItem(CPropertyItem* pItem) {
+int CPropertyList::AddPropItem(CPropertyItem *pItem)
+{
 	if (pItem->m_nItemType == PIT_VAR) {
 		measureItem = pItem;
 	} else {
 		measureItem = NULL;
 	}
+
 	int nIndex = AddString(_T(""));
 	measureItem = NULL;
 	SetItemDataPtr(nIndex,pItem);
 	return nIndex;
 }
 
-int CPropertyList::OnCreate(LPCREATESTRUCT lpCreateStruct) {
+int CPropertyList::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
 	if (CListBox::OnCreate(lpCreateStruct) == -1) {
 		return -1;
 	}
@@ -181,7 +197,8 @@ int CPropertyList::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	return 0;
 }
 
-void CPropertyList::OnSelchange() {
+void CPropertyList::OnSelchange()
+{
 	CRect rect;
 	CString lBoxSelText;
 	static int recurse = 0;
@@ -191,7 +208,7 @@ void CPropertyList::OnSelchange() {
 	GetItemRect(m_curSel,rect);
 	rect.left = m_nDivider;
 
-	CPropertyItem* pItem = (CPropertyItem*) GetItemDataPtr(m_curSel);
+	CPropertyItem *pItem = (CPropertyItem *) GetItemDataPtr(m_curSel);
 
 	if (updateInspectors) {
 		g_Inspectors->entityDlg.SetKeyVal(pItem->m_propName, pItem->m_curValue);
@@ -205,9 +222,10 @@ void CPropertyList::OnSelchange() {
 		//display the combo box.  If the combo box has already been
 		//created then simply move it to the new location, else create it
 		m_nLastBox = 0;
+
 		if (m_cmbBox) {
 			m_cmbBox.MoveWindow(rect);
-		} else {	
+		} else {
 			rect.bottom += 300;
 			m_cmbBox.Create(CBS_DROPDOWNLIST | WS_VSCROLL | WS_VISIBLE | WS_CHILD | WS_BORDER,rect,this,IDC_PROPCMBBOX);
 			m_cmbBox.SetFont(&m_SSerif8Font);
@@ -216,11 +234,12 @@ void CPropertyList::OnSelchange() {
 		//add the choices for this particular property
 		CString cmbItems = pItem->m_cmbItems;
 		lBoxSelText = pItem->m_curValue;
-		
+
 		m_cmbBox.ResetContent();
-		m_cmbBox.AddString("");		
+		m_cmbBox.AddString("");
 		int i,i2;
 		i=0;
+
 		while ((i2=cmbItems.Find('|',i)) != -1)	{
 			m_cmbBox.AddString(cmbItems.Mid(i,i2-i));
 			i=i2+1;
@@ -231,21 +250,23 @@ void CPropertyList::OnSelchange() {
 
 		//jump to the property's current value in the combo box
 		int j = m_cmbBox.FindStringExact(0,lBoxSelText);
+
 		if (j != CB_ERR) {
 			m_cmbBox.SetCurSel(j);
 		} else {
 			m_cmbBox.SetCurSel(0);
 		}
-		//m_cmbBox.ShowDropDown();  
-	}
-	else if (pItem->m_nItemType==PIT_EDIT) {
+
+		//m_cmbBox.ShowDropDown();
+	} else if (pItem->m_nItemType==PIT_EDIT) {
 		//display edit box
 		m_nLastBox = 1;
 		m_prevSel = m_curSel;
 		rect.bottom -= 3;
+
 		if (m_editBox) {
 			m_editBox.MoveWindow(rect);
-		} else {	
+		} else {
 			m_editBox.Create(ES_LEFT | ES_AUTOHSCROLL | WS_VISIBLE | WS_CHILD | WS_BORDER,rect,this,IDC_PROPEDITBOX);
 			m_editBox.SetFont(&m_SSerif8Font);
 		}
@@ -264,7 +285,8 @@ void CPropertyList::OnSelchange() {
 	}
 }
 
-void CPropertyList::DisplayButton(CRect region) {
+void CPropertyList::DisplayButton(CRect region)
+{
 	//displays a button if the property is a file/color/font chooser
 	m_nLastBox = 2;
 	m_prevSel = m_curSel;
@@ -272,11 +294,12 @@ void CPropertyList::DisplayButton(CRect region) {
 	if (region.Width() > 25) {
 		region.left = region.right - 25;
 	}
+
 	region.bottom -= 3;
 
 	if (m_btnCtrl) {
 		m_btnCtrl.MoveWindow(region);
-	} else {	
+	} else {
 		m_btnCtrl.Create("...",BS_PUSHBUTTON | WS_VISIBLE | WS_CHILD,region,this,IDC_PROPBTNCTRL);
 		m_btnCtrl.SetFont(&m_SSerif8Font);
 	}
@@ -285,58 +308,71 @@ void CPropertyList::DisplayButton(CRect region) {
 	m_btnCtrl.SetFocus();
 }
 
-void CPropertyList::ResetContent() {
+void CPropertyList::ResetContent()
+{
 	if (m_btnCtrl.GetSafeHwnd()) {
 		m_btnCtrl.ShowWindow(SW_HIDE);
 	}
+
 	int c = this->GetCount();
+
 	for (int i = 0; i < c; i++) {
-		CPropertyItem *pi = reinterpret_cast<CPropertyItem*>(GetItemDataPtr(i));
+		CPropertyItem *pi = reinterpret_cast<CPropertyItem *>(GetItemDataPtr(i));
+
 		if (pi) {
 			delete pi;
 		}
 	}
+
 	CListBox::ResetContent();
 }
 
-void CPropertyList::OnKillFocus(CWnd* pNewWnd) {
+void CPropertyList::OnKillFocus(CWnd *pNewWnd)
+{
 	//m_btnCtrl.ShowWindow(SW_HIDE);
 	CListBox::OnKillFocus(pNewWnd);
 }
 
-void CPropertyList::OnKillfocusCmbBox() {
+void CPropertyList::OnKillfocusCmbBox()
+{
 	m_cmbBox.ShowWindow(SW_HIDE);
 	Invalidate();
 }
 
-void CPropertyList::OnKillfocusEditBox() {
+void CPropertyList::OnKillfocusEditBox()
+{
 	CString newStr;
 	m_editBox.ShowWindow(SW_HIDE);
 	Invalidate();
 }
 
-void CPropertyList::OnSelchangeCmbBox() {
+void CPropertyList::OnSelchangeCmbBox()
+{
 	CString selStr;
+
 	if (m_cmbBox) {
 		m_cmbBox.GetLBText(m_cmbBox.GetCurSel(),selStr);
-		CPropertyItem* pItem = (CPropertyItem*) GetItemDataPtr(m_curSel);
+		CPropertyItem *pItem = (CPropertyItem *) GetItemDataPtr(m_curSel);
 		pItem->m_curValue = selStr;
+
 		if (updateInspectors) {
 			g_Inspectors->entityDlg.UpdateFromListBox();
 		}
 	}
 }
 
-void CPropertyList::OnChangeEditBox() {
+void CPropertyList::OnChangeEditBox()
+{
 	CString newStr;
 	m_editBox.GetWindowText(newStr);
-	
-	CPropertyItem* pItem = (CPropertyItem*) GetItemDataPtr(m_curSel);
+
+	CPropertyItem *pItem = (CPropertyItem *) GetItemDataPtr(m_curSel);
 	pItem->m_curValue = newStr;
 }
 
-void CPropertyList::OnButton() {
-	CPropertyItem* pItem = (CPropertyItem*) GetItemDataPtr(m_curSel);
+void CPropertyList::OnButton()
+{
+	CPropertyItem *pItem = (CPropertyItem *) GetItemDataPtr(m_curSel);
 
 	//display the appropriate common dialog depending on what type
 	//of chooser is associated with the property
@@ -356,32 +392,36 @@ void CPropertyList::OnButton() {
 			color.z = ((dlg.GetColor() >> 16)&255)/255.0;
 			pItem->m_curValue = color.ToString(4);
 		}
+
 		if (updateInspectors) {
 			g_Inspectors->entityDlg.UpdateFromListBox();
 		}
+
 		m_btnCtrl.ShowWindow(SW_HIDE);
 		Invalidate();
 	} else if (pItem->m_nItemType == PIT_FILE) {
-		CString SelectedFile; 
+		CString SelectedFile;
 		CString Filter("Gif Files (*.gif)|*.gif||");
-	
+
 		CFileDialog FileDlg(TRUE, NULL, NULL, NULL,	Filter);
-		
+
 		CString currPath = pItem->m_curValue;
 		FileDlg.m_ofn.lpstrTitle = "Select file";
+
 		if (currPath.GetLength() > 0) {
 			FileDlg.m_ofn.lpstrInitialDir = currPath.Left(currPath.GetLength() - currPath.ReverseFind('\\'));
 		}
 
-		if(IDOK == FileDlg.DoModal()) {
+		if (IDOK == FileDlg.DoModal()) {
 			SelectedFile = FileDlg.GetPathName();
 			m_btnCtrl.ShowWindow(SW_HIDE);
 			pItem->m_curValue = SelectedFile;
 			Invalidate();
 		}
-	} else if (pItem->m_nItemType == PIT_FONT) {	
+	} else if (pItem->m_nItemType == PIT_FONT) {
 		CFontDialog FontDlg(NULL,CF_EFFECTS | CF_SCREENFONTS,NULL,this);
-		if(IDOK == FontDlg.DoModal()) {
+
+		if (IDOK == FontDlg.DoModal()) {
 			CString faceName = FontDlg.GetFaceName();
 			m_btnCtrl.ShowWindow(SW_HIDE);
 			pItem->m_curValue = faceName;
@@ -389,44 +429,55 @@ void CPropertyList::OnButton() {
 		}
 	} else if (pItem->m_nItemType == PIT_MODEL) {
 		CPreviewDlg *dlg = CEntityDlg::ShowModelChooser();
+
 		if (dlg->returnCode == IDOK) {
 			pItem->m_curValue = dlg->mediaName;
 			m_btnCtrl.ShowWindow(SW_HIDE);
+
 			if (updateInspectors) {
 				g_Inspectors->entityDlg.UpdateFromListBox();
 			}
+
 			Invalidate();
 		}
 	} else if (pItem->m_nItemType == PIT_GUI) {
 		CPreviewDlg *dlg = CEntityDlg::ShowGuiChooser();
+
 		if (dlg->returnCode == IDOK) {
 			pItem->m_curValue = dlg->mediaName;
 			m_btnCtrl.ShowWindow(SW_HIDE);
+
 			if (updateInspectors) {
 				g_Inspectors->entityDlg.UpdateFromListBox();
 			}
+
 			Invalidate();
 		}
 	} else if (pItem->m_nItemType == PIT_MATERIAL) {
 		CPreviewDlg *dlg = CEntityDlg::ShowMaterialChooser();
+
 		if (dlg->returnCode == IDOK) {
 			pItem->m_curValue = dlg->mediaName;
 			m_btnCtrl.ShowWindow(SW_HIDE);
+
 			if (updateInspectors) {
 				g_Inspectors->entityDlg.UpdateFromListBox();
 			}
+
 			Invalidate();
 		}
 	}
 }
 
-void CPropertyList::OnLButtonUp(UINT nFlags, CPoint point) {
+void CPropertyList::OnLButtonUp(UINT nFlags, CPoint point)
+{
 	if (m_bTracking) {
 		//if columns were being resized then this indicates
 		//that mouse is up so resizing is done.  Need to redraw
 		//columns to reflect their new widths.
-		
+
 		m_bTracking = FALSE;
+
 		//if mouse was captured then release it
 		if (GetCapture()==this) {
 			::ReleaseCapture();
@@ -449,19 +500,22 @@ void CPropertyList::OnLButtonUp(UINT nFlags, CPoint point) {
 	}
 }
 
-void CPropertyList::OnLButtonDown(UINT nFlags, CPoint point) {
+void CPropertyList::OnLButtonDown(UINT nFlags, CPoint point)
+{
 	if ((point.x>=m_nDivider-5) && (point.x<=m_nDivider+5))	{
 		//if mouse clicked on divider line, then start resizing
 		::SetCursor(m_hCursorSize);
 		CRect windowRect;
 		GetWindowRect(windowRect);
-		windowRect.left += 10; windowRect.right -= 10;
+		windowRect.left += 10;
+		windowRect.right -= 10;
 		//do not let mouse leave the list box boundary
 		::ClipCursor(windowRect);
-		
+
 		if (m_cmbBox) {
 			m_cmbBox.ShowWindow(SW_HIDE);
 		}
+
 		if (m_editBox) {
 			m_editBox.ShowWindow(SW_HIDE);
 		}
@@ -485,7 +539,8 @@ void CPropertyList::OnLButtonDown(UINT nFlags, CPoint point) {
 	}
 }
 
-void CPropertyList::OnMouseMove(UINT nFlags, CPoint point) {	
+void CPropertyList::OnMouseMove(UINT nFlags, CPoint point)
+{
 	if (m_bTracking) {
 		//move divider line to the mouse pos. if columns are
 		//currently being resized
@@ -503,14 +558,16 @@ void CPropertyList::OnMouseMove(UINT nFlags, CPoint point) {
 	}
 }
 
-void CPropertyList::InvertLine(CDC* pDC,CPoint ptFrom,CPoint ptTo) {
+void CPropertyList::InvertLine(CDC *pDC,CPoint ptFrom,CPoint ptTo)
+{
 	int nOldMode = pDC->SetROP2(R2_NOT);
 	pDC->MoveTo(ptFrom);
 	pDC->LineTo(ptTo);
 	pDC->SetROP2(nOldMode);
 }
 
-void CPropertyList::PreSubclassWindow() {
+void CPropertyList::PreSubclassWindow()
+{
 	m_bDivIsSet = FALSE;
 	m_nDivider = 0;
 	m_bTracking = FALSE;
@@ -523,18 +580,22 @@ void CPropertyList::PreSubclassWindow() {
 }
 
 
-void CPropertyList::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar) {
+void CPropertyList::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar *pScrollBar)
+{
 	if (m_cmbBox) {
-		m_cmbBox.ShowWindow(SW_HIDE); 
-	} 
-	if (m_editBox) { 
-		m_editBox.ShowWindow(SW_HIDE); 
-	} 
-	if (m_btnCtrl) { 
-		m_btnCtrl.ShowWindow(SW_HIDE); 
-	} 
-	Invalidate(); 
+		m_cmbBox.ShowWindow(SW_HIDE);
+	}
 
-	CListBox::OnVScroll(nSBCode, nPos, pScrollBar); 
-} 
+	if (m_editBox) {
+		m_editBox.ShowWindow(SW_HIDE);
+	}
+
+	if (m_btnCtrl) {
+		m_btnCtrl.ShowWindow(SW_HIDE);
+	}
+
+	Invalidate();
+
+	CListBox::OnVScroll(nSBCode, nPos, pScrollBar);
+}
 

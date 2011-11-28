@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ static char THIS_FILE[] = __FILE__;
 // CWaitDlg dialog
 
 
-CWaitDlg::CWaitDlg(CWnd* pParent, const char *msg)
+CWaitDlg::CWaitDlg(CWnd *pParent, const char *msg)
 	: CDialog(CWaitDlg::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CWaitDlg)
@@ -53,11 +53,12 @@ CWaitDlg::CWaitDlg(CWnd* pParent, const char *msg)
 	//g_pParentWnd->SetBusy(true);
 }
 
-CWaitDlg::~CWaitDlg() {
+CWaitDlg::~CWaitDlg()
+{
 	g_pParentWnd->SetBusy(false);
 }
 
-void CWaitDlg::DoDataExchange(CDataExchange* pDX)
+void CWaitDlg::DoDataExchange(CDataExchange *pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CWaitDlg)
@@ -74,24 +75,25 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CWaitDlg message handlers
 
-BOOL CWaitDlg::OnInitDialog() 
+BOOL CWaitDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	//GetDlgItem(IDC_WAITSTR)->SetWindowText(waitStr);
 	GetDlgItem(IDC_WAITSTR)->SetFocus();
 	UpdateData(FALSE);
 	ShowWindow(SW_SHOW);
-	
+
 	// cancel disabled by default
-	AllowCancel( false );
+	AllowCancel(false);
 
 	// TODO: Add extra initialization here
-	
+
 	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	// EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CWaitDlg::SetText(const char *msg, bool append) {
+void CWaitDlg::SetText(const char *msg, bool append)
+{
 	if (append) {
 		waitStr = text;
 		waitStr += "\r\n";
@@ -100,39 +102,44 @@ void CWaitDlg::SetText(const char *msg, bool append) {
 		waitStr = msg;
 		text = msg;
 	}
+
 	UpdateData(FALSE);
 	Invalidate();
 	UpdateWindow();
-	ShowWindow (SW_SHOWNORMAL);
+	ShowWindow(SW_SHOWNORMAL);
 }
 
-void CWaitDlg::AllowCancel( bool enable ) {
+void CWaitDlg::AllowCancel(bool enable)
+{
 	// this shows or hides the Cancel button
-	CWnd* pCancelButton = GetDlgItem (IDCANCEL);
-	ASSERT (pCancelButton);
-	if ( enable ) {
-		pCancelButton->ShowWindow (SW_NORMAL);
+	CWnd *pCancelButton = GetDlgItem(IDCANCEL);
+	ASSERT(pCancelButton);
+
+	if (enable) {
+		pCancelButton->ShowWindow(SW_NORMAL);
 	} else {
-		pCancelButton->ShowWindow (SW_HIDE);
+		pCancelButton->ShowWindow(SW_HIDE);
 	}
 }
 
-bool CWaitDlg::CancelPressed( void ) {
+bool CWaitDlg::CancelPressed(void)
+{
 #if _MSC_VER >= 1300
 	MSG *msg = AfxGetCurrentMessage();			// TODO Robert fix me!!
 #else
 	MSG *msg = &m_msgCur;
 #endif
 
-	while( ::PeekMessage(msg, NULL, NULL, NULL, PM_NOREMOVE) ) {
+	while (::PeekMessage(msg, NULL, NULL, NULL, PM_NOREMOVE)) {
 		// pump message
-		if ( !AfxGetApp()->PumpMessage() ) {
+		if (!AfxGetApp()->PumpMessage()) {
 		}
 	}
 
 	return cancelPressed;
 }
 
-void CWaitDlg::OnCancel() {
+void CWaitDlg::OnCancel()
+{
 	cancelPressed = true;
 }

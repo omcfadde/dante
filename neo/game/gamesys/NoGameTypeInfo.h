@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,33 +38,33 @@ If you have questions concerning this license or the applicable additional terms
 */
 
 typedef struct {
-	const char * name;
-	const char * type;
-	const char * value;
+	const char *name;
+	const char *type;
+	const char *value;
 } constantInfo_t;
 
 typedef struct {
-	const char * name;
+	const char *name;
 	int value;
 } enumValueInfo_t;
 
 typedef struct {
-	const char * typeName;
-	const enumValueInfo_t * values;
+	const char *typeName;
+	const enumValueInfo_t *values;
 } enumTypeInfo_t;
 
 typedef struct {
-	const char * type;
-	const char * name;
+	const char *type;
+	const char *name;
 	int offset;
 	int size;
 } classVariableInfo_t;
 
 typedef struct {
-	const char * typeName;
-	const char * superType;
+	const char *typeName;
+	const char *superType;
 	int size;
-	const classVariableInfo_t * variables;
+	const classVariableInfo_t *variables;
 } classTypeInfo_t;
 
 

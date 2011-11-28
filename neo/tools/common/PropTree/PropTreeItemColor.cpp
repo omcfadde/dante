@@ -6,13 +6,13 @@
 //
 //  This material is provided "as is", with absolutely no warranty expressed
 //  or implied. Any use is at your own risk.
-// 
-//  Permission to use or copy this software for any purpose is hereby granted 
+//
+//  Permission to use or copy this software for any purpose is hereby granted
 //  without fee, provided the above notices are retained on all copies.
 //  Permission to modify the code and to distribute modified code is granted,
 //  provided the above notices are retained, and a notice that the code was
 //  modified is included with the above copyright notice.
-// 
+//
 //	If you use this code, drop me an email.  I'd like to know if you find the code
 //	useful.
 
@@ -32,65 +32,63 @@ static char THIS_FILE[] = __FILE__;
 
 extern HINSTANCE ghInst;
 
-typedef struct _ColorTableEntry
-{
+typedef struct _ColorTableEntry {
 	COLORREF	color;
 	RECT		rcSpot;
 } ColorTableEntry;
 
-static ColorTableEntry _crColors[] = 
-{
-    {RGB(0x00, 0x00, 0x00)},
-    {RGB(0xA5, 0x2A, 0x00)},
-    {RGB(0x00, 0x40, 0x40)},
-    {RGB(0x00, 0x55, 0x00)},
-    {RGB(0x00, 0x00, 0x5E)},
-    {RGB(0x00, 0x00, 0x8B)},
-    {RGB(0x4B, 0x00, 0x82)},
-    {RGB(0x28, 0x28, 0x28)},
+static ColorTableEntry _crColors[] = {
+	{RGB(0x00, 0x00, 0x00)},
+	{RGB(0xA5, 0x2A, 0x00)},
+	{RGB(0x00, 0x40, 0x40)},
+	{RGB(0x00, 0x55, 0x00)},
+	{RGB(0x00, 0x00, 0x5E)},
+	{RGB(0x00, 0x00, 0x8B)},
+	{RGB(0x4B, 0x00, 0x82)},
+	{RGB(0x28, 0x28, 0x28)},
 
-    {RGB(0x8B, 0x00, 0x00)},
-    {RGB(0xFF, 0x68, 0x20)},
-    {RGB(0x8B, 0x8B, 0x00)},
-    {RGB(0x00, 0x93, 0x00)},
-    {RGB(0x38, 0x8E, 0x8E)},
-    {RGB(0x00, 0x00, 0xFF)},
-    {RGB(0x7B, 0x7B, 0xC0)},
-    {RGB(0x66, 0x66, 0x66)},
+	{RGB(0x8B, 0x00, 0x00)},
+	{RGB(0xFF, 0x68, 0x20)},
+	{RGB(0x8B, 0x8B, 0x00)},
+	{RGB(0x00, 0x93, 0x00)},
+	{RGB(0x38, 0x8E, 0x8E)},
+	{RGB(0x00, 0x00, 0xFF)},
+	{RGB(0x7B, 0x7B, 0xC0)},
+	{RGB(0x66, 0x66, 0x66)},
 
-    {RGB(0xFF, 0x00, 0x00)},
-    {RGB(0xFF, 0xAD, 0x5B)},
-    {RGB(0x32, 0xCD, 0x32)}, 
-    {RGB(0x3C, 0xB3, 0x71)},
-    {RGB(0x7F, 0xFF, 0xD4)},
-    {RGB(0x7D, 0x9E, 0xC0)},
-    {RGB(0x80, 0x00, 0x80)},
-    {RGB(0x7F, 0x7F, 0x7F)},
+	{RGB(0xFF, 0x00, 0x00)},
+	{RGB(0xFF, 0xAD, 0x5B)},
+	{RGB(0x32, 0xCD, 0x32)},
+	{RGB(0x3C, 0xB3, 0x71)},
+	{RGB(0x7F, 0xFF, 0xD4)},
+	{RGB(0x7D, 0x9E, 0xC0)},
+	{RGB(0x80, 0x00, 0x80)},
+	{RGB(0x7F, 0x7F, 0x7F)},
 
-    {RGB(0xFF, 0xC0, 0xCB)},
-    {RGB(0xFF, 0xD7, 0x00)},
-    {RGB(0xFF, 0xFF, 0x00)},    
-    {RGB(0x00, 0xFF, 0x00)},
-    {RGB(0x40, 0xE0, 0xD0)},
-    {RGB(0xC0, 0xFF, 0xFF)},
-    {RGB(0x48, 0x00, 0x48)},
-    {RGB(0xC0, 0xC0, 0xC0)},
+	{RGB(0xFF, 0xC0, 0xCB)},
+	{RGB(0xFF, 0xD7, 0x00)},
+	{RGB(0xFF, 0xFF, 0x00)},
+	{RGB(0x00, 0xFF, 0x00)},
+	{RGB(0x40, 0xE0, 0xD0)},
+	{RGB(0xC0, 0xFF, 0xFF)},
+	{RGB(0x48, 0x00, 0x48)},
+	{RGB(0xC0, 0xC0, 0xC0)},
 
-    {RGB(0xFF, 0xE4, 0xE1)},
-    {RGB(0xD2, 0xB4, 0x8C)},
-    {RGB(0xFF, 0xFF, 0xE0)},
-    {RGB(0x98, 0xFB, 0x98)},
-    {RGB(0xAF, 0xEE, 0xEE)},
-    {RGB(0x68, 0x83, 0x8B)},
-    {RGB(0xE6, 0xE6, 0xFA)},
-    {RGB(0xFF, 0xFF, 0xFF)}
+	{RGB(0xFF, 0xE4, 0xE1)},
+	{RGB(0xD2, 0xB4, 0x8C)},
+	{RGB(0xFF, 0xFF, 0xE0)},
+	{RGB(0x98, 0xFB, 0x98)},
+	{RGB(0xAF, 0xEE, 0xEE)},
+	{RGB(0x68, 0x83, 0x8B)},
+	{RGB(0xE6, 0xE6, 0xFA)},
+	{RGB(0xFF, 0xFF, 0xFF)}
 };
 
-static void ColorBox(CDC* pDC, CPoint pt, COLORREF clr, BOOL bHover)
+static void ColorBox(CDC *pDC, CPoint pt, COLORREF clr, BOOL bHover)
 {
 	CBrush br(clr);
 
-	CBrush* obr = pDC->SelectObject(&br);
+	CBrush *obr = pDC->SelectObject(&br);
 
 	pDC->PatBlt(pt.x, pt.y, 13, 13, PATCOPY);
 	pDC->SelectObject(obr);
@@ -105,8 +103,7 @@ static void ColorBox(CDC* pDC, CPoint pt, COLORREF clr, BOOL bHover)
 
 static LONG FindSpot(CPoint point)
 {
-	for (LONG i=0; i<40; i++)
-	{
+	for (LONG i=0; i<40; i++) {
 		if (PtInRect(&_crColors[i].rcSpot, point))
 			return i;
 	}
@@ -118,7 +115,7 @@ static LONG FindSpot(CPoint point)
 /////////////////////////////////////////////////////////////////////////////
 // CPropTreeItemColor
 
-COLORREF* CPropTreeItemColor::s_pColors = NULL;
+COLORREF *CPropTreeItemColor::s_pColors = NULL;
 
 CPropTreeItemColor::CPropTreeItemColor() :
 	m_cColor(0),
@@ -149,18 +146,18 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CPropTreeItemColor message handlers
 
-void CPropTreeItemColor::SetDefaultColorsList(COLORREF* pColors)
+void CPropTreeItemColor::SetDefaultColorsList(COLORREF *pColors)
 {
 	s_pColors = pColors;
 }
 
 
-void CPropTreeItemColor::DrawAttribute(CDC* pDC, const RECT& rc)
+void CPropTreeItemColor::DrawAttribute(CDC *pDC, const RECT &rc)
 {
 	ASSERT(m_pProp!=NULL);
 
 	CRect r(rc);
-	
+
 	pDC->SelectObject(IsReadOnly() ? m_pProp->GetNormalFont() : m_pProp->GetBoldFont());
 
 	if (!m_pProp->IsWindowEnabled())
@@ -172,7 +169,7 @@ void CPropTreeItemColor::DrawAttribute(CDC* pDC, const RECT& rc)
 	r.right = r.left + r.Height() - 1;
 
 	CBrush br(m_cColor);
-	CBrush* pold = pDC->SelectObject(&br);
+	CBrush *pold = pDC->SelectObject(&br);
 	pDC->PatBlt(r.left, r.top, r.Width(), r.Height(), PATCOPY);
 	pDC->SelectObject(pold);
 
@@ -228,12 +225,11 @@ void CPropTreeItemColor::OnActivate(int activateType, CPoint point)
 	ASSERT(m_pProp!=NULL);
 	m_pProp->GetCtrlParent()->ClientToScreen(r);
 
-	if (!IsWindow(m_hWnd))
-	{
+	if (!IsWindow(m_hWnd)) {
 		LPCTSTR pszClassName;
 
 		pszClassName = AfxRegisterWndClass(CS_VREDRAW|CS_HREDRAW, LoadCursor(NULL, IDC_ARROW), (HBRUSH)(COLOR_BTNFACE + 1));
-		
+
 		DWORD dwStyle = WS_POPUP|WS_DLGFRAME;
 
 		CreateEx(0, pszClassName, _T(""), dwStyle, r, m_pProp->GetCtrlParent(), 0);
@@ -245,22 +241,21 @@ void CPropTreeItemColor::OnActivate(int activateType, CPoint point)
 }
 
 
-void CPropTreeItemColor::OnKillFocus(CWnd* pNewWnd) 
+void CPropTreeItemColor::OnKillFocus(CWnd *pNewWnd)
 {
 	CWnd::OnKillFocus(pNewWnd);
-	
+
 	if (!m_bInDialog)
 		CommitChanges();
 }
 
 
-void CPropTreeItemColor::OnPaint() 
+void CPropTreeItemColor::OnPaint()
 {
 	CPaintDC dc(this);
 	CPoint pt;
-	
-	for (LONG i=0; i<40; i++)
-	{
+
+	for (LONG i=0; i<40; i++) {
 		pt.x = (i & 7) * 18 + 3;
 		pt.y = (i >> 3) * 18 + 3;
 		ColorBox(&dc, pt, _crColors[i].color, m_nSpot==i);
@@ -281,45 +276,42 @@ void CPropTreeItemColor::OnPaint()
 }
 
 
-void CPropTreeItemColor::OnClose() 
+void CPropTreeItemColor::OnClose()
 {
 	CommitChanges();
 }
 
 
-void CPropTreeItemColor::OnMouseMove(UINT, CPoint point) 
+void CPropTreeItemColor::OnMouseMove(UINT, CPoint point)
 {
 	BOOL bButton;
 	LONG nSpot;
 
 	nSpot = FindSpot(point);
-	if (nSpot!=m_nSpot)
-	{
+
+	if (nSpot!=m_nSpot) {
 		Invalidate(FALSE);
 		m_nSpot = nSpot;
 	}
 
 	bButton = m_rcButton.PtInRect(point);
 
-	if (bButton!=m_bButton)
-	{
+	if (bButton!=m_bButton) {
 		m_bButton = bButton;
 		Invalidate(FALSE);
 	}
 }
 
 
-BOOL CPropTreeItemColor::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
+BOOL CPropTreeItemColor::OnSetCursor(CWnd *pWnd, UINT nHitTest, UINT message)
 {
-	if (nHitTest==HTCLIENT)
-	{
+	if (nHitTest==HTCLIENT) {
 		CPoint point;
 
 		GetCursorPos(&point);
 		ScreenToClient(&point);
 
-		if (FindSpot(point)!=-1 || m_rcButton.PtInRect(point))
-		{
+		if (FindSpot(point)!=-1 || m_rcButton.PtInRect(point)) {
 			SetCursor(LoadCursor(ghInst, MAKEINTRESOURCE(IDC_FPOINT)));
 			return TRUE;
 		}
@@ -330,16 +322,12 @@ BOOL CPropTreeItemColor::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 }
 
 
-void CPropTreeItemColor::OnLButtonDown(UINT, CPoint point) 
+void CPropTreeItemColor::OnLButtonDown(UINT, CPoint point)
 {
-	if (m_nSpot!=-1)
-	{
+	if (m_nSpot!=-1) {
 		m_cColor = _crColors[m_nSpot].color;
 		CommitChanges();
-	}
-	else
-	if (m_rcButton.PtInRect(point))
-	{
+	} else if (m_rcButton.PtInRect(point)) {
 		CHOOSECOLOR cc;
 		COLORREF clr[16];
 

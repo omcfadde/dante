@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -56,26 +56,25 @@ If you have questions concerning this license or the applicable additional terms
 class CPropertyItem
 {
 // Attributes
-public:
-	CString m_propName;
-	CString m_curValue;
-	int m_nItemType;
-	CString m_cmbItems;
-	int data;
+	public:
+		CString m_propName;
+		CString m_curValue;
+		int m_nItemType;
+		CString m_cmbItems;
+		int data;
 
-public:
-	CPropertyItem(CString propName, CString curValue,
-				  int nItemType, CString cmbItems)
-	{
-		m_propName = propName;
-		m_curValue = curValue;
-		m_nItemType = nItemType;
-		m_cmbItems = cmbItems;
-		data = -1;
-	}
-	void SetData(int d) {
-		data = d;
-	}
+	public:
+		CPropertyItem(CString propName, CString curValue,
+		              int nItemType, CString cmbItems) {
+			m_propName = propName;
+			m_curValue = curValue;
+			m_nItemType = nItemType;
+			m_cmbItems = cmbItems;
+			data = -1;
+		}
+		void SetData(int d) {
+			data = d;
+		}
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -84,82 +83,82 @@ public:
 class CPropertyList : public CListBox
 {
 // Construction
-public:
-	CPropertyList();
+	public:
+		CPropertyList();
 
 // Attributes
-public:
+	public:
 
 // Operations
-public:
-	int AddItem(CString txt);
-	int AddPropItem(CPropertyItem* pItem);
-	void ResetContent();
-	CEdit *GetEditBox() {
-		return &m_editBox;
-	}
-	void SetUpdateInspectors(bool b) {
-		updateInspectors = b;
-	}
-	void SetDivider( int div ) {
-		m_nDivider = div;
-	}
-	afx_msg void OnKillfocusEditBox();
-	afx_msg void OnChangeEditBox();
+	public:
+		int AddItem(CString txt);
+		int AddPropItem(CPropertyItem *pItem);
+		void ResetContent();
+		CEdit *GetEditBox() {
+			return &m_editBox;
+		}
+		void SetUpdateInspectors(bool b) {
+			updateInspectors = b;
+		}
+		void SetDivider(int div) {
+			m_nDivider = div;
+		}
+		afx_msg void OnKillfocusEditBox();
+		afx_msg void OnChangeEditBox();
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPropertyList)
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CPropertyList)
 	public:
-	virtual void MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct);
-	virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
-	afx_msg void OnSelchange();
+		virtual void MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct);
+		virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
+		afx_msg void OnSelchange();
 	protected:
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	virtual void PreSubclassWindow();
-	//}}AFX_VIRTUAL
+		virtual BOOL PreCreateWindow(CREATESTRUCT &cs);
+		virtual void PreSubclassWindow();
+		//}}AFX_VIRTUAL
 
 // Implementation
-public:
-	virtual ~CPropertyList();
+	public:
+		virtual ~CPropertyList();
 
-	// Generated message map functions
-protected:
-	//{{AFX_MSG(CPropertyList)
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnKillFocus(CWnd* pNewWnd);
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+		// Generated message map functions
+	protected:
+		//{{AFX_MSG(CPropertyList)
+		afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+		afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+		afx_msg void OnKillFocus(CWnd *pNewWnd);
+		afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+		afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+		afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar *pScrollBar);
 
-	//}}AFX_MSG
-	afx_msg void OnKillfocusCmbBox();
-	afx_msg void OnSelchangeCmbBox();
-	afx_msg void OnButton();
+		//}}AFX_MSG
+		afx_msg void OnKillfocusCmbBox();
+		afx_msg void OnSelchangeCmbBox();
+		afx_msg void OnButton();
 
-	DECLARE_MESSAGE_MAP()
+		DECLARE_MESSAGE_MAP()
 
-	void InvertLine(CDC* pDC,CPoint ptFrom,CPoint ptTo);
-	void DisplayButton(CRect region);
+		void InvertLine(CDC *pDC,CPoint ptFrom,CPoint ptTo);
+		void DisplayButton(CRect region);
 
-	CComboBox m_cmbBox;
-	CEdit m_editBox;
-	CButton m_btnCtrl;
-	CFont m_SSerif8Font;
-	
-	int m_curSel,m_prevSel;
-	int m_nDivider;
-	int m_nDivTop;
-	int m_nDivBtm;
-	int m_nOldDivX;
-	int m_nLastBox;
-	BOOL m_bTracking;
-	BOOL m_bDivIsSet;
-	HCURSOR m_hCursorArrow;
-	HCURSOR m_hCursorSize;
-	CPropertyItem *measureItem;
-	bool updateInspectors;
+		CComboBox m_cmbBox;
+		CEdit m_editBox;
+		CButton m_btnCtrl;
+		CFont m_SSerif8Font;
+
+		int m_curSel,m_prevSel;
+		int m_nDivider;
+		int m_nDivTop;
+		int m_nDivBtm;
+		int m_nOldDivX;
+		int m_nLastBox;
+		BOOL m_bTracking;
+		BOOL m_bDivIsSet;
+		HCURSOR m_hCursorArrow;
+		HCURSOR m_hCursorSize;
+		CPropertyItem *measureItem;
+		bool updateInspectors;
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -41,32 +41,32 @@ If you have questions concerning this license or the applicable additional terms
 class CDlgEvent : public CDialog
 {
 // Construction
-public:
-	CDlgEvent(CWnd* pParent = NULL);   // standard constructor
+	public:
+		CDlgEvent(CWnd *pParent = NULL);   // standard constructor
 
 // Dialog Data
-	//{{AFX_DATA(CDlgEvent)
-	enum { IDD = IDD_DLG_CAMERAEVENT };
-	CString	m_strParm;
-	int m_event;
-	//}}AFX_DATA
+		//{{AFX_DATA(CDlgEvent)
+		enum { IDD = IDD_DLG_CAMERAEVENT };
+		CString	m_strParm;
+		int m_event;
+		//}}AFX_DATA
 
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDlgEvent)
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CDlgEvent)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+		virtual void DoDataExchange(CDataExchange *pDX);    // DDX/DDV support
+		//}}AFX_VIRTUAL
 
 // Implementation
-protected:
+	protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CDlgEvent)
+		// Generated message map functions
+		//{{AFX_MSG(CDlgEvent)
 		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+		//}}AFX_MSG
+		DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

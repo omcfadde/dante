@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -49,7 +49,8 @@ If you have questions concerning this license or the applicable additional terms
 idSIMD_SSE3::GetName
 ============
 */
-const char * idSIMD_SSE3::GetName( void ) const {
+const char *idSIMD_SSE3::GetName(void) const
+{
 	return "MMX & SSE & SSE2 & SSE3";
 }
 
@@ -240,15 +241,16 @@ const char * idSIMD_SSE3::GetName( void ) const {
 SSE3_Dot
 ============
 */
-float SSE3_Dot( const idVec4 &v1, const idVec4 &v2 ) {
+float SSE3_Dot(const idVec4 &v1, const idVec4 &v2)
+{
 	float d;
 	__asm {
 		mov		esi, v1
 		mov		edi, v2
 		movaps	xmm0, [esi]
 		mulps	xmm0, [edi]
-		haddps(	_xmm0, _xmm0 )
-		haddps(	_xmm0, _xmm0 )
+		haddps(_xmm0, _xmm0)
+		haddps(_xmm0, _xmm0)
 		movss	d, xmm0
 	}
 	return d;
@@ -259,7 +261,8 @@ float SSE3_Dot( const idVec4 &v1, const idVec4 &v2 ) {
 idSIMD_SSE3::GetName
 ============
 */
-const char * idSIMD_SSE3::GetName( void ) const {
+const char *idSIMD_SSE3::GetName(void) const
+{
 	return "MMX & SSE & SSE2 & SSE3";
 }
 
@@ -268,16 +271,16 @@ const char * idSIMD_SSE3::GetName( void ) const {
 idSIMD_SSE3::TransformVerts
 ============
 */
-void VPCALL idSIMD_SSE3::TransformVerts( idDrawVert *verts, const int numVerts, const idJointMat *joints, const idVec4 *weights, const int *index, const int numWeights ) {
+void VPCALL idSIMD_SSE3::TransformVerts(idDrawVert *verts, const int numVerts, const idJointMat *joints, const idVec4 *weights, const int *index, const int numWeights)
+{
 #if 1
 
-	assert( sizeof( idDrawVert ) == DRAWVERT_SIZE );
-	assert( (int)&((idDrawVert *)0)->xyz == DRAWVERT_XYZ_OFFSET );
-	assert( sizeof( idVec4 ) == JOINTWEIGHT_SIZE );
-	assert( sizeof( idJointMat ) == JOINTMAT_SIZE );
+	assert(sizeof(idDrawVert) == DRAWVERT_SIZE);
+	assert((int)&((idDrawVert *)0)->xyz == DRAWVERT_XYZ_OFFSET);
+	assert(sizeof(idVec4) == JOINTWEIGHT_SIZE);
+	assert(sizeof(idJointMat) == JOINTMAT_SIZE);
 
-	__asm
-	{
+	__asm {
 		mov			eax, numVerts
 		test		eax, eax
 		jz			done
@@ -291,7 +294,7 @@ void VPCALL idSIMD_SSE3::TransformVerts( idDrawVert *verts, const int numVerts, 
 		add			ecx, eax
 		neg			eax
 
-	loopVert:
+		loopVert:
 		mov			ebx, [edx]
 		movaps		xmm2, [esi]
 		add			edx, 8
@@ -307,7 +310,7 @@ void VPCALL idSIMD_SSE3::TransformVerts( idDrawVert *verts, const int numVerts, 
 
 		jne			doneWeight
 
-	loopWeight:
+		loopWeight:
 		mov			ebx, [edx]
 		movaps		xmm5, [esi]
 		add			edx, 8
@@ -327,39 +330,41 @@ void VPCALL idSIMD_SSE3::TransformVerts( idDrawVert *verts, const int numVerts, 
 
 		je			loopWeight
 
-	doneWeight:
+		doneWeight:
 		add			eax, DRAWVERT_SIZE
 
-		haddps(		_xmm0, _xmm1 )
-		haddps(		_xmm2, _xmm0 )
+		haddps(_xmm0, _xmm1)
+		haddps(_xmm2, _xmm0)
 
 		movhps		[ecx+eax-DRAWVERT_SIZE+0], xmm2
 
-		haddps(		_xmm2, _xmm2 )
+		haddps(_xmm2, _xmm2)
 
 		movss		[ecx+eax-DRAWVERT_SIZE+8], xmm2
 
 		jl			loopVert
-	done:
+		done:
 	}
 
 #else
 
-	int i, j;
-	const byte *jointsPtr = (byte *)joints;
+int i, j;
+const byte *jointsPtr = (byte *)joints;
 
-	for( j = i = 0; i < numVerts; i++ ) {
-		idVec3 v;
+for (j = i = 0; i < numVerts; i++) {
+	idVec3 v;
 
-		v = ( *(idJointMat *) ( jointsPtr + index[j*2+0] ) ) * weights[j];
-		while( index[j*2+1] == 0 ) {
-			j++;
-			v += ( *(idJointMat *) ( jointsPtr + index[j*2+0] ) ) * weights[j];
-		}
+	v = (*(idJointMat *)(jointsPtr + index[j*2+0])) * weights[j];
+
+	while (index[j*2+1] == 0) {
 		j++;
-
-		verts[i].xyz = v;
+		v += (*(idJointMat *)(jointsPtr + index[j*2+0])) * weights[j];
 	}
+
+	j++;
+
+	verts[i].xyz = v;
+}
 
 #endif
 }

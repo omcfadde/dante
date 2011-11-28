@@ -25,39 +25,39 @@ extern "C"
 
 #include "codec.h"
 
-extern int vorbis_encode_init(vorbis_info *vi,
-			      long channels,
-			      long rate,
-			      
-			      long max_bitrate,
-			      long nominal_bitrate,
-			      long min_bitrate);
+	extern int vorbis_encode_init(vorbis_info *vi,
+	                              long channels,
+	                              long rate,
 
-extern int vorbis_encode_setup_managed(vorbis_info *vi,
-				       long channels,
-				       long rate,
-				       
-				       long max_bitrate,
-				       long nominal_bitrate,
-				       long min_bitrate);
-  
-extern int vorbis_encode_setup_vbr(vorbis_info *vi,
-				  long channels,
-				  long rate,
-				  
-				  float /* quality level from 0. (lo) to 1. (hi) */
-				  );
+	                              long max_bitrate,
+	                              long nominal_bitrate,
+	                              long min_bitrate);
 
-extern int vorbis_encode_init_vbr(vorbis_info *vi,
-				  long channels,
-				  long rate,
-				  
-				  float base_quality /* quality level from 0. (lo) to 1. (hi) */
-				  );
+	extern int vorbis_encode_setup_managed(vorbis_info *vi,
+	                                       long channels,
+	                                       long rate,
 
-extern int vorbis_encode_setup_init(vorbis_info *vi);
+	                                       long max_bitrate,
+	                                       long nominal_bitrate,
+	                                       long min_bitrate);
 
-extern int vorbis_encode_ctl(vorbis_info *vi,int number,void *arg);
+	extern int vorbis_encode_setup_vbr(vorbis_info *vi,
+	                                   long channels,
+	                                   long rate,
+
+	                                   float /* quality level from 0. (lo) to 1. (hi) */
+	                                  );
+
+	extern int vorbis_encode_init_vbr(vorbis_info *vi,
+	                                  long channels,
+	                                  long rate,
+
+	                                  float base_quality /* quality level from 0. (lo) to 1. (hi) */
+	                                 );
+
+	extern int vorbis_encode_setup_init(vorbis_info *vi);
+
+	extern int vorbis_encode_ctl(vorbis_info *vi,int number,void *arg);
 
 #define OV_ECTL_RATEMANAGE_GET       0x10
 
@@ -71,18 +71,18 @@ extern int vorbis_encode_ctl(vorbis_info *vi,int number,void *arg);
 #define OV_ECTL_IBLOCK_GET           0x30
 #define OV_ECTL_IBLOCK_SET           0x31
 
-struct ovectl_ratemanage_arg {
-  int    management_active;
+	struct ovectl_ratemanage_arg {
+		int    management_active;
 
-  long   bitrate_hard_min;
-  long   bitrate_hard_max;
-  double bitrate_hard_window;
+		long   bitrate_hard_min;
+		long   bitrate_hard_max;
+		double bitrate_hard_window;
 
-  long   bitrate_av_lo;
-  long   bitrate_av_hi;
-  double bitrate_av_window;
-  double bitrate_av_window_center;
-};
+		long   bitrate_av_lo;
+		long   bitrate_av_hi;
+		double bitrate_av_window;
+		double bitrate_av_window_center;
+	};
 
 #ifdef __cplusplus
 }

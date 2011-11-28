@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ static char THIS_FILE[] = __FILE__;
 // CMapInfo dialog
 
 
-CMapInfo::CMapInfo(CWnd* pParent /*=NULL*/)
+CMapInfo::CMapInfo(CWnd *pParent /*=NULL*/)
 	: CDialog(CMapInfo::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CMapInfo)
@@ -54,7 +54,7 @@ CMapInfo::CMapInfo(CWnd* pParent /*=NULL*/)
 }
 
 
-void CMapInfo::DoDataExchange(CDataExchange* pDX)
+void CMapInfo::DoDataExchange(CDataExchange *pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CMapInfo)
@@ -74,47 +74,48 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CMapInfo message handlers
 
-BOOL CMapInfo::OnInitDialog() 
+BOOL CMapInfo::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-  m_nTotalBrushes = 0;
-  m_nTotalEntities = 0;
-  m_nNet = 0;
-	for (brush_t* pBrush=active_brushes.next ; pBrush != &active_brushes ; pBrush=pBrush->next)
-  {
-    m_nTotalBrushes++;
-    if (pBrush->owner == world_entity)
-      m_nNet++;
-  }
+	m_nTotalBrushes = 0;
+	m_nTotalEntities = 0;
+	m_nNet = 0;
+
+	for (brush_t *pBrush=active_brushes.next ; pBrush != &active_brushes ; pBrush=pBrush->next) {
+		m_nTotalBrushes++;
+
+		if (pBrush->owner == world_entity)
+			m_nNet++;
+	}
 
 
-  CMapStringToPtr mapEntity;
+	CMapStringToPtr mapEntity;
 
-  int nValue = 0;
-	for (entity_t* pEntity=entities.next ; pEntity != &entities ; pEntity=pEntity->next)
-	{
-    m_nTotalEntities++;
-    nValue = 0;
-    mapEntity.Lookup(pEntity->eclass->name, reinterpret_cast<void*&>(nValue));
-    nValue++ ;
-    mapEntity.SetAt(pEntity->eclass->name, reinterpret_cast<void*>(nValue));
-  }
+	int nValue = 0;
 
-  m_lstEntity.ResetContent();
-  m_lstEntity.SetTabStops(96);
-  CString strKey;
-  POSITION pos = mapEntity.GetStartPosition();
-  while (pos)
-  {
-    mapEntity.GetNextAssoc(pos, strKey, reinterpret_cast<void*&>(nValue));
-    CString strList;
-    strList.Format("%s\t%i", strKey, nValue);
-    m_lstEntity.AddString(strList);
-  }
+	for (entity_t *pEntity=entities.next ; pEntity != &entities ; pEntity=pEntity->next) {
+		m_nTotalEntities++;
+		nValue = 0;
+		mapEntity.Lookup(pEntity->eclass->name, reinterpret_cast<void* &>(nValue));
+		nValue++ ;
+		mapEntity.SetAt(pEntity->eclass->name, reinterpret_cast<void *>(nValue));
+	}
 
-  UpdateData(FALSE);
-	
+	m_lstEntity.ResetContent();
+	m_lstEntity.SetTabStops(96);
+	CString strKey;
+	POSITION pos = mapEntity.GetStartPosition();
+
+	while (pos) {
+		mapEntity.GetNextAssoc(pos, strKey, reinterpret_cast<void* &>(nValue));
+		CString strList;
+		strList.Format("%s\t%i", strKey, nValue);
+		m_lstEntity.AddString(strList);
+	}
+
+	UpdateData(FALSE);
+
 	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	// EXCEPTION: OCX Property Pages should return FALSE
 }

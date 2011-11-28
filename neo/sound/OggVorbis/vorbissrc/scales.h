@@ -25,34 +25,39 @@
 #define VORBIS_IEEE_FLOAT32 1
 #ifdef VORBIS_IEEE_FLOAT32
 
-static float unitnorm(float x){
-  ogg_uint32_t *ix=(ogg_uint32_t *)&x;
-  *ix=(*ix&0x80000000UL)|(0x3f800000UL);
-  return(x);
+static float unitnorm(float x)
+{
+	ogg_uint32_t *ix=(ogg_uint32_t *)&x;
+	*ix=(*ix&0x80000000UL)|(0x3f800000UL);
+	return(x);
 }
 
-static float FABS(float *x){
-  ogg_uint32_t *ix=(ogg_uint32_t *)x;
-  *ix&=0x7fffffffUL;
-  return(*x);
+static float FABS(float *x)
+{
+	ogg_uint32_t *ix=(ogg_uint32_t *)x;
+	*ix&=0x7fffffffUL;
+	return(*x);
 }
 
-static float todB(const float *x){
-  float calc;
-  ogg_int32_t *i=(ogg_int32_t *)x;
-  calc = ((*i) & 0x7fffffff);
-  calc *= 7.1771144e-7f;
-  calc += -764.27118f;
-  return calc;
+static float todB(const float *x)
+{
+	float calc;
+	ogg_int32_t *i=(ogg_int32_t *)x;
+	calc = ((*i) & 0x7fffffff);
+	calc *= 7.1771144e-7f;
+	calc += -764.27118f;
+	return calc;
 }
 
 #define todB_nn(x) todB(x)
 
 #else
 
-static float unitnorm(float x){
-  if(x<0)return(-1.f);
-  return(1.f);
+static float unitnorm(float x)
+{
+	if (x<0)return(-1.f);
+
+	return(1.f);
 }
 
 #define FABS(x) fabs(*(x))
@@ -60,9 +65,9 @@ static float unitnorm(float x){
 #define todB(x)   (*(x)==0?-400.f:log(*(x)**(x))*4.34294480f)
 #define todB_nn(x)   (*(x)==0.f?-400.f:log(*(x))*8.6858896f)
 
-#endif 
+#endif
 
-#define fromdB(x) (exp((x)*.11512925f))  
+#define fromdB(x) (exp((x)*.11512925f))
 
 /* The bark scale equations are approximations, since the original
    table was somewhat hand rolled.  The below are chosen to have the

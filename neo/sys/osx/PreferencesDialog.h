@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,8 +29,7 @@ If you have questions concerning this license or the applicable additional terms
 #ifndef PREFERENCESDIALOG_H
 #define PREFERENCESDIALOG_H
 
-enum GameDisplayMode
-{
+enum GameDisplayMode {
 	kInactive,
 	kFullScreen,
 	kWindow
@@ -38,14 +37,12 @@ enum GameDisplayMode
 
 typedef long LONG;
 
-typedef struct tagPOINT
-{
+typedef struct tagPOINT {
 	LONG  x;
 	LONG  y;
 } POINT;
 
-typedef struct 
-{
+typedef struct {
 	GameDisplayMode		mode;				// Indicates if the game is in full screen mode or window mode.
 	CGDirectDisplayID	displayID;			// Display used for the full screen mode.
 	short				width;				// Width of screen and/or window.
@@ -60,13 +57,13 @@ typedef struct
 typedef bool(*ValidModeCallbackProc)(CGDirectDisplayID displayID, int width, int height, int depth, Fixed freq);
 
 OSStatus CreateGameDisplayPreferencesDialog(
-							const GameDisplayInfo *inGDInfo,
-							WindowRef *outWindow,
-							ValidModeCallbackProc inCallback = NULL);
+        const GameDisplayInfo *inGDInfo,
+        WindowRef *outWindow,
+        ValidModeCallbackProc inCallback = NULL);
 
 OSStatus RunGameDisplayPreferencesDialog(
-							GameDisplayInfo *outGDInfo, 
-							WindowRef inWindow);
+        GameDisplayInfo *outGDInfo,
+        WindowRef inWindow);
 
 
 #endif // PREFERENCESDIALOG_H

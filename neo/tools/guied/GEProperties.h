@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,40 +38,40 @@ class rvGEWindowWrapper;
 
 class rvGEProperties
 {
-public:
+	public:
 
-	rvGEProperties ( );
-	
-	bool	Create				( HWND parent, bool visible );
-	void	Show				( bool visibile );
+		rvGEProperties();
 
-	void	SetWorkspace		( rvGEWorkspace* workspace );
+		bool	Create(HWND parent, bool visible);
+		void	Show(bool visibile);
 
-	void	Update				( void );	
+		void	SetWorkspace(rvGEWorkspace *workspace);
 
-	HWND	GetWindow			( void );
-	
-protected:
+		void	Update(void);
 
-	bool	AddModifier			( const char* name, const char* value );
+		HWND	GetWindow(void);
 
-	static LRESULT CALLBACK WndProc ( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
+	protected:
 
-	HWND				mWnd;
-	rvPropertyGrid		mGrid;
-	rvGEWindowWrapper*	mWrapper;
-	rvGEWorkspace*		mWorkspace;	
+		bool	AddModifier(const char *name, const char *value);
+
+		static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+		HWND				mWnd;
+		rvPropertyGrid		mGrid;
+		rvGEWindowWrapper	*mWrapper;
+		rvGEWorkspace		*mWorkspace;
 };
 
-ID_INLINE HWND rvGEProperties::GetWindow ( void )
+ID_INLINE HWND rvGEProperties::GetWindow(void)
 {
 	return mWnd;
 }
 
-ID_INLINE void rvGEProperties::SetWorkspace ( rvGEWorkspace* workspace )
+ID_INLINE void rvGEProperties::SetWorkspace(rvGEWorkspace *workspace)
 {
 	mWorkspace = workspace;
-	Update ( );
+	Update();
 }
 
 #endif // GEPROPERTIES_H_

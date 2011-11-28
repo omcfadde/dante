@@ -12,10 +12,10 @@
  *  defined.
  */
 
-Bool XNVCTRLQueryExtension (
-    Display *dpy,
-    int *event_basep,
-    int *error_basep
+Bool XNVCTRLQueryExtension(
+        Display *dpy,
+        int *event_basep,
+        int *error_basep
 );
 
 /*
@@ -26,10 +26,10 @@ Bool XNVCTRLQueryExtension (
  *  numbers.
  */
 
-Bool XNVCTRLQueryVersion (
-    Display *dpy,
-    int *major,
-    int *minor
+Bool XNVCTRLQueryVersion(
+        Display *dpy,
+        int *major,
+        int *minor
 );
 
 
@@ -40,9 +40,9 @@ Bool XNVCTRLQueryVersion (
  *  driver.  Returns False otherwise.
  */
 
-Bool XNVCTRLIsNvScreen (
-    Display *dpy,
-    int screen
+Bool XNVCTRLIsNvScreen(
+        Display *dpy,
+        int screen
 );
 
 /*
@@ -59,12 +59,12 @@ Bool XNVCTRLIsNvScreen (
  *     BadMatch - The NVIDIA driver is not present on that screen.
  */
 
-void XNVCTRLSetAttribute (
-    Display *dpy,
-    int screen,
-    unsigned int display_mask,
-    unsigned int attribute,
-    int value
+void XNVCTRLSetAttribute(
+        Display *dpy,
+        int screen,
+        unsigned int display_mask,
+        unsigned int attribute,
+        int value
 );
 
 /*
@@ -83,12 +83,12 @@ void XNVCTRLSetAttribute (
  */
 
 
-Bool XNVCTRLQueryAttribute (
-    Display *dpy,
-    int screen,
-    unsigned int display_mask,
-    unsigned int attribute,
-    int *value
+Bool XNVCTRLQueryAttribute(
+        Display *dpy,
+        int screen,
+        unsigned int display_mask,
+        unsigned int attribute,
+        int *value
 );
 
 /*
@@ -105,12 +105,12 @@ Bool XNVCTRLQueryAttribute (
  *     BadAlloc - Insufficient resources to fulfill the request.
  */
 
-Bool XNVCTRLQueryStringAttribute (
-    Display *dpy,
-    int screen,
-    unsigned int display_mask,
-    unsigned int attribute,
-    char **ptr
+Bool XNVCTRLQueryStringAttribute(
+        Display *dpy,
+        int screen,
+        unsigned int display_mask,
+        unsigned int attribute,
+        char **ptr
 );
 
 /*
@@ -122,12 +122,12 @@ Bool XNVCTRLQueryStringAttribute (
  * of NVCTRLAttributeValidValues in NVCtrl.h.
  */
 
-Bool XNVCTRLQueryValidAttributeValues (
-    Display *dpy,
-    int screen,
-    unsigned int display_mask,
-    unsigned int attribute,                                 
-    NVCTRLAttributeValidValuesRec *values
+Bool XNVCTRLQueryValidAttributeValues(
+        Display *dpy,
+        int screen,
+        unsigned int display_mask,
+        unsigned int attribute,
+        NVCTRLAttributeValidValuesRec *values
 );
 
 /*
@@ -142,11 +142,11 @@ Bool XNVCTRLQueryValidAttributeValues (
  * controlled by the NVIDIA driver.
  */
 
-Bool XNVCtrlSelectNotify (
-    Display *dpy,
-    int screen,
-    int type,
-    Bool onoff
+Bool XNVCtrlSelectNotify(
+        Display *dpy,
+        int screen,
+        int type,
+        Bool onoff
 );
 
 
@@ -156,21 +156,21 @@ Bool XNVCtrlSelectNotify (
  */
 
 typedef struct {
-    int type;
-    unsigned long serial;
-    Bool send_event;  /* always FALSE, we don't allow send_events */
-    Display *display;
-    Time time;
-    int screen;
-    unsigned int display_mask;
-    unsigned int attribute;
-    int value;
+	int type;
+	unsigned long serial;
+	Bool send_event;  /* always FALSE, we don't allow send_events */
+	Display *display;
+	Time time;
+	int screen;
+	unsigned int display_mask;
+	unsigned int attribute;
+	int value;
 } XNVCtrlAttributeChangedEvent;
 
 typedef union {
-    int type;
-    XNVCtrlAttributeChangedEvent attribute_changed;
-    long pad[24];
+	int type;
+	XNVCtrlAttributeChangedEvent attribute_changed;
+	long pad[24];
 } XNVCtrlEvent;
 
 

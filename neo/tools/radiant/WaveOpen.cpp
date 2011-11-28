@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -46,11 +46,11 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNAMIC(CWaveOpen, CFileDialog)
 
 CWaveOpen::CWaveOpen(BOOL bOpenFileDialog, LPCTSTR lpszDefExt, LPCTSTR lpszFileName,
-		DWORD dwFlags, LPCTSTR lpszFilter, CWnd* pParentWnd) :
-		CFileDialog(bOpenFileDialog, lpszDefExt, lpszFileName, dwFlags, lpszFilter, pParentWnd)
+                     DWORD dwFlags, LPCTSTR lpszFilter, CWnd *pParentWnd) :
+	CFileDialog(bOpenFileDialog, lpszDefExt, lpszFileName, dwFlags, lpszFilter, pParentWnd)
 {
-  m_ofn.Flags |= (OFN_EXPLORER | OFN_ENABLETEMPLATE);
-  m_ofn.lpTemplateName = MAKEINTRESOURCE(IDD_PLAYWAVE);
+	m_ofn.Flags |= (OFN_EXPLORER | OFN_ENABLETEMPLATE);
+	m_ofn.lpTemplateName = MAKEINTRESOURCE(IDD_PLAYWAVE);
 }
 
 
@@ -63,43 +63,41 @@ END_MESSAGE_MAP()
 
 void CWaveOpen::OnFileNameChange()
 {
-  CString str = GetPathName();
-  str.MakeLower();
-  CWnd *pWnd = GetDlgItem(IDC_BTN_PLAY);
-  if (pWnd == NULL)
-  {
-    return;
-  }
-  if (str.Find(".wav") >= 0)
-  {
-    pWnd->EnableWindow(TRUE);
-  }
-  else
-  {
-    pWnd->EnableWindow(FALSE);
-  }
+	CString str = GetPathName();
+	str.MakeLower();
+	CWnd *pWnd = GetDlgItem(IDC_BTN_PLAY);
+
+	if (pWnd == NULL) {
+		return;
+	}
+
+	if (str.Find(".wav") >= 0) {
+		pWnd->EnableWindow(TRUE);
+	} else {
+		pWnd->EnableWindow(FALSE);
+	}
 }
 
-void CWaveOpen::OnBtnPlay() 
+void CWaveOpen::OnBtnPlay()
 {
-  sndPlaySound(NULL, NULL);
-  CString str = GetPathName();
-  if (str.GetLength() > 0)
-  {
-    sndPlaySound(str, SND_FILENAME | SND_ASYNC);
-  }
+	sndPlaySound(NULL, NULL);
+	CString str = GetPathName();
+
+	if (str.GetLength() > 0) {
+		sndPlaySound(str, SND_FILENAME | SND_ASYNC);
+	}
 }
 
-BOOL CWaveOpen::OnInitDialog() 
+BOOL CWaveOpen::OnInitDialog()
 {
 	CFileDialog::OnInitDialog();
-	
-  CWnd *pWnd = GetDlgItem(IDC_BTN_PLAY);
-  if (pWnd != NULL)
-  {
-    pWnd->EnableWindow(FALSE);
-  }
-	
+
+	CWnd *pWnd = GetDlgItem(IDC_BTN_PLAY);
+
+	if (pWnd != NULL) {
+		pWnd->EnableWindow(FALSE);
+	}
+
 	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	// EXCEPTION: OCX Property Pages should return FALSE
 }

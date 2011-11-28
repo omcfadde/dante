@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -43,16 +43,18 @@ CEntityListDlg g_EntityListDlg;
 /////////////////////////////////////////////////////////////////////////////
 // CEntityListDlg dialog
 
-void CEntityListDlg::ShowDialog() {
+void CEntityListDlg::ShowDialog()
+{
 	if (g_EntityListDlg.GetSafeHwnd() == NULL) {
 		g_EntityListDlg.Create(IDD_DLG_ENTITYLIST);
-	} 
+	}
+
 	g_EntityListDlg.UpdateList();
 	g_EntityListDlg.ShowWindow(SW_SHOW);
 
 }
 
-CEntityListDlg::CEntityListDlg(CWnd* pParent /*=NULL*/)
+CEntityListDlg::CEntityListDlg(CWnd *pParent /*=NULL*/)
 	: CDialog(CEntityListDlg::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CEntityListDlg)
@@ -60,7 +62,7 @@ CEntityListDlg::CEntityListDlg(CWnd* pParent /*=NULL*/)
 }
 
 
-void CEntityListDlg::DoDataExchange(CDataExchange* pDX)
+void CEntityListDlg::DoDataExchange(CDataExchange *pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CEntityListDlg)
@@ -82,43 +84,51 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CEntityListDlg message handlers
 
-void CEntityListDlg::OnSelect() 
+void CEntityListDlg::OnSelect()
 {
 	int index = listEntities.GetCurSel();
+
 	if (index != LB_ERR) {
-		entity_t *ent = reinterpret_cast<entity_t*>(listEntities.GetItemDataPtr(index));
+		entity_t *ent = reinterpret_cast<entity_t *>(listEntities.GetItemDataPtr(index));
+
 		if (ent) {
 			Select_Deselect();
-			Select_Brush (ent->brushes.onext);
+			Select_Brush(ent->brushes.onext);
 		}
 	}
-  Sys_UpdateWindows(W_ALL);
+
+	Sys_UpdateWindows(W_ALL);
 }
 
-void CEntityListDlg::UpdateList() {
+void CEntityListDlg::UpdateList()
+{
 	listEntities.ResetContent();
-	for (entity_t* pEntity=entities.next ; pEntity != &entities ; pEntity=pEntity->next) {
+
+	for (entity_t *pEntity=entities.next ; pEntity != &entities ; pEntity=pEntity->next) {
 		int index = listEntities.AddString(pEntity->epairs.GetString("name"));
+
 		if (index != LB_ERR) {
-			listEntities.SetItemDataPtr(index, (void*)pEntity);
+			listEntities.SetItemDataPtr(index, (void *)pEntity);
 		}
 	}
 }
 
-void CEntityListDlg::OnSysCommand(UINT nID,  LPARAM lParam) {
+void CEntityListDlg::OnSysCommand(UINT nID,  LPARAM lParam)
+{
 	if (nID == SC_CLOSE) {
 		DestroyWindow();
 	}
 }
 
-void CEntityListDlg::OnCancel() {
+void CEntityListDlg::OnCancel()
+{
 	DestroyWindow();
 }
 
-BOOL CEntityListDlg::OnInitDialog() 
+BOOL CEntityListDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
-	
+
 	UpdateList();
 
 	CRect rct;
@@ -127,23 +137,27 @@ BOOL CEntityListDlg::OnInitDialog()
 	m_lstEntity.InsertColumn(1, "Value", LVCFMT_LEFT, rct.Width() / 2);
 	m_lstEntity.DeleteColumn(2);
 	UpdateData(FALSE);
-	
+
 	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	// EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CEntityListDlg::OnClose() {
+void CEntityListDlg::OnClose()
+{
 	DestroyWindow();
 }
 
 void CEntityListDlg::OnLbnSelchangeListEntities()
 {
 	int index = listEntities.GetCurSel();
+
 	if (index != LB_ERR) {
 		m_lstEntity.DeleteAllItems();
-		entity_t* pEntity = reinterpret_cast<entity_t*>(listEntities.GetItemDataPtr(index));
-	    if (pEntity) {
+		entity_t *pEntity = reinterpret_cast<entity_t *>(listEntities.GetItemDataPtr(index));
+
+		if (pEntity) {
 			int count = pEntity->epairs.GetNumKeyVals();
+
 			for (int i = 0; i < count; i++) {
 				int nParent = m_lstEntity.InsertItem(0, pEntity->epairs.GetKeyVal(i)->GetKey());
 				m_lstEntity.SetItem(nParent, 1, LVIF_TEXT, pEntity->epairs.GetKeyVal(i)->GetValue(), 0, 0, 0, reinterpret_cast<DWORD>(pEntity));
@@ -154,5 +168,5 @@ void CEntityListDlg::OnLbnSelchangeListEntities()
 
 void CEntityListDlg::OnLbnDblclkListEntities()
 {
-  OnSelect();
+	OnSelect();
 }

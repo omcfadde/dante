@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -42,31 +42,32 @@ If you have questions concerning this license or the applicable additional terms
 ===============================================================================
 */
 
-class idConsole {
-public:
-	virtual			~idConsole( void ) {}
+class idConsole
+{
+	public:
+		virtual			~idConsole(void) {}
 
-	virtual void	Init( void ) = 0;
-	virtual void	Shutdown( void ) = 0;
+		virtual void	Init(void) = 0;
+		virtual void	Shutdown(void) = 0;
 
-	// can't be combined with Init, because Init happens before renderer is started
-	virtual void	LoadGraphics() = 0;
+		// can't be combined with Init, because Init happens before renderer is started
+		virtual void	LoadGraphics() = 0;
 
-	virtual bool	ProcessEvent( const struct sysEvent_s *event, bool forceAccept ) = 0;
+		virtual bool	ProcessEvent(const struct sysEvent_s *event, bool forceAccept) = 0;
 
-	// the system code can release the mouse pointer when the console is active
-	virtual bool	Active( void ) = 0;
+		// the system code can release the mouse pointer when the console is active
+		virtual bool	Active(void) = 0;
 
-	// clear the timers on any recent prints that are displayed in the notify lines
-	virtual void	ClearNotifyLines( void ) = 0;
+		// clear the timers on any recent prints that are displayed in the notify lines
+		virtual void	ClearNotifyLines(void) = 0;
 
-	// some console commands, like timeDemo, will force the console closed before they start
-	virtual void	Close( void ) = 0;
+		// some console commands, like timeDemo, will force the console closed before they start
+		virtual void	Close(void) = 0;
 
-	virtual void	Draw( bool forceFullScreen ) = 0;
-	virtual void	Print( const char *text ) = 0;
+		virtual void	Draw(bool forceFullScreen) = 0;
+		virtual void	Print(const char *text) = 0;
 };
 
-extern idConsole *	console;	// statically initialized to an idConsoleLocal
+extern idConsole 	*console;	// statically initialized to an idConsoleLocal
 
 #endif /* !__CONSOLE_H__ */

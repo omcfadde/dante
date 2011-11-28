@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -60,9 +60,8 @@ const char *GetKeyString(entity_t *ent, int iIndex)
 //
 //	assert(0);
 //	return NULL;
-	
-	if ( iIndex < GetNumKeys(ent) )
-	{
+
+	if (iIndex < GetNumKeys(ent)) {
 		return ent->epairs.GetKeyVal(iIndex)->GetKey().c_str();
 	}
 
@@ -75,7 +74,8 @@ const char *GetKeyString(entity_t *ent, int iIndex)
  =======================================================================================================================
  =======================================================================================================================
  */
-const char *ValueForKey(entity_t *ent, const char *key) {
+const char *ValueForKey(entity_t *ent, const char *key)
+{
 	return ent->epairs.GetString(key);
 }
 
@@ -83,14 +83,16 @@ const char *ValueForKey(entity_t *ent, const char *key) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void TrackMD3Angles(entity_t *e, const char *key, const char *value) {
-	if ( idStr::Icmp(key, "angle") != 0 ) {
+void TrackMD3Angles(entity_t *e, const char *key, const char *value)
+{
+	if (idStr::Icmp(key, "angle") != 0) {
 		return;
 	}
 
 	if ((e->eclass->fixedsize && e->eclass->nShowFlags & ECLASS_MISCMODEL) || EntityHasModel(e)) {
 		float	a = FloatForKey(e, "angle");
 		float	b = atof(value);
+
 		if (a != b) {
 			idVec3	vAngle;
 			vAngle[0] = vAngle[1] = 0;
@@ -106,7 +108,8 @@ void TrackMD3Angles(entity_t *e, const char *key, const char *value) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void SetKeyValue(entity_t *ent, const char *key, const char *value, bool trackAngles) {
+void SetKeyValue(entity_t *ent, const char *key, const char *value, bool trackAngles)
+{
 	if (ent == NULL) {
 		return;
 	}
@@ -123,14 +126,15 @@ void SetKeyValue(entity_t *ent, const char *key, const char *value, bool trackAn
 	GetVectorForKey(ent, "origin", ent->origin);
 
 	// update sound in case this key was relevent
-	Entity_UpdateSoundEmitter( ent );
+	Entity_UpdateSoundEmitter(ent);
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void SetKeyVec3(entity_t *ent, const char *key, idVec3 v) {
+void SetKeyVec3(entity_t *ent, const char *key, idVec3 v)
+{
 	if (ent == NULL) {
 		return;
 	}
@@ -149,7 +153,8 @@ void SetKeyVec3(entity_t *ent, const char *key, idVec3 v) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void SetKeyMat3(entity_t *ent, const char *key, idMat3 m) {
+void SetKeyMat3(entity_t *ent, const char *key, idMat3 m)
+{
 	if (ent == NULL) {
 		return;
 	}
@@ -159,9 +164,9 @@ void SetKeyMat3(entity_t *ent, const char *key, idMat3 m) {
 	}
 
 	idStr str;
-	
+
 	sprintf(str, "%g %g %g %g %g %g %g %g %g",m[0][0],m[0][1],m[0][2],m[1][0],m[1][1],m[1][2],m[2][0],m[2][1],m[2][2]);
-	
+
 	ent->epairs.Set(key, str);
 	GetVectorForKey(ent, "origin", ent->origin);
 }
@@ -172,8 +177,10 @@ void SetKeyMat3(entity_t *ent, const char *key, idMat3 m) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void DeleteKey(entity_t *ent, const char *key) {
+void DeleteKey(entity_t *ent, const char *key)
+{
 	ent->epairs.Delete(key);
+
 	if (stricmp(key, "rotation") == 0) {
 		ent->rotation.Identity();
 	}
@@ -183,10 +190,12 @@ void DeleteKey(entity_t *ent, const char *key) {
  =======================================================================================================================
  =======================================================================================================================
  */
-float FloatForKey(entity_t *ent, const char *key) {
+float FloatForKey(entity_t *ent, const char *key)
+{
 	const char	*k;
 
 	k = ValueForKey(ent, key);
+
 	if (k && *k) {
 		return atof(k);
 	}
@@ -198,7 +207,8 @@ float FloatForKey(entity_t *ent, const char *key) {
  =======================================================================================================================
  =======================================================================================================================
  */
-int IntForKey(entity_t *ent, const char *key) {
+int IntForKey(entity_t *ent, const char *key)
+{
 	const char	*k;
 
 	k = ValueForKey(ent, key);
@@ -209,14 +219,15 @@ int IntForKey(entity_t *ent, const char *key) {
  =======================================================================================================================
  =======================================================================================================================
  */
-bool GetVectorForKey(entity_t *ent, const char *key, idVec3 &vec) {
+bool GetVectorForKey(entity_t *ent, const char *key, idVec3 &vec)
+{
 	const char	*k;
 	k = ValueForKey(ent, key);
+
 	if (k && strlen(k) > 0) {
 		sscanf(k, "%f %f %f", &vec[0], &vec[1], &vec[2]);
 		return true;
-	}
-	else {
+	} else {
 		vec[0] = vec[1] = vec[2] = 0;
 	}
 
@@ -227,14 +238,15 @@ bool GetVectorForKey(entity_t *ent, const char *key, idVec3 &vec) {
  =======================================================================================================================
  =======================================================================================================================
  */
-bool GetVector4ForKey(entity_t *ent, const char *key, idVec4 &vec) {
+bool GetVector4ForKey(entity_t *ent, const char *key, idVec4 &vec)
+{
 	const char	*k;
 	k = ValueForKey(ent, key);
+
 	if (k && strlen(k) > 0) {
 		sscanf(k, "%f %f %f %f", &vec[0], &vec[1], &vec[2], &vec[3]);
 		return true;
-	}
-	else {
+	} else {
 		vec[0] = vec[1] = vec[2] = vec[3] = 0;
 	}
 
@@ -245,9 +257,11 @@ bool GetVector4ForKey(entity_t *ent, const char *key, idVec4 &vec) {
  =======================================================================================================================
  =======================================================================================================================
  */
-bool GetFloatForKey(entity_t *ent, const char *key, float *f) {
+bool GetFloatForKey(entity_t *ent, const char *key, float *f)
+{
 	const char	*k;
 	k = ValueForKey(ent, key);
+
 	if (k && strlen(k) > 0) {
 		*f = atof(k);
 		return true;
@@ -261,27 +275,28 @@ bool GetFloatForKey(entity_t *ent, const char *key, float *f) {
  =======================================================================================================================
  =======================================================================================================================
  */
-bool GetMatrixForKey(entity_t *ent, const char *key, idMat3 &mat) {
+bool GetMatrixForKey(entity_t *ent, const char *key, idMat3 &mat)
+{
 	const char	*k;
 	k = ValueForKey(ent, key);
+
 	if (k && strlen(k) > 0) {
 		sscanf
 		(
-			k,
-			"%f %f %f %f %f %f %f %f %f ",
-			&mat[0][0],
-			&mat[0][1],
-			&mat[0][2],
-			&mat[1][0],
-			&mat[1][1],
-			&mat[1][2],
-			&mat[2][0],
-			&mat[2][1],
-			&mat[2][2]
+		        k,
+		        "%f %f %f %f %f %f %f %f %f ",
+		        &mat[0][0],
+		        &mat[0][1],
+		        &mat[0][2],
+		        &mat[1][0],
+		        &mat[1][1],
+		        &mat[1][2],
+		        &mat[2][0],
+		        &mat[2][1],
+		        &mat[2][2]
 		);
 		return true;
-	}
-	else {
+	} else {
 		mat.Identity();
 	}
 
@@ -293,7 +308,8 @@ bool GetMatrixForKey(entity_t *ent, const char *key, idMat3 &mat) {
     Entity_FreeEpairs Frees the entity epairs.
  =======================================================================================================================
  */
-void Entity_FreeEpairs(entity_t *e) {
+void Entity_FreeEpairs(entity_t *e)
+{
 	e->epairs.Clear();
 }
 
@@ -302,7 +318,8 @@ void Entity_FreeEpairs(entity_t *e) {
     Entity_AddToList
  =======================================================================================================================
  */
-void Entity_AddToList(entity_t *e, entity_t *list) {
+void Entity_AddToList(entity_t *e, entity_t *list)
+{
 	if (e->next || e->prev) {
 		Error("Entity_AddToList: allready linked");
 	}
@@ -318,8 +335,9 @@ void Entity_AddToList(entity_t *e, entity_t *list) {
     Entity_RemoveFromList
  =======================================================================================================================
  */
-void Entity_RemoveFromList(entity_t *e) {
-	if ( !e->next || !e->prev ) {
+void Entity_RemoveFromList(entity_t *e)
+{
+	if (!e->next || !e->prev) {
 		Error("Entity_RemoveFromList: not linked");
 	}
 
@@ -333,18 +351,19 @@ void Entity_RemoveFromList(entity_t *e) {
     Entity_Free Frees the entity and any brushes is has. The entity is removed from the global entities list.
  =======================================================================================================================
  */
-void Entity_Free( entity_t *e ) {
+void Entity_Free(entity_t *e)
+{
 
-	while ( e->brushes.onext != &e->brushes ) {
+	while (e->brushes.onext != &e->brushes) {
 		Brush_Free(e->brushes.onext);
 	}
 
-	if ( e->next ) {
+	if (e->next) {
 		e->next->prev = e->prev;
 		e->prev->next = e->next;
 	}
 
-	Entity_FreeEpairs( e );
+	Entity_FreeEpairs(e);
 
 	delete e;
 }
@@ -355,17 +374,18 @@ void Entity_Free( entity_t *e ) {
  =======================================================================================================================
  */
 
-int Entity_MemorySize( entity_t *e ) 
+int Entity_MemorySize(entity_t *e)
 {
 	brush_t		*b;
 	int			size;
 
-	size = sizeof( entity_t ) + e->epairs.Size();
-	for( b = e->brushes.onext; b != &e->brushes; b = b->onext )
-	{
-		size += Brush_MemorySize( b );
-}
-	return( size );
+	size = sizeof(entity_t) + e->epairs.Size();
+
+	for (b = e->brushes.onext; b != &e->brushes; b = b->onext) {
+		size += Brush_MemorySize(b);
+	}
+
+	return(size);
 }
 
 /*
@@ -398,13 +418,17 @@ const EpairFixup FloatFixups[] = {
 
 const int FixupCount = sizeof(FloatFixups) / sizeof(EpairFixup);
 
-void FixFloats(idDict *dict) {
+void FixFloats(idDict *dict)
+{
 	int count = dict->GetNumKeyVals();
+
 	for (int i = 0; i < count; i++) {
 		const idKeyValue *kv = dict->GetKeyVal(i);
+
 		for (int j = 0; j < FixupCount; j++) {
 			if (kv->GetKey().Icmp(FloatFixups[j].name) == 0) {
 				idStr val;
+
 				if (FloatFixups[j].type == 1) {
 					idVec3 v;
 					sscanf(kv->GetValue().c_str(), "%f %f %f", &v.x, &v.y, &v.z);
@@ -417,6 +441,7 @@ void FixFloats(idDict *dict) {
 					float f = atof(kv->GetValue().c_str());
 					sprintf(val, "%g", f);
 				}
+
 				dict->Set(kv->GetKey(), val);
 				break;
 			}
@@ -424,11 +449,12 @@ void FixFloats(idDict *dict) {
 	}
 }
 
-void ParseEpair(idDict *dict) {
+void ParseEpair(idDict *dict)
+{
 	idStr key = token;
 	GetToken(false);
 	idStr val = token;
-	
+
 	if (key.Length() > 0) {
 		dict->Set(key, val);
 	}
@@ -438,12 +464,14 @@ void ParseEpair(idDict *dict) {
  =======================================================================================================================
  =======================================================================================================================
  */
-bool EntityHasModel(entity_t *ent) {
+bool EntityHasModel(entity_t *ent)
+{
 	if (ent) {
 		const char	*model = ValueForKey(ent, "model");
 		const char	*name = ValueForKey(ent, "name");
+
 		if (model && *model) {
-			if ( idStr::Icmp(model, name) ) {
+			if (idStr::Icmp(model, name)) {
 				return true;
 			}
 		}
@@ -456,9 +484,10 @@ bool EntityHasModel(entity_t *ent) {
  =======================================================================================================================
  =======================================================================================================================
  */
-entity_t *Entity_New() {
+entity_t *Entity_New()
+{
 	entity_t *ent = new entity_t;
-	
+
 	ent->prev = ent->next = NULL;
 	ent->brushes.prev = ent->brushes.next = NULL;
 	ent->brushes.oprev = ent->brushes.onext = NULL;
@@ -480,79 +509,95 @@ entity_t *Entity_New() {
 	return ent;
 }
 
-void Entity_UpdateCurveData( entity_t *ent ) {
-	
-	if ( ent == NULL || ent->curve == NULL ) {
+void Entity_UpdateCurveData(entity_t *ent)
+{
+
+	if (ent == NULL || ent->curve == NULL) {
 		return;
 	}
 
-	const idKeyValue *kv = ent->epairs.MatchPrefix( CURVE_TAG );
-	if ( kv == NULL ) { 
-		if ( ent->curve ) {
+	const idKeyValue *kv = ent->epairs.MatchPrefix(CURVE_TAG);
+
+	if (kv == NULL) {
+		if (ent->curve) {
 			delete ent->curve;
 			ent->curve = NULL;
-			if ( g_qeglobals.d_select_mode == sel_editpoint ) {
+
+			if (g_qeglobals.d_select_mode == sel_editpoint) {
 				g_qeglobals.d_select_mode = sel_brush;
 			}
 		}
+
 		return;
 	}
 
 	int c = ent->curve->GetNumValues();
-	idStr str = va( "%i ( ", c );
+	idStr str = va("%i ( ", c);
 	idVec3 v;
-	for ( int i = 0; i < c; i++ ) {
-		v = ent->curve->GetValue( i );
+
+	for (int i = 0; i < c; i++) {
+		v = ent->curve->GetValue(i);
 		str += " ";
 		str += v.ToString();
 		str += " ";
 	}
+
 	str += " )";
 
-	ent->epairs.Set( kv->GetKey(), str );
+	ent->epairs.Set(kv->GetKey(), str);
 
 }
 
-idCurve<idVec3> *Entity_MakeCurve( entity_t *ent ) {
-	const idKeyValue *kv = ent->epairs.MatchPrefix( CURVE_TAG );
-	if ( kv ) {
-		idStr str = kv->GetKey().Right( kv->GetKey().Length() - strlen( CURVE_TAG ) );
-		if ( str.Icmp( "CatmullRomSpline" ) == 0 ) {
+idCurve<idVec3> *Entity_MakeCurve(entity_t *ent)
+{
+	const idKeyValue *kv = ent->epairs.MatchPrefix(CURVE_TAG);
+
+	if (kv) {
+		idStr str = kv->GetKey().Right(kv->GetKey().Length() - strlen(CURVE_TAG));
+
+		if (str.Icmp("CatmullRomSpline") == 0) {
 			return new idCurve_CatmullRomSpline<idVec3>();
-		} else if ( str.Icmp( "Nurbs" ) == 0 ) {
+		} else if (str.Icmp("Nurbs") == 0) {
 			return new idCurve_NURBS<idVec3>();
 		}
 	}
+
 	return NULL;
 }
 
-void Entity_SetCurveData( entity_t *ent ) {
+void Entity_SetCurveData(entity_t *ent)
+{
 
-	ent->curve = Entity_MakeCurve( ent );
-	const idKeyValue *kv = ent->epairs.MatchPrefix( CURVE_TAG );
-	if ( kv && ent->curve ) {
+	ent->curve = Entity_MakeCurve(ent);
+	const idKeyValue *kv = ent->epairs.MatchPrefix(CURVE_TAG);
+
+	if (kv && ent->curve) {
 		idLexer lex;
-		lex.LoadMemory( kv->GetValue(), kv->GetValue().Length(), "_curve" );
+		lex.LoadMemory(kv->GetValue(), kv->GetValue().Length(), "_curve");
 		int numPoints = lex.ParseInt();
-		if ( numPoints > 0 ) {
+
+		if (numPoints > 0) {
 			float *fp = new float[numPoints * 3];
-			lex.Parse1DMatrix( numPoints * 3, fp );
+			lex.Parse1DMatrix(numPoints * 3, fp);
 			int time = 0;
-			for ( int i = 0; i < numPoints * 3; i += 3 ) {
+
+			for (int i = 0; i < numPoints * 3; i += 3) {
 				idVec3 v;
 				v.x = fp[i];
 				v.y = fp[i+1];
 				v.z = fp[i+2];
-				ent->curve->AddValue( time, v );
+				ent->curve->AddValue(time, v);
 				time += 100;
 			}
+
 			delete []fp;
 		}
 	}
 
 }
 
-entity_t *Entity_PostParse(entity_t *ent, brush_t *pList) {
+entity_t *Entity_PostParse(entity_t *ent, brush_t *pList)
+{
 	bool		has_brushes;
 	eclass_t	*e;
 	brush_t		*b;
@@ -561,12 +606,11 @@ entity_t *Entity_PostParse(entity_t *ent, brush_t *pList) {
 
 	zero.Zero();
 
-	Entity_SetCurveData( ent );
+	Entity_SetCurveData(ent);
 
 	if (ent->brushes.onext == &ent->brushes) {
 		has_brushes = false;
-	}
-	else {
+	} else {
 		has_brushes = true;
 	}
 
@@ -579,14 +623,17 @@ entity_t *Entity_PostParse(entity_t *ent, brush_t *pList) {
 		e = Eclass_ForName(cp, has_brushes);
 	} else {
 		const char *cp2 = ValueForKey(ent, "name");
+
 		if (strlen(cp2)) {
 			char buff[1024];
 			strcpy(buff, cp2);
 			int len = strlen(buff);
+
 			while ((isdigit(buff[len-1]) || buff[len-1] == '_') && len > 0) {
 				buff[len-1] = '\0';
 				len--;
 			}
+
 			e = Eclass_ForName(buff, has_brushes);
 			SetKeyValue(ent, "classname", buff, false);
 		} else {
@@ -595,17 +642,18 @@ entity_t *Entity_PostParse(entity_t *ent, brush_t *pList) {
 	}
 
 	idStr str;
-	
+
 	if (e->defArgs.GetString("model", "", str) && e->entityModel == NULL) {
-		e->entityModel = gameEdit->ANIM_GetModelFromEntityDef( &e->defArgs );
+		e->entityModel = gameEdit->ANIM_GetModelFromEntityDef(&e->defArgs);
 	}
-	
+
 	ent->eclass = e;
 
 	bool hasModel = EntityHasModel(ent);
 
 	if (hasModel) {
 		ent->eclass->defArgs.GetString("model", "", str);
+
 		if (str.Length()) {
 			hasModel = false;
 			ent->epairs.Delete("model");
@@ -615,7 +663,7 @@ entity_t *Entity_PostParse(entity_t *ent, brush_t *pList) {
 	if (e->nShowFlags & ECLASS_WORLDSPAWN) {
 		ent->origin.Zero();
 		needsOrigin = false;
-		ent->epairs.Delete( "model" );
+		ent->epairs.Delete("model");
 	} else if (e->nShowFlags & ECLASS_LIGHT) {
 		if (GetVectorForKey(ent, "light_origin", ent->lightOrigin)) {
 			GetMatrixForKey(ent, "light_rotation", ent->lightRotation);
@@ -623,24 +671,28 @@ entity_t *Entity_PostParse(entity_t *ent, brush_t *pList) {
 		} else if (hasModel) {
 			SetKeyValue(ent, "light_origin", ValueForKey(ent, "origin"));
 			ent->lightOrigin = ent->origin;
+
 			if (GetMatrixForKey(ent, "rotation", ent->lightRotation)) {
 				SetKeyValue(ent, "light_rotation", ValueForKey(ent, "rotation"));
 			}
+
 			ent->trackLightOrigin = true;
 		}
-	} else if ( e->nShowFlags & ECLASS_ENV ) {
+	} else if (e->nShowFlags & ECLASS_ENV) {
 		// need to create an origin from the bones here
 		idVec3 org;
 		idAngles ang;
 		bo.Clear();
 		bool hasBody = false;
-		const idKeyValue *arg = ent->epairs.MatchPrefix( "body ", NULL );
-		while ( arg ) {
-			sscanf( arg->GetValue(), "%f %f %f %f %f %f", &org.x, &org.y, &org.z, &ang.pitch, &ang.yaw, &ang.roll );
-			bo.AddPoint( org );
-			arg = ent->epairs.MatchPrefix( "body ", arg );
+		const idKeyValue *arg = ent->epairs.MatchPrefix("body ", NULL);
+
+		while (arg) {
+			sscanf(arg->GetValue(), "%f %f %f %f %f %f", &org.x, &org.y, &org.z, &ang.pitch, &ang.yaw, &ang.roll);
+			bo.AddPoint(org);
+			arg = ent->epairs.MatchPrefix("body ", arg);
 			hasBody = true;
 		}
+
 		if (hasBody) {
 			ent->origin = bo.GetCenter();
 		}
@@ -655,23 +707,25 @@ entity_t *Entity_PostParse(entity_t *ent, brush_t *pList) {
 
 		if (hasModel) {
 			// model entity
-			idRenderModel *modelHandle = renderModelManager->FindModel( pModel );
+			idRenderModel *modelHandle = renderModelManager->FindModel(pModel);
 
-			if ( dynamic_cast<idRenderModelPrt*>( modelHandle ) || dynamic_cast<idRenderModelLiquid*>( modelHandle ) ) {
+			if (dynamic_cast<idRenderModelPrt *>(modelHandle) || dynamic_cast<idRenderModelLiquid *>(modelHandle)) {
 				bo.Zero();
-				bo.ExpandSelf( 12.0f );
+				bo.ExpandSelf(12.0f);
 			} else {
-				bo = modelHandle->Bounds( NULL );
+				bo = modelHandle->Bounds(NULL);
 			}
 
 			VectorCopy(bo[0], mins);
 			VectorCopy(bo[1], maxs);
+
 			for (int i = 0; i < 3; i++) {
 				if (mins[i] == maxs[i]) {
 					mins[i]--;
 					maxs[i]++;
 				}
 			}
+
 			VectorAdd(mins, ent->origin, mins);
 			VectorAdd(maxs, ent->origin, maxs);
 			b = Brush_Create(mins, maxs, &e->texdef);
@@ -681,7 +735,7 @@ entity_t *Entity_PostParse(entity_t *ent, brush_t *pList) {
 			bool		convertAngles = GetFloatForKey(ent, "angle", &yaw);
 			extern void Brush_Rotate(brush_t *b, idMat3 matrix, idVec3 origin, bool bBuild);
 			extern void Brush_Rotate(brush_t *b, idVec3 rot, idVec3 origin, bool bBuild);
-			
+
 			if (convertAngles) {
 				idVec3	rot(0, 0, yaw);
 				Brush_Rotate(b, rot, ent->origin, false);
@@ -693,6 +747,7 @@ entity_t *Entity_PostParse(entity_t *ent, brush_t *pList) {
 				b->owner = ent;
 				Brush_Resize(b, bo2[0], bo2[1]);
 			}
+
 			Entity_LinkBrush(ent, b);
 		}
 
@@ -710,11 +765,12 @@ entity_t *Entity_PostParse(entity_t *ent, brush_t *pList) {
 			GetMatrixForKey(ent, "rotation", ent->rotation);
 			Entity_LinkBrush(ent, b);
 			b->trackLightOrigin = ent->trackLightOrigin;
-			if ( e->texdef.name == NULL ) {
+
+			if (e->texdef.name == NULL) {
 				brushprimit_texdef_t bp;
 				texdef_t td;
-				td.SetName( ent->eclass->defMaterial );
-				Brush_SetTexture( b, &td, &bp, false );
+				td.SetName(ent->eclass->defMaterial);
+				Brush_SetTexture(b, &td, &bp, false);
 			}
 		}
 	} else {	// brush entity
@@ -726,6 +782,7 @@ entity_t *Entity_PostParse(entity_t *ent, brush_t *pList) {
 			idStr cn = ValueForKey(ent, "classname");
 			idStr name = ValueForKey(ent, "name");
 			idStr model = ValueForKey(ent, "model");
+
 			if (cn.Icmp("func_static") == 0) {
 				if (name.Icmp(model) == 0) {
 					needsOrigin = true;
@@ -743,6 +800,7 @@ entity_t *Entity_PostParse(entity_t *ent, brush_t *pList) {
 			// add in the origin
 			for (b = ent->brushes.onext; b != &ent->brushes; b = b->onext) {
 				Brush_Build(b, true, false, false);
+
 				for (i = 0; i < 3; i++) {
 					if (b->mins[i] < mins[i]) {
 						mins[i] = b->mins[i];
@@ -766,8 +824,7 @@ entity_t *Entity_PostParse(entity_t *ent, brush_t *pList) {
 			if (e->defArgs.FindKey("model") == NULL && (pModel == NULL || (pModel && strlen(pModel) == 0))) {
 				SetKeyValue(ent, "model", ValueForKey(ent, "name"));
 			}
-		}
-		else {
+		} else {
 			DeleteKey(ent, "origin");
 		}
 	}
@@ -794,7 +851,8 @@ entity_t *Entity_PostParse(entity_t *ent, brush_t *pList) {
     global list. Used for parsing the project.
  =======================================================================================================================
  */
-entity_t *Entity_Parse(bool onlypairs, brush_t *pList) {
+entity_t *Entity_Parse(bool onlypairs, brush_t *pList)
+{
 	entity_t	*ent;
 
 	if (!GetToken(true)) {
@@ -810,6 +868,7 @@ entity_t *Entity_Parse(bool onlypairs, brush_t *pList) {
 	ent->origin.Zero();
 
 	int n = 0;
+
 	do {
 		if (!GetToken(true)) {
 			Warning("ParseEntity: EOF without closing brace");
@@ -823,6 +882,7 @@ entity_t *Entity_Parse(bool onlypairs, brush_t *pList) {
 		if (!strcmp(token, "{")) {
 			GetVectorForKey(ent, "origin", ent->origin);
 			brush_t *b = Brush_Parse(ent->origin);
+
 			if (b != NULL) {
 				b->owner = ent;
 
@@ -831,12 +891,10 @@ entity_t *Entity_Parse(bool onlypairs, brush_t *pList) {
 				b->oprev = ent->brushes.oprev;
 				ent->brushes.oprev->onext = b;
 				ent->brushes.oprev = b;
-			}
-			else {
+			} else {
 				break;
 			}
-		}
-		else {
+		} else {
 			ParseEpair(&ent->epairs);
 		}
 	} while (1);
@@ -852,7 +910,8 @@ entity_t *Entity_Parse(bool onlypairs, brush_t *pList) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void VectorMidpoint(idVec3 va, idVec3 vb, idVec3 &out) {
+void VectorMidpoint(idVec3 va, idVec3 vb, idVec3 &out)
+{
 	for (int i = 0; i < 3; i++) {
 		out[i] = va[i] + ((vb[i] - va[i]) / 2);
 	}
@@ -863,7 +922,8 @@ void VectorMidpoint(idVec3 va, idVec3 vb, idVec3 &out) {
     Entity_Write
  =======================================================================================================================
  */
-void Entity_Write(entity_t *e, FILE *f, bool use_region) {
+void Entity_Write(entity_t *e, FILE *f, bool use_region)
+{
 	brush_t *b;
 	idVec3	origin;
 	char	text[128];
@@ -877,11 +937,11 @@ void Entity_Write(entity_t *e, FILE *f, bool use_region) {
 			fprintf(f, "\"classname\" \"info_player_start\"\n");
 			fprintf
 			(
-				f,
-				"\"origin\" \"%i %i %i\"\n",
-				(int)g_pParentWnd->GetCamera()->Camera().origin[0],
-				(int)g_pParentWnd->GetCamera()->Camera().origin[1],
-				(int)g_pParentWnd->GetCamera()->Camera().origin[2]
+			        f,
+			        "\"origin\" \"%i %i %i\"\n",
+			        (int)g_pParentWnd->GetCamera()->Camera().origin[0],
+			        (int)g_pParentWnd->GetCamera()->Camera().origin[1],
+			        (int)g_pParentWnd->GetCamera()->Camera().origin[2]
 			);
 			fprintf(f, "\"angle\" \"%i\"\n", (int)g_pParentWnd->GetCamera()->Camera().angles[YAW]);
 			fprintf(f, "}\n");
@@ -918,20 +978,23 @@ void Entity_Write(entity_t *e, FILE *f, bool use_region) {
 	fprintf(f, "{\n");
 
 	count = e->epairs.GetNumKeyVals();
+
 	for (int j = 0; j < count; j++) {
 		fprintf(f, "\"%s\" \"%s\"\n", e->epairs.GetKeyVal(j)->GetKey().c_str(), e->epairs.GetKeyVal(j)->GetValue().c_str());
 	}
 
 	if (!EntityHasModel(e)) {
 		count = 0;
+
 		for (b = e->brushes.onext; b != &e->brushes; b = b->onext) {
 			if (e->eclass->fixedsize && !b->entityModel) {
 				continue;
 			}
+
 			if (!use_region || !Map_IsBrushFiltered(b)) {
 				fprintf(f, "// brush %i\n", count);
 				count++;
-				Brush_Write( b, f, e->origin, ( g_PrefsDlg.m_bNewMapFormat != FALSE ) );
+				Brush_Write(b, f, e->origin, (g_PrefsDlg.m_bNewMapFormat != FALSE));
 			}
 		}
 	}
@@ -943,8 +1006,9 @@ void Entity_Write(entity_t *e, FILE *f, bool use_region) {
  =======================================================================================================================
  =======================================================================================================================
  */
-bool IsBrushSelected(brush_t *bSel) {
-	for (brush_t * b = selected_brushes.next; b != NULL && b != &selected_brushes; b = b->next) {
+bool IsBrushSelected(brush_t *bSel)
+{
+	for (brush_t *b = selected_brushes.next; b != NULL && b != &selected_brushes; b = b->next) {
 		if (b == bSel) {
 			return true;
 		}
@@ -958,7 +1022,8 @@ bool IsBrushSelected(brush_t *bSel) {
 //    Entity_WriteSelected
 // =======================================================================================================================
 //
-void Entity_WriteSelected(entity_t *e, FILE *f) {
+void Entity_WriteSelected(entity_t *e, FILE *f)
+{
 	brush_t *b;
 	idVec3	origin;
 	char	text[128];
@@ -984,22 +1049,25 @@ void Entity_WriteSelected(entity_t *e, FILE *f) {
 	}
 
 	fprintf(f, "{\n");
-	
+
 	count = e->epairs.GetNumKeyVals();
+
 	for (int j = 0; j < count; j++) {
 		fprintf(f, "\"%s\" \"%s\"\n", e->epairs.GetKeyVal(j)->GetKey().c_str(), e->epairs.GetKeyVal(j)->GetValue().c_str());
 	}
 
 	if (!EntityHasModel(e)) {
 		count = 0;
+
 		for (b = e->brushes.onext; b != &e->brushes; b = b->onext) {
 			if (e->eclass->fixedsize && !b->entityModel) {
 				continue;
 			}
+
 			if (IsBrushSelected(b)) {
 				fprintf(f, "// brush %i\n", count);
 				count++;
-				Brush_Write( b, f, e->origin, ( g_PrefsDlg.m_bNewMapFormat != FALSE ) );
+				Brush_Write(b, f, e->origin, (g_PrefsDlg.m_bNewMapFormat != FALSE));
 			}
 		}
 	}
@@ -1012,7 +1080,8 @@ void Entity_WriteSelected(entity_t *e, FILE *f) {
 //    Entity_WriteSelected to a CMemFile
 // =======================================================================================================================
 //
-void Entity_WriteSelected(entity_t *e, CMemFile *pMemFile) {
+void Entity_WriteSelected(entity_t *e, CMemFile *pMemFile)
+{
 	brush_t *b;
 	idVec3	origin;
 	char	text[128];
@@ -1040,20 +1109,23 @@ void Entity_WriteSelected(entity_t *e, CMemFile *pMemFile) {
 	MemFile_fprintf(pMemFile, "{\n");
 
 	count = e->epairs.GetNumKeyVals();
+
 	for (int j = 0; j < count; j++) {
 		MemFile_fprintf(pMemFile, "\"%s\" \"%s\"\n", e->epairs.GetKeyVal(j)->GetKey().c_str(), e->epairs.GetKeyVal(j)->GetValue().c_str());
 	}
 
 	if (!EntityHasModel(e)) {
 		count = 0;
+
 		for (b = e->brushes.onext; b != &e->brushes; b = b->onext) {
 			if (e->eclass->fixedsize && !b->entityModel) {
 				continue;
 			}
+
 			if (IsBrushSelected(b)) {
 				MemFile_fprintf(pMemFile, "// brush %i\n", count);
 				count++;
-				Brush_Write( b, pMemFile, e->origin, ( g_PrefsDlg.m_bNewMapFormat != FALSE ) );
+				Brush_Write(b, pMemFile, e->origin, (g_PrefsDlg.m_bNewMapFormat != FALSE));
 			}
 		}
 	}
@@ -1065,10 +1137,12 @@ void Entity_WriteSelected(entity_t *e, CMemFile *pMemFile) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void Entity_SetName(entity_t *e, const char *name) {
+void Entity_SetName(entity_t *e, const char *name)
+{
 	CString oldName = ValueForKey(e, "name");
 	CString oldModel = ValueForKey(e, "model");
 	SetKeyValue(e, "name", name);
+
 	if (oldName == oldModel) {
 		SetKeyValue(e, "model", name);
 	}
@@ -1080,7 +1154,8 @@ extern bool Entity_NameIsUnique(const char *name);
  =======================================================================================================================
  =======================================================================================================================
  */
-void Entity_Name(entity_t *e, bool force) {
+void Entity_Name(entity_t *e, bool force)
+{
 	const char	*name = ValueForKey(e, "name");
 
 	if (!force && name && name[0]) {
@@ -1092,24 +1167,29 @@ void Entity_Name(entity_t *e, bool force) {
 	}
 
 	bool	setModel = false;
+
 	if (name[0]) {
 		const char	*model = ValueForKey(e, "model");
+
 		if (model[0]) {
-			if ( idStr::Icmp(model, name) == 0 ) {
+			if (idStr::Icmp(model, name) == 0) {
 				setModel = true;
 			}
 		}
 	}
 
 	const char *eclass = ValueForKey(e, "classname");
+
 	if (eclass && eclass[0]) {
-		idStr str = cvarSystem->GetCVarString( "radiant_nameprefix" );
+		idStr str = cvarSystem->GetCVarString("radiant_nameprefix");
 		int id = Map_GetUniqueEntityID(str, eclass);
+
 		if (str.Length()) {
 			SetKeyValue(e, "name", va("%s_%s_%i", str.c_str(), eclass, id));
 		} else {
 			SetKeyValue(e, "name", va("%s_%i", eclass, id));
 		}
+
 		if (setModel) {
 			if (str.Length()) {
 				SetKeyValue(e, "model", va("%s_%s_%i", str.c_str(), eclass, id));
@@ -1126,7 +1206,8 @@ void Entity_Name(entity_t *e, bool force) {
     are only used to find a midpoint. Otherwise, the brushes have their ownership transfered to the new entity.
  =======================================================================================================================
  */
-entity_t *Entity_Create(eclass_t *c, bool forceFixed) {
+entity_t *Entity_Create(eclass_t *c, bool forceFixed)
+{
 	entity_t	*e;
 	brush_t		*b;
 	idVec3		mins, maxs, origin;
@@ -1144,8 +1225,9 @@ entity_t *Entity_Create(eclass_t *c, bool forceFixed) {
 	}
 
 	idStr str;
+
 	if (c->defArgs.GetString("model", "", str) && c->entityModel == NULL) {
-		c->entityModel = gameEdit->ANIM_GetModelFromEntityDef( &c->defArgs );
+		c->entityModel = gameEdit->ANIM_GetModelFromEntityDef(&c->defArgs);
 	}
 
 	// create it
@@ -1189,8 +1271,7 @@ entity_t *Entity_Create(eclass_t *c, bool forceFixed) {
 		selected_brushes.next = selected_brushes.prev = b;
 
 		Brush_Build(b);
-	}
-	else {
+	} else {
 
 		Select_GetMid(origin);
 
@@ -1199,6 +1280,7 @@ entity_t *Entity_Create(eclass_t *c, bool forceFixed) {
 			Entity_UnlinkBrush(b);
 			Entity_LinkBrush(e, b);
 			Brush_Build(b); // so the key brush gets a name
+
 			if (c->defMaterial.Length()) {
 				td.SetName(c->defMaterial);
 				Brush_SetTexture(b, &td, &bp, false);
@@ -1223,7 +1305,8 @@ entity_t *Entity_Create(eclass_t *c, bool forceFixed) {
 	return e;
 }
 
-void Brush_MakeDirty(brush_t *b) {
+void Brush_MakeDirty(brush_t *b)
+{
 	for (face_t *f = b->brush_faces; f; f = f->next) {
 		f->dirty = true;
 	}
@@ -1233,7 +1316,8 @@ void Brush_MakeDirty(brush_t *b) {
     Entity_LinkBrush
  =======================================================================================================================
  */
-void Entity_LinkBrush(entity_t *e, brush_t *b) {
+void Entity_LinkBrush(entity_t *e, brush_t *b)
+{
 	if (b->oprev || b->onext) {
 		Error("Entity_LinkBrush: Allready linked");
 	}
@@ -1253,7 +1337,8 @@ void Entity_LinkBrush(entity_t *e, brush_t *b) {
     Entity_UnlinkBrush
  =======================================================================================================================
  */
-void Entity_UnlinkBrush(brush_t *b) {
+void Entity_UnlinkBrush(brush_t *b)
+{
 	// if (!b->owner || !b->onext || !b->oprev)
 	if (!b->onext || !b->oprev) {
 		Error("Entity_UnlinkBrush: Not currently linked");
@@ -1270,7 +1355,8 @@ void Entity_UnlinkBrush(brush_t *b) {
     Entity_Clone
  =======================================================================================================================
  */
-entity_t *Entity_Clone(entity_t *e) {
+entity_t *Entity_Clone(entity_t *e)
+{
 	entity_t	*n;
 
 	n = Entity_New();
@@ -1291,7 +1377,8 @@ entity_t *Entity_Clone(entity_t *e) {
  =======================================================================================================================
  =======================================================================================================================
  */
-int GetUniqueTargetId(int iHint) {
+int GetUniqueTargetId(int iHint)
+{
 	int			iMin, iMax, i;
 	BOOL		fFound;
 	entity_t	*pe;
@@ -1303,9 +1390,11 @@ int GetUniqueTargetId(int iHint) {
 
 	for (; pe != NULL && pe != &entities; pe = pe->next) {
 		i = IntForKey(pe, "target");
+
 		if (i) {
 			iMin = Min(i, iMin);
 			iMax = Max(i, iMax);
+
 			if (i == iHint) {
 				fFound = TRUE;
 			}
@@ -1314,8 +1403,7 @@ int GetUniqueTargetId(int iHint) {
 
 	if (fFound) {
 		return iMax + 1;
-	}
-	else {
+	} else {
 		return iHint;
 	}
 }
@@ -1324,7 +1412,8 @@ int GetUniqueTargetId(int iHint) {
  =======================================================================================================================
  =======================================================================================================================
  */
-entity_t *FindEntity(const char *pszKey, const char *pszValue) {
+entity_t *FindEntity(const char *pszKey, const char *pszValue)
+{
 	entity_t	*pe;
 
 	pe = entities.next;
@@ -1342,7 +1431,8 @@ entity_t *FindEntity(const char *pszKey, const char *pszValue) {
  =======================================================================================================================
  =======================================================================================================================
  */
-entity_t *FindEntityInt(const char *pszKey, int iValue) {
+entity_t *FindEntityInt(const char *pszKey, int iValue)
+{
 	entity_t	*pe;
 
 	pe = entities.next;
@@ -1366,34 +1456,38 @@ to it not having one, being filtered away, or the sound mode being turned off.
 Creates or updates the soundEmitter if needed
 ====================
 */
-void Entity_UpdateSoundEmitter( entity_t *ent ) {
+void Entity_UpdateSoundEmitter(entity_t *ent)
+{
 	bool	playing = false;
 
 	// if an entity doesn't have any brushes at all, don't do anything
 	// if the brush isn't displayed (filtered or culled), don't do anything
-	if ( g_pParentWnd->GetCamera()->GetSoundMode() 
-		&& ent->brushes.onext != &ent->brushes && !FilterBrush(ent->brushes.onext) ) {
+	if (g_pParentWnd->GetCamera()->GetSoundMode()
+	    && ent->brushes.onext != &ent->brushes && !FilterBrush(ent->brushes.onext)) {
 		// check for sounds
-		const char *v = ValueForKey( ent, "s_shader" );
-		if ( v[0] ) {
+		const char *v = ValueForKey(ent, "s_shader");
+
+		if (v[0]) {
 			refSound_t	sound;
 
-			gameEdit->ParseSpawnArgsToRefSound( &ent->epairs, &sound );
-			if ( !sound.waitfortrigger ) {	// waitfortrigger will not start playing immediately
-				if ( !ent->soundEmitter ) {
+			gameEdit->ParseSpawnArgsToRefSound(&ent->epairs, &sound);
+
+			if (!sound.waitfortrigger) {	// waitfortrigger will not start playing immediately
+				if (!ent->soundEmitter) {
 					ent->soundEmitter = g_qeglobals.sw->AllocSoundEmitter();
 				}
+
 				playing = true;
-				ent->soundEmitter->UpdateEmitter( ent->origin, 0, &sound.parms );
+				ent->soundEmitter->UpdateEmitter(ent->origin, 0, &sound.parms);
 				// always play on a single channel, so updates always override
-				ent->soundEmitter->StartSound( sound.shader, SCHANNEL_ONE );
+				ent->soundEmitter->StartSound(sound.shader, SCHANNEL_ONE);
 			}
 		}
 	}
 
 	// delete the soundEmitter if not used
-	if ( !playing && ent->soundEmitter ) {
-		ent->soundEmitter->Free( true );
+	if (!playing && ent->soundEmitter) {
+		ent->soundEmitter->Free(true);
 		ent->soundEmitter = NULL;
 	}
 

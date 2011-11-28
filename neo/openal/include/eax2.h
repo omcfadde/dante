@@ -15,35 +15,34 @@ extern "C" {
 
 #pragma pack(push, 4)
 
-/*
-* EAX 2.0 listener property set {0306A6A8-B224-11d2-99E5-0000E8D8C722}
-*/
-DEFINE_GUID(DSPROPSETID_EAX20_ListenerProperties, 
-    0x306a6a8, 
-    0xb224, 
-    0x11d2, 
-    0x99, 0xe5, 0x0, 0x0, 0xe8, 0xd8, 0xc7, 0x22);
+	/*
+	* EAX 2.0 listener property set {0306A6A8-B224-11d2-99E5-0000E8D8C722}
+	*/
+	DEFINE_GUID(DSPROPSETID_EAX20_ListenerProperties,
+	            0x306a6a8,
+	            0xb224,
+	            0x11d2,
+	            0x99, 0xe5, 0x0, 0x0, 0xe8, 0xd8, 0xc7, 0x22);
 
-typedef enum
-{
-    DSPROPERTY_EAX20LISTENER_NONE,
-    DSPROPERTY_EAX20LISTENER_ALLPARAMETERS,
-    DSPROPERTY_EAX20LISTENER_ROOM,
-    DSPROPERTY_EAX20LISTENER_ROOMHF,
-    DSPROPERTY_EAX20LISTENER_ROOMROLLOFFFACTOR,
-    DSPROPERTY_EAX20LISTENER_DECAYTIME,
-    DSPROPERTY_EAX20LISTENER_DECAYHFRATIO,
-    DSPROPERTY_EAX20LISTENER_REFLECTIONS,
-    DSPROPERTY_EAX20LISTENER_REFLECTIONSDELAY,
-    DSPROPERTY_EAX20LISTENER_REVERB,
-    DSPROPERTY_EAX20LISTENER_REVERBDELAY,
-    DSPROPERTY_EAX20LISTENER_ENVIRONMENT,
-    DSPROPERTY_EAX20LISTENER_ENVIRONMENTSIZE,
-    DSPROPERTY_EAX20LISTENER_ENVIRONMENTDIFFUSION,
-    DSPROPERTY_EAX20LISTENER_AIRABSORPTIONHF,
-    DSPROPERTY_EAX20LISTENER_FLAGS
-} DSPROPERTY_EAX20_LISTENERPROPERTY;
-	
+	typedef enum {
+		DSPROPERTY_EAX20LISTENER_NONE,
+		DSPROPERTY_EAX20LISTENER_ALLPARAMETERS,
+		DSPROPERTY_EAX20LISTENER_ROOM,
+		DSPROPERTY_EAX20LISTENER_ROOMHF,
+		DSPROPERTY_EAX20LISTENER_ROOMROLLOFFFACTOR,
+		DSPROPERTY_EAX20LISTENER_DECAYTIME,
+		DSPROPERTY_EAX20LISTENER_DECAYHFRATIO,
+		DSPROPERTY_EAX20LISTENER_REFLECTIONS,
+		DSPROPERTY_EAX20LISTENER_REFLECTIONSDELAY,
+		DSPROPERTY_EAX20LISTENER_REVERB,
+		DSPROPERTY_EAX20LISTENER_REVERBDELAY,
+		DSPROPERTY_EAX20LISTENER_ENVIRONMENT,
+		DSPROPERTY_EAX20LISTENER_ENVIRONMENTSIZE,
+		DSPROPERTY_EAX20LISTENER_ENVIRONMENTDIFFUSION,
+		DSPROPERTY_EAX20LISTENER_AIRABSORPTIONHF,
+		DSPROPERTY_EAX20LISTENER_FLAGS
+	} DSPROPERTY_EAX20_LISTENERPROPERTY;
+
 // OR these flags with property id
 #define DSPROPERTY_EAX20LISTENER_IMMEDIATE 0x00000000 // changes take effect immediately
 #define DSPROPERTY_EAX20LISTENER_DEFERRED  0x80000000 // changes take effect later
@@ -63,59 +62,57 @@ typedef enum
 //              myListener.dwFlags = myFlags /* see EAXLISTENERFLAGS below */ ;
 //       instead of:
 //              myListener = { -1000, -100, ... , 0x00000009 };
-//       If you want to save and load presets in binary form, you 
+//       If you want to save and load presets in binary form, you
 //       should define your own structure to insure future compatibility.
 //
-typedef struct _EAX20LISTENERPROPERTIES
-{
-    long lRoom;                    // room effect level at low frequencies
-    long lRoomHF;                  // room effect high-frequency level re. low frequency level
-    float flRoomRolloffFactor;     // like DS3D flRolloffFactor but for room effect
-    float flDecayTime;             // reverberation decay time at low frequencies
-    float flDecayHFRatio;          // high-frequency to low-frequency decay time ratio
-    long lReflections;             // early reflections level relative to room effect
-    float flReflectionsDelay;      // initial reflection delay time
-    long lReverb;                  // late reverberation level relative to room effect
-    float flReverbDelay;           // late reverberation delay time relative to initial reflection
-    unsigned long dwEnvironment;   // sets all listener properties
-    float flEnvironmentSize;       // environment size in meters
-    float flEnvironmentDiffusion;  // environment diffusion
-    float flAirAbsorptionHF;       // change in level per meter at 5 kHz
-    unsigned long dwFlags;         // modifies the behavior of properties
-} EAX20LISTENERPROPERTIES, *LPEAX20LISTENERPROPERTIES;
+	typedef struct _EAX20LISTENERPROPERTIES {
+		long lRoom;                    // room effect level at low frequencies
+		long lRoomHF;                  // room effect high-frequency level re. low frequency level
+		float flRoomRolloffFactor;     // like DS3D flRolloffFactor but for room effect
+		float flDecayTime;             // reverberation decay time at low frequencies
+		float flDecayHFRatio;          // high-frequency to low-frequency decay time ratio
+		long lReflections;             // early reflections level relative to room effect
+		float flReflectionsDelay;      // initial reflection delay time
+		long lReverb;                  // late reverberation level relative to room effect
+		float flReverbDelay;           // late reverberation delay time relative to initial reflection
+		unsigned long dwEnvironment;   // sets all listener properties
+		float flEnvironmentSize;       // environment size in meters
+		float flEnvironmentDiffusion;  // environment diffusion
+		float flAirAbsorptionHF;       // change in level per meter at 5 kHz
+		unsigned long dwFlags;         // modifies the behavior of properties
+	} EAX20LISTENERPROPERTIES, *LPEAX20LISTENERPROPERTIES;
 
 // used by DSPROPERTY_EAX20LISTENER_ENVIRONMENT
-enum
-{
-    EAX20_ENVIRONMENT_GENERIC,
-    EAX20_ENVIRONMENT_PADDEDCELL,
-    EAX20_ENVIRONMENT_ROOM,
-    EAX20_ENVIRONMENT_BATHROOM,
-    EAX20_ENVIRONMENT_LIVINGROOM,
-    EAX20_ENVIRONMENT_STONEROOM,
-    EAX20_ENVIRONMENT_AUDITORIUM,
-    EAX20_ENVIRONMENT_CONCERTHALL,
-    EAX20_ENVIRONMENT_CAVE,
-    EAX20_ENVIRONMENT_ARENA,
-    EAX20_ENVIRONMENT_HANGAR,
-    EAX20_ENVIRONMENT_CARPETEDHALLWAY,
-    EAX20_ENVIRONMENT_HALLWAY,
-    EAX20_ENVIRONMENT_STONECORRIDOR,
-    EAX20_ENVIRONMENT_ALLEY,
-    EAX20_ENVIRONMENT_FOREST,
-    EAX20_ENVIRONMENT_CITY,
-    EAX20_ENVIRONMENT_MOUNTAINS,
-    EAX20_ENVIRONMENT_QUARRY,
-    EAX20_ENVIRONMENT_PLAIN,
-    EAX20_ENVIRONMENT_PARKINGLOT,
-    EAX20_ENVIRONMENT_SEWERPIPE,
-    EAX20_ENVIRONMENT_UNDERWATER,
-    EAX20_ENVIRONMENT_DRUGGED,
-    EAX20_ENVIRONMENT_DIZZY,
-    EAX20_ENVIRONMENT_PSYCHOTIC,
+	enum {
+		EAX20_ENVIRONMENT_GENERIC,
+		EAX20_ENVIRONMENT_PADDEDCELL,
+		EAX20_ENVIRONMENT_ROOM,
+		EAX20_ENVIRONMENT_BATHROOM,
+		EAX20_ENVIRONMENT_LIVINGROOM,
+		EAX20_ENVIRONMENT_STONEROOM,
+		EAX20_ENVIRONMENT_AUDITORIUM,
+		EAX20_ENVIRONMENT_CONCERTHALL,
+		EAX20_ENVIRONMENT_CAVE,
+		EAX20_ENVIRONMENT_ARENA,
+		EAX20_ENVIRONMENT_HANGAR,
+		EAX20_ENVIRONMENT_CARPETEDHALLWAY,
+		EAX20_ENVIRONMENT_HALLWAY,
+		EAX20_ENVIRONMENT_STONECORRIDOR,
+		EAX20_ENVIRONMENT_ALLEY,
+		EAX20_ENVIRONMENT_FOREST,
+		EAX20_ENVIRONMENT_CITY,
+		EAX20_ENVIRONMENT_MOUNTAINS,
+		EAX20_ENVIRONMENT_QUARRY,
+		EAX20_ENVIRONMENT_PLAIN,
+		EAX20_ENVIRONMENT_PARKINGLOT,
+		EAX20_ENVIRONMENT_SEWERPIPE,
+		EAX20_ENVIRONMENT_UNDERWATER,
+		EAX20_ENVIRONMENT_DRUGGED,
+		EAX20_ENVIRONMENT_DIZZY,
+		EAX20_ENVIRONMENT_PSYCHOTIC,
 
-    EAX20_ENVIRONMENT_COUNT
-};
+		EAX20_ENVIRONMENT_COUNT
+	};
 
 // Used by DS20PROPERTY_EAXLISTENER_FLAGS
 //
@@ -134,7 +131,7 @@ enum
 
 // This flag limits high-frequency decay time according to air absorption.
 #define EAX20LISTENERFLAGS_DECAYHFLIMIT          0x00000020
- 
+
 #define EAX20LISTENERFLAGS_RESERVED              0xFFFFFFC0 // reserved future use
 
 // property ranges and defaults:
@@ -200,36 +197,35 @@ enum
 
 
 
-/*
-* EAX 2.0 buffer property set {0306A6A7-B224-11d2-99E5-0000E8D8C722}
-*/
-DEFINE_GUID(DSPROPSETID_EAX20_BufferProperties, 
-    0x306a6a7, 
-    0xb224, 
-    0x11d2, 
-    0x99, 0xe5, 0x0, 0x0, 0xe8, 0xd8, 0xc7, 0x22);
+	/*
+	* EAX 2.0 buffer property set {0306A6A7-B224-11d2-99E5-0000E8D8C722}
+	*/
+	DEFINE_GUID(DSPROPSETID_EAX20_BufferProperties,
+	            0x306a6a7,
+	            0xb224,
+	            0x11d2,
+	            0x99, 0xe5, 0x0, 0x0, 0xe8, 0xd8, 0xc7, 0x22);
 
 // For compatibility with future EAX versions:
 #define DSPROPSETID_EAX20_BufferProperties DSPROPSETID_EAX20_BufferProperties
 
-typedef enum
-{
-    DSPROPERTY_EAX20BUFFER_NONE,
-    DSPROPERTY_EAX20BUFFER_ALLPARAMETERS,
-    DSPROPERTY_EAX20BUFFER_DIRECT,
-    DSPROPERTY_EAX20BUFFER_DIRECTHF,
-    DSPROPERTY_EAX20BUFFER_ROOM,
-    DSPROPERTY_EAX20BUFFER_ROOMHF, 
-    DSPROPERTY_EAX20BUFFER_ROOMROLLOFFFACTOR,
-    DSPROPERTY_EAX20BUFFER_OBSTRUCTION,
-    DSPROPERTY_EAX20BUFFER_OBSTRUCTIONLFRATIO,
-    DSPROPERTY_EAX20BUFFER_OCCLUSION, 
-    DSPROPERTY_EAX20BUFFER_OCCLUSIONLFRATIO,
-    DSPROPERTY_EAX20BUFFER_OCCLUSIONROOMRATIO,
-    DSPROPERTY_EAX20BUFFER_OUTSIDEVOLUMEHF,
-    DSPROPERTY_EAX20BUFFER_AIRABSORPTIONFACTOR,
-    DSPROPERTY_EAX20BUFFER_FLAGS
-} DSPROPERTY_EAX20_BUFFERPROPERTY;    
+	typedef enum {
+		DSPROPERTY_EAX20BUFFER_NONE,
+		DSPROPERTY_EAX20BUFFER_ALLPARAMETERS,
+		DSPROPERTY_EAX20BUFFER_DIRECT,
+		DSPROPERTY_EAX20BUFFER_DIRECTHF,
+		DSPROPERTY_EAX20BUFFER_ROOM,
+		DSPROPERTY_EAX20BUFFER_ROOMHF,
+		DSPROPERTY_EAX20BUFFER_ROOMROLLOFFFACTOR,
+		DSPROPERTY_EAX20BUFFER_OBSTRUCTION,
+		DSPROPERTY_EAX20BUFFER_OBSTRUCTIONLFRATIO,
+		DSPROPERTY_EAX20BUFFER_OCCLUSION,
+		DSPROPERTY_EAX20BUFFER_OCCLUSIONLFRATIO,
+		DSPROPERTY_EAX20BUFFER_OCCLUSIONROOMRATIO,
+		DSPROPERTY_EAX20BUFFER_OUTSIDEVOLUMEHF,
+		DSPROPERTY_EAX20BUFFER_AIRABSORPTIONFACTOR,
+		DSPROPERTY_EAX20BUFFER_FLAGS
+	} DSPROPERTY_EAX20_BUFFERPROPERTY;
 
 // OR these flags with property id
 #define DSPROPERTY_EAX20BUFFER_IMMEDIATE 0x00000000 // changes take effect immediately
@@ -249,22 +245,21 @@ typedef enum
 //       instead of:
 //              myBuffer = { 0, -200, ... , 0x00000003 };
 //
-typedef struct _EAX20BUFFERPROPERTIES
-{
-    long lDirect;                // direct path level
-    long lDirectHF;              // direct path level at high frequencies
-    long lRoom;                  // room effect level
-    long lRoomHF;                // room effect level at high frequencies
-    float flRoomRolloffFactor;   // like DS3D flRolloffFactor but for room effect
-    long lObstruction;           // main obstruction control (attenuation at high frequencies) 
-    float flObstructionLFRatio;  // obstruction low-frequency level re. main control
-    long lOcclusion;             // main occlusion control (attenuation at high frequencies)
-    float flOcclusionLFRatio;    // occlusion low-frequency level re. main control
-    float flOcclusionRoomRatio;  // occlusion room effect level re. main control
-    long lOutsideVolumeHF;       // outside sound cone level at high frequencies
-    float flAirAbsorptionFactor; // multiplies DSPROPERTY_EAXLISTENER_AIRABSORPTIONHF
-    unsigned long dwFlags;       // modifies the behavior of properties
-} EAX20BUFFERPROPERTIES, *LPEAX20BUFFERPROPERTIES;
+	typedef struct _EAX20BUFFERPROPERTIES {
+		long lDirect;                // direct path level
+		long lDirectHF;              // direct path level at high frequencies
+		long lRoom;                  // room effect level
+		long lRoomHF;                // room effect level at high frequencies
+		float flRoomRolloffFactor;   // like DS3D flRolloffFactor but for room effect
+		long lObstruction;           // main obstruction control (attenuation at high frequencies)
+		float flObstructionLFRatio;  // obstruction low-frequency level re. main control
+		long lOcclusion;             // main occlusion control (attenuation at high frequencies)
+		float flOcclusionLFRatio;    // occlusion low-frequency level re. main control
+		float flOcclusionRoomRatio;  // occlusion room effect level re. main control
+		long lOutsideVolumeHF;       // outside sound cone level at high frequencies
+		float flAirAbsorptionFactor; // multiplies DSPROPERTY_EAXLISTENER_AIRABSORPTIONHF
+		unsigned long dwFlags;       // modifies the behavior of properties
+	} EAX20BUFFERPROPERTIES, *LPEAX20BUFFERPROPERTIES;
 
 // Used by DSPROPERTY_EAX20BUFFER_FLAGS
 //    TRUE:    value is computed automatically - property is an offset

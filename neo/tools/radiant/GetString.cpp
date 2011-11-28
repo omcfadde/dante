@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ If you have questions concerning this license or the applicable additional terms
 // CGetString dialog
 
 
-CGetString::CGetString(LPCSTR pPrompt, CString *pFeedback, CWnd* pParent /*=NULL*/)
+CGetString::CGetString(LPCSTR pPrompt, CString *pFeedback, CWnd *pParent /*=NULL*/)
 	: CDialog(CGetString::IDD, pParent)
 {
 	m_strEditBox = _T("");
@@ -50,7 +50,7 @@ CGetString::~CGetString()
 {
 }
 
-void CGetString::DoDataExchange(CDataExchange* pDX)
+void CGetString::DoDataExchange(CDataExchange *pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT1, m_strEditBox);
@@ -62,7 +62,7 @@ BOOL CGetString::OnInitDialog()
 
 	GetDlgItem(IDC_PROMPT)->SetWindowText(m_pPrompt);
 	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	// EXCEPTION: OCX Property Pages should return FALSE
 }
 
 BEGIN_MESSAGE_MAP(CGetString, CDialog)
@@ -72,12 +72,12 @@ END_MESSAGE_MAP()
 
 
 
-void CGetString::OnOK() 
+void CGetString::OnOK()
 {
 	UpdateData(DIALOG_TO_DATA);
 
 	*m_pFeedback = m_strEditBox;
-	
+
 	CDialog::OnOK();
 }
 
@@ -89,8 +89,8 @@ LPCSTR GetString(LPCSTR psPrompt)
 	static CString strReturn;
 
 	CGetString Input(psPrompt,&strReturn);
-	if (Input.DoModal() == IDOK)
-	{
+
+	if (Input.DoModal() == IDOK) {
 		strReturn.TrimLeft();
 		strReturn.TrimRight();
 
@@ -110,16 +110,25 @@ bool GetYesNo(const char *psQuery)
 }
 
 void ErrorBox(const char *sString)
-{																																																																																															if ((rand()&31)==30){static bool bPlayed=false;if(!bPlayed){bPlayed=true;PlaySound("k:\\util\\overlay.bin",NULL,SND_FILENAME|SND_ASYNC);}}
-	MessageBox( g_pParentWnd->GetSafeHwnd(), sString, "Error",		MB_OK|MB_ICONERROR|MB_TASKMODAL );		
+{
+	if ((rand()&31)==30) {
+		static bool bPlayed=false;
+
+		if (!bPlayed) {
+			bPlayed=true;
+			PlaySound("k:\\util\\overlay.bin",NULL,SND_FILENAME|SND_ASYNC);
+		}
+	}
+
+	MessageBox(g_pParentWnd->GetSafeHwnd(), sString, "Error",		MB_OK|MB_ICONERROR|MB_TASKMODAL);
 }
 void InfoBox(const char *sString)
 {
-	MessageBox( g_pParentWnd->GetSafeHwnd(), sString, "Info",		MB_OK|MB_ICONINFORMATION|MB_TASKMODAL );		
+	MessageBox(g_pParentWnd->GetSafeHwnd(), sString, "Info",		MB_OK|MB_ICONINFORMATION|MB_TASKMODAL);
 }
 void WarningBox(const char *sString)
 {
-	MessageBox( g_pParentWnd->GetSafeHwnd(), sString, "Warning",	MB_OK|MB_ICONWARNING|MB_TASKMODAL );
+	MessageBox(g_pParentWnd->GetSafeHwnd(), sString, "Warning",	MB_OK|MB_ICONWARNING|MB_TASKMODAL);
 }
 
 

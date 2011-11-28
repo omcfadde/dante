@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -31,101 +31,90 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "GEModifierGroup.h"
 
-rvGEModifierGroup::rvGEModifierGroup ( ) :
-	rvGEModifier ( "Group", NULL )
-{	
+rvGEModifierGroup::rvGEModifierGroup() :
+	rvGEModifier("Group", NULL)
+{
 }
 
-rvGEModifierGroup::~rvGEModifierGroup ( )
+rvGEModifierGroup::~rvGEModifierGroup()
 {
 	int i;
-	
-	for ( i = 0; i < mModifiers.Num(); i ++ )
-	{
+
+	for (i = 0; i < mModifiers.Num(); i ++) {
 		delete mModifiers[i];
 	}
-	
-	mModifiers.Clear ( );
+
+	mModifiers.Clear();
 }
 
-bool rvGEModifierGroup::Append ( rvGEModifier* mod )
+bool rvGEModifierGroup::Append(rvGEModifier *mod)
 {
 	// All modifiers must be the same type
-	assert ( !mModifiers.Num() || !idStr::Icmp ( mod->GetName ( ), mModifiers[0]->GetName ( ) ) );
+	assert(!mModifiers.Num() || !idStr::Icmp(mod->GetName(), mModifiers[0]->GetName()));
 
-	if ( !mModifiers.Num ( ) )
-	{
-		mName = mod->GetName ( );
+	if (!mModifiers.Num()) {
+		mName = mod->GetName();
 	}
 
-	mModifiers.Append ( mod );
+	mModifiers.Append(mod);
 	return true;
 }
 
-bool rvGEModifierGroup::IsValid ( void )
+bool rvGEModifierGroup::IsValid(void)
 {
 	int i;
-	
-	for ( i = 0; i < mModifiers.Num(); i ++ )
-	{
-		if ( !mModifiers[i]->IsValid ( ) )
-		{
+
+	for (i = 0; i < mModifiers.Num(); i ++) {
+		if (!mModifiers[i]->IsValid()) {
 			return false;
 		}
 	}
-	
+
 	return true;
 }
 
-bool rvGEModifierGroup::Apply ( void )
+bool rvGEModifierGroup::Apply(void)
 {
 	int i;
-	
-	for ( i = 0; i < mModifiers.Num(); i ++ )
-	{
-		mModifiers[i]->Apply ( );
+
+	for (i = 0; i < mModifiers.Num(); i ++) {
+		mModifiers[i]->Apply();
 	}
-	
+
 	return true;
 }
 
-bool rvGEModifierGroup::Undo ( void )
+bool rvGEModifierGroup::Undo(void)
 {
 	int i;
-	
-	for ( i = 0; i < mModifiers.Num(); i ++ )
-	{
-		mModifiers[i]->Undo ( );
+
+	for (i = 0; i < mModifiers.Num(); i ++) {
+		mModifiers[i]->Undo();
 	}
-	
+
 	return true;
 }
 
-bool rvGEModifierGroup::CanMerge ( rvGEModifier* mergebase )
+bool rvGEModifierGroup::CanMerge(rvGEModifier *mergebase)
 {
-	rvGEModifierGroup*	merge = (rvGEModifierGroup*) mergebase;
+	rvGEModifierGroup	*merge = (rvGEModifierGroup *) mergebase;
 	int					i;
-			
-	if ( mModifiers.Num() != merge->mModifiers.Num ( ) )
-	{
+
+	if (mModifiers.Num() != merge->mModifiers.Num()) {
 		return false;
 	}
-			
+
 	// Double check the merge is possible
-	for ( i = 0; i < mModifiers.Num(); i ++ )
-	{
-		if ( mModifiers[i]->GetWindow() != merge->mModifiers[i]->GetWindow() )
-		{
-			return false;
-		}
-		
-		if ( idStr::Icmp ( mModifiers[i]->GetName ( ), merge->mModifiers[i]->GetName ( ) ) )
-		{
+	for (i = 0; i < mModifiers.Num(); i ++) {
+		if (mModifiers[i]->GetWindow() != merge->mModifiers[i]->GetWindow()) {
 			return false;
 		}
 
-		if ( !mModifiers[i]->CanMerge ( merge->mModifiers[i] ) )
-		{
+		if (idStr::Icmp(mModifiers[i]->GetName(), merge->mModifiers[i]->GetName())) {
+			return false;
+		}
+
+		if (!mModifiers[i]->CanMerge(merge->mModifiers[i])) {
 			return false;
 		}
 	}
@@ -133,16 +122,15 @@ bool rvGEModifierGroup::CanMerge ( rvGEModifier* mergebase )
 	return true;
 }
 
-bool rvGEModifierGroup::Merge ( rvGEModifier* mergebase )
+bool rvGEModifierGroup::Merge(rvGEModifier *mergebase)
 {
-	rvGEModifierGroup*	merge = (rvGEModifierGroup*) mergebase;
+	rvGEModifierGroup	*merge = (rvGEModifierGroup *) mergebase;
 	int					i;
-	
+
 	// Double check the merge is possible
-	for ( i = 0; i < mModifiers.Num(); i ++ )
-	{
-		mModifiers[i]->Merge ( merge->mModifiers[i] );
+	for (i = 0; i < mModifiers.Num(); i ++) {
+		mModifiers[i]->Merge(merge->mModifiers[i]);
 	}
-	
+
 	return true;
 }

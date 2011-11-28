@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ If you have questions concerning this license or the applicable additional terms
 /*
 ===============================================================================
 
-	Grabber Object - Class to extend idWeapon to include functionality for 
+	Grabber Object - Class to extend idWeapon to include functionality for
 						manipulating physics objects.
 
 ===============================================================================
@@ -38,49 +38,50 @@ If you have questions concerning this license or the applicable additional terms
 
 class idBeam;
 
-class idGrabber : public idEntity {
-public:
-	CLASS_PROTOTYPE( idGrabber );
+class idGrabber : public idEntity
+{
+	public:
+		CLASS_PROTOTYPE(idGrabber);
 
-							idGrabber( void );
-							~idGrabber( void );
+		idGrabber(void);
+		~idGrabber(void);
 
-	void					Save( idSaveGame *savefile ) const;
-	void					Restore( idRestoreGame *savefile );
+		void					Save(idSaveGame *savefile) const;
+		void					Restore(idRestoreGame *savefile);
 
-	void					Initialize( void );
-	void					SetDragDistance( float dist );
-	int						Update( idPlayer *player, bool hide );
+		void					Initialize(void);
+		void					SetDragDistance(float dist);
+		int						Update(idPlayer *player, bool hide);
 
-private:
-	idEntityPtr<idEntity>	dragEnt;			// entity being dragged
-	idForce_Grab			drag;
-	idVec3					saveGravity;
+	private:
+		idEntityPtr<idEntity>	dragEnt;			// entity being dragged
+		idForce_Grab			drag;
+		idVec3					saveGravity;
 
-	int						id;					// id of body being dragged
-	idVec3					localPlayerPoint;	// dragged point in player space
-	idEntityPtr<idPlayer>	owner;
-	int						oldUcmdFlags;
-	bool					holdingAF;
-	bool					shakeForceFlip;
-	int						endTime;
-	int						lastFiredTime;
-	int						dragFailTime;
-	int						startDragTime;
-	float					dragTraceDist;
-	int						savedContents;
-	int						savedClipmask;
+		int						id;					// id of body being dragged
+		idVec3					localPlayerPoint;	// dragged point in player space
+		idEntityPtr<idPlayer>	owner;
+		int						oldUcmdFlags;
+		bool					holdingAF;
+		bool					shakeForceFlip;
+		int						endTime;
+		int						lastFiredTime;
+		int						dragFailTime;
+		int						startDragTime;
+		float					dragTraceDist;
+		int						savedContents;
+		int						savedClipmask;
 
-	idBeam*					beam;
-	idBeam*					beamTarget;
+		idBeam					*beam;
+		idBeam					*beamTarget;
 
-	int						warpId;
+		int						warpId;
 
-	bool					grabbableAI( const char *aiName );
-	void					StartDrag( idEntity *grabEnt, int id );
-	void					StopDrag( bool dropOnly );
-	void					UpdateBeams( void );
-	void					ApplyShake( void );
+		bool					grabbableAI(const char *aiName);
+		void					StartDrag(idEntity *grabEnt, int id);
+		void					StopDrag(bool dropOnly);
+		void					UpdateBeams(void);
+		void					ApplyShake(void);
 };
 
 #endif

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -31,44 +31,44 @@ If you have questions concerning this license or the applicable additional terms
 
 class rvGEViewer
 {
-public:
+	public:
 
-	rvGEViewer ( );
+		rvGEViewer();
 
-	bool				Create		( HWND parent );
-	bool				Destroy		( void );
-	bool				OpenFile	( const char* filename );
-	
-	void				RunFrame	( void );
-	
-	HWND				GetWindow	( void );
-		
-protected:
+		bool				Create(HWND parent);
+		bool				Destroy(void);
+		bool				OpenFile(const char *filename);
 
-	void				Render		( HDC dc );
-	void				Play		( void );
-	void				Pause		( void );
+		void				RunFrame(void);
 
-	HWND					mWnd;
-	int						mWindowWidth;
-	int						mWindowHeight;
-	int						mToolbarHeight;
-	idUserInterfaceLocal*	mInterface;
-	bool					mPaused;
-	HWND					mToolbar;
-	int						mLastTime;
-	int						mTime;
-	
-	LRESULT		HandlePaint	( WPARAM wParam, LPARAM lParam );
-	
-private:
+		HWND				GetWindow(void);
 
-	bool	SetupPixelFormat ( void );
+	protected:
 
-	static LRESULT CALLBACK WndProc ( HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam );
+		void				Render(HDC dc);
+		void				Play(void);
+		void				Pause(void);
+
+		HWND					mWnd;
+		int						mWindowWidth;
+		int						mWindowHeight;
+		int						mToolbarHeight;
+		idUserInterfaceLocal	*mInterface;
+		bool					mPaused;
+		HWND					mToolbar;
+		int						mLastTime;
+		int						mTime;
+
+		LRESULT		HandlePaint(WPARAM wParam, LPARAM lParam);
+
+	private:
+
+		bool	SetupPixelFormat(void);
+
+		static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 };
 
-ID_INLINE HWND rvGEViewer::GetWindow ( void )
+ID_INLINE HWND rvGEViewer::GetWindow(void)
 {
 	return mWnd;
 }

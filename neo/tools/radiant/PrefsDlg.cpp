@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -115,7 +115,7 @@ static char THIS_FILE[] = __FILE__;
 // CPrefsDlg dialog
 
 
-CPrefsDlg::CPrefsDlg(CWnd* pParent /*=NULL*/)
+CPrefsDlg::CPrefsDlg(CWnd *pParent /*=NULL*/)
 	: CDialog(CPrefsDlg::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CPrefsDlg)
@@ -166,7 +166,7 @@ CPrefsDlg::CPrefsDlg(CWnd* pParent /*=NULL*/)
 	m_nUndoLevels = 63;
 }
 
-void CPrefsDlg::DoDataExchange(CDataExchange* pDX)
+void CPrefsDlg::DoDataExchange(CDataExchange *pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CPrefsDlg)
@@ -215,7 +215,7 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CPrefsDlg message handlers
 
-BOOL CPrefsDlg::OnInitDialog() 
+BOOL CPrefsDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	m_wndSpin.SetRange(1,60);
@@ -234,36 +234,41 @@ BOOL CPrefsDlg::OnInitDialog()
 	//GetDlgItem(IDC_CHECK_NOCLAMP)->EnableWindow(FALSE);
 
 	return TRUE;	// return TRUE unless you set the focus to a control
-					// EXCEPTION: OCX Property Pages should return FALSE
+	// EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CPrefsDlg::OnOK() 
+void CPrefsDlg::OnOK()
 {
 	m_nMoveSpeed = m_wndCamSpeed.GetPos();
 	m_nAngleSpeed = (float)m_nMoveSpeed * 0.50;
 	this->m_nTextureQuality = m_wndTexturequality.GetPos();
 	SavePrefs();
 
-	if ( g_pParentWnd ) {
+	if (g_pParentWnd) {
 		g_pParentWnd->SetGridStatus();
 	}
+
 	Sys_UpdateWindows(W_ALL);
 	Undo_SetMaxSize(m_nUndoLevels);
 	CDialog::OnOK();
 }
 
-int GetCvarInt(const char *name, const int def) {
-	idCVar *cvar = cvarSystem->Find( name );
-	if ( cvar ) {
+int GetCvarInt(const char *name, const int def)
+{
+	idCVar *cvar = cvarSystem->Find(name);
+
+	if (cvar) {
 		return cvar->GetInteger();
 	} else {
 		return def;
 	}
 }
 
-const char *GetCvarString( const char *name, const char *def ) {
-	idCVar *cvar = cvarSystem->Find( name );
-	if ( cvar ) {
+const char *GetCvarString(const char *name, const char *def)
+{
+	idCVar *cvar = cvarSystem->Find(name);
+
+	if (cvar) {
 		return cvar->GetString();
 	} else {
 		return def;
@@ -272,56 +277,71 @@ const char *GetCvarString( const char *name, const char *def ) {
 
 static const char hexDigits[] = "0123456789ABCDEF";
 
-void SetCvarInt( const char *name, const int value ) {
-	cvarSystem->SetCVarInteger( name, value, CVAR_TOOL );
+void SetCvarInt(const char *name, const int value)
+{
+	cvarSystem->SetCVarInteger(name, value, CVAR_TOOL);
 }
 
-void SetCvarString( const char *name, const char *value ) {
-	cvarSystem->SetCVarString( name, value, CVAR_TOOL );
+void SetCvarString(const char *name, const char *value)
+{
+	cvarSystem->SetCVarString(name, value, CVAR_TOOL);
 }
 
-void SetCvarBinary(const char *name, void *pv, int size) {
+void SetCvarBinary(const char *name, void *pv, int size)
+{
 	unsigned char *in = new unsigned char[size];
 	idStr s;
-	memset( in, 0, size );
-	memcpy( in, pv, size );
-	for ( int i = 0; i < size; i++ ) {
+	memset(in, 0, size);
+	memcpy(in, pv, size);
+
+	for (int i = 0; i < size; i++) {
 		s += hexDigits[in[i] >> 4];
 		s += hexDigits[in[i] & 0x0f];
 	}
+
 	delete []in;
 	SetCvarString(name, s);
 }
 
-bool GetCvarBinary( const char *name, void *pv, int size ) {
+bool GetCvarBinary(const char *name, void *pv, int size)
+{
 	bool ret = false;
 	unsigned char *out = new unsigned char[size];
-	idStr s = GetCvarString( name, "" );
-	if ( s.Length() / 2 == size ) {
+	idStr s = GetCvarString(name, "");
+
+	if (s.Length() / 2 == size) {
 		int j = 0;
-		for ( int i = 0; i < s.Length(); i += 2 ) {
+
+		for (int i = 0; i < s.Length(); i += 2) {
 			char c;
+
 			if (s[i] > '9') {
 				c = s[i] - 'A' + 0x0a;
 			} else {
 				c = s[i] - 0x30;
 			}
+
 			c <<= 4;
+
 			if (s[i+1] > '9') {
 				c |= s[i+1] - 'A' + 0x0a;
 			} else {
 				c |= s[i+1] - 0x30;
 			}
+
 			out[j++] = c;
 		}
+
 		memcpy(pv, out, size);
 		ret = true;
 	}
+
 	delete []out;
 	return ret;
 }
 
-void CPrefsDlg::LoadPrefs() {
+void CPrefsDlg::LoadPrefs()
+{
 	CString strBuff;
 	CString strPrefab = g_strAppPath;
 	AddSlash(strPrefab);
@@ -329,123 +349,129 @@ void CPrefsDlg::LoadPrefs() {
 
 	m_nMouseButtons = 3;
 
-	m_bTextureLock = GetCvarInt( TLOCK_KEY, TLOCK_DEF );
-	m_bRotateLock = GetCvarInt( RLOCK_KEY, TLOCK_DEF );
-	m_strLastProject = GetCvarString( LASTPROJ_KEY, "" );
-	m_strLastMap = GetCvarString( LASTMAP_KEY, "" );
-	m_bLoadLast = GetCvarInt( LOADLAST_KEY, LOADLAST_DEF );
-	m_bRunBefore = GetCvarInt( RUN_KEY, RUN_DEF );
-	m_bFace = GetCvarInt( FACE_KEY, 1 );
-	m_bRightClick = GetCvarInt( RCLICK_KEY, 1 );
-	m_bVertex = GetCvarInt( VERTEX_KEY, 1 );
-	m_bAutoSave = GetCvarInt( AUTOSAVE_KEY, 1 );
-	m_bNewApplyHandling = GetCvarInt( NEWAPPLY_KEY, 0 );
-	m_bLoadLastMap = GetCvarInt( LOADLASTMAP_KEY, 0 );
-	m_bGatewayHack = GetCvarInt( HACK_KEY, 0 );
-	m_bTextureWindow = GetCvarInt( TEXTURE_KEY, 0 );
-	m_bCleanTiny = GetCvarInt( TINYBRUSH_KEY, 0 );
-	strBuff = GetCvarString( TINYSIZE_KEY, "0.5" );
-	m_fTinySize = atof(strBuff );
-	m_nAutoSave = GetCvarInt( AUTOSAVETIME_KEY, 5 );
-	if ( m_nAutoSave <= 0 ) { m_nAutoSave = 1; }
-	m_strAutoSave.Format("%i", m_nAutoSave );
-	m_bSnapShots = GetCvarInt( SNAPSHOT_KEY, 0 );
-	m_nStatusSize = GetCvarInt( STATUS_KEY, 10 );
-	m_nMoveSpeed = GetCvarInt( MOVESPEED_KEY, 400 );
-	m_nAngleSpeed = GetCvarInt( ANGLESPEED_KEY, 300 );
-	m_bCamXYUpdate = GetCvarInt( CAMXYUPDATE_KEY, 1 );
-	m_bNewLightDraw = GetCvarInt( LIGHTDRAW_KEY, 1 );
-	m_bCubicClipping = ( GetCvarInt( CUBICCLIP_KEY, 1) != 0  );
-	m_nCubicScale = GetCvarInt( CUBICSCALE_KEY, 13 );
-	m_bALTEdge = GetCvarInt( ALTEDGE_KEY, 0 );
-	m_bQE4Painting = GetCvarInt( QE4PAINT_KEY, 1 );
-	m_bSnapTToGrid = GetCvarInt( SNAPT_KEY, 0 );
-	m_bXZVis = GetCvarInt( XZVIS_KEY, 0 );
-	m_bYZVis = GetCvarInt( YZVIS_KEY, 0 );
-	m_bZVis = GetCvarInt( ZVIS_KEY, 1 );
-	m_bSizePaint = GetCvarInt( SIZEPAINT_KEY, 0 );
-	m_bWideToolbar = GetCvarInt( WIDETOOLBAR_KEY, 1 );
-	m_bNoClamp = GetCvarInt( NOCLAMP_KEY, 0 );
-	m_nRotation = GetCvarInt( ROTATION_KEY, 45 );
-	m_bHiColorTextures = GetCvarInt( HICOLOR_KEY, 1 );
-	m_bChaseMouse = GetCvarInt( CHASEMOUSE_KEY, 1 );
-	m_nEntityShowState = GetCvarInt( ENTITYSHOW_KEY, 0 );
-	m_nTextureScale = GetCvarInt( TEXTURESCALE_KEY, 50 );
-	m_bTextureScrollbar = GetCvarInt( TEXTURESCROLLBAR_KEY, TRUE );
-	m_bDisplayLists = GetCvarInt( DISPLAYLISTS_KEY, TRUE );
-	m_bSwitchClip = GetCvarInt( SWITCHCLIP_KEY, TRUE );
-	m_bSelectWholeEntities = GetCvarInt( SELWHOLEENTS_KEY, TRUE );
-	m_nTextureQuality = GetCvarInt( TEXTUREQUALITY_KEY, 6 );
-	m_bGLLighting = GetCvarInt( GLLIGHTING_KEY, FALSE );
-	m_bNoStipple = GetCvarInt( NOSTIPPLE_KEY, 0 );
-	m_nUndoLevels = GetCvarInt( UNDOLEVELS_KEY, 63 );
-	m_strMaps = GetCvarString( MAPS_KEY, "" );
-	m_strModels = GetCvarString( MODELS_KEY, "" );
-	m_bNoStipple = GetCvarInt( NEWMAPFORMAT_KEY, 1 );
+	m_bTextureLock = GetCvarInt(TLOCK_KEY, TLOCK_DEF);
+	m_bRotateLock = GetCvarInt(RLOCK_KEY, TLOCK_DEF);
+	m_strLastProject = GetCvarString(LASTPROJ_KEY, "");
+	m_strLastMap = GetCvarString(LASTMAP_KEY, "");
+	m_bLoadLast = GetCvarInt(LOADLAST_KEY, LOADLAST_DEF);
+	m_bRunBefore = GetCvarInt(RUN_KEY, RUN_DEF);
+	m_bFace = GetCvarInt(FACE_KEY, 1);
+	m_bRightClick = GetCvarInt(RCLICK_KEY, 1);
+	m_bVertex = GetCvarInt(VERTEX_KEY, 1);
+	m_bAutoSave = GetCvarInt(AUTOSAVE_KEY, 1);
+	m_bNewApplyHandling = GetCvarInt(NEWAPPLY_KEY, 0);
+	m_bLoadLastMap = GetCvarInt(LOADLASTMAP_KEY, 0);
+	m_bGatewayHack = GetCvarInt(HACK_KEY, 0);
+	m_bTextureWindow = GetCvarInt(TEXTURE_KEY, 0);
+	m_bCleanTiny = GetCvarInt(TINYBRUSH_KEY, 0);
+	strBuff = GetCvarString(TINYSIZE_KEY, "0.5");
+	m_fTinySize = atof(strBuff);
+	m_nAutoSave = GetCvarInt(AUTOSAVETIME_KEY, 5);
 
-	if ( m_bRunBefore == FALSE ) {
+	if (m_nAutoSave <= 0) {
+		m_nAutoSave = 1;
+	}
+
+	m_strAutoSave.Format("%i", m_nAutoSave);
+	m_bSnapShots = GetCvarInt(SNAPSHOT_KEY, 0);
+	m_nStatusSize = GetCvarInt(STATUS_KEY, 10);
+	m_nMoveSpeed = GetCvarInt(MOVESPEED_KEY, 400);
+	m_nAngleSpeed = GetCvarInt(ANGLESPEED_KEY, 300);
+	m_bCamXYUpdate = GetCvarInt(CAMXYUPDATE_KEY, 1);
+	m_bNewLightDraw = GetCvarInt(LIGHTDRAW_KEY, 1);
+	m_bCubicClipping = (GetCvarInt(CUBICCLIP_KEY, 1) != 0);
+	m_nCubicScale = GetCvarInt(CUBICSCALE_KEY, 13);
+	m_bALTEdge = GetCvarInt(ALTEDGE_KEY, 0);
+	m_bQE4Painting = GetCvarInt(QE4PAINT_KEY, 1);
+	m_bSnapTToGrid = GetCvarInt(SNAPT_KEY, 0);
+	m_bXZVis = GetCvarInt(XZVIS_KEY, 0);
+	m_bYZVis = GetCvarInt(YZVIS_KEY, 0);
+	m_bZVis = GetCvarInt(ZVIS_KEY, 1);
+	m_bSizePaint = GetCvarInt(SIZEPAINT_KEY, 0);
+	m_bWideToolbar = GetCvarInt(WIDETOOLBAR_KEY, 1);
+	m_bNoClamp = GetCvarInt(NOCLAMP_KEY, 0);
+	m_nRotation = GetCvarInt(ROTATION_KEY, 45);
+	m_bHiColorTextures = GetCvarInt(HICOLOR_KEY, 1);
+	m_bChaseMouse = GetCvarInt(CHASEMOUSE_KEY, 1);
+	m_nEntityShowState = GetCvarInt(ENTITYSHOW_KEY, 0);
+	m_nTextureScale = GetCvarInt(TEXTURESCALE_KEY, 50);
+	m_bTextureScrollbar = GetCvarInt(TEXTURESCROLLBAR_KEY, TRUE);
+	m_bDisplayLists = GetCvarInt(DISPLAYLISTS_KEY, TRUE);
+	m_bSwitchClip = GetCvarInt(SWITCHCLIP_KEY, TRUE);
+	m_bSelectWholeEntities = GetCvarInt(SELWHOLEENTS_KEY, TRUE);
+	m_nTextureQuality = GetCvarInt(TEXTUREQUALITY_KEY, 6);
+	m_bGLLighting = GetCvarInt(GLLIGHTING_KEY, FALSE);
+	m_bNoStipple = GetCvarInt(NOSTIPPLE_KEY, 0);
+	m_nUndoLevels = GetCvarInt(UNDOLEVELS_KEY, 63);
+	m_strMaps = GetCvarString(MAPS_KEY, "");
+	m_strModels = GetCvarString(MODELS_KEY, "");
+	m_bNoStipple = GetCvarInt(NEWMAPFORMAT_KEY, 1);
+
+	if (m_bRunBefore == FALSE) {
 		SetGamePrefs();
 	}
 }
 
-void CPrefsDlg::SavePrefs() {
-	if ( GetSafeHwnd() ) {
+void CPrefsDlg::SavePrefs()
+{
+	if (GetSafeHwnd()) {
 		UpdateData(TRUE);
 	}
 
 	m_nMouseButtons = 3;
 
-	SetCvarInt( TLOCK_KEY, m_bTextureLock );
-	SetCvarInt( RLOCK_KEY, m_bRotateLock );
-	SetCvarInt( LOADLAST_KEY, m_bLoadLast );
-	SetCvarString( LASTPROJ_KEY, m_strLastProject );
-	SetCvarString( LASTMAP_KEY, m_strLastMap );
-	SetCvarInt( RUN_KEY, m_bRunBefore );
-	SetCvarInt( FACE_KEY, m_bFace );
-	SetCvarInt( RCLICK_KEY, m_bRightClick );
-	SetCvarInt( VERTEX_KEY, m_bVertex );
-	SetCvarInt( AUTOSAVE_KEY, m_bAutoSave );
-	SetCvarInt( LOADLASTMAP_KEY, m_bLoadLastMap );
-	SetCvarInt( TEXTURE_KEY, m_bTextureWindow );
-	m_nAutoSave = atoi( m_strAutoSave );
-	SetCvarInt( AUTOSAVETIME_KEY, m_nAutoSave );
-	SetCvarInt( SNAPSHOT_KEY, m_bSnapShots );
-	SetCvarInt( STATUS_KEY, m_nStatusSize );
-	SetCvarInt( CAMXYUPDATE_KEY, m_bCamXYUpdate );
-	SetCvarInt( LIGHTDRAW_KEY, m_bNewLightDraw );
-	SetCvarInt( MOVESPEED_KEY, m_nMoveSpeed );
-	SetCvarInt( ANGLESPEED_KEY, m_nAngleSpeed );
-	SetCvarInt( CUBICCLIP_KEY, m_bCubicClipping );
-	SetCvarInt( CUBICSCALE_KEY, m_nCubicScale );
-	SetCvarInt( ALTEDGE_KEY, m_bALTEdge );
-	SetCvarInt( QE4PAINT_KEY, m_bQE4Painting );
-	SetCvarInt( SNAPT_KEY, m_bSnapTToGrid );
-	SetCvarInt( XZVIS_KEY, m_bXZVis );
-	SetCvarInt( YZVIS_KEY, m_bYZVis );
-	SetCvarInt( ZVIS_KEY, m_bZVis );
-	SetCvarInt( SIZEPAINT_KEY, m_bSizePaint );
-	SetCvarInt( WIDETOOLBAR_KEY, m_bWideToolbar );
-	SetCvarInt( NOCLAMP_KEY, m_bNoClamp );
-	SetCvarInt( ROTATION_KEY, m_nRotation );
-	SetCvarInt( HICOLOR_KEY, m_bHiColorTextures );
-	SetCvarInt( CHASEMOUSE_KEY, m_bChaseMouse );
-	SetCvarInt( ENTITYSHOW_KEY, m_nEntityShowState );
-	SetCvarInt( TEXTURESCALE_KEY, m_nTextureScale );
-	SetCvarInt( TEXTURESCROLLBAR_KEY, m_bTextureScrollbar );
-	SetCvarInt( DISPLAYLISTS_KEY, m_bDisplayLists );
-	SetCvarInt( SWITCHCLIP_KEY, m_bSwitchClip );
-	SetCvarInt( SELWHOLEENTS_KEY, m_bSelectWholeEntities );
-	SetCvarInt( TEXTUREQUALITY_KEY, m_nTextureQuality );
-	SetCvarInt( GLLIGHTING_KEY, m_bGLLighting );
-	SetCvarInt( NOSTIPPLE_KEY, m_bNoStipple );
-	SetCvarInt( UNDOLEVELS_KEY, m_nUndoLevels );
-	SetCvarString( MAPS_KEY, m_strMaps );
-	SetCvarString( MODELS_KEY, m_strModels );
-	SetCvarInt( NEWMAPFORMAT_KEY, m_bNewMapFormat );
-	common->WriteFlaggedCVarsToFile( "editor.cfg", CVAR_TOOL, "sett" );
+	SetCvarInt(TLOCK_KEY, m_bTextureLock);
+	SetCvarInt(RLOCK_KEY, m_bRotateLock);
+	SetCvarInt(LOADLAST_KEY, m_bLoadLast);
+	SetCvarString(LASTPROJ_KEY, m_strLastProject);
+	SetCvarString(LASTMAP_KEY, m_strLastMap);
+	SetCvarInt(RUN_KEY, m_bRunBefore);
+	SetCvarInt(FACE_KEY, m_bFace);
+	SetCvarInt(RCLICK_KEY, m_bRightClick);
+	SetCvarInt(VERTEX_KEY, m_bVertex);
+	SetCvarInt(AUTOSAVE_KEY, m_bAutoSave);
+	SetCvarInt(LOADLASTMAP_KEY, m_bLoadLastMap);
+	SetCvarInt(TEXTURE_KEY, m_bTextureWindow);
+	m_nAutoSave = atoi(m_strAutoSave);
+	SetCvarInt(AUTOSAVETIME_KEY, m_nAutoSave);
+	SetCvarInt(SNAPSHOT_KEY, m_bSnapShots);
+	SetCvarInt(STATUS_KEY, m_nStatusSize);
+	SetCvarInt(CAMXYUPDATE_KEY, m_bCamXYUpdate);
+	SetCvarInt(LIGHTDRAW_KEY, m_bNewLightDraw);
+	SetCvarInt(MOVESPEED_KEY, m_nMoveSpeed);
+	SetCvarInt(ANGLESPEED_KEY, m_nAngleSpeed);
+	SetCvarInt(CUBICCLIP_KEY, m_bCubicClipping);
+	SetCvarInt(CUBICSCALE_KEY, m_nCubicScale);
+	SetCvarInt(ALTEDGE_KEY, m_bALTEdge);
+	SetCvarInt(QE4PAINT_KEY, m_bQE4Painting);
+	SetCvarInt(SNAPT_KEY, m_bSnapTToGrid);
+	SetCvarInt(XZVIS_KEY, m_bXZVis);
+	SetCvarInt(YZVIS_KEY, m_bYZVis);
+	SetCvarInt(ZVIS_KEY, m_bZVis);
+	SetCvarInt(SIZEPAINT_KEY, m_bSizePaint);
+	SetCvarInt(WIDETOOLBAR_KEY, m_bWideToolbar);
+	SetCvarInt(NOCLAMP_KEY, m_bNoClamp);
+	SetCvarInt(ROTATION_KEY, m_nRotation);
+	SetCvarInt(HICOLOR_KEY, m_bHiColorTextures);
+	SetCvarInt(CHASEMOUSE_KEY, m_bChaseMouse);
+	SetCvarInt(ENTITYSHOW_KEY, m_nEntityShowState);
+	SetCvarInt(TEXTURESCALE_KEY, m_nTextureScale);
+	SetCvarInt(TEXTURESCROLLBAR_KEY, m_bTextureScrollbar);
+	SetCvarInt(DISPLAYLISTS_KEY, m_bDisplayLists);
+	SetCvarInt(SWITCHCLIP_KEY, m_bSwitchClip);
+	SetCvarInt(SELWHOLEENTS_KEY, m_bSelectWholeEntities);
+	SetCvarInt(TEXTUREQUALITY_KEY, m_nTextureQuality);
+	SetCvarInt(GLLIGHTING_KEY, m_bGLLighting);
+	SetCvarInt(NOSTIPPLE_KEY, m_bNoStipple);
+	SetCvarInt(UNDOLEVELS_KEY, m_nUndoLevels);
+	SetCvarString(MAPS_KEY, m_strMaps);
+	SetCvarString(MODELS_KEY, m_strModels);
+	SetCvarInt(NEWMAPFORMAT_KEY, m_bNewMapFormat);
+	common->WriteFlaggedCVarsToFile("editor.cfg", CVAR_TOOL, "sett");
 }
 
-void CPrefsDlg::SetGamePrefs() {
+void CPrefsDlg::SetGamePrefs()
+{
 	m_bHiColorTextures = TRUE;
 	m_bWideToolbar = TRUE;
 	SavePrefs();

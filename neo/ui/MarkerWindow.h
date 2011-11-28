@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -36,39 +36,42 @@ typedef struct {
 	idRectangle rect;
 } markerData_t;
 
-class idMarkerWindow : public idWindow {
-public:
-	idMarkerWindow(idUserInterfaceLocal *gui);
-	idMarkerWindow(idDeviceContext *d, idUserInterfaceLocal *gui);
-	virtual ~idMarkerWindow();
-	virtual size_t Allocated(){return idWindow::Allocated();};
-	virtual idWinVar *GetWinVarByName(const char *_name, bool winLookup = false);
+class idMarkerWindow : public idWindow
+{
+	public:
+		idMarkerWindow(idUserInterfaceLocal *gui);
+		idMarkerWindow(idDeviceContext *d, idUserInterfaceLocal *gui);
+		virtual ~idMarkerWindow();
+		virtual size_t Allocated() {
+			return idWindow::Allocated();
+		};
+		virtual idWinVar *GetWinVarByName(const char *_name, bool winLookup = false);
 
-	virtual const char *HandleEvent(const sysEvent_t *event, bool *updateVisuals);
-	virtual void PostParse();
-	virtual void Draw(int time, float x, float y);
-	virtual const char *RouteMouseCoords(float xd, float yd);
-	virtual void		Activate(bool activate, idStr &act);
-	virtual void MouseExit();
-	virtual void MouseEnter();
+		virtual const char *HandleEvent(const sysEvent_t *event, bool *updateVisuals);
+		virtual void PostParse();
+		virtual void Draw(int time, float x, float y);
+		virtual const char *RouteMouseCoords(float xd, float yd);
+		virtual void		Activate(bool activate, idStr &act);
+		virtual void MouseExit();
+		virtual void MouseEnter();
 
-	
-private:
-	virtual bool ParseInternalVar(const char *name, idParser *src);
-	void CommonInit();
-	void Line(int x1, int y1, int x2, int y2, dword* out, dword color);
-	void Point(int x, int y, dword *out, dword color);
-	logStats_t loggedStats[MAX_LOGGED_STATS];
-	idList<markerData_t> markerTimes;
-	idStr statData;
-	int numStats;
-	dword *imageBuff;
-	const idMaterial *markerMat;
-	const idMaterial *markerStop;
-	idVec4 markerColor;
-	int currentMarker;
-	int currentTime;
-	int stopTime;
+
+	private:
+		virtual bool ParseInternalVar(const char *name, idParser *src);
+		void CommonInit();
+		void Line(int x1, int y1, int x2, int y2, dword *out, dword color);
+		void Point(int x, int y, dword *out, dword color);
+		logStats_t loggedStats[MAX_LOGGED_STATS];
+		idList<markerData_t> markerTimes;
+		idStr statData;
+		int numStats;
+		dword *imageBuff;
+		const idMaterial *markerMat;
+		const idMaterial *markerStop;
+		idVec4 markerColor;
+		int currentMarker;
+		int currentTime;
+		int stopTime;
 };
 
 #endif // __MARKERWINDOW_H

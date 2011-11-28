@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,26 +34,26 @@ If you have questions concerning this license or the applicable additional terms
 
 class rvGEKeyValueModifier : public rvGEModifier
 {
-public:
+	public:
 
-	rvGEKeyValueModifier ( const char* name, idWindow* window, const char* key, const char* value );
-	
-	virtual bool		Apply		( void );
-	virtual bool		Undo		( void );
+		rvGEKeyValueModifier(const char *name, idWindow *window, const char *key, const char *value);
 
-	virtual bool		CanMerge	( rvGEModifier* merge );
-	virtual bool		Merge		( rvGEModifier* merge );
-			
-protected:
-	
-	idStr		mKey;
-	idStr		mValue;
-	idStr		mUndoValue;
-}; 
+		virtual bool		Apply(void);
+		virtual bool		Undo(void);
 
-ID_INLINE bool rvGEKeyValueModifier::CanMerge ( rvGEModifier* merge )
+		virtual bool		CanMerge(rvGEModifier *merge);
+		virtual bool		Merge(rvGEModifier *merge);
+
+	protected:
+
+		idStr		mKey;
+		idStr		mValue;
+		idStr		mUndoValue;
+};
+
+ID_INLINE bool rvGEKeyValueModifier::CanMerge(rvGEModifier *merge)
 {
-	return !((rvGEKeyValueModifier*)merge)->mKey.Icmp ( mKey );
+	return !((rvGEKeyValueModifier *)merge)->mKey.Icmp(mKey);
 }
 
 #endif // GEKEYVALUEMODIFIER_H_

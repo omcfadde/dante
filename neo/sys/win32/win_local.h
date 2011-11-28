@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ extern	PFNWGLRELEASEPBUFFERDCARBPROC	wglReleasePbufferDCARB;
 extern	PFNWGLDESTROYPBUFFERARBPROC	wglDestroyPbufferARB;
 extern	PFNWGLQUERYPBUFFERARBPROC	wglQueryPbufferARB;
 
-// WGL_ARB_render_texture 
+// WGL_ARB_render_texture
 extern	PFNWGLBINDTEXIMAGEARBPROC		wglBindTexImageARB;
 extern	PFNWGLRELEASETEXIMAGEARBPROC	wglReleaseTexImageARB;
 extern	PFNWGLSETPBUFFERATTRIBARBPROC	wglSetPbufferAttribARB;
@@ -60,42 +60,42 @@ extern	PFNWGLSETPBUFFERATTRIBARBPROC	wglSetPbufferAttribARB;
 
 #define	WINDOW_STYLE	(WS_OVERLAPPED|WS_BORDER|WS_CAPTION|WS_VISIBLE | WS_THICKFRAME)
 
-void	Sys_QueEvent( int time, sysEventType_t type, int value, int value2, int ptrLength, void *ptr );
+void	Sys_QueEvent(int time, sysEventType_t type, int value, int value2, int ptrLength, void *ptr);
 
-void	Sys_CreateConsole( void );
-void	Sys_DestroyConsole( void );
+void	Sys_CreateConsole(void);
+void	Sys_DestroyConsole(void);
 
-char	*Sys_ConsoleInput (void);
-char	*Sys_GetCurrentUser( void );
+char	*Sys_ConsoleInput(void);
+char	*Sys_GetCurrentUser(void);
 
-void	Win_SetErrorText( const char *text );
+void	Win_SetErrorText(const char *text);
 
-cpuid_t	Sys_GetCPUId( void );
+cpuid_t	Sys_GetCPUId(void);
 
-int		MapKey (int key);
+int		MapKey(int key);
 
 
 // Input subsystem
 
-void	IN_Init (void);
-void	IN_Shutdown (void);
+void	IN_Init(void);
+void	IN_Shutdown(void);
 // add additional non keyboard / non mouse movement on top of the keyboard move cmd
 
-void	IN_DeactivateMouseIfWindowed( void );
-void	IN_DeactivateMouse( void );
-void	IN_ActivateMouse( void );
+void	IN_DeactivateMouseIfWindowed(void);
+void	IN_DeactivateMouse(void);
+void	IN_ActivateMouse(void);
 
-void	IN_Frame( void );
+void	IN_Frame(void);
 
-int		IN_DIMapKey( int key );
+int		IN_DIMapKey(int key);
 
-void	DisableTaskKeys( BOOL bDisable, BOOL bBeep, BOOL bTaskMgr );
+void	DisableTaskKeys(BOOL bDisable, BOOL bBeep, BOOL bTaskMgr);
 
 
 // window procedure
-LONG WINAPI MainWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+LONG WINAPI MainWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-void Conbuf_AppendText( const char *msg );
+void Conbuf_AppendText(const char *msg);
 
 typedef struct {
 	HWND			hWnd;
@@ -120,7 +120,7 @@ typedef struct {
 
 	HDC				hDC;							// handle to device context
 	HGLRC			hGLRC;						// handle to GL rendering context
-	PIXELFORMATDESCRIPTOR pfd;		
+	PIXELFORMATDESCRIPTOR pfd;
 	int				pixelformat;
 
 	HINSTANCE		hinstOpenGL;	// HINSTANCE for the OpenGL library
@@ -163,7 +163,7 @@ typedef struct {
 	HANDLE			renderActiveEvent;
 	HANDLE			renderThreadHandle;
 	unsigned long	renderThreadId;
-	void			(*glimpRenderThread)( void );
+	void	(*glimpRenderThread)(void);
 	void			*smpData;
 	int				wglErrors;
 	// SMP acceleration vars

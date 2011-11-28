@@ -17,7 +17,7 @@
  *  Boston, MA  02111-1307, USA.
  * Or go to http://www.gnu.org/copyleft/lgpl.html
  */
- 
+
 #ifndef _ALUT_H_
 #define _ALUT_H_
 
@@ -29,23 +29,23 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-   
+
 #ifdef TARGET_OS_MAC
-   #if TARGET_OS_MAC
-       #pragma export on
-   #endif
+#if TARGET_OS_MAC
+#pragma export on
+#endif
 #endif
 
-ALUTAPI ALvoid	ALUTAPIENTRY alutInit(ALint *argc,ALbyte **argv);
-ALUTAPI ALvoid	ALUTAPIENTRY alutExit(ALvoid);
-ALUTAPI ALvoid	ALUTAPIENTRY alutLoadWAVFile(ALbyte *file,ALenum *format,ALvoid **data,ALsizei *size,ALsizei *freq);
-ALUTAPI ALvoid  ALUTAPIENTRY alutLoadWAVMemory(ALbyte *memory,ALenum *format,ALvoid **data,ALsizei *size,ALsizei *freq);
-ALUTAPI ALvoid  ALUTAPIENTRY alutUnloadWAV(ALenum format,ALvoid *data,ALsizei size,ALsizei freq);
+	ALUTAPI ALvoid	ALUTAPIENTRY alutInit(ALint *argc,ALbyte **argv);
+	ALUTAPI ALvoid	ALUTAPIENTRY alutExit(ALvoid);
+	ALUTAPI ALvoid	ALUTAPIENTRY alutLoadWAVFile(ALbyte *file,ALenum *format,ALvoid **data,ALsizei *size,ALsizei *freq);
+	ALUTAPI ALvoid  ALUTAPIENTRY alutLoadWAVMemory(ALbyte *memory,ALenum *format,ALvoid **data,ALsizei *size,ALsizei *freq);
+	ALUTAPI ALvoid  ALUTAPIENTRY alutUnloadWAV(ALenum format,ALvoid *data,ALsizei size,ALsizei freq);
 
 #ifdef TARGET_OS_MAC
-   #if TARGET_OS_MAC
-      #pragma export off
-   #endif
+#if TARGET_OS_MAC
+#pragma export off
+#endif
 #endif
 
 #ifdef __cplusplus

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,28 +38,29 @@ If you have questions concerning this license or the applicable additional terms
 ===============================================================================
 */
 
-class idNetworkSystem {
-public:
-	virtual					~idNetworkSystem( void ) {}
+class idNetworkSystem
+{
+	public:
+		virtual					~idNetworkSystem(void) {}
 
-	virtual void			ServerSendReliableMessage( int clientNum, const idBitMsg &msg );
-	virtual void			ServerSendReliableMessageExcluding( int clientNum, const idBitMsg &msg );
-	virtual int				ServerGetClientPing( int clientNum );
-	virtual int				ServerGetClientPrediction( int clientNum );
-	virtual int				ServerGetClientTimeSinceLastPacket( int clientNum );
-	virtual int				ServerGetClientTimeSinceLastInput( int clientNum );
-	virtual int				ServerGetClientOutgoingRate( int clientNum );
-	virtual int				ServerGetClientIncomingRate( int clientNum );
-	virtual float			ServerGetClientIncomingPacketLoss( int clientNum );
+		virtual void			ServerSendReliableMessage(int clientNum, const idBitMsg &msg);
+		virtual void			ServerSendReliableMessageExcluding(int clientNum, const idBitMsg &msg);
+		virtual int				ServerGetClientPing(int clientNum);
+		virtual int				ServerGetClientPrediction(int clientNum);
+		virtual int				ServerGetClientTimeSinceLastPacket(int clientNum);
+		virtual int				ServerGetClientTimeSinceLastInput(int clientNum);
+		virtual int				ServerGetClientOutgoingRate(int clientNum);
+		virtual int				ServerGetClientIncomingRate(int clientNum);
+		virtual float			ServerGetClientIncomingPacketLoss(int clientNum);
 
-	virtual void			ClientSendReliableMessage( const idBitMsg &msg );
-	virtual int				ClientGetPrediction( void );
-	virtual int				ClientGetTimeSinceLastPacket( void );
-	virtual int				ClientGetOutgoingRate( void );
-	virtual int				ClientGetIncomingRate( void );
-	virtual float			ClientGetIncomingPacketLoss( void );
+		virtual void			ClientSendReliableMessage(const idBitMsg &msg);
+		virtual int				ClientGetPrediction(void);
+		virtual int				ClientGetTimeSinceLastPacket(void);
+		virtual int				ClientGetOutgoingRate(void);
+		virtual int				ClientGetIncomingRate(void);
+		virtual float			ClientGetIncomingPacketLoss(void);
 };
 
-extern idNetworkSystem *	networkSystem;
+extern idNetworkSystem 	*networkSystem;
 
 #endif /* !__NETWORKSYSTEM_H__ */

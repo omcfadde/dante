@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -36,35 +36,36 @@ typedef struct {
 	int					numIndexes;
 } guiModelSurface_t;
 
-class idGuiModel {
-public:
-	idGuiModel();
+class idGuiModel
+{
+	public:
+		idGuiModel();
 
-	void	Clear();
+		void	Clear();
 
-	void	WriteToDemo( idDemoFile *demo );
-	void	ReadFromDemo( idDemoFile *demo );	
-	
-	void	EmitToCurrentView( float modelMatrix[16], bool depthHack );
-	void	EmitFullScreen();
+		void	WriteToDemo(idDemoFile *demo);
+		void	ReadFromDemo(idDemoFile *demo);
 
-	// these calls are forwarded from the renderer
-	void	SetColor( float r, float g, float b, float a );
-	void	DrawStretchPic( const idDrawVert *verts, const glIndex_t *indexes, int vertCount, int indexCount, const idMaterial *hShader,
-									bool clip = true, float min_x = 0.0f, float min_y = 0.0f, float max_x = 640.0f, float max_y = 480.0f );
-	void	DrawStretchPic( float x, float y, float w, float h,
-									float s1, float t1, float s2, float t2, const idMaterial *hShader);
-	void	DrawStretchTri ( idVec2 p1, idVec2 p2, idVec2 p3, idVec2 t1, idVec2 t2, idVec2 t3, const idMaterial *material );
+		void	EmitToCurrentView(float modelMatrix[16], bool depthHack);
+		void	EmitFullScreen();
 
-	//---------------------------
-private:
-	void	AdvanceSurf();
-	void	EmitSurface( guiModelSurface_t *surf, float modelMatrix[16], float modelViewMatrix[16], bool depthHack );
+		// these calls are forwarded from the renderer
+		void	SetColor(float r, float g, float b, float a);
+		void	DrawStretchPic(const idDrawVert *verts, const glIndex_t *indexes, int vertCount, int indexCount, const idMaterial *hShader,
+		                       bool clip = true, float min_x = 0.0f, float min_y = 0.0f, float max_x = 640.0f, float max_y = 480.0f);
+		void	DrawStretchPic(float x, float y, float w, float h,
+		                       float s1, float t1, float s2, float t2, const idMaterial *hShader);
+		void	DrawStretchTri(idVec2 p1, idVec2 p2, idVec2 p3, idVec2 t1, idVec2 t2, idVec2 t3, const idMaterial *material);
 
-	guiModelSurface_t		*surf;
+		//---------------------------
+	private:
+		void	AdvanceSurf();
+		void	EmitSurface(guiModelSurface_t *surf, float modelMatrix[16], float modelViewMatrix[16], bool depthHack);
 
-	idList<guiModelSurface_t>	surfaces;
-	idList<glIndex_t>		indexes;
-	idList<idDrawVert>	verts;
+		guiModelSurface_t		*surf;
+
+		idList<guiModelSurface_t>	surfaces;
+		idList<glIndex_t>		indexes;
+		idList<idDrawVert>	verts;
 };
 

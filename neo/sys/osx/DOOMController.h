@@ -2,8 +2,8 @@
 
 #import <AppKit/AppKit.h>
 
-@interface DOOMController : NSObject
-{
+@interface DOOMController :
+NSObject {
 	//    IBOutlet NSPanel *bannerPanel;
 }
 

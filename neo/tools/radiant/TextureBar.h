@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -40,49 +40,49 @@ If you have questions concerning this license or the applicable additional terms
 class CTextureBar : public CDialogBar
 {
 // Construction
-public:
-	void GetSurfaceAttributes();
-	void SetSurfaceAttributes();
-	CTextureBar();
+	public:
+		void GetSurfaceAttributes();
+		void SetSurfaceAttributes();
+		CTextureBar();
 
 // Dialog Data
-	//{{AFX_DATA(CTextureBar)
-	enum { IDD = IDD_TEXTUREBAR };
-	CSpinButtonCtrl	m_spinRotate;
-	CSpinButtonCtrl	m_spinVScale;
-	CSpinButtonCtrl	m_spinVShift;
-	CSpinButtonCtrl	m_spinHScale;
-	CSpinButtonCtrl	m_spinHShift;
-	int	m_nHShift;
-	int	m_nHScale;
-	int	m_nRotate;
-	int	m_nVShift;
-	int	m_nVScale;
-	int		m_nRotateAmt;
-	//}}AFX_DATA
+		//{{AFX_DATA(CTextureBar)
+		enum { IDD = IDD_TEXTUREBAR };
+		CSpinButtonCtrl	m_spinRotate;
+		CSpinButtonCtrl	m_spinVScale;
+		CSpinButtonCtrl	m_spinVShift;
+		CSpinButtonCtrl	m_spinHScale;
+		CSpinButtonCtrl	m_spinHShift;
+		int	m_nHShift;
+		int	m_nHScale;
+		int	m_nRotate;
+		int	m_nVShift;
+		int	m_nVScale;
+		int		m_nRotateAmt;
+		//}}AFX_DATA
 
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CTextureBar)
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CTextureBar)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+		virtual void DoDataExchange(CDataExchange *pDX);    // DDX/DDV support
+		//}}AFX_VIRTUAL
 
 // Implementation
-protected:
-	// Generated message map functions
-	//{{AFX_MSG(CTextureBar)
-	afx_msg void OnDeltaposSpinHshift(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnDeltaposSpinVshift(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnDeltaposSpinHScale(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnDeltaposSpinVScale(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnDeltaposSpinRotate(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnSelectionPrint();
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnBtnApplytexturestuff();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+	protected:
+		// Generated message map functions
+		//{{AFX_MSG(CTextureBar)
+		afx_msg void OnDeltaposSpinHshift(NMHDR *pNMHDR, LRESULT *pResult);
+		afx_msg void OnDeltaposSpinVshift(NMHDR *pNMHDR, LRESULT *pResult);
+		afx_msg void OnDeltaposSpinHScale(NMHDR *pNMHDR, LRESULT *pResult);
+		afx_msg void OnDeltaposSpinVScale(NMHDR *pNMHDR, LRESULT *pResult);
+		afx_msg void OnDeltaposSpinRotate(NMHDR *pNMHDR, LRESULT *pResult);
+		afx_msg void OnSelectionPrint();
+		afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+		afx_msg void OnBtnApplytexturestuff();
+		//}}AFX_MSG
+		DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

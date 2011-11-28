@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -30,59 +30,56 @@ If you have questions concerning this license or the applicable additional terms
 
 class rvGEStatusBar
 {
-public:
+	public:
 
-	rvGEStatusBar ( );
+		rvGEStatusBar();
 
-	bool	Create			( HWND parent, UINT id, bool visible = true );
-	void	Resize			( int width, int height );	
-	
-	HWND	GetWindow		( void );
+		bool	Create(HWND parent, UINT id, bool visible = true);
+		void	Resize(int width, int height);
 
-	void	SetZoom			( int zoom );
-	void	SetTriangles	( int tris );
-	void	SetSimple		( bool simple );
-	
-	void	Show			( bool state );
-	void	Update			( void );
-		
-protected:
+		HWND	GetWindow(void);
 
-	HWND	mWnd;
-	bool	mSimple;
-	int		mZoom;
-	int		mTriangles;
+		void	SetZoom(int zoom);
+		void	SetTriangles(int tris);
+		void	SetSimple(bool simple);
+
+		void	Show(bool state);
+		void	Update(void);
+
+	protected:
+
+		HWND	mWnd;
+		bool	mSimple;
+		int		mZoom;
+		int		mTriangles;
 };
 
-ID_INLINE HWND rvGEStatusBar::GetWindow ( void )
+ID_INLINE HWND rvGEStatusBar::GetWindow(void)
 {
 	return mWnd;
 }
 
-ID_INLINE void rvGEStatusBar::SetZoom ( int zoom )
+ID_INLINE void rvGEStatusBar::SetZoom(int zoom)
 {
-	if ( mZoom != zoom )
-	{
+	if (mZoom != zoom) {
 		mZoom = zoom;
-		Update ( );
+		Update();
 	}
 }
 
-ID_INLINE void rvGEStatusBar::SetTriangles ( int triangles )
+ID_INLINE void rvGEStatusBar::SetTriangles(int triangles)
 {
-	if ( triangles != mTriangles )
-	{
+	if (triangles != mTriangles) {
 		mTriangles = triangles;
-		Update ( );
+		Update();
 	}
 }
 
-ID_INLINE void rvGEStatusBar::SetSimple ( bool simple )
+ID_INLINE void rvGEStatusBar::SetSimple(bool simple)
 {
-	if ( mSimple != simple )
-	{
+	if (mSimple != simple) {
 		mSimple = simple;
-		Update ( );
+		Update();
 	}
 }
 

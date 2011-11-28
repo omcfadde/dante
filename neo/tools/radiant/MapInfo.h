@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -40,34 +40,34 @@ If you have questions concerning this license or the applicable additional terms
 class CMapInfo : public CDialog
 {
 // Construction
-public:
-	CMapInfo(CWnd* pParent = NULL);   // standard constructor
+	public:
+		CMapInfo(CWnd *pParent = NULL);   // standard constructor
 
 // Dialog Data
-	//{{AFX_DATA(CMapInfo)
-	enum { IDD = IDD_DLG_MAPINFO };
-	CListBox	m_lstEntity;
-	int		m_nNet;
-	int		m_nTotalBrushes;
-	int		m_nTotalEntities;
-	//}}AFX_DATA
+		//{{AFX_DATA(CMapInfo)
+		enum { IDD = IDD_DLG_MAPINFO };
+		CListBox	m_lstEntity;
+		int		m_nNet;
+		int		m_nTotalBrushes;
+		int		m_nTotalEntities;
+		//}}AFX_DATA
 
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMapInfo)
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CMapInfo)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+		virtual void DoDataExchange(CDataExchange *pDX);    // DDX/DDV support
+		//}}AFX_VIRTUAL
 
 // Implementation
-protected:
+	protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CMapInfo)
-	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+		// Generated message map functions
+		//{{AFX_MSG(CMapInfo)
+		virtual BOOL OnInitDialog();
+		//}}AFX_MSG
+		DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

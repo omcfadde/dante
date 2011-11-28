@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -40,42 +40,42 @@ If you have questions concerning this license or the applicable additional terms
 class CRotateDlg : public CDialog
 {
 // Construction
-public:
-	CRotateDlg(CWnd* pParent = NULL);   // standard constructor
+	public:
+		CRotateDlg(CWnd *pParent = NULL);   // standard constructor
 
 // Dialog Data
-	//{{AFX_DATA(CRotateDlg)
-	enum { IDD = IDD_ROTATE };
-	CSpinButtonCtrl	m_wndSpin3;
-	CSpinButtonCtrl	m_wndSpin2;
-	CSpinButtonCtrl	m_wndSpin1;
-	CString	m_strX;
-	CString	m_strY;
-	CString	m_strZ;
-	//}}AFX_DATA
+		//{{AFX_DATA(CRotateDlg)
+		enum { IDD = IDD_ROTATE };
+		CSpinButtonCtrl	m_wndSpin3;
+		CSpinButtonCtrl	m_wndSpin2;
+		CSpinButtonCtrl	m_wndSpin1;
+		CString	m_strX;
+		CString	m_strY;
+		CString	m_strZ;
+		//}}AFX_DATA
 
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CRotateDlg)
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CRotateDlg)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+		virtual void DoDataExchange(CDataExchange *pDX);    // DDX/DDV support
+		//}}AFX_VIRTUAL
 
 // Implementation
-protected:
-	void ApplyNoPaint();
+	protected:
+		void ApplyNoPaint();
 
-	// Generated message map functions
-	//{{AFX_MSG(CRotateDlg)
-	virtual void OnOK();
-	afx_msg void OnApply();
-	virtual BOOL OnInitDialog();
-	afx_msg void OnDeltaposSpin1(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnDeltaposSpin2(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnDeltaposSpin3(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+		// Generated message map functions
+		//{{AFX_MSG(CRotateDlg)
+		virtual void OnOK();
+		afx_msg void OnApply();
+		virtual BOOL OnInitDialog();
+		afx_msg void OnDeltaposSpin1(NMHDR *pNMHDR, LRESULT *pResult);
+		afx_msg void OnDeltaposSpin2(NMHDR *pNMHDR, LRESULT *pResult);
+		afx_msg void OnDeltaposSpin3(NMHDR *pNMHDR, LRESULT *pResult);
+		//}}AFX_MSG
+		DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -55,7 +55,8 @@ void		RemoveRegionBrushes(void);
  =======================================================================================================================
  =======================================================================================================================
  */
-void DupLists() {
+void DupLists()
+{
 	DWORD	dw = GetTickCount();
 }
 
@@ -72,7 +73,8 @@ bool		g_bRestoreBetween = false;
  =======================================================================================================================
  =======================================================================================================================
  */
-void Map_SaveBetween(void) {
+void Map_SaveBetween(void)
+{
 	if (g_pParentWnd->ActiveXY()) {
 		g_bRestoreBetween = true;
 		g_pParentWnd->ActiveXY()->Copy();
@@ -86,7 +88,8 @@ void Map_SaveBetween(void) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void Map_RestoreBetween(void) {
+void Map_RestoreBetween(void)
+{
 	if (g_pParentWnd->ActiveXY() && g_bRestoreBetween) {
 		g_pParentWnd->ActiveXY()->Paste();
 	}
@@ -99,8 +102,10 @@ void Map_RestoreBetween(void) {
  =======================================================================================================================
  =======================================================================================================================
  */
-bool CheckForTinyBrush(brush_t *b, int n, float fSize) {
+bool CheckForTinyBrush(brush_t *b, int n, float fSize)
+{
 	bool	bTiny = false;
+
 	for (int i = 0; i < 3; i++) {
 		if (b->maxs[i] - b->mins[i] < fSize) {
 			bTiny = true;
@@ -118,7 +123,8 @@ bool CheckForTinyBrush(brush_t *b, int n, float fSize) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void Map_BuildBrushData(void) {
+void Map_BuildBrushData(void)
+{
 	brush_t *b, *next;
 
 	if (active_brushes.next == NULL) {
@@ -128,9 +134,11 @@ void Map_BuildBrushData(void) {
 	Sys_BeginWait();	// this could take a while
 
 	int n = 0;
+
 	for (b = active_brushes.next; b != NULL && b != &active_brushes; b = next) {
 		next = b->next;
 		Brush_Build(b, true, false, false);
+
 		if (!b->brush_faces || (g_PrefsDlg.m_bCleanTiny && CheckForTinyBrush(b, n++, g_PrefsDlg.m_fTinySize))) {
 			Brush_Free(b);
 			common->Printf("Removed degenerate brush\n");
@@ -144,7 +152,8 @@ void Map_BuildBrushData(void) {
  =======================================================================================================================
  =======================================================================================================================
  */
-entity_t *Map_FindClass(char *cname) {
+entity_t *Map_FindClass(char *cname)
+{
 	entity_t	*ent;
 
 	for (ent = entities.next; ent != &entities; ent = ent->next) {
@@ -160,22 +169,29 @@ entity_t *Map_FindClass(char *cname) {
  =======================================================================================================================
  =======================================================================================================================
  */
-int Map_GetUniqueEntityID(const char *prefix, const char *eclass) {
+int Map_GetUniqueEntityID(const char *prefix, const char *eclass)
+{
 	entity_t	*ent;
 	int			id = 0;
+
 	for (ent = entities.next; ent != &entities; ent = ent->next) {
 		if (!strcmp(eclass, ValueForKey(ent, "classname"))) {
 			const char	*name = ValueForKey(ent, "name");
+
 			if (name && name[0]) {
 				const char *buf;
+
 				if (prefix && *prefix) {
 					buf = va("%s_%s_", prefix, eclass);
 				} else {
 					buf = va("%s_", eclass);
 				}
+
 				int			len = strlen(buf);
-				if ( idStr::Cmpn(name, buf, len) == 0 ) {
+
+				if (idStr::Cmpn(name, buf, len) == 0) {
 					int j = atoi(name + len);
+
 					if (j > id) {
 						id = j;
 					}
@@ -191,16 +207,19 @@ int Map_GetUniqueEntityID(const char *prefix, const char *eclass) {
  =======================================================================================================================
  =======================================================================================================================
  */
-bool Entity_NameIsUnique(const char *name) {
+bool Entity_NameIsUnique(const char *name)
+{
 	entity_t	*ent;
+
 	if (name == NULL) {
 		return false;
 	}
 
 	for (ent = entities.next; ent != &entities; ent = ent->next) {
 		const char	*testName = ValueForKey(ent, "name");
+
 		if (testName) {
-			if ( idStr::Icmp(name, testName) == 0 ) {
+			if (idStr::Icmp(name, testName) == 0) {
 				return false;
 			}
 		}
@@ -214,8 +233,10 @@ bool Entity_NameIsUnique(const char *name) {
     Map_Free
  =======================================================================================================================
  */
-void Map_Free(void) {
+void Map_Free(void)
+{
 	g_bRestoreBetween = false;
+
 	if (selected_brushes.next && (selected_brushes.next != &selected_brushes)) {
 		if (g_pParentWnd->MessageBox("Copy selection?", "", MB_YESNO) == IDYES) {
 			Map_SaveBetween();
@@ -223,7 +244,7 @@ void Map_Free(void) {
 	}
 
 	// clear all the render and sound system data
-	g_qeglobals.rw->InitFromMap( NULL );
+	g_qeglobals.rw->InitFromMap(NULL);
 	g_qeglobals.sw->ClearAllSoundEmitters();
 
 	Texture_ClearInuse();
@@ -238,8 +259,7 @@ void Map_Free(void) {
 		filtered_brushes.prev = filtered_brushes.next = &filtered_brushes;
 
 		entities.prev = entities.next = &entities;
-	}
-	else {
+	} else {
 		while (active_brushes.next != &active_brushes) {
 			Brush_Free(active_brushes.next, false);
 		}
@@ -268,8 +288,10 @@ void Map_Free(void) {
  =======================================================================================================================
  =======================================================================================================================
  */
-entity_t *AngledEntity() {
+entity_t *AngledEntity()
+{
 	entity_t	*ent = Map_FindClass("info_player_start");
+
 	if (!ent) {
 		ent = Map_FindClass("info_player_deathmatch");
 	}
@@ -298,45 +320,56 @@ entity_t *AngledEntity() {
 }
 
 
-brush_t *BrushFromMapPatch(idMapPatch *mappatch, idVec3 origin) {
+brush_t *BrushFromMapPatch(idMapPatch *mappatch, idVec3 origin)
+{
 	patchMesh_t *pm = MakeNewPatch(mappatch->GetWidth(), mappatch->GetHeight());
 	pm->d_texture = Texture_ForName(mappatch->GetMaterial());
+
 	for (int i = 0; i < mappatch->GetWidth(); i++) {
 		for (int j = 0; j < mappatch->GetHeight(); j++) {
 			pm->ctrl(i, j).xyz = (*mappatch)[j * mappatch->GetWidth() + i].xyz + origin;
 			pm->ctrl(i, j).st = (*mappatch)[j * mappatch->GetWidth() + i].st;
 		}
 	}
+
 	pm->horzSubdivisions = mappatch->GetHorzSubdivisions();
 	pm->vertSubdivisions = mappatch->GetVertSubdivisions();
 	pm->explicitSubdivisions = mappatch->GetExplicitlySubdivided();
+
 	if (mappatch->epairs.GetNumKeyVals()) {
 		pm->epairs = new idDict;
 		*pm->epairs = mappatch->epairs;
 	}
+
 	brush_t *b = AddBrushForPatch(pm, false);
 	return b;
 }
 
-brush_t *BrushFromMapBrush(idMapBrush *mapbrush, idVec3 origin) {
+brush_t *BrushFromMapBrush(idMapBrush *mapbrush, idVec3 origin)
+{
 	brush_t *b = NULL;
+
 	if (mapbrush) {
 		b = Brush_Alloc();
 		int count = mapbrush->GetNumSides();
+
 		for (int i = 0; i < count; i++) {
 			idMapBrushSide *side = mapbrush->GetSide(i);
 			face_t *f = Face_Alloc();
 			f->next = NULL;
+
 			if (!b->brush_faces) {
 				b->brush_faces = f;
-			}
-			else {
+			} else {
 				face_t	*scan;
+
 				for (scan = b->brush_faces; scan->next; scan = scan->next) {
 					;
 				}
+
 				scan->next = f;
 			}
+
 			f->plane = side->GetPlane();
 			f->originalPlane = f->plane;
 			f->dirty = false;
@@ -362,11 +395,14 @@ brush_t *BrushFromMapBrush(idMapBrush *mapbrush, idVec3 origin) {
 			f->texdef.SetName(side->GetMaterial());
 		}
 	}
+
 	return b;
 }
 
-entity_t *EntityFromMapEntity(idMapEntity *mapent, CWaitDlg *dlg) {
+entity_t *EntityFromMapEntity(idMapEntity *mapent, CWaitDlg *dlg)
+{
 	entity_t *ent = NULL;
+
 	if (mapent) {
 		ent = Entity_New();
 		ent->brushes.onext = ent->brushes.oprev = &ent->brushes;
@@ -376,31 +412,38 @@ entity_t *EntityFromMapEntity(idMapEntity *mapent, CWaitDlg *dlg) {
 		int count = mapent->GetNumPrimitives();
 		long lastUpdate = 0;
 		idStr status;
+
 		for (int i = 0; i < count; i++) {
 			idMapPrimitive *prim = mapent->GetPrimitive(i);
+
 			if (prim) {
 				// update 20 times a second
-				if ( (GetTickCount() - lastUpdate) > 50 ) {
+				if ((GetTickCount() - lastUpdate) > 50) {
 					lastUpdate = GetTickCount();
+
 					if (prim->GetType() == idMapPrimitive::TYPE_BRUSH) {
 						sprintf(status, "Reading primitive %i (brush)", i);
 					} else if (prim->GetType() == idMapPrimitive::TYPE_PATCH) {
 						sprintf(status, "Reading primitive %i (patch)", i);
 					}
+
 					dlg->SetText(status, true);
 				}
-				if ( dlg->CancelPressed() ) {
+
+				if (dlg->CancelPressed()) {
 					return ent;
 				}
 
 				brush_t *b = NULL;
+
 				if (prim->GetType() == idMapPrimitive::TYPE_BRUSH) {
-					idMapBrush *mapbrush = reinterpret_cast<idMapBrush*>(prim);
+					idMapBrush *mapbrush = reinterpret_cast<idMapBrush *>(prim);
 					b = BrushFromMapBrush(mapbrush, ent->origin);
 				} else if (prim->GetType() == idMapPrimitive::TYPE_PATCH) {
-					idMapPatch *mappatch = reinterpret_cast<idMapPatch*>(prim);
+					idMapPatch *mappatch = reinterpret_cast<idMapPatch *>(prim);
 					b = BrushFromMapPatch(mappatch, ent->origin);
 				}
+
 				if (b) {
 					b->owner = ent;
 					// add to the end of the entity chain
@@ -412,16 +455,18 @@ entity_t *EntityFromMapEntity(idMapEntity *mapent, CWaitDlg *dlg) {
 			}
 		}
 	}
+
 	return ent;
 }
 
 extern entity_t *Entity_PostParse(entity_t *ent, brush_t *pList);
- /*
- =======================================================================================================================
-    Map_LoadFile
- =======================================================================================================================
- */
-void Map_LoadFile(const char *filename) {
+/*
+=======================================================================================================================
+   Map_LoadFile
+=======================================================================================================================
+*/
+void Map_LoadFile(const char *filename)
+{
 	entity_t *ent;
 	CWaitDlg dlg;
 	idStr fileStr, status;
@@ -430,25 +475,25 @@ void Map_LoadFile(const char *filename) {
 	Sys_BeginWait();
 	Select_Deselect();
 
-	dlg.AllowCancel( true );
-	idStr( filename ).ExtractFileName( fileStr );
-	sprintf( status, "Loading %s...", fileStr.c_str() );
-	dlg.SetWindowText( status );
-	sprintf( status, "Reading file %s...", fileStr.c_str() );
-	dlg.SetText( status );
+	dlg.AllowCancel(true);
+	idStr(filename).ExtractFileName(fileStr);
+	sprintf(status, "Loading %s...", fileStr.c_str());
+	dlg.SetWindowText(status);
+	sprintf(status, "Reading file %s...", fileStr.c_str());
+	dlg.SetText(status);
 
 	// SetInspectorMode(W_CONSOLE);
 	fileStr = filename;
 	fileStr.BackSlashesToSlashes();
 
-	common->Printf( "Map_LoadFile: %s\n", fileStr.c_str() );
+	common->Printf("Map_LoadFile: %s\n", fileStr.c_str());
 
 	Map_Free();
 
 	g_qeglobals.d_parsed_brushes = 0;
-	strcpy( currentmap, filename );
+	strcpy(currentmap, filename);
 
-	if(mapfile.Parse(filename, true, true)) {
+	if (mapfile.Parse(filename, true, true)) {
 		g_qeglobals.bNeedConvert = false;
 		g_qeglobals.bOldBrushes = false;
 		g_qeglobals.bPrimitBrushes = false;
@@ -456,21 +501,26 @@ void Map_LoadFile(const char *filename) {
 
 		long lastUpdate = 0;
 		int count = mapfile.GetNumEntities();
+
 		for (int i = 0; i < count; i++) {
 			idMapEntity *mapent = mapfile.GetEntity(i);
+
 			if (mapent) {
 				idStr classname = mapent->epairs.GetString("classname");
+
 				// Update 20 times a second
-				if ( (GetTickCount() - lastUpdate) > 50 ) {
+				if ((GetTickCount() - lastUpdate) > 50) {
 					lastUpdate = GetTickCount();
 					sprintf(status, "Loading entity %i (%s)...", i, classname.c_str());
 					dlg.SetText(status);
 				}
-				if ( dlg.CancelPressed() ) {
+
+				if (dlg.CancelPressed()) {
 					Sys_Status("Map load cancelled.\n");
 					Map_New();
 					return;
 				}
+
 				if (classname == "worldspawn") {
 					world_entity = EntityFromMapEntity(mapent, &dlg);
 					Entity_PostParse(world_entity, &active_brushes);
@@ -518,13 +568,12 @@ void Map_LoadFile(const char *filename) {
 	ent = AngledEntity();
 
 	g_pParentWnd->GetCamera()->Camera().angles[PITCH] = 0;
-	
+
 	if (ent) {
 		GetVectorForKey(ent, "origin", g_pParentWnd->GetCamera()->Camera().origin);
 		GetVectorForKey(ent, "origin", g_pParentWnd->GetXYWnd()->GetOrigin());
 		g_pParentWnd->GetCamera()->Camera().angles[YAW] = FloatForKey(ent, "angle");
-	}
-	else {
+	} else {
 		g_pParentWnd->GetCamera()->Camera().angles[YAW] = 0;
 		VectorCopy(vec3_origin, g_pParentWnd->GetCamera()->Camera().origin);
 		VectorCopy(vec3_origin, g_pParentWnd->GetXYWnd()->GetOrigin());
@@ -537,6 +586,7 @@ void Map_LoadFile(const char *filename) {
 	if (GetFileAttributes(filename) & FILE_ATTRIBUTE_READONLY) {
 		fileStr += " (read only) ";
 	}
+
 	Sys_SetTitle(fileStr);
 
 	Texture_ShowInuse();
@@ -550,52 +600,62 @@ void Map_LoadFile(const char *filename) {
 }
 
 
-void Map_VerifyCurrentMap(const char *map) {
-	if ( idStr::Icmp( map, currentmap ) != 0 ) {
-		Map_LoadFile( map );
+void Map_VerifyCurrentMap(const char *map)
+{
+	if (idStr::Icmp(map, currentmap) != 0) {
+		Map_LoadFile(map);
 	}
 }
 
-idMapPrimitive *BrushToMapPrimitive( const brush_t *b, const idVec3 &origin ) {
-	if ( b->pPatch ) {
-		idMapPatch *patch = new idMapPatch( b->pPatch->width * 6, b->pPatch->height * 6 );
-		patch->SetSize( b->pPatch->width, b->pPatch->height );
-		for ( int i = 0; i < b->pPatch->width; i++ ) {
-			for ( int j = 0; j < b->pPatch->height; j++ ) {
+idMapPrimitive *BrushToMapPrimitive(const brush_t *b, const idVec3 &origin)
+{
+	if (b->pPatch) {
+		idMapPatch *patch = new idMapPatch(b->pPatch->width * 6, b->pPatch->height * 6);
+		patch->SetSize(b->pPatch->width, b->pPatch->height);
+
+		for (int i = 0; i < b->pPatch->width; i++) {
+			for (int j = 0; j < b->pPatch->height; j++) {
 				(*patch)[j*patch->GetWidth()+i].xyz =  b->pPatch->ctrl(i, j).xyz - origin;
 				(*patch)[j*patch->GetWidth()+i].st = b->pPatch->ctrl(i, j).st;
 			}
 		}
-		patch->SetExplicitlySubdivided( b->pPatch->explicitSubdivisions );
-		if ( b->pPatch->explicitSubdivisions ) {
-			patch->SetHorzSubdivisions( b->pPatch->horzSubdivisions );
-			patch->SetVertSubdivisions( b->pPatch->vertSubdivisions );
+
+		patch->SetExplicitlySubdivided(b->pPatch->explicitSubdivisions);
+
+		if (b->pPatch->explicitSubdivisions) {
+			patch->SetHorzSubdivisions(b->pPatch->horzSubdivisions);
+			patch->SetVertSubdivisions(b->pPatch->vertSubdivisions);
 		}
-		patch->SetMaterial( b->pPatch->d_texture->GetName() );
-		if ( b->pPatch->epairs ) {
+
+		patch->SetMaterial(b->pPatch->d_texture->GetName());
+
+		if (b->pPatch->epairs) {
 			patch->epairs = *b->pPatch->epairs;
 		}
+
 		return patch;
-	}
-	else {
+	} else {
 		idMapBrush *mapbrush = new idMapBrush;
-		for ( face_t *f = b->brush_faces; f; f = f->next ) {
+
+		for (face_t *f = b->brush_faces; f; f = f->next) {
 			idMapBrushSide *side = new idMapBrushSide;
 
 			idPlane plane;
-			if ( f->dirty ) {
+
+			if (f->dirty) {
 				f->planepts[0] -= origin;
 				f->planepts[1] -= origin;
 				f->planepts[2] -= origin;
-				plane.FromPoints( f->planepts[0], f->planepts[1], f->planepts[2], false );
+				plane.FromPoints(f->planepts[0], f->planepts[1], f->planepts[2], false);
 				f->planepts[0] += origin;
 				f->planepts[1] += origin;
 				f->planepts[2] += origin;
 			} else {
 				plane = f->originalPlane;
 			}
-			side->SetPlane( plane );
-			side->SetMaterial( f->d_texture->GetName() );
+
+			side->SetPlane(plane);
+			side->SetMaterial(f->d_texture->GetName());
 			idVec3 mat[2];
 			mat[0][0] = f->brushprimit_texdef.coords[0][0];
 			mat[0][1] = f->brushprimit_texdef.coords[0][1];
@@ -607,41 +667,50 @@ idMapPrimitive *BrushToMapPrimitive( const brush_t *b, const idVec3 &origin ) {
 			mapbrush->AddSide(side);
 			mapbrush->epairs = b->epairs;
 		}
+
 		return mapbrush;
 	}
 }
 
-idMapEntity *EntityToMapEntity(entity_t *e, bool use_region, CWaitDlg *dlg) {
+idMapEntity *EntityToMapEntity(entity_t *e, bool use_region, CWaitDlg *dlg)
+{
 	idMapEntity *mapent = new idMapEntity;
 	mapent->epairs = e->epairs;
 	idStr status;
 	int count = 0;
 	long lastUpdate = 0;
-	if ( !EntityHasModel( e ) ) {
-		for ( brush_t *b = e->brushes.onext; b != &e->brushes; b = b->onext ) {
-			count++;					
-			if ( e->eclass->fixedsize && !b->entityModel ) {
+
+	if (!EntityHasModel(e)) {
+		for (brush_t *b = e->brushes.onext; b != &e->brushes; b = b->onext) {
+			count++;
+
+			if (e->eclass->fixedsize && !b->entityModel) {
 				continue;
 			}
-			if ( !use_region || !Map_IsBrushFiltered( b ) ) {
+
+			if (!use_region || !Map_IsBrushFiltered(b)) {
 				// Update 20 times a second
-				if ( GetTickCount() - lastUpdate > 50 ) {
+				if (GetTickCount() - lastUpdate > 50) {
 					lastUpdate = GetTickCount();
-					if ( b->pPatch ) {
-						sprintf( status, "Adding primitive %i (patch)", count );
-						dlg->SetText( status, true );
+
+					if (b->pPatch) {
+						sprintf(status, "Adding primitive %i (patch)", count);
+						dlg->SetText(status, true);
 					} else {
-						sprintf( status, "Adding primitive %i (brush)", count );
-						dlg->SetText( status, true );
+						sprintf(status, "Adding primitive %i (brush)", count);
+						dlg->SetText(status, true);
 					}
 				}
-				idMapPrimitive *prim = BrushToMapPrimitive( b, e->origin );
-				if ( prim ) {
-					mapent->AddPrimitive( prim );
+
+				idMapPrimitive *prim = BrushToMapPrimitive(b, e->origin);
+
+				if (prim) {
+					mapent->AddPrimitive(prim);
 				}
-	 		}
-		 }
+			}
+		}
 	}
+
 	return mapent;
 }
 
@@ -650,7 +719,8 @@ idMapEntity *EntityToMapEntity(entity_t *e, bool use_region, CWaitDlg *dlg) {
     Map_SaveFile
  =======================================================================================================================
  */
-bool Map_SaveFile(const char *filename, bool use_region, bool autosave) {
+bool Map_SaveFile(const char *filename, bool use_region, bool autosave)
+{
 	entity_t	*e, *next;
 	idStr		temp;
 	int			count;
@@ -659,7 +729,8 @@ bool Map_SaveFile(const char *filename, bool use_region, bool autosave) {
 
 	int len = strlen(filename);
 	WIN32_FIND_DATA FileData;
-	if (FindFirstFile(filename, &FileData) != INVALID_HANDLE_VALUE) { 
+
+	if (FindFirstFile(filename, &FileData) != INVALID_HANDLE_VALUE) {
 		// the file exists;
 		if (len > 0 && GetFileAttributes(filename) & FILE_ATTRIBUTE_READONLY) {
 			g_pParentWnd->MessageBox("File is read only", "Read Only", MB_OK);
@@ -669,19 +740,20 @@ bool Map_SaveFile(const char *filename, bool use_region, bool autosave) {
 
 	if (filename == NULL || len == 0 || (filename && stricmp(filename, "unnamed.map") == 0)) {
 		CFileDialog dlgSave(FALSE,"map",NULL,OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,"Map Files (*.map)|*.map||",AfxGetMainWnd());
+
 		if (dlgSave.DoModal() == IDOK) {
 			filename = dlgSave.m_ofn.lpstrFile;
 			strcpy(currentmap, filename);
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
 
 	MEMORYSTATUSEX statex;
-	statex.dwLength = sizeof (statex);
-	GlobalMemoryStatusEx (&statex);
-	if ( statex.dwMemoryLoad > 95 ) {
+	statex.dwLength = sizeof(statex);
+	GlobalMemoryStatusEx(&statex);
+
+	if (statex.dwMemoryLoad > 95) {
 		g_pParentWnd->MessageBox("Physical memory is over 95% utilized. Consider saving and restarting", "Memory");
 	}
 
@@ -691,17 +763,18 @@ bool Map_SaveFile(const char *filename, bool use_region, bool autosave) {
 	temp = filename;
 	temp.BackSlashesToSlashes();
 
-	if ( !use_region ) {
+	if (!use_region) {
 		idStr backup;
 		backup = temp;
 		backup.StripFileExtension();
-		backup.SetFileExtension( ".bak" );
-		if ( _unlink(backup) != 0 && errno != 2 ) { // errno 2 means the file doesn't exist, which we don't care about
-			g_pParentWnd->MessageBox( va("Unable to delete %s: %s", backup.c_str(), strerror(errno) ), "File Error" );
+		backup.SetFileExtension(".bak");
+
+		if (_unlink(backup) != 0 && errno != 2) {   // errno 2 means the file doesn't exist, which we don't care about
+			g_pParentWnd->MessageBox(va("Unable to delete %s: %s", backup.c_str(), strerror(errno)), "File Error");
 		}
 
-		if ( rename(filename, backup) != 0 ) {
-			g_pParentWnd->MessageBox( va("Unable to rename %s to %s: %s", filename, backup.c_str(), strerror(errno) ), "File Error" );
+		if (rename(filename, backup) != 0) {
+			g_pParentWnd->MessageBox(va("Unable to rename %s to %s: %s", filename, backup.c_str(), strerror(errno)), "File Error");
 		}
 	}
 
@@ -709,10 +782,11 @@ bool Map_SaveFile(const char *filename, bool use_region, bool autosave) {
 
 	idStr mapFile;
 	bool localFile = (strstr(filename, ":") != NULL);
+
 	if (autosave || localFile) {
 		mapFile = filename;
 	} else {
-		mapFile = fileSystem->OSPathToRelativePath( filename );
+		mapFile = fileSystem->OSPathToRelativePath(filename);
 	}
 
 	if (use_region) {
@@ -725,27 +799,28 @@ bool Map_SaveFile(const char *filename, bool use_region, bool autosave) {
 	dlg.SetText("Saving worldspawn...");
 	map.AddEntity(mapentity);
 
-	if ( use_region ) {
+	if (use_region) {
 		idStr buf;
-		sprintf( buf, "{\n\"classname\"    \"info_player_start\"\n\"origin\"\t \"%i %i %i\"\n\"angle\"\t \"%i\"\n}\n", 
-					(int)g_pParentWnd->GetCamera()->Camera().origin[0],
-					(int)g_pParentWnd->GetCamera()->Camera().origin[1],
-					(int)g_pParentWnd->GetCamera()->Camera().origin[2],
-					(int)g_pParentWnd->GetCamera()->Camera().angles[YAW] );
-		idLexer src( LEXFL_NOSTRINGCONCAT | LEXFL_NOSTRINGESCAPECHARS | LEXFL_ALLOWPATHNAMES );
-		src.LoadMemory( buf, buf.Length(), "regionbuf" );
-		idMapEntity *playerstart = idMapEntity::Parse( src );
-		map.AddEntity( playerstart );
+		sprintf(buf, "{\n\"classname\"    \"info_player_start\"\n\"origin\"\t \"%i %i %i\"\n\"angle\"\t \"%i\"\n}\n",
+		        (int)g_pParentWnd->GetCamera()->Camera().origin[0],
+		        (int)g_pParentWnd->GetCamera()->Camera().origin[1],
+		        (int)g_pParentWnd->GetCamera()->Camera().origin[2],
+		        (int)g_pParentWnd->GetCamera()->Camera().angles[YAW]);
+		idLexer src(LEXFL_NOSTRINGCONCAT | LEXFL_NOSTRINGESCAPECHARS | LEXFL_ALLOWPATHNAMES);
+		src.LoadMemory(buf, buf.Length(), "regionbuf");
+		idMapEntity *playerstart = idMapEntity::Parse(src);
+		map.AddEntity(playerstart);
 	}
 
 	count = -1;
-	for ( e = entities.next; e != &entities; e = next ) {
+
+	for (e = entities.next; e != &entities; e = next) {
 		count++;
 		next = e->next;
+
 		if (e->brushes.onext == &e->brushes) {
 			Entity_Free(e); // no brushes left, so remove it
-		}
-		else {
+		} else {
 			if (use_region) {
 				for (b = e->brushes.onext; b != &e->brushes; b = b->onext) {
 					if (!Map_IsBrushFiltered(b)) {
@@ -758,7 +833,9 @@ bool Map_SaveFile(const char *filename, bool use_region, bool autosave) {
 				}
 
 			}
+
 			idVec3 origin;
+
 			if (!GetVectorForKey(e, "origin", origin)) {
 				idStr text;
 				VectorSubtract(e->brushes.onext->mins, e->eclass->mins, origin);
@@ -768,8 +845,8 @@ bool Map_SaveFile(const char *filename, bool use_region, bool autosave) {
 
 			if (use_region && !idStr::Icmp(ValueForKey(e, "classname"), "info_player_start")) {
 				continue;
-			} 
-		
+			}
+
 			idStr classname = e->epairs.GetString("classname");
 			sprintf(status, "Saving entity %i (%s)...", count, classname.c_str());
 			dlg.SetText(status);
@@ -804,12 +881,13 @@ bool Map_SaveFile(const char *filename, bool use_region, bool autosave) {
     Map_New
  =======================================================================================================================
  */
-void Map_New(void) {
+void Map_New(void)
+{
 	common->Printf("Map_New\n");
 	Map_Free();
 
 	Patch_Cleanup();
-	g_Inspectors->entityDlg.SetEditEntity ( NULL );
+	g_Inspectors->entityDlg.SetEditEntity(NULL);
 
 	world_entity = Entity_New();
 	world_entity->brushes.onext = world_entity->brushes.oprev = &world_entity->brushes;
@@ -843,7 +921,8 @@ brush_t *region_sides[6];
     AddRegionBrushes a regioned map will have temp walls put up at the region boundary
  =======================================================================================================================
  */
-void AddRegionBrushes(void) {
+void AddRegionBrushes(void)
+{
 	idVec3		mins, maxs;
 	int			i;
 	texdef_t	td;
@@ -858,7 +937,7 @@ void AddRegionBrushes(void) {
 	// strcpy (td.name, "REGION");
 	td.SetName("textures/REGION");
 
-const int REGION_WIDTH = 1024;
+	const int REGION_WIDTH = 1024;
 
 
 	mins[0] = region_mins[0] - REGION_WIDTH;
@@ -905,7 +984,8 @@ const int REGION_WIDTH = 1024;
  =======================================================================================================================
  =======================================================================================================================
  */
-void RemoveRegionBrushes(void) {
+void RemoveRegionBrushes(void)
+{
 	int i;
 
 	if (!region_active) {
@@ -921,7 +1001,8 @@ void RemoveRegionBrushes(void) {
  =======================================================================================================================
  =======================================================================================================================
  */
-bool Map_IsBrushFiltered(brush_t *b) {
+bool Map_IsBrushFiltered(brush_t *b)
+{
 	int i;
 
 	if (!region_active) {
@@ -946,11 +1027,13 @@ bool Map_IsBrushFiltered(brush_t *b) {
     Map_RegionOff Other filtering options may still be on
  =======================================================================================================================
  */
-void Map_RegionOff(void) {
+void Map_RegionOff(void)
+{
 	brush_t *b, *next;
 	int		i;
 
 	region_active = false;
+
 	for (i = 0; i < 3; i++) {
 		region_maxs[i] = MAX_WORLD_COORD;	// 4096;
 		region_mins[i] = MIN_WORLD_COORD;	// -4096;
@@ -958,11 +1041,13 @@ void Map_RegionOff(void) {
 
 	for (b = filtered_brushes.next; b != &filtered_brushes; b = next) {
 		next = b->next;
+
 		if (Map_IsBrushFiltered(b)) {
 			continue;						// still filtered
 		}
 
 		Brush_RemoveFromList(b);
+
 		if (active_brushes.next == NULL || active_brushes.prev == NULL) {
 			active_brushes.next = &active_brushes;
 			active_brushes.prev = &active_brushes;
@@ -978,12 +1063,15 @@ void Map_RegionOff(void) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void Map_ApplyRegion(void) {
+void Map_ApplyRegion(void)
+{
 	brush_t *b, *next;
 
 	region_active = true;
+
 	for (b = active_brushes.next; b != &active_brushes; b = next) {
 		next = b->next;
+
 		if (!Map_IsBrushFiltered(b)) {
 			continue;	// still filtered
 		}
@@ -1000,7 +1088,8 @@ void Map_ApplyRegion(void) {
     Map_RegionSelectedBrushes
  =======================================================================================================================
  */
-void Map_RegionSelectedBrushes(void) {
+void Map_RegionSelectedBrushes(void)
+{
 	Map_RegionOff();
 
 	if (selected_brushes.next == &selected_brushes) {	// nothing selected
@@ -1035,25 +1124,26 @@ void Map_RegionSelectedBrushes(void) {
     Map_RegionXY
  =======================================================================================================================
  */
-void Map_RegionXY(void) {
+void Map_RegionXY(void)
+{
 	Map_RegionOff();
 
 	region_mins[0] = g_pParentWnd->GetXYWnd()->GetOrigin()[0] -
-		0.5 *
-		g_pParentWnd->GetXYWnd()->Width() /
-		g_pParentWnd->GetXYWnd()->Scale();
+	                 0.5 *
+	                 g_pParentWnd->GetXYWnd()->Width() /
+	                 g_pParentWnd->GetXYWnd()->Scale();
 	region_maxs[0] = g_pParentWnd->GetXYWnd()->GetOrigin()[0] +
-		0.5 *
-		g_pParentWnd->GetXYWnd()->Width() /
-		g_pParentWnd->GetXYWnd()->Scale();
+	                 0.5 *
+	                 g_pParentWnd->GetXYWnd()->Width() /
+	                 g_pParentWnd->GetXYWnd()->Scale();
 	region_mins[1] = g_pParentWnd->GetXYWnd()->GetOrigin()[1] -
-		0.5 *
-		g_pParentWnd->GetXYWnd()->Height() /
-		g_pParentWnd->GetXYWnd()->Scale();
+	                 0.5 *
+	                 g_pParentWnd->GetXYWnd()->Height() /
+	                 g_pParentWnd->GetXYWnd()->Scale();
 	region_maxs[1] = g_pParentWnd->GetXYWnd()->GetOrigin()[1] +
-		0.5 *
-		g_pParentWnd->GetXYWnd()->Height() /
-		g_pParentWnd->GetXYWnd()->Scale();
+	                 0.5 *
+	                 g_pParentWnd->GetXYWnd()->Height() /
+	                 g_pParentWnd->GetXYWnd()->Scale();
 	region_mins[2] = MIN_WORLD_COORD;
 	region_maxs[2] = MAX_WORLD_COORD;
 	Map_ApplyRegion();
@@ -1064,7 +1154,8 @@ void Map_RegionXY(void) {
     Map_RegionTallBrush
  =======================================================================================================================
  */
-void Map_RegionTallBrush(void) {
+void Map_RegionTallBrush(void)
+{
 	brush_t *b;
 
 	if (!QE_SingleBrush()) {
@@ -1089,7 +1180,8 @@ void Map_RegionTallBrush(void) {
     Map_RegionBrush
  =======================================================================================================================
  */
-void Map_RegionBrush(void) {
+void Map_RegionBrush(void)
+{
 	brush_t *b;
 
 	if (!QE_SingleBrush()) {
@@ -1111,28 +1203,33 @@ void Map_RegionBrush(void) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void UniqueTargetName(idStr &rStr) {
+void UniqueTargetName(idStr &rStr)
+{
 	// make a unique target value
 	int maxtarg = 0;
-	for (entity_t * e = entities.next; e != &entities; e = e->next) {
+
+	for (entity_t *e = entities.next; e != &entities; e = e->next) {
 		const char	*tn = ValueForKey(e, "name");
+
 		if (tn && tn[0]) {
 			int targetnum = atoi(tn + 1);
+
 			if (targetnum > maxtarg) {
 				maxtarg = targetnum;
 			}
-		}
-		else {
+		} else {
 			tn = ValueForKey(e, "target");
+
 			if (tn && tn[0]) {
 				int targetnum = atoi(tn + 1);
+
 				if (targetnum > maxtarg) {
 					maxtarg = targetnum;
 				}
 			}
 		}
 	}
-	
+
 	sprintf(rStr, "t%i", maxtarg + 1);
 }
 
@@ -1142,7 +1239,8 @@ void UniqueTargetName(idStr &rStr) {
 //    may contain brushes in old format ( conversion needed )
 // =======================================================================================================================
 //
-void Map_ImportBuffer(char *buf, bool renameEntities) {
+void Map_ImportBuffer(char *buf, bool renameEntities)
+{
 	entity_t	*ent;
 	brush_t		*b = NULL;
 	CPtrArray	ptrs;
@@ -1152,6 +1250,7 @@ void Map_ImportBuffer(char *buf, bool renameEntities) {
 	Undo_Start("import buffer");
 
 	g_qeglobals.d_parsed_brushes = 0;
+
 	if (buf) {
 		CMapStringToString	mapStr;
 		StartTokenParsing(buf);
@@ -1184,6 +1283,7 @@ void Map_ImportBuffer(char *buf, bool renameEntities) {
 			// &selected_brushes);
 			//
 			ent = Entity_Parse(false, &active_brushes);
+
 			if (!ent) {
 				break;
 			}
@@ -1199,6 +1299,7 @@ void Map_ImportBuffer(char *buf, bool renameEntities) {
 			if (!strcmp(ValueForKey(ent, "classname"), "worldspawn")) {
 				// world brushes need to be added to the current world entity
 				b = ent->brushes.onext;
+
 				while (b && b != &ent->brushes) {
 					brush_t *bNext = b->onext;
 					Entity_UnlinkBrush(b);
@@ -1206,12 +1307,12 @@ void Map_ImportBuffer(char *buf, bool renameEntities) {
 					ptrs.Add(b);
 					b = bNext;
 				}
-			}
-			else {
+			} else {
 				// the following bit remaps conflicting target/targetname key/value pairs
 				CString str = ValueForKey(ent, "target");
 				CString strKey;
 				CString strTarget("");
+
 				if (str.GetLength() > 0) {
 					if (FindEntity("target", str.GetBuffer(0))) {
 						if (!mapStr.Lookup(str, strKey)) {
@@ -1235,10 +1336,11 @@ void Map_ImportBuffer(char *buf, bool renameEntities) {
 				CString cstrNameOld = ValueForKey(ent, "name");
 				Entity_Name(ent, renameEntities);
 				CString cstrNameNew = ValueForKey(ent, "name");
-				if (cstrNameOld != cstrNameNew)
-				{
+
+				if (cstrNameOld != cstrNameNew) {
 					RemappedNames.Set(cstrNameOld, cstrNameNew);
 				}
+
 				//
 				// if (strTarget.GetLength() > 0) SetKeyValue(ent, "target",
 				// strTarget.GetBuffer(0));
@@ -1261,9 +1363,9 @@ void Map_ImportBuffer(char *buf, bool renameEntities) {
 		// (I could probably write this in half the size with STL, but WTF, work with what we have...)
 		//
 		int iNumKeyVals = RemappedNames.GetNumKeyVals();
-		for (int iKeyVal=0; iKeyVal < iNumKeyVals; iKeyVal++)
-		{
-			const idKeyValue *pKeyVal = RemappedNames.GetKeyVal( iKeyVal );
+
+		for (int iKeyVal=0; iKeyVal < iNumKeyVals; iKeyVal++) {
+			const idKeyValue *pKeyVal = RemappedNames.GetKeyVal(iKeyVal);
 
 			LPCSTR psOldName = pKeyVal->GetKey().c_str();
 			LPCSTR psNewName = pKeyVal->GetValue().c_str();
@@ -1271,20 +1373,19 @@ void Map_ImportBuffer(char *buf, bool renameEntities) {
 			entity_t *pEntOld = FindEntity("name", psOldName);	// original ent we cloned from
 			entity_t *pEntNew = FindEntity("name", psNewName);	// cloned ent
 
-			if (pEntOld && pEntNew)
-			{
+			if (pEntOld && pEntNew) {
 				CString cstrTargetNameOld = ValueForKey(pEntOld, "target");
-				if (!cstrTargetNameOld.IsEmpty())
-				{
+
+				if (!cstrTargetNameOld.IsEmpty()) {
 					// ok, this ent was targeted at another ent, so it's clone needs updating to point to
 					//	the clone of that target, so...
 					//
 					entity_t *pEntOldTarget = FindEntity("name", cstrTargetNameOld);
-					if ( pEntOldTarget )
-					{
-						LPCSTR psNewTargetName = RemappedNames.GetString( cstrTargetNameOld );
-						if (psNewTargetName && psNewTargetName[0])
-						{								
+
+					if (pEntOldTarget) {
+						LPCSTR psNewTargetName = RemappedNames.GetString(cstrTargetNameOld);
+
+						if (psNewTargetName && psNewTargetName[0]) {
 							SetKeyValue(pEntNew, "target", psNewTargetName);
 						}
 					}
@@ -1298,9 +1399,10 @@ void Map_ImportBuffer(char *buf, bool renameEntities) {
 	// ::LockWindowUpdate(g_qeglobals.d_hwndEntity);
 	//
 	g_bScreenUpdates = false;
+
 	for (int i = 0; i < ptrs.GetSize(); i++) {
-		Brush_Build(reinterpret_cast < brush_t * > (ptrs[i]), true, false);
-		Select_Brush(reinterpret_cast < brush_t * > (ptrs[i]), true, false);
+		Brush_Build(reinterpret_cast < brush_t * >(ptrs[i]), true, false);
+		Select_Brush(reinterpret_cast < brush_t * >(ptrs[i]), true, false);
 	}
 
 	// ::LockWindowUpdate(NULL);
@@ -1327,15 +1429,17 @@ void Map_ImportBuffer(char *buf, bool renameEntities) {
 //    Map_ImportFile
 // =======================================================================================================================
 //
-void Map_ImportFile(char *fileName) {
+void Map_ImportFile(char *fileName)
+{
 	char	*buf;
 	idStr	temp;
 	Sys_BeginWait();
 	temp = fileName;
 	temp.BackSlashesToSlashes();
-	if (LoadFile( temp, (void **) &buf) != -1) {
+
+	if (LoadFile(temp, (void **) &buf) != -1) {
 		Map_ImportBuffer(buf);
-		Mem_Free( buf );
+		Mem_Free(buf);
 		Map_BuildBrushData();
 	}
 
@@ -1349,7 +1453,8 @@ void Map_ImportFile(char *fileName) {
 //    Map_SaveSelected Saves selected world brushes and whole entities with partial/full selections
 // =======================================================================================================================
 //
-void Map_SaveSelected(char *fileName) {
+void Map_SaveSelected(char *fileName)
+{
 	entity_t	*e, *next;
 	FILE		*f;
 	idStr		temp;
@@ -1359,29 +1464,30 @@ void Map_SaveSelected(char *fileName) {
 	temp.BackSlashesToSlashes();
 	f = fopen(temp, "w");
 
-	if ( !f ) {
-		common->Printf( "ERROR!!!! Couldn't open %s\n", temp.c_str() );
+	if (!f) {
+		common->Printf("ERROR!!!! Couldn't open %s\n", temp.c_str());
 		return;
 	}
 
 	// write version
 	g_qeglobals.mapVersion = MAP_VERSION;
-	fprintf( f, "Version %1.2f\n", MAP_VERSION );
+	fprintf(f, "Version %1.2f\n", MAP_VERSION);
 
 	// write world entity second
 	world_entity->origin.Zero();
-	Entity_WriteSelected( world_entity, f );
+	Entity_WriteSelected(world_entity, f);
 
 	// then write all other ents
 	count = 1;
-	for ( e = entities.next; e != &entities; e = next ) {
-		fprintf( f, "// entity %i\n", count );
+
+	for (e = entities.next; e != &entities; e = next) {
+		fprintf(f, "// entity %i\n", count);
 		count++;
-		Entity_WriteSelected( e, f );
+		Entity_WriteSelected(e, f);
 		next = e->next;
 	}
 
-	fclose( f );
+	fclose(f);
 }
 
 //
@@ -1389,7 +1495,8 @@ void Map_SaveSelected(char *fileName) {
 //    Map_SaveSelected Saves selected world brushes and whole entities with partial/full selections
 // =======================================================================================================================
 //
-void Map_SaveSelected(CMemFile *pMemFile, CMemFile *pPatchFile) {
+void Map_SaveSelected(CMemFile *pMemFile, CMemFile *pPatchFile)
+{
 	entity_t	*e, *next;
 	int			count;
 	CString		strTemp;
@@ -1404,6 +1511,7 @@ void Map_SaveSelected(CMemFile *pMemFile, CMemFile *pPatchFile) {
 
 	// then write all other ents
 	count = 1;
+
 	for (e = entities.next; e != &entities; e = next) {
 		MemFile_fprintf(pMemFile, "// entity %i\n", count);
 		count++;
@@ -1424,7 +1532,8 @@ void Map_SaveSelected(CMemFile *pMemFile, CMemFile *pPatchFile) {
 WriteFileString
 ================
 */
-bool WriteFileString( FILE *fp, char *string, ... ) {
+bool WriteFileString(FILE *fp, char *string, ...)
+{
 	long i;
 	unsigned long u;
 	double f;
@@ -1432,88 +1541,93 @@ bool WriteFileString( FILE *fp, char *string, ... ) {
 	idStr buf;
 	va_list argPtr;
 
-	va_start( argPtr, string );
+	va_start(argPtr, string);
 
-	while( *string ) {
-		switch( *string ) {
+	while (*string) {
+		switch (*string) {
 			case '%':
 				string++;
-				while ( (*string >= '0' && *string <= '9') ||
-						*string == '.' || *string == '-' || *string == '+' || *string == '#') {
+
+				while ((*string >= '0' && *string <= '9') ||
+				       *string == '.' || *string == '-' || *string == '+' || *string == '#') {
 					string++;
 				}
-				switch( *string ) {
+
+				switch (*string) {
 					case 'f':
 					case 'e':
 					case 'E':
 					case 'g':
 					case 'G':
-						f = va_arg( argPtr, double );
-						sprintf( buf, "%1.10f", f );
-						buf.StripTrailing( '0' );
-						buf.StripTrailing( '.' );
-						fprintf( fp, "%s", buf.c_str() );
+						f = va_arg(argPtr, double);
+						sprintf(buf, "%1.10f", f);
+						buf.StripTrailing('0');
+						buf.StripTrailing('.');
+						fprintf(fp, "%s", buf.c_str());
 						break;
 					case 'd':
 					case 'i':
-						i = va_arg( argPtr, long );
-						fprintf( fp, "%d", i );
+						i = va_arg(argPtr, long);
+						fprintf(fp, "%d", i);
 						break;
 					case 'u':
-						u = va_arg( argPtr, unsigned long );
-						fprintf( fp, "%u", u );
+						u = va_arg(argPtr, unsigned long);
+						fprintf(fp, "%u", u);
 						break;
 					case 'o':
-						u = va_arg( argPtr, unsigned long );
-						fprintf( fp, "%o", u );
+						u = va_arg(argPtr, unsigned long);
+						fprintf(fp, "%o", u);
 						break;
 					case 'x':
-						u = va_arg( argPtr, unsigned long );
-						fprintf( fp, "%x", u );
+						u = va_arg(argPtr, unsigned long);
+						fprintf(fp, "%x", u);
 						break;
 					case 'X':
-						u = va_arg( argPtr, unsigned long );
-						fprintf( fp, "%X", u );
+						u = va_arg(argPtr, unsigned long);
+						fprintf(fp, "%X", u);
 						break;
 					case 'c':
-						i = va_arg( argPtr, long );
-						fprintf( fp, "%c", (char) i );
+						i = va_arg(argPtr, long);
+						fprintf(fp, "%c", (char) i);
 						break;
 					case 's':
-						str = va_arg( argPtr, char * );
-						fprintf( fp, "%s", str );
+						str = va_arg(argPtr, char *);
+						fprintf(fp, "%s", str);
 						break;
 					case '%':
-						fprintf( fp, "%%" );
+						fprintf(fp, "%%");
 						break;
 					default:
-						common->Error( "WriteFileString: invalid %%%c", *string );
+						common->Error("WriteFileString: invalid %%%c", *string);
 						break;
 				}
+
 				string++;
 				break;
 			case '\\':
 				string++;
-				switch( *string ) {
+
+				switch (*string) {
 					case 't':
-						fprintf( fp, "\t" );
+						fprintf(fp, "\t");
 						break;
 					case 'n':
-						fprintf( fp, "\n" );
+						fprintf(fp, "\n");
 					default:
-						common->Error( "WriteFileString: unknown escape character \'%c\'", *string );
+						common->Error("WriteFileString: unknown escape character \'%c\'", *string);
 						break;
 				}
+
 				string++;
 				break;
 			default:
-				fprintf( fp, "%c", *string );
+				fprintf(fp, "%c", *string);
 				string++;
 				break;
 		}
 	}
 
-	va_end( argPtr );
+	va_end(argPtr);
 
 	return true;
 }
@@ -1523,7 +1637,8 @@ bool WriteFileString( FILE *fp, char *string, ... ) {
 MemFile_fprintf
 ================
 */
-void MemFile_fprintf( CMemFile *pMemFile, const char *string, ... ) {
+void MemFile_fprintf(CMemFile *pMemFile, const char *string, ...)
+{
 	char	Buffer[4096];
 	long i;
 	unsigned long u;
@@ -1534,82 +1649,87 @@ void MemFile_fprintf( CMemFile *pMemFile, const char *string, ... ) {
 
 	char *buff = Buffer;
 
-	va_start( argPtr, string );
+	va_start(argPtr, string);
 
-	while( *string ) {
-		switch( *string ) {
+	while (*string) {
+		switch (*string) {
 			case '%':
 				string++;
-				while ( (*string >= '0' && *string <= '9') ||
-						*string == '.' || *string == '-' || *string == '+' || *string == '#') {
+
+				while ((*string >= '0' && *string <= '9') ||
+				       *string == '.' || *string == '-' || *string == '+' || *string == '#') {
 					string++;
 				}
-				switch( *string ) {
+
+				switch (*string) {
 					case 'f':
 					case 'e':
 					case 'E':
 					case 'g':
 					case 'G':
-						f = va_arg( argPtr, double );
-						sprintf( buf, "%1.10f", f );
-						buf.StripTrailing( '0' );
-						buf.StripTrailing( '.' );
-						sprintf( buff, "%s", buf.c_str() );
+						f = va_arg(argPtr, double);
+						sprintf(buf, "%1.10f", f);
+						buf.StripTrailing('0');
+						buf.StripTrailing('.');
+						sprintf(buff, "%s", buf.c_str());
 						break;
 					case 'd':
 					case 'i':
-						i = va_arg( argPtr, long );
-						sprintf( buff, "%d", i );
+						i = va_arg(argPtr, long);
+						sprintf(buff, "%d", i);
 						break;
 					case 'u':
-						u = va_arg( argPtr, unsigned long );
-						sprintf( buff, "%u", u );
+						u = va_arg(argPtr, unsigned long);
+						sprintf(buff, "%u", u);
 						break;
 					case 'o':
-						u = va_arg( argPtr, unsigned long );
-						sprintf( buff, "%o", u );
+						u = va_arg(argPtr, unsigned long);
+						sprintf(buff, "%o", u);
 						break;
 					case 'x':
-						u = va_arg( argPtr, unsigned long );
-						sprintf( buff, "%x", u );
+						u = va_arg(argPtr, unsigned long);
+						sprintf(buff, "%x", u);
 						break;
 					case 'X':
-						u = va_arg( argPtr, unsigned long );
-						sprintf( buff, "%X", u );
+						u = va_arg(argPtr, unsigned long);
+						sprintf(buff, "%X", u);
 						break;
 					case 'c':
-						i = va_arg( argPtr, long );
-						sprintf( buff, "%c", (char) i );
+						i = va_arg(argPtr, long);
+						sprintf(buff, "%c", (char) i);
 						break;
 					case 's':
-						str = va_arg( argPtr, char * );
-						sprintf( buff, "%s", str );
+						str = va_arg(argPtr, char *);
+						sprintf(buff, "%s", str);
 						break;
 					case '%':
-						sprintf( buff, "%%" );
+						sprintf(buff, "%%");
 						break;
 					default:
-						common->Error( "MemFile_fprintf: invalid %%%c", *string );
+						common->Error("MemFile_fprintf: invalid %%%c", *string);
 						break;
 				}
+
 				string++;
 				break;
 			case '\\':
 				string++;
-				switch( *string ) {
+
+				switch (*string) {
 					case 't':
-						sprintf( buff, "\t" );
+						sprintf(buff, "\t");
 						break;
 					case 'n':
-						sprintf( buff, "\n" );
+						sprintf(buff, "\n");
 					default:
-						common->Error( "MemFile_fprintf: unknown escape character \'%c\'", *string );
+						common->Error("MemFile_fprintf: unknown escape character \'%c\'", *string);
 						break;
 				}
+
 				string++;
 				break;
 			default:
-				sprintf( buff, "%c", *string );
+				sprintf(buff, "%c", *string);
 				string++;
 				break;
 		}
@@ -1617,8 +1737,8 @@ void MemFile_fprintf( CMemFile *pMemFile, const char *string, ... ) {
 		buff = Buffer + strlen(Buffer);
 	}
 
-	va_end( argPtr );
+	va_end(argPtr);
 
 	out = Buffer;
-	pMemFile->Write( out.c_str(), out.Length() );
+	pMemFile->Write(out.c_str(), out.Length());
 }

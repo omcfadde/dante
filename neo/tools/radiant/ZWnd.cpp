@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -81,7 +81,7 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CZWnd message handlers
 
-int CZWnd::OnCreate(LPCREATESTRUCT lpCreateStruct) 
+int CZWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
@@ -89,15 +89,14 @@ int CZWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_dcZ = ::GetDC(GetSafeHwnd());
 	QEW_SetupPixelFormat(m_dcZ, false);
 
-  	m_pZClip = new CZClip();
+	m_pZClip = new CZClip();
 
 	return 0;
 }
 
-void CZWnd::OnDestroy() 
+void CZWnd::OnDestroy()
 {
-	if (m_pZClip)
-	{
+	if (m_pZClip) {
 		delete m_pZClip;
 		m_pZClip = NULL;
 	}
@@ -105,166 +104,171 @@ void CZWnd::OnDestroy()
 	CWnd::OnDestroy();
 }
 
-void CZWnd::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
+void CZWnd::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-  g_pParentWnd->HandleKey(nChar, nRepCnt, nFlags);
+	g_pParentWnd->HandleKey(nChar, nRepCnt, nFlags);
 }
 
-void CZWnd::OnLButtonDown(UINT nFlags, CPoint point) 
+void CZWnd::OnLButtonDown(UINT nFlags, CPoint point)
 {
-  SetFocus();
-  SetCapture();
-  CRect rctZ;
-  GetClientRect(rctZ);
-	Z_MouseDown (point.x, rctZ.Height() - 1 - point.y , nFlags);
+	SetFocus();
+	SetCapture();
+	CRect rctZ;
+	GetClientRect(rctZ);
+	Z_MouseDown(point.x, rctZ.Height() - 1 - point.y , nFlags);
 }
 
-void CZWnd::OnMButtonDown(UINT nFlags, CPoint point) 
+void CZWnd::OnMButtonDown(UINT nFlags, CPoint point)
 {
-  SetFocus();
-  SetCapture();
-  CRect rctZ;
-  GetClientRect(rctZ);
-	Z_MouseDown (point.x, rctZ.Height() - 1 - point.y , nFlags);
+	SetFocus();
+	SetCapture();
+	CRect rctZ;
+	GetClientRect(rctZ);
+	Z_MouseDown(point.x, rctZ.Height() - 1 - point.y , nFlags);
 }
 
-void CZWnd::OnRButtonDown(UINT nFlags, CPoint point) 
+void CZWnd::OnRButtonDown(UINT nFlags, CPoint point)
 {
-  SetFocus();
-  SetCapture();
-  CRect rctZ;
-  GetClientRect(rctZ);
-	Z_MouseDown (point.x, rctZ.Height() - 1 - point.y , nFlags);
+	SetFocus();
+	SetCapture();
+	CRect rctZ;
+	GetClientRect(rctZ);
+	Z_MouseDown(point.x, rctZ.Height() - 1 - point.y , nFlags);
 }
 
-void CZWnd::OnPaint() 
+void CZWnd::OnPaint()
 {
 	CPaintDC dc(this); // device context for painting
-  //if (!wglMakeCurrent(m_dcZ, m_hglrcZ))
-  //if (!qwglMakeCurrent(dc.m_hDC, m_hglrcZ))
-  if (!qwglMakeCurrent(dc.m_hDC, win32.hGLRC))
-  {
-    common->Printf("ERROR: wglMakeCurrent failed..\n ");
-    common->Printf("Please restart " EDITOR_WINDOWTEXT " if the Z view is not working\n");
-  }
-  else
-  {
-	  QE_CheckOpenGLForErrors();
+	//if (!wglMakeCurrent(m_dcZ, m_hglrcZ))
+	//if (!qwglMakeCurrent(dc.m_hDC, m_hglrcZ))
+	if (!qwglMakeCurrent(dc.m_hDC, win32.hGLRC)) {
+		common->Printf("ERROR: wglMakeCurrent failed..\n ");
+		common->Printf("Please restart " EDITOR_WINDOWTEXT " if the Z view is not working\n");
+	} else {
+		QE_CheckOpenGLForErrors();
 
-    Z_Draw ();
-	  //qwglSwapBuffers(m_dcZ);
-	  qwglSwapBuffers(dc.m_hDC);
-    TRACE("Z Paint\n");
-  }
+		Z_Draw();
+		//qwglSwapBuffers(m_dcZ);
+		qwglSwapBuffers(dc.m_hDC);
+		TRACE("Z Paint\n");
+	}
 }
 
-void CZWnd::OnGetMinMaxInfo(MINMAXINFO FAR* lpMMI) 
+void CZWnd::OnGetMinMaxInfo(MINMAXINFO FAR *lpMMI)
 {
 	lpMMI->ptMinTrackSize.x = ZWIN_WIDTH;
 }
 
-void CZWnd::OnMouseMove(UINT nFlags, CPoint point) 
+void CZWnd::OnMouseMove(UINT nFlags, CPoint point)
 {
-  CRect rctZ;
-  GetClientRect(rctZ);
-  float fz = z.origin[2] + ((rctZ.Height() - 1 - point.y) - (z.height/2)) / z.scale;
+	CRect rctZ;
+	GetClientRect(rctZ);
+	float fz = z.origin[2] + ((rctZ.Height() - 1 - point.y) - (z.height/2)) / z.scale;
 	fz = floor(fz / g_qeglobals.d_gridsize + 0.5) * g_qeglobals.d_gridsize;
-  CString strStatus;
-  strStatus.Format("Z:: %.1f", fz);
-  g_pParentWnd->SetStatusText(1, strStatus);
-  Z_MouseMoved (point.x, rctZ.Height() - 1 - point.y, nFlags);
+	CString strStatus;
+	strStatus.Format("Z:: %.1f", fz);
+	g_pParentWnd->SetStatusText(1, strStatus);
+	Z_MouseMoved(point.x, rctZ.Height() - 1 - point.y, nFlags);
 }
 
-void CZWnd::OnSize(UINT nType, int cx, int cy) 
+void CZWnd::OnSize(UINT nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
-  CRect rctZ;
-  GetClientRect(rctZ);
-  z.width = rctZ.right;
+	CRect rctZ;
+	GetClientRect(rctZ);
+	z.width = rctZ.right;
 	z.height = rctZ.bottom;
-  if (z.width < 10)
-    z.width = 10;
-  if (z.height < 10)
-    z.height = 10;
-  Invalidate();
+
+	if (z.width < 10)
+		z.width = 10;
+
+	if (z.height < 10)
+		z.height = 10;
+
+	Invalidate();
 }
 
-void CZWnd::OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp) 
+void CZWnd::OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR *lpncsp)
 {
 	CWnd::OnNcCalcSize(bCalcValidRects, lpncsp);
 }
 
-void CZWnd::OnKillFocus(CWnd* pNewWnd) 
+void CZWnd::OnKillFocus(CWnd *pNewWnd)
 {
 	CWnd::OnKillFocus(pNewWnd);
-	SendMessage(WM_NCACTIVATE, FALSE , 0 );
+	SendMessage(WM_NCACTIVATE, FALSE , 0);
 }
 
-void CZWnd::OnSetFocus(CWnd* pOldWnd) 
+void CZWnd::OnSetFocus(CWnd *pOldWnd)
 {
 	CWnd::OnSetFocus(pOldWnd);
-	SendMessage(WM_NCACTIVATE, TRUE , 0 );
+	SendMessage(WM_NCACTIVATE, TRUE , 0);
 }
 
-void CZWnd::OnClose() 
+void CZWnd::OnClose()
 {
 	CWnd::OnClose();
 }
 
-void CZWnd::OnLButtonUp(UINT nFlags, CPoint point) 
+void CZWnd::OnLButtonUp(UINT nFlags, CPoint point)
 {
-  CRect rctZ;
-  GetClientRect(rctZ);
-	Z_MouseUp (point.x, rctZ.bottom - 1 - point.y, nFlags);
-	if (! (nFlags & (MK_LBUTTON|MK_RBUTTON|MK_MBUTTON)))
-  	ReleaseCapture ();
+	CRect rctZ;
+	GetClientRect(rctZ);
+	Z_MouseUp(point.x, rctZ.bottom - 1 - point.y, nFlags);
+
+	if (!(nFlags & (MK_LBUTTON|MK_RBUTTON|MK_MBUTTON)))
+		ReleaseCapture();
 }
 
-void CZWnd::OnMButtonUp(UINT nFlags, CPoint point) 
+void CZWnd::OnMButtonUp(UINT nFlags, CPoint point)
 {
-  CRect rctZ;
-  GetClientRect(rctZ);
-	Z_MouseUp (point.x, rctZ.bottom - 1 - point.y, nFlags);
-	if (! (nFlags & (MK_LBUTTON|MK_RBUTTON|MK_MBUTTON)))
-  	ReleaseCapture ();
+	CRect rctZ;
+	GetClientRect(rctZ);
+	Z_MouseUp(point.x, rctZ.bottom - 1 - point.y, nFlags);
+
+	if (!(nFlags & (MK_LBUTTON|MK_RBUTTON|MK_MBUTTON)))
+		ReleaseCapture();
 }
 
-void CZWnd::OnRButtonUp(UINT nFlags, CPoint point) 
+void CZWnd::OnRButtonUp(UINT nFlags, CPoint point)
 {
-  CRect rctZ;
-  GetClientRect(rctZ);
-	Z_MouseUp (point.x, rctZ.bottom - 1 - point.y, nFlags);
-	if (! (nFlags & (MK_LBUTTON|MK_RBUTTON|MK_MBUTTON)))
-  	ReleaseCapture ();
+	CRect rctZ;
+	GetClientRect(rctZ);
+	Z_MouseUp(point.x, rctZ.bottom - 1 - point.y, nFlags);
+
+	if (!(nFlags & (MK_LBUTTON|MK_RBUTTON|MK_MBUTTON)))
+		ReleaseCapture();
 }
 
 
-BOOL CZWnd::PreCreateWindow(CREATESTRUCT& cs) 
+BOOL CZWnd::PreCreateWindow(CREATESTRUCT &cs)
 {
-  WNDCLASS wc;
-  HINSTANCE hInstance = AfxGetInstanceHandle();
-  if (::GetClassInfo(hInstance, Z_WINDOW_CLASS, &wc) == FALSE)
-  {
-    // Register a new class
-  	memset (&wc, 0, sizeof(wc));
-    wc.style         = CS_NOCLOSE;// | CS_OWNDC;
-    wc.lpszClassName = Z_WINDOW_CLASS;
-    wc.hCursor       = LoadCursor (NULL,IDC_ARROW);
-    wc.lpfnWndProc = ::DefWindowProc;
-    if (AfxRegisterClass(&wc) == FALSE)
-      Error ("CZWnd RegisterClass: failed");
-  }
+	WNDCLASS wc;
+	HINSTANCE hInstance = AfxGetInstanceHandle();
 
-  cs.lpszClass = Z_WINDOW_CLASS;
-  cs.lpszName = "Z";
-  if (cs.style != QE3_CHILDSTYLE)
-    cs.style = QE3_SPLITTER_STYLE;
+	if (::GetClassInfo(hInstance, Z_WINDOW_CLASS, &wc) == FALSE) {
+		// Register a new class
+		memset(&wc, 0, sizeof(wc));
+		wc.style         = CS_NOCLOSE;// | CS_OWNDC;
+		wc.lpszClassName = Z_WINDOW_CLASS;
+		wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
+		wc.lpfnWndProc = ::DefWindowProc;
+
+		if (AfxRegisterClass(&wc) == FALSE)
+			Error("CZWnd RegisterClass: failed");
+	}
+
+	cs.lpszClass = Z_WINDOW_CLASS;
+	cs.lpszName = "Z";
+
+	if (cs.style != QE3_CHILDSTYLE)
+		cs.style = QE3_SPLITTER_STYLE;
 
 	return CWnd::PreCreateWindow(cs);
 }
 
 
-void CZWnd::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) 
+void CZWnd::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-  g_pParentWnd->HandleKey(nChar, nRepCnt, nFlags, false);
+	g_pParentWnd->HandleKey(nChar, nRepCnt, nFlags, false);
 }

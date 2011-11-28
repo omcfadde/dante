@@ -27,6 +27,6 @@ extern float vorbis_fromdBlook(float a);
 extern long vorbis_invsqlook_i(long a,long e);
 extern long vorbis_coslook_i(long a);
 extern float vorbis_fromdBlook_i(long a);
-#endif 
+#endif
 
 #endif

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,26 +38,26 @@ If you have questions concerning this license or the applicable additional terms
 #include <stdarg.h>
 
 
-int		LoadFile( const char *filename, void **bufferptr );
-void 	DefaultExtension( char *path, char *extension );
-void 	DefaultPath( char *path, char *basepath );
-void 	StripFilename( char *path );
-void 	StripExtension( char *path );
+int		LoadFile(const char *filename, void **bufferptr);
+void 	DefaultExtension(char *path, char *extension);
+void 	DefaultPath(char *path, char *basepath);
+void 	StripFilename(char *path);
+void 	StripExtension(char *path);
 
 // error and printf functions
-typedef void (PFN_ERR)( const char *pFormat, ... );
-typedef void (PFN_PRINTF)( const char *pFormat, ... );
-typedef void (PFN_ERR_NUM)( int nNum, const char *pFormat, ... );
-typedef void (PFN_PRINTF_NUM)( int nNum, const char *pFormat, ... );
+typedef void (PFN_ERR)(const char *pFormat, ...);
+typedef void (PFN_PRINTF)(const char *pFormat, ...);
+typedef void (PFN_ERR_NUM)(int nNum, const char *pFormat, ...);
+typedef void (PFN_PRINTF_NUM)(int nNum, const char *pFormat, ...);
 
-void Error( const char *pFormat, ... );
-void Printf( const char *pFormat, ... );
-void ErrorNum( int n, const char *pFormat, ... );
-void PrintfNum( int n, const char *pFormat, ... );
+void Error(const char *pFormat, ...);
+void Printf(const char *pFormat, ...);
+void ErrorNum(int n, const char *pFormat, ...);
+void PrintfNum(int n, const char *pFormat, ...);
 
-void SetErrorHandler( PFN_ERR pe );
-void SetPrintfHandler( PFN_PRINTF pe );
-void SetErrorHandlerNum( PFN_ERR_NUM pe );
-void SetPrintfHandlerNum( PFN_PRINTF_NUM pe );
+void SetErrorHandler(PFN_ERR pe);
+void SetPrintfHandler(PFN_PRINTF pe);
+void SetErrorHandlerNum(PFN_ERR_NUM pe);
+void SetPrintfHandlerNum(PFN_PRINTF_NUM pe);
 
 #endif /* !__CMDLIB__ */

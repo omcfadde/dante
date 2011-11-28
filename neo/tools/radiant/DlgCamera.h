@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -42,60 +42,60 @@ extern void showCameraInspector();
 class CDlgCamera : public CDialog
 {
 // Construction
-public:
-	CDlgCamera(CWnd* pParent = NULL);   // standard constructor
-	void setupFromCamera();
+	public:
+		CDlgCamera(CWnd *pParent = NULL);   // standard constructor
+		void setupFromCamera();
 
 // Dialog Data
-	//{{AFX_DATA(CDlgCamera)
-	enum { IDD = IDD_DLG_CAMERA };
-	CScrollBar	m_wndSegments;
-	CListBox	m_wndEvents;
-	CComboBox	m_wndSplines;
-	CString	m_strName;
-	float	m_fSeconds;
-	BOOL	m_trackCamera;
-	int		m_numSegments;
-	int		m_currentSegment;
-	CString	m_strType;
-	int		m_editPoints;
-	//}}AFX_DATA
+		//{{AFX_DATA(CDlgCamera)
+		enum { IDD = IDD_DLG_CAMERA };
+		CScrollBar	m_wndSegments;
+		CListBox	m_wndEvents;
+		CComboBox	m_wndSplines;
+		CString	m_strName;
+		float	m_fSeconds;
+		BOOL	m_trackCamera;
+		int		m_numSegments;
+		int		m_currentSegment;
+		CString	m_strType;
+		int		m_editPoints;
+		//}}AFX_DATA
 
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDlgCamera)
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CDlgCamera)
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+		virtual void DoDataExchange(CDataExchange *pDX);    // DDX/DDV support
+		//}}AFX_VIRTUAL
 
 // Implementation
-protected:
-	// Generated message map functions
-	//{{AFX_MSG(CDlgCamera)
-	afx_msg void OnBtnAddevent();
-	afx_msg void OnBtnAddtarget();
-	afx_msg void OnBtnDelevent();
-	afx_msg void OnBtnDeltarget();
-	afx_msg void OnDblclkComboSplines();
-	afx_msg void OnSelchangeComboSplines();
-	afx_msg void OnSelchangeListEvents();
-	afx_msg void OnDblclkListEvents();
-	virtual BOOL OnInitDialog();
-	virtual void OnOK();
-	afx_msg void OnDestroy();
-	afx_msg void OnApply();
-	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
-	afx_msg void OnFileNew();
-	afx_msg void OnFileOpen();
-	afx_msg void OnFileSave();
-	afx_msg void OnTestcamera();
-	afx_msg void OnBtnDeletepoints();
-	afx_msg void OnBtnSelectall();
-	afx_msg void OnRadioEditpoints();
-	afx_msg void OnRadioAddPoints();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+	protected:
+		// Generated message map functions
+		//{{AFX_MSG(CDlgCamera)
+		afx_msg void OnBtnAddevent();
+		afx_msg void OnBtnAddtarget();
+		afx_msg void OnBtnDelevent();
+		afx_msg void OnBtnDeltarget();
+		afx_msg void OnDblclkComboSplines();
+		afx_msg void OnSelchangeComboSplines();
+		afx_msg void OnSelchangeListEvents();
+		afx_msg void OnDblclkListEvents();
+		virtual BOOL OnInitDialog();
+		virtual void OnOK();
+		afx_msg void OnDestroy();
+		afx_msg void OnApply();
+		afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar *pScrollBar);
+		afx_msg void OnFileNew();
+		afx_msg void OnFileOpen();
+		afx_msg void OnFileSave();
+		afx_msg void OnTestcamera();
+		afx_msg void OnBtnDeletepoints();
+		afx_msg void OnBtnSelectall();
+		afx_msg void OnRadioEditpoints();
+		afx_msg void OnRadioAddPoints();
+		//}}AFX_MSG
+		DECLARE_MESSAGE_MAP()
 };
 
 //{{AFX_INSERT_LOCATION}}

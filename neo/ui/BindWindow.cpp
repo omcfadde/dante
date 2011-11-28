@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -35,30 +35,35 @@ If you have questions concerning this license or the applicable additional terms
 #include "BindWindow.h"
 
 
-void idBindWindow::CommonInit() {
+void idBindWindow::CommonInit()
+{
 	bindName = "";
 	waitingOnKey = false;
 }
 
-idBindWindow::idBindWindow(idDeviceContext *d, idUserInterfaceLocal *g) : idWindow(d, g) {
+idBindWindow::idBindWindow(idDeviceContext *d, idUserInterfaceLocal *g) : idWindow(d, g)
+{
 	dc = d;
 	gui = g;
 	CommonInit();
 }
 
-idBindWindow::idBindWindow(idUserInterfaceLocal *g) : idWindow(g) {
+idBindWindow::idBindWindow(idUserInterfaceLocal *g) : idWindow(g)
+{
 	gui = g;
 	CommonInit();
 }
 
-idBindWindow::~idBindWindow() {
+idBindWindow::~idBindWindow()
+{
 
 }
 
 
-const char *idBindWindow::HandleEvent(const sysEvent_t *event, bool *updateVisuals) {
+const char *idBindWindow::HandleEvent(const sysEvent_t *event, bool *updateVisuals)
+{
 	static char ret[ 256 ];
-	
+
 	if (!(event->evType == SE_KEY && event->evValue2)) {
 		return "";
 	}
@@ -67,11 +72,13 @@ const char *idBindWindow::HandleEvent(const sysEvent_t *event, bool *updateVisua
 
 	if (waitingOnKey) {
 		waitingOnKey = false;
+
 		if (key == K_ESCAPE) {
-			idStr::snPrintf( ret, sizeof( ret ), "clearbind \"%s\"", bindName.GetName());
+			idStr::snPrintf(ret, sizeof(ret), "clearbind \"%s\"", bindName.GetName());
 		} else {
-			idStr::snPrintf( ret, sizeof( ret ), "bind %i \"%s\"", key, bindName.GetName());
+			idStr::snPrintf(ret, sizeof(ret), "bind %i \"%s\"", key, bindName.GetName());
 		}
+
 		return ret;
 	} else {
 		if (key == K_MOUSE1) {
@@ -84,7 +91,8 @@ const char *idBindWindow::HandleEvent(const sysEvent_t *event, bool *updateVisua
 	return "";
 }
 
-idWinVar *idBindWindow::GetWinVarByName(const char *_name, bool fixup, drawWin_t** owner) {
+idWinVar *idBindWindow::GetWinVarByName(const char *_name, bool fixup, drawWin_t **owner)
+{
 
 	if (idStr::Icmp(_name, "bind") == 0) {
 		return &bindName;
@@ -93,27 +101,30 @@ idWinVar *idBindWindow::GetWinVarByName(const char *_name, bool fixup, drawWin_t
 	return idWindow::GetWinVarByName(_name, fixup,owner);
 }
 
-void idBindWindow::PostParse() {
+void idBindWindow::PostParse()
+{
 	idWindow::PostParse();
-	bindName.SetGuiInfo( gui->GetStateDict(), bindName );
+	bindName.SetGuiInfo(gui->GetStateDict(), bindName);
 	bindName.Update();
 	//bindName = state.GetString("bind");
 	flags |= (WIN_HOLDCAPTURE | WIN_CANFOCUS);
 }
 
-void idBindWindow::Draw(int time, float x, float y) {
+void idBindWindow::Draw(int time, float x, float y)
+{
 	idVec4 color = foreColor;
 
 	idStr str;
-	if ( waitingOnKey ) {
-		str = common->GetLanguageDict()->GetString( "#str_07000" );
-	} else if ( bindName.Length() ) {
+
+	if (waitingOnKey) {
+		str = common->GetLanguageDict()->GetString("#str_07000");
+	} else if (bindName.Length()) {
 		str = bindName.c_str();
 	} else {
-		str = common->GetLanguageDict()->GetString( "#str_07001" );
+		str = common->GetLanguageDict()->GetString("#str_07001");
 	}
 
-	if ( waitingOnKey || ( hover && !noEvents && Contains(gui->CursorX(), gui->CursorY()) ) ) {
+	if (waitingOnKey || (hover && !noEvents && Contains(gui->CursorX(), gui->CursorY()))) {
 		color = hoverColor;
 	} else {
 		hover = false;
@@ -122,7 +133,8 @@ void idBindWindow::Draw(int time, float x, float y) {
 	dc->DrawText(str, textScale, textAlign, color, textRect, false, -1);
 }
 
-void idBindWindow::Activate( bool activate, idStr &act ) {
-	idWindow::Activate( activate, act );
+void idBindWindow::Activate(bool activate, idStr &act)
+{
+	idWindow::Activate(activate, act);
 	bindName.Update();
 }

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -47,16 +47,20 @@ static char THIS_FILE[] = __FILE__;
 CDlgCamera g_dlgCamera;
 
 
-void showCameraInspector() {
+void showCameraInspector()
+{
 	if (g_dlgCamera.GetSafeHwnd() == NULL) {
 		g_dlgCamera.Create(IDD_DLG_CAMERA);
 		CRect rct;
 		LONG lSize = sizeof(rct);
+
 		if (LoadRegistryInfo("Radiant::CameraInspector", &rct, &lSize)) {
 			g_dlgCamera.SetWindowPos(NULL, rct.left, rct.top, 0,0, SWP_NOSIZE | SWP_SHOWWINDOW);
 		}
+
 		Sys_UpdateWindows(W_ALL);
-	} 
+	}
+
 	g_dlgCamera.ShowWindow(SW_SHOW);
 	g_dlgCamera.setupFromCamera();
 }
@@ -64,7 +68,7 @@ void showCameraInspector() {
 // CDlgCamera dialog
 
 
-CDlgCamera::CDlgCamera(CWnd* pParent /*=NULL*/)
+CDlgCamera::CDlgCamera(CWnd *pParent /*=NULL*/)
 	: CDialog(CDlgCamera::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CDlgCamera)
@@ -79,7 +83,7 @@ CDlgCamera::CDlgCamera(CWnd* pParent /*=NULL*/)
 }
 
 
-void CDlgCamera::DoDataExchange(CDataExchange* pDX)
+void CDlgCamera::DoDataExchange(CDataExchange *pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CDlgCamera)
@@ -123,9 +127,10 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CDlgCamera message handlers
 
-void CDlgCamera::OnBtnAddevent() 
+void CDlgCamera::OnBtnAddevent()
 {
 	CDlgEvent dlg;
+
 	if (dlg.DoModal() == IDOK) {
 		long n = m_wndSegments.GetScrollPos() / 4 * 1000;
 		g_splineList->addEvent(static_cast<idCameraEvent::eventType>(dlg.m_event+1), dlg.m_strParm, n);
@@ -133,9 +138,10 @@ void CDlgCamera::OnBtnAddevent()
 	}
 }
 
-void CDlgCamera::OnBtnAddtarget() 
+void CDlgCamera::OnBtnAddtarget()
 {
 	CCameraTargetDlg dlg;
+
 	if (dlg.DoModal() == IDOK) {
 		g_splineList->addTarget(dlg.m_strName, static_cast<idCameraPosition::positionType>(dlg.m_nType));
 		setupFromCamera();
@@ -144,31 +150,32 @@ void CDlgCamera::OnBtnAddtarget()
 	}
 }
 
-void CDlgCamera::OnBtnDelevent() 
+void CDlgCamera::OnBtnDelevent()
 {
 	// TODO: Add your control notification handler code here
-	
+
 }
 
-void CDlgCamera::OnBtnDeltarget() 
+void CDlgCamera::OnBtnDeltarget()
 {
 	// TODO: Add your control notification handler code here
-	
+
 }
 
-void CDlgCamera::OnDblclkComboSplines() 
+void CDlgCamera::OnDblclkComboSplines()
 {
 	// TODO: Add your control notification handler code here
-	
+
 }
 
-void CDlgCamera::OnSelchangeComboSplines() 
+void CDlgCamera::OnSelchangeComboSplines()
 {
 	UpdateData(TRUE);
 	g_qeglobals.d_select_mode = (m_editPoints == 0) ? sel_editpoint : sel_addpoint;
 	g_qeglobals.d_numpoints = 0;
 	g_qeglobals.d_num_move_points = 0;
 	int i = m_wndSplines.GetCurSel();
+
 	if (i > 0) {
 		g_splineList->setActiveTarget(i-1);
 		g_qeglobals.selectObject = g_splineList->getActiveTarget(i-1);
@@ -184,16 +191,16 @@ void CDlgCamera::OnSelchangeComboSplines()
 	Sys_UpdateWindows(W_ALL);
 }
 
-void CDlgCamera::OnSelchangeListEvents() 
+void CDlgCamera::OnSelchangeListEvents()
 {
 	int sel = m_wndEvents.GetCurSel();
 	//g_splineList->setActiveSegment(sel >= 0 ? sel : 0);
 }
 
-void CDlgCamera::OnDblclkListEvents() 
+void CDlgCamera::OnDblclkListEvents()
 {
 	// TODO: Add your control notification handler code here
-	
+
 }
 
 void CDlgCamera::setupFromCamera()
@@ -205,34 +212,39 @@ void CDlgCamera::setupFromCamera()
 		m_strType = g_splineList->getPositionObj()->typeStr();
 		m_wndSplines.ResetContent();
 		m_wndSplines.AddString("Path");
+
 		for (i = 0; i < g_splineList->numTargets(); i++) {
 			m_wndSplines.AddString(g_splineList->getActiveTarget(i)->getName());
 		}
+
 		m_wndSplines.SetCurSel(0);
 		m_fSeconds = g_splineList->getTotalTime();
 		m_wndSegments.SetScrollRange(0, g_splineList->getTotalTime() * 4.0);
 
 		m_wndEvents.ResetContent();
+
 		for (i = 0; i < g_splineList->numEvents(); i++) {
 			str = va("%s\t%s", g_splineList->getEvent(i)->typeStr(), g_splineList->getEvent(i)->getParam());
 			m_wndEvents.AddString(str);
 		}
+
 		//m_currentSegment = g_splineList->getActiveSegment();
 		//m_numSegments = g_splineList->numSegments();
 	}
+
 	g_splineList->startEdit(true);
 	UpdateData(FALSE);
 }
 
-BOOL CDlgCamera::OnInitDialog() 
+BOOL CDlgCamera::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	setupFromCamera();
 	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	// EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CDlgCamera::OnOK() 
+void CDlgCamera::OnOK()
 {
 	g_dlgCamera.ShowWindow(SW_HIDE);
 	g_qeglobals.d_select_mode = sel_brush;
@@ -240,19 +252,20 @@ void CDlgCamera::OnOK()
 	Sys_UpdateWindows(W_ALL);
 }
 
-void CDlgCamera::OnDestroy() 
+void CDlgCamera::OnDestroy()
 {
 	if (GetSafeHwnd()) {
 		CRect rct;
 		GetWindowRect(rct);
 		SaveRegistryInfo("Radiant::CameraInspector", &rct, sizeof(rct));
 	}
+
 	CDialog::OnDestroy();
 	Sys_UpdateWindows(W_ALL);
 }
 
 
-void CDlgCamera::OnApply() 
+void CDlgCamera::OnApply()
 {
 	UpdateData(TRUE);
 	g_splineList->setBaseTime(m_fSeconds);
@@ -261,14 +274,17 @@ void CDlgCamera::OnApply()
 	m_wndSegments.SetScrollRange(0, g_splineList->getTotalTime() * 4.0);
 }
 
-void CDlgCamera::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar) 
+void CDlgCamera::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar *pScrollBar)
 {
 	CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
 	int max = g_splineList->getTotalTime() * 4;
+
 	if (max == 0) {
 		max = 1;
 	}
+
 	int n = pScrollBar->GetScrollPos();
+
 	switch (nSBCode) {
 		case SB_LINEUP : {
 			n--;
@@ -294,6 +310,7 @@ void CDlgCamera::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 			n = nPos;
 		}
 	}
+
 //	if (n < 0) {
 //		n = 0;
 //	} else if (n >= g_splineList->numSegments()) {
@@ -303,6 +320,7 @@ void CDlgCamera::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 //		n = g_splineList->numSegments() - 1;
 //	}
 	pScrollBar->SetScrollPos(n);
+
 	if (m_trackCamera) {
 		float p = (float)n / max;
 		p *= g_splineList->getTotalTime() * 1000;
@@ -311,62 +329,65 @@ void CDlgCamera::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 		idVec3 dir;
 		float fov;
 		g_splineList->getCameraInfo(p, g_pParentWnd->GetCamera()->Camera().origin, dir, &fov);
-		g_pParentWnd->GetCamera()->Camera().angles[1] = atan2 (dir[1], dir[0])*180/3.14159;
-		g_pParentWnd->GetCamera()->Camera().angles[0] = asin (dir[2])*180/3.14159;
+		g_pParentWnd->GetCamera()->Camera().angles[1] = atan2(dir[1], dir[0])*180/3.14159;
+		g_pParentWnd->GetCamera()->Camera().angles[0] = asin(dir[2])*180/3.14159;
 
 	}
+
 	UpdateData(FALSE);
 	Sys_UpdateWindows(W_XY | W_CAMERA);
 }
 
-void CDlgCamera::OnFileNew() 
+void CDlgCamera::OnFileNew()
 {
 	g_splineList->clear();
 	setupFromCamera();
 }
 
-void CDlgCamera::OnFileOpen() 
+void CDlgCamera::OnFileOpen()
 {
 	DialogName dlg("Open Camera File");
+
 	if (dlg.DoModal() == IDOK) {
 		g_splineList->clear();
 		g_splineList->load(va("cameras/%s.camera", dlg.m_strName));
 	}
 }
 
-void CDlgCamera::OnFileSave() 
+void CDlgCamera::OnFileSave()
 {
 	DialogName dlg("Save Camera File");
+
 	if (dlg.DoModal() == IDOK) {
 		g_splineList->save(va("cameras/%s.camera", dlg.m_strName));
 	}
 }
 
-void CDlgCamera::OnTestcamera() 
+void CDlgCamera::OnTestcamera()
 {
 	// TODO: Add your control notification handler code here
-	
+
 }
 
-void CDlgCamera::OnBtnDeletepoints() 
+void CDlgCamera::OnBtnDeletepoints()
 {
 	// TODO: Add your control notification handler code here
-	
+
 }
 
-void CDlgCamera::OnBtnSelectall() 
+void CDlgCamera::OnBtnSelectall()
 {
 	// TODO: Add your control notification handler code here
-	
+
 }
 
-void CDlgCamera::OnRadioEditpoints() 
+void CDlgCamera::OnRadioEditpoints()
 {
 	UpdateData(TRUE);
 	g_qeglobals.d_select_mode = sel_editpoint;
 }
 
-void CDlgCamera::OnRadioAddPoints() 
+void CDlgCamera::OnRadioAddPoints()
 {
 	UpdateData(TRUE);
 	g_qeglobals.d_select_mode = sel_addpoint;

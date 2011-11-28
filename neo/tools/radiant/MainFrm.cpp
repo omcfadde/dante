@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -63,8 +63,8 @@ If you have questions concerning this license or the applicable additional terms
 #include "../comafx/DialogColorPicker.h"
 
 #ifdef _DEBUG
-	#define new DEBUG_NEW
-	#undef THIS_FILE
+#define new DEBUG_NEW
+#undef THIS_FILE
 static char		THIS_FILE[] = __FILE__;
 #endif
 
@@ -252,7 +252,7 @@ SCommandInfo	g_Commands[] = {
 	{ "Selection_Connect",      'K', RAD_CONTROL, ID_SELECTION_CONNECT },
 	{ "Selection_Ungroup",      'G', RAD_SHIFT, ID_SELECTION_UNGROUPENTITY },
 	{ "Selection_CSGMerge",     'M', RAD_SHIFT, ID_SELECTION_CSGMERGE },
-	
+
 	{ "Selection_CenterOrigin",           'O', RAD_SHIFT, ID_SELECTION_CENTER_ORIGIN },
 	{ "Selection_SelectCompleteEntity",   'E' , RAD_CONTROL|RAD_ALT|RAD_SHIFT , ID_SELECT_COMPLETE_ENTITY },
 	{ "Selection_SelectAllOfType",        'A', RAD_SHIFT, ID_SELECT_ALL },
@@ -274,7 +274,7 @@ SCommandInfo	g_Commands[] = {
 	{ "Render_Toggle",           VK_F3, 0, ID_VIEW_RENDERMODE },
 
 	{ "Find_Textures",    'F', RAD_SHIFT, ID_TEXTURE_REPLACEALL },
-	{ "Find_Entity",       VK_F3, RAD_CONTROL, ID_MISC_FINDORREPLACEENTITY},	
+	{ "Find_Entity",       VK_F3, RAD_CONTROL, ID_MISC_FINDORREPLACEENTITY},
 	{ "Find_NextEntity",   VK_F3,RAD_SHIFT, ID_MISC_FINDNEXTENT},
 
 	{ "_ShowDOOM",               VK_F2, 0, ID_SHOW_DOOM },
@@ -366,7 +366,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_FILE_SAVE, OnFileSave)
 	ON_COMMAND(ID_FILE_SAVEAS, OnFileSaveas)
 	ON_COMMAND(D3XP_ID_FILE_SAVE_COPY, OnFileSaveCopy)
-	ON_COMMAND(D3XP_ID_SHOW_MODELS, OnViewShowModels )
+	ON_COMMAND(D3XP_ID_SHOW_MODELS, OnViewShowModels)
 	ON_COMMAND(ID_VIEW_100, OnView100)
 	ON_COMMAND(ID_VIEW_CENTER, OnViewCenter)
 	ON_COMMAND(ID_VIEW_CONSOLE, OnViewConsole)
@@ -491,7 +491,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_COLOR_SETORIGINAL, OnColorSetoriginal)
 	ON_COMMAND(ID_COLOR_SETQER, OnColorSetqer)
 	ON_COMMAND(ID_COLOR_SUPERMAL, OnColorSetSuperMal)
-	ON_COMMAND(ID_THEMES_MAX , OnColorSetMax )
+	ON_COMMAND(ID_THEMES_MAX , OnColorSetMax)
 	ON_COMMAND(ID_COLOR_SETBLACK, OnColorSetblack)
 	ON_COMMAND(ID_SNAPTOGRID, OnSnaptogrid)
 	ON_COMMAND(ID_SELECT_SCALE, OnSelectScale)
@@ -679,7 +679,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_SOUND_SHOWSOUNDVOLUMES, OnSoundShowsoundvolumes)
 	ON_COMMAND(ID_SOUND_SHOWSELECTEDSOUNDVOLUMES, OnSoundShowselectedsoundvolumes)
 	ON_COMMAND(ID_PATCH_NURBEDITOR, OnNurbEditor)
-    ON_COMMAND(ID_SELECT_COMPLETE_ENTITY, OnSelectCompleteEntity)
+	ON_COMMAND(ID_SELECT_COMPLETE_ENTITY, OnSelectCompleteEntity)
 	ON_COMMAND(ID_PRECISION_CURSOR_CYCLE , OnPrecisionCursorCycle)
 	ON_COMMAND(ID_MATERIALS_GENERATEMATERIALSLIST,OnGenerateMaterialsList)
 	ON_COMMAND(ID_SELECTION_VIEW_WIREFRAMEON, OnSelectionWireFrameOn)
@@ -693,14 +693,14 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND_RANGE(ID_VIEW_NEAREST, ID_TEXTURES_FLATSHADE, OnViewNearest)
 	ON_COMMAND_RANGE(ID_GRID_POINT0625, ID_GRID_64, OnGrid1)
 #if _MSC_VER < 1300
-	ON_REGISTERED_MESSAGE(g_msgBSPDone, OnBSPDone) 
+	ON_REGISTERED_MESSAGE(g_msgBSPDone, OnBSPDone)
 	ON_REGISTERED_MESSAGE(g_msgBSPStatus, OnBSPStatus)
 	ON_MESSAGE(WM_DISPLAYCHANGE, OnDisplayChange)
 #endif
 	ON_COMMAND(ID_AUTOCAULK, OnAutocaulk)
 	ON_UPDATE_COMMAND_UI(ID_AUTOCAULK, OnUpdateAutocaulk)
 	ON_COMMAND(ID_SELECT_ALLTARGETS, OnSelectAlltargets)
-	END_MESSAGE_MAP()
+END_MESSAGE_MAP()
 static UINT indicators[] = {
 	ID_SEPARATOR,	// status line indicator
 	ID_SEPARATOR,	// status line indicator
@@ -714,7 +714,8 @@ static UINT indicators[] = {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnDisplayChange(UINT wParam, long lParam) {
+void CMainFrame::OnDisplayChange(UINT wParam, long lParam)
+{
 	int n = wParam;
 }
 
@@ -722,9 +723,11 @@ void CMainFrame::OnDisplayChange(UINT wParam, long lParam) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBSPStatus(UINT wParam, long lParam) {
+void CMainFrame::OnBSPStatus(UINT wParam, long lParam)
+{
 	// lparam is an atom contain the text
 	char buff[1024];
+
 	if (::GlobalGetAtomName(static_cast<ATOM>(lParam), buff, sizeof(buff))) {
 		common->Printf("%s", buff);
 		::GlobalDeleteAtom(static_cast<ATOM>(lParam));
@@ -735,10 +738,12 @@ void CMainFrame::OnBSPStatus(UINT wParam, long lParam) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBSPDone(UINT wParam, long lParam) {
-	idStr str = cvarSystem->GetCVarString( "radiant_bspdone" );
+void CMainFrame::OnBSPDone(UINT wParam, long lParam)
+{
+	idStr str = cvarSystem->GetCVarString("radiant_bspdone");
+
 	if (str.Length()) {
-	    sndPlaySound(str.c_str(), SND_FILENAME | SND_ASYNC);
+		sndPlaySound(str.c_str(), SND_FILENAME | SND_ASYNC);
 	}
 }
 
@@ -747,7 +752,8 @@ void CMainFrame::OnBSPDone(UINT wParam, long lParam) {
 //    CMainFrame construction/destruction
 // =======================================================================================================================
 //
-CMainFrame::CMainFrame() {
+CMainFrame::CMainFrame()
+{
 	m_bDoLoop = false;
 	g_pParentWnd = this;
 	m_pXYWnd = NULL;
@@ -764,14 +770,16 @@ CMainFrame::CMainFrame() {
  =======================================================================================================================
  =======================================================================================================================
  */
-CMainFrame::~CMainFrame() {
+CMainFrame::~CMainFrame()
+{
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void HandlePopup(CWnd *pWindow, unsigned int uId) {
+void HandlePopup(CWnd *pWindow, unsigned int uId)
+{
 	// Get the current position of the mouse
 	CPoint	ptMouse;
 	GetCursorPos(&ptMouse);
@@ -780,12 +788,12 @@ void HandlePopup(CWnd *pWindow, unsigned int uId) {
 	CMenu	mnuPopup;
 	VERIFY(mnuPopup.LoadMenu(uId));
 	mnuPopup.GetSubMenu(0)->TrackPopupMenu
-		(
-			TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_RIGHTBUTTON,
-			ptMouse.x,
-			ptMouse.y,
-			pWindow
-		);
+	(
+	        TPM_LEFTALIGN | TPM_LEFTBUTTON | TPM_RIGHTBUTTON,
+	        ptMouse.x,
+	        ptMouse.y,
+	        pWindow
+	);
 	mnuPopup.DestroyMenu();
 
 	// Set focus back to window
@@ -796,15 +804,18 @@ void HandlePopup(CWnd *pWindow, unsigned int uId) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnParentNotify(UINT message, LPARAM lParam) {
+void CMainFrame::OnParentNotify(UINT message, LPARAM lParam)
+{
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::SetButtonMenuStates() {
+void CMainFrame::SetButtonMenuStates()
+{
 	CMenu	*pMenu = GetMenu();
+
 	if (pMenu) {
 		//
 		pMenu->CheckMenuItem(ID_VIEW_SHOWNAMES, MF_BYCOMMAND | MF_CHECKED);
@@ -885,33 +896,34 @@ void CMainFrame::SetButtonMenuStates() {
 
 		pMenu->CheckMenuItem(ID_TOGGLE_LOCK, MF_BYCOMMAND | (g_PrefsDlg.m_bTextureLock) ? MF_CHECKED : MF_UNCHECKED);
 		pMenu->CheckMenuItem
-			(
-				ID_TOGGLE_ROTATELOCK,
-				MF_BYCOMMAND | (g_PrefsDlg.m_bRotateLock) ? MF_CHECKED : MF_UNCHECKED
-			);
+		(
+		        ID_TOGGLE_ROTATELOCK,
+		        MF_BYCOMMAND | (g_PrefsDlg.m_bRotateLock) ? MF_CHECKED : MF_UNCHECKED
+		);
 		pMenu->CheckMenuItem
-			(
-				ID_VIEW_CUBICCLIPPING,
-				MF_BYCOMMAND | (g_PrefsDlg.m_bCubicClipping) ? MF_CHECKED : MF_UNCHECKED
-			);
+		(
+		        ID_VIEW_CUBICCLIPPING,
+		        MF_BYCOMMAND | (g_PrefsDlg.m_bCubicClipping) ? MF_CHECKED : MF_UNCHECKED
+		);
 		pMenu->CheckMenuItem
-			(
-				ID_VIEW_OPENGLLIGHTING,
-				MF_BYCOMMAND | (g_PrefsDlg.m_bGLLighting) ? MF_CHECKED : MF_UNCHECKED
-			);
+		(
+		        ID_VIEW_OPENGLLIGHTING,
+		        MF_BYCOMMAND | (g_PrefsDlg.m_bGLLighting) ? MF_CHECKED : MF_UNCHECKED
+		);
 		pMenu->CheckMenuItem(ID_SNAPTOGRID, MF_BYCOMMAND | (!g_PrefsDlg.m_bNoClamp) ? MF_CHECKED : MF_UNCHECKED);
+
 		if (m_wndToolBar.GetSafeHwnd()) {
 			m_wndToolBar.GetToolBarCtrl().CheckButton
-				(
-					ID_VIEW_CUBICCLIPPING,
-					(g_PrefsDlg.m_bCubicClipping) ? TRUE : FALSE
-				);
+			(
+			        ID_VIEW_CUBICCLIPPING,
+			        (g_PrefsDlg.m_bCubicClipping) ? TRUE : FALSE
+			);
 		}
 
 		int n = g_PrefsDlg.m_nTextureScale;
 		int id;
-		switch (n)
-		{
+
+		switch (n) {
 			case 10:
 				id = ID_TEXTURES_TEXTUREWINDOWSCALE_10;
 				break;
@@ -935,7 +947,7 @@ void CMainFrame::SetButtonMenuStates() {
 	if (g_qeglobals.d_project_entity) {
 		// FillTextureMenu(); // redundant but i'll clean it up later.. yeah right..
 		FillBSPMenu();
-		LoadMruInReg(g_qeglobals.d_lpMruMenu, "Software\\" EDITOR_REGISTRY_KEY "\\MRU" );
+		LoadMruInReg(g_qeglobals.d_lpMruMenu, "Software\\" EDITOR_REGISTRY_KEY "\\MRU");
 		PlaceMenuMRUItem(g_qeglobals.d_lpMruMenu, ::GetSubMenu(::GetMenu(GetSafeHwnd()), 0), ID_FILE_EXIT);
 	}
 }
@@ -944,7 +956,8 @@ void CMainFrame::SetButtonMenuStates() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::ShowMenuItemKeyBindings(CMenu *pMenu) {
+void CMainFrame::ShowMenuItemKeyBindings(CMenu *pMenu)
+{
 	int				i, j;
 	char			key[1024], *ptr;
 	MENUITEMINFO	MenuItemInfo;
@@ -956,6 +969,7 @@ void CMainFrame::ShowMenuItemKeyBindings(CMenu *pMenu) {
 		MenuItemInfo.fMask = MIIM_TYPE;
 		MenuItemInfo.dwTypeData = key;
 		MenuItemInfo.cch = sizeof(key);
+
 		if (!pMenu->GetMenuItemInfo(g_Commands[i].m_nCommand, &MenuItemInfo)) {
 			continue;
 		}
@@ -965,11 +979,13 @@ void CMainFrame::ShowMenuItemKeyBindings(CMenu *pMenu) {
 		}
 
 		ptr = strchr(key, '\t');
+
 		if (ptr) {
 			*ptr = '\0';
 		}
 
 		strcat(key, "\t");
+
 		if (g_Commands[i].m_nModifiers) {	// are there modifiers present?
 			if (g_Commands[i].m_nModifiers & RAD_SHIFT) {
 				strcat(key, "Shift-");
@@ -1010,7 +1026,7 @@ void CMainFrame::ShowMenuItemKeyBindings(CMenu *pMenu) {
 MFCCreate
 ==============
 */
-void MFCCreate( HINSTANCE hInstance )
+void MFCCreate(HINSTANCE hInstance)
 {
 	HMENU hMenu = NULL;
 	int i = sizeof(g_qeglobals.d_savedinfo);
@@ -1020,13 +1036,14 @@ void MFCCreate( HINSTANCE hInstance )
 	LoadRegistryInfo("radiant_SavedInfo", &g_qeglobals.d_savedinfo, &l);
 
 	int nOldSize = g_qeglobals.d_savedinfo.iSize;
+
 	if (g_qeglobals.d_savedinfo.iSize != sizeof(g_qeglobals.d_savedinfo)) {
 		// fill in new defaults
 		g_qeglobals.d_savedinfo.iSize = sizeof(g_qeglobals.d_savedinfo);
 		g_qeglobals.d_savedinfo.fGamma = 1.0;
 		g_qeglobals.d_savedinfo.iTexMenu = ID_VIEW_BILINEARMIPMAP;
 		g_qeglobals.d_savedinfo.m_nTextureTweak = 1.0;
-  
+
 		//g_qeglobals.d_savedinfo.exclude = INCLUDE_EASY | INCLUDE_NORMAL | INCLUDE_HARD | INCLUDE_DEATHMATCH;
 		g_qeglobals.d_savedinfo.show_coordinates = true;
 		g_qeglobals.d_savedinfo.show_names       = false;
@@ -1076,7 +1093,8 @@ void MFCCreate( HINSTANCE hInstance )
  =======================================================================================================================
  =======================================================================================================================
  */
-int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
+int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
 	char	*pBuffer = g_strAppPath.GetBufferSetLength(_MAX_PATH + 1);
 	int		nResult = ::GetModuleFileName(NULL, pBuffer, _MAX_PATH);
 	ASSERT(nResult != 0);
@@ -1097,7 +1115,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	UINT	nID = (g_PrefsDlg.m_bWideToolbar) ? IDR_TOOLBAR_ADVANCED : IDR_TOOLBAR1;
 
 	if (!m_wndToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD | WS_VISIBLE | CBRS_TOP
-		| CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) || !m_wndToolBar.LoadToolBar(nID)) {
+	                           | CBRS_GRIPPER | CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC) || !m_wndToolBar.LoadToolBar(nID)) {
 		TRACE0("Failed to create toolbar\n");
 		return -1;	// fail to create
 	}
@@ -1157,9 +1175,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 		 * editing QE4 project files directly, this is HIGHLY recommended", "Create a
 		 * default project?", MB_YESNO) == IDYES) { OnFileNewproject(); }
 		 */
-	}
-	else
-	{
+	} else {
 		// load plugins before the first Map_LoadFile required for model plugins
 		if (g_PrefsDlg.m_bLoadLastMap && g_PrefsDlg.m_strLastMap.GetLength() > 0) {
 			Map_LoadFile(g_PrefsDlg.m_strLastMap.GetBuffer(0));
@@ -1176,11 +1192,11 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 
 	PostMessage(WM_KEYDOWN, 'O', NULL);
 
-	if ( radiant_entityMode.GetBool() ) {
+	if (radiant_entityMode.GetBool()) {
 		g_qeglobals.d_savedinfo.exclude |= (EXCLUDE_PATHS | EXCLUDE_CLIP | EXCLUDE_CAULK | EXCLUDE_VISPORTALS | EXCLUDE_NODRAW | EXCLUDE_TRIGGERS);
 	}
 
-	Sys_UpdateWindows ( W_ALL );
+	Sys_UpdateWindows(W_ALL);
 	return 0;
 }
 
@@ -1189,9 +1205,11 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
  =======================================================================================================================
  */
 
-void FindReplace(CString& strContents, const char* pTag, const char* pValue) {
+void FindReplace(CString &strContents, const char *pTag, const char *pValue)
+{
 	if (strcmp(pTag, pValue) == 0)
 		return;
+
 	for (int nPos = strContents.Find(pTag); nPos >= 0; nPos = strContents.Find(pTag)) {
 		int nRightLen = strContents.GetLength() - strlen(pTag) - nPos;
 		CString strLeft = strContents.Left(nPos);
@@ -1202,7 +1220,8 @@ void FindReplace(CString& strContents, const char* pTag, const char* pValue) {
 	}
 }
 
-void CMainFrame::LoadCommandMap() {
+void CMainFrame::LoadCommandMap()
+{
 	CString strINI;
 	char	pBuff[1024];
 	strINI = g_strAppPath;
@@ -1210,6 +1229,7 @@ void CMainFrame::LoadCommandMap() {
 
 	for (int i = 0; i < g_nCommandCount; i++) {
 		int nLen = GetPrivateProfileString("Commands", g_Commands[i].m_strCommand, "", pBuff, 1024, strINI);
+
 		if (nLen > 0) {
 			CString strBuff = pBuff;
 			strBuff.TrimLeft();
@@ -1217,18 +1237,21 @@ void CMainFrame::LoadCommandMap() {
 
 			int nSpecial = strBuff.Find("+alt");
 			g_Commands[i].m_nModifiers = 0;
+
 			if (nSpecial >= 0) {
 				g_Commands[i].m_nModifiers |= RAD_ALT;
 				FindReplace(strBuff, "+alt", "");
 			}
 
 			nSpecial = strBuff.Find("+ctrl");
+
 			if (nSpecial >= 0) {
 				g_Commands[i].m_nModifiers |= RAD_CONTROL;
 				FindReplace(strBuff, "+ctrl", "");
 			}
 
 			nSpecial = strBuff.Find("+shift");
+
 			if (nSpecial >= 0) {
 				g_Commands[i].m_nModifiers |= RAD_SHIFT;
 				FindReplace(strBuff, "+shift", "");
@@ -1237,10 +1260,10 @@ void CMainFrame::LoadCommandMap() {
 			strBuff.TrimLeft();
 			strBuff.TrimRight();
 			strBuff.MakeUpper();
+
 			if (nLen == 1) {	// most often case.. deal with first
 				g_Commands[i].m_nKey = __toascii(strBuff.GetAt(0));
-			}
-			else {				// special key
+			} else {				// special key
 				for (int j = 0; j < g_nKeyCount; j++) {
 					if (strBuff.CompareNoCase(g_Keys[j].m_strName) == 0) {
 						g_Commands[i].m_nKey = g_Keys[j].m_nVKKey;
@@ -1256,7 +1279,8 @@ void CMainFrame::LoadCommandMap() {
  =======================================================================================================================
  =======================================================================================================================
  */
-BOOL CMainFrame::PreCreateWindow(CREATESTRUCT &cs) {
+BOOL CMainFrame::PreCreateWindow(CREATESTRUCT &cs)
+{
 	// TODO: Modify the Window class or styles here by modifying the CREATESTRUCT cs
 	return CFrameWnd::PreCreateWindow(cs);
 }
@@ -1268,7 +1292,8 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT &cs) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::AssertValid() const {
+void CMainFrame::AssertValid() const
+{
 	CFrameWnd::AssertValid();
 }
 
@@ -1276,7 +1301,8 @@ void CMainFrame::AssertValid() const {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::Dump(CDumpContext &dc) const {
+void CMainFrame::Dump(CDumpContext &dc) const
+{
 	CFrameWnd::Dump(dc);
 }
 #endif // _DEBUG
@@ -1286,21 +1312,25 @@ void CMainFrame::Dump(CDumpContext &dc) const {
 //    CMainFrame message handlers
 // =======================================================================================================================
 //
-void CMainFrame::CreateQEChildren() {
+void CMainFrame::CreateQEChildren()
+{
 	//
 	// the project file can be specified on the command line, or implicitly found in
 	// the basedir directory
 	//
 	bool bProjectLoaded = false;
+
 	if (g_PrefsDlg.m_bLoadLast && g_PrefsDlg.m_strLastProject.GetLength() > 0) {
 		bProjectLoaded = QE_LoadProject(g_PrefsDlg.m_strLastProject.GetBuffer(0));
 	}
+
 	if (!bProjectLoaded) {
-		bProjectLoaded = QE_LoadProject( EDITOR_DEFAULT_PROJECT );
+		bProjectLoaded = QE_LoadProject(EDITOR_DEFAULT_PROJECT);
 	}
 
 	if (!bProjectLoaded) {
-		CFileDialog dlgFile( true, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, EDITOR_WINDOWTEXT " Project files (*.qe4, *.prj)|*.qe4|*.prj||",	this );
+		CFileDialog dlgFile(true, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, EDITOR_WINDOWTEXT " Project files (*.qe4, *.prj)|*.qe4|*.prj||",	this);
+
 		if (dlgFile.DoModal() == IDOK) {
 			bProjectLoaded = QE_LoadProject(dlgFile.GetPathName().GetBuffer(0));
 		}
@@ -1323,7 +1353,8 @@ void CMainFrame::CreateQEChildren() {
  =======================================================================================================================
  =======================================================================================================================
  */
-BOOL CMainFrame::OnCommand(WPARAM wParam, LPARAM lParam) {
+BOOL CMainFrame::OnCommand(WPARAM wParam, LPARAM lParam)
+{
 	return CFrameWnd::OnCommand(wParam, lParam);
 }
 
@@ -1331,7 +1362,8 @@ BOOL CMainFrame::OnCommand(WPARAM wParam, LPARAM lParam) {
  =======================================================================================================================
  =======================================================================================================================
  */
-LRESULT CMainFrame::DefWindowProc(UINT message, WPARAM wParam, LPARAM lParam) {
+LRESULT CMainFrame::DefWindowProc(UINT message, WPARAM wParam, LPARAM lParam)
+{
 	//RoutineProcessing();
 	return CFrameWnd::DefWindowProc(message, wParam, lParam);
 }
@@ -1340,7 +1372,8 @@ LRESULT CMainFrame::DefWindowProc(UINT message, WPARAM wParam, LPARAM lParam) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::RoutineProcessing() {
+void CMainFrame::RoutineProcessing()
+{
 	if (m_bDoLoop) {
 		double	time = 0.0;
 		static double oldtime = 0.0;
@@ -1349,6 +1382,7 @@ void CMainFrame::RoutineProcessing() {
 		time = Sys_DoubleTime();
 		delta = time - oldtime;
 		oldtime = time;
+
 		if (delta > 0.2) {
 			delta = 0.2;
 		}
@@ -1370,7 +1404,8 @@ void CMainFrame::RoutineProcessing() {
  =======================================================================================================================
  =======================================================================================================================
  */
-LRESULT CMainFrame::WindowProc(UINT message, WPARAM wParam, LPARAM lParam) {
+LRESULT CMainFrame::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
+{
 	return CFrameWnd::WindowProc(message, wParam, lParam);
 }
 
@@ -1378,7 +1413,8 @@ LRESULT CMainFrame::WindowProc(UINT message, WPARAM wParam, LPARAM lParam) {
  =======================================================================================================================
  =======================================================================================================================
  */
-bool MouseDown() {
+bool MouseDown()
+{
 	if (::GetAsyncKeyState(VK_LBUTTON)) {
 		return true;
 	}
@@ -1399,21 +1435,25 @@ bool MouseDown() {
  =======================================================================================================================
  */
 
-void CMainFrame::OnTimer(UINT nIDEvent) {
+void CMainFrame::OnTimer(UINT nIDEvent)
+{
 	static bool autoSavePending = false;
 
-	if ( nIDEvent == QE_TIMER0 && !MouseDown() ) {
+	if (nIDEvent == QE_TIMER0 && !MouseDown()) {
 		QE_CountBrushesAndUpdateStatusBar();
 	}
-	if ( nIDEvent == QE_TIMER1 || autoSavePending ) {
-		if ( MouseDown() ) {
+
+	if (nIDEvent == QE_TIMER1 || autoSavePending) {
+		if (MouseDown()) {
 			autoSavePending = true;
 			return;
 		}
-		if ( Sys_Waiting() ) {
+
+		if (Sys_Waiting()) {
 			autoSavePending = true;
 			return;
 		}
+
 		QE_CheckAutoSave();
 		autoSavePending = false;
 	}
@@ -1428,11 +1468,13 @@ struct SplitInfo {
  =======================================================================================================================
  =======================================================================================================================
  */
-bool LoadWindowPlacement(HWND hwnd, const char *pName) {
+bool LoadWindowPlacement(HWND hwnd, const char *pName)
+{
 	WINDOWPLACEMENT wp;
 	wp.length = sizeof(WINDOWPLACEMENT);
 
 	LONG lSize = sizeof(wp);
+
 	if (LoadRegistryInfo(pName, &wp, &lSize)) {
 		::SetWindowPlacement(hwnd, &wp);
 		return true;
@@ -1445,9 +1487,11 @@ bool LoadWindowPlacement(HWND hwnd, const char *pName) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void SaveWindowPlacement(HWND hwnd, const char *pName) {
+void SaveWindowPlacement(HWND hwnd, const char *pName)
+{
 	WINDOWPLACEMENT wp;
 	wp.length = sizeof(WINDOWPLACEMENT);
+
 	if (::GetWindowPlacement(hwnd, &wp)) {
 		SaveRegistryInfo(pName, &wp, sizeof(wp));
 	}
@@ -1457,7 +1501,8 @@ void SaveWindowPlacement(HWND hwnd, const char *pName) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnDestroy() {
+void CMainFrame::OnDestroy()
+{
 	KillTimer(QE_TIMER0);
 
 	SaveBarState("RadiantToolBars2");
@@ -1513,7 +1558,7 @@ void CMainFrame::OnDestroy() {
 	delete m_pCamWnd;
 	m_pCamWnd = NULL;
 
-	if ( idStr::Icmp(currentmap, "unnamed.map") != 0 ) {
+	if (idStr::Icmp(currentmap, "unnamed.map") != 0) {
 		g_PrefsDlg.m_strLastMap = currentmap;
 		g_PrefsDlg.SavePrefs();
 	}
@@ -1540,6 +1585,7 @@ void CMainFrame::OnDestroy() {
 	g_qeglobals.d_project_entity->epairs.Clear();
 
 	entity_t	*pEntity = g_qeglobals.d_project_entity->next;
+
 	while (pEntity != NULL && pEntity != g_qeglobals.d_project_entity) {
 		entity_t	*pNextEntity = pEntity->next;
 		Entity_Free(pEntity);
@@ -1571,9 +1617,10 @@ void CMainFrame::OnDestroy() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnClose() {
+void CMainFrame::OnClose()
+{
 	if (ConfirmModified()) {
-		g_Inspectors->SaveWindowPlacement ();
+		g_Inspectors->SaveWindowPlacement();
 		CFrameWnd::OnClose();
 	}
 }
@@ -1582,14 +1629,17 @@ void CMainFrame::OnClose() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
+void CMainFrame::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
 	// run through our list to see if we have a handler for nChar
 
 	for (int i = 0; i < g_nCommandCount; i++) {
 		if (g_Commands[i].m_nKey == nChar) {	// find a match?
 			bool	bGo = true;
+
 			if (g_Commands[i].m_nModifiers & RAD_PRESS) {
 				int nModifiers = g_Commands[i].m_nModifiers &~RAD_PRESS;
+
 				if (nModifiers) {				// are there modifiers present?
 					if (nModifiers & RAD_ALT) {
 						if (!(GetAsyncKeyState(VK_MENU) & 0x8000)) {
@@ -1608,8 +1658,7 @@ void CMainFrame::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 							bGo = false;
 						}
 					}
-				}
-				else {	// no modifiers make sure none of those keys are pressed
+				} else {	// no modifiers make sure none of those keys are pressed
 					if (GetAsyncKeyState(VK_MENU) & 0x8000) {
 						bGo = false;
 					}
@@ -1636,12 +1685,12 @@ void CMainFrame::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
  =======================================================================================================================
  =======================================================================================================================
  */
-bool CamOK(unsigned int nKey) {
+bool CamOK(unsigned int nKey)
+{
 	if (nKey == VK_UP || nKey == VK_LEFT || nKey == VK_RIGHT || nKey == VK_DOWN) {
 		if (::GetAsyncKeyState(nKey)) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -1653,7 +1702,8 @@ bool CamOK(unsigned int nKey) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+void CMainFrame::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
 	// OnKeyDown(nChar, nRepCnt, nFlags);
 	if (nChar == VK_DOWN) {
 		OnKeyDown(nChar, nRepCnt, nFlags);
@@ -1666,12 +1716,14 @@ void CMainFrame::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+void CMainFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
 
 	for (int i = 0; i < g_nCommandCount; i++) {
 		if (g_Commands[i].m_nKey == nChar) {	// find a match?
 			// check modifiers
 			unsigned int	nState = 0;
+
 			if (GetAsyncKeyState(VK_MENU) & 0x8000) {
 				nState |= RAD_ALT;
 			}
@@ -1698,20 +1750,21 @@ void CMainFrame::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
  =======================================================================================================================
  =======================================================================================================================
  */
-BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext *pContext) {
+BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext *pContext)
+{
 
-	g_Inspectors = new CInspectorDialog( this );
+	g_Inspectors = new CInspectorDialog(this);
 	g_Inspectors->Create(IDD_DIALOG_INSPECTORS, this);
 
 	LoadWindowPlacement(g_Inspectors->GetSafeHwnd(), "radiant_InspectorsWindow");
 	g_Inspectors->ShowWindow(SW_SHOW);
 
 	CRect r;
-	g_Inspectors->GetWindowRect ( r );
+	g_Inspectors->GetWindowRect(r);
 
 	//stupid hack to get the window resize itself properly
 	r.DeflateRect(0,0,0,1);
-	g_Inspectors->MoveWindow(r);	
+	g_Inspectors->MoveWindow(r);
 	r.InflateRect(0,0,0,1);
 	g_Inspectors->MoveWindow(r);
 
@@ -1781,7 +1834,8 @@ CRect	g_rctOld(0, 0, 0, 0);
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSize(UINT nType, int cx, int cy) {
+void CMainFrame::OnSize(UINT nType, int cx, int cy)
+{
 	CFrameWnd::OnSize(nType, cx, cy);
 
 	CRect	rctParent;
@@ -1790,19 +1844,20 @@ void CMainFrame::OnSize(UINT nType, int cx, int cy) {
 	UINT	nID;
 	UINT	nStyle;
 	int		nWidth;
+
 	if (m_wndStatusBar.GetSafeHwnd()) {
-		m_wndStatusBar.GetPaneInfo( 0, nID, nStyle, nWidth);
-		m_wndStatusBar.SetPaneInfo( 0, nID, nStyle, rctParent.Width() * 0.15f );
-		m_wndStatusBar.GetPaneInfo( 1, nID, nStyle, nWidth);
-		m_wndStatusBar.SetPaneInfo( 1, nID, nStyle, rctParent.Width() * 0.15f);
-		m_wndStatusBar.GetPaneInfo( 2, nID, nStyle, nWidth);
-		m_wndStatusBar.SetPaneInfo( 2, nID, nStyle, rctParent.Width() * 0.15f );
-		m_wndStatusBar.GetPaneInfo( 3, nID, nStyle, nWidth);
-		m_wndStatusBar.SetPaneInfo( 3, nID, nStyle, rctParent.Width() * 0.39f );
-		m_wndStatusBar.GetPaneInfo( 4, nID, nStyle, nWidth);
-		m_wndStatusBar.SetPaneInfo( 4, nID, nStyle, rctParent.Width() * 0.15f );
-		m_wndStatusBar.GetPaneInfo( 5, nID, nStyle, nWidth);
-		m_wndStatusBar.SetPaneInfo( 5, nID, nStyle, rctParent.Width() * 0.01f );
+		m_wndStatusBar.GetPaneInfo(0, nID, nStyle, nWidth);
+		m_wndStatusBar.SetPaneInfo(0, nID, nStyle, rctParent.Width() * 0.15f);
+		m_wndStatusBar.GetPaneInfo(1, nID, nStyle, nWidth);
+		m_wndStatusBar.SetPaneInfo(1, nID, nStyle, rctParent.Width() * 0.15f);
+		m_wndStatusBar.GetPaneInfo(2, nID, nStyle, nWidth);
+		m_wndStatusBar.SetPaneInfo(2, nID, nStyle, rctParent.Width() * 0.15f);
+		m_wndStatusBar.GetPaneInfo(3, nID, nStyle, nWidth);
+		m_wndStatusBar.SetPaneInfo(3, nID, nStyle, rctParent.Width() * 0.39f);
+		m_wndStatusBar.GetPaneInfo(4, nID, nStyle, nWidth);
+		m_wndStatusBar.SetPaneInfo(4, nID, nStyle, rctParent.Width() * 0.15f);
+		m_wndStatusBar.GetPaneInfo(5, nID, nStyle, nWidth);
+		m_wndStatusBar.SetPaneInfo(5, nID, nStyle, rctParent.Width() * 0.01f);
 	}
 }
 
@@ -1814,11 +1869,11 @@ void	Select_Ungroup();
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::ToggleCamera() {
+void CMainFrame::ToggleCamera()
+{
 	if (m_bCamPreview) {
 		m_bCamPreview = false;
-	}
-	else {
+	} else {
 		m_bCamPreview = true;
 	}
 }
@@ -1827,14 +1882,16 @@ void CMainFrame::ToggleCamera() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFileClose() {
+void CMainFrame::OnFileClose()
+{
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFileExit() {
+void CMainFrame::OnFileExit()
+{
 	PostMessage(WM_CLOSE, 0, 0L);
 }
 
@@ -1842,7 +1899,8 @@ void CMainFrame::OnFileExit() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFileLoadproject() {
+void CMainFrame::OnFileLoadproject()
+{
 	if (ConfirmModified()) {
 		ProjectDialog();
 	}
@@ -1852,7 +1910,8 @@ void CMainFrame::OnFileLoadproject() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFileNew() {
+void CMainFrame::OnFileNew()
+{
 	if (ConfirmModified()) {
 		Map_New();
 	}
@@ -1862,7 +1921,8 @@ void CMainFrame::OnFileNew() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFileOpen() {
+void CMainFrame::OnFileOpen()
+{
 	if (ConfirmModified()) {
 		OpenDialog();
 	}
@@ -1872,13 +1932,14 @@ void CMainFrame::OnFileOpen() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFilePointfile() {
+void CMainFrame::OnFilePointfile()
+{
 	if (g_qeglobals.d_pointfile_display_list) {
 		Pointfile_Clear();
-	}
-	else {
+	} else {
 		Pointfile_Check();
 	}
+
 	Sys_UpdateWindows(W_ALL);
 }
 
@@ -1886,25 +1947,27 @@ void CMainFrame::OnFilePointfile() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFilePrint() {
+void CMainFrame::OnFilePrint()
+{
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFilePrintPreview() {
+void CMainFrame::OnFilePrintPreview()
+{
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFileSave() {
+void CMainFrame::OnFileSave()
+{
 	if (!strcmp(currentmap, "unnamed.map")) {
 		SaveAsDialog(false);
-	}
-	else {
+	} else {
 		Map_SaveFile(currentmap, false);
 	}
 
@@ -1916,7 +1979,8 @@ void CMainFrame::OnFileSave() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFileSaveas() {
+void CMainFrame::OnFileSaveas()
+{
 	SaveAsDialog(false);
 }
 
@@ -1924,17 +1988,19 @@ void CMainFrame::OnFileSaveas() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFileSaveCopy() {
+void CMainFrame::OnFileSaveCopy()
+{
 	char aFile[260] = "\0";
 	char aFilter[260] = "Map\0*.map\0\0";
 	char aTitle[260] = "Save a Copy\0";
 	OPENFILENAME afn;
 
-	memset( &afn, 0, sizeof(OPENFILENAME) );
+	memset(&afn, 0, sizeof(OPENFILENAME));
 
 	CString strPath = ValueForKey(g_qeglobals.d_project_entity, "basepath");
 	AddSlash(strPath);
 	strPath += "maps";
+
 	if (g_PrefsDlg.m_strMaps.GetLength() > 0) {
 		strPath += va("\\%s", g_PrefsDlg.m_strMaps);
 	}
@@ -1970,7 +2036,8 @@ void CMainFrame::OnFileSaveCopy() {
 /*
 ==================================================================================================
 */
-void CMainFrame::OnViewShowModels() {
+void CMainFrame::OnViewShowModels()
+{
 	g_qeglobals.d_savedinfo.exclude ^= EXCLUDE_MODELS;
 
 	Sys_UpdateWindows(W_ALL);
@@ -1980,7 +2047,8 @@ void CMainFrame::OnViewShowModels() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnView100() {
+void CMainFrame::OnView100()
+{
 	if (m_pXYWnd) {
 		m_pXYWnd->SetScale(1);
 	}
@@ -2000,7 +2068,8 @@ void CMainFrame::OnView100() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewCenter() {
+void CMainFrame::OnViewCenter()
+{
 	m_pCamWnd->Camera().angles[ROLL] = m_pCamWnd->Camera().angles[PITCH] = 0;
 	m_pCamWnd->Camera().angles[YAW] = 22.5 * floor((m_pCamWnd->Camera().angles[YAW] + 11) / 22.5);
 	Sys_UpdateWindows(W_CAMERA | W_XY_OVERLAY);
@@ -2010,7 +2079,8 @@ void CMainFrame::OnViewCenter() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewConsole() {
+void CMainFrame::OnViewConsole()
+{
 	g_Inspectors->SetMode(W_CONSOLE);
 }
 
@@ -2018,7 +2088,8 @@ void CMainFrame::OnViewConsole() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewDownfloor() {
+void CMainFrame::OnViewDownfloor()
+{
 	m_pCamWnd->Cam_ChangeFloor(false);
 }
 
@@ -2026,11 +2097,13 @@ void CMainFrame::OnViewDownfloor() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewEntity() {
+void CMainFrame::OnViewEntity()
+{
 	g_Inspectors->SetMode(W_ENTITY);
 }
 
-void CMainFrame::OnViewMediaBrowser() {
+void CMainFrame::OnViewMediaBrowser()
+{
 	g_Inspectors->SetMode(W_MEDIA);
 }
 
@@ -2040,7 +2113,8 @@ void CMainFrame::OnViewMediaBrowser() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewFront() {
+void CMainFrame::OnViewFront()
+{
 	m_pXYWnd->SetViewType(YZ);
 	m_pXYWnd->PositionView();
 	Sys_UpdateWindows(W_XY);
@@ -2069,31 +2143,32 @@ BOOL DoMru(HWND hWnd,WORD wId)
 		AddNewItem(g_qeglobals.d_lpMruMenu,(LPSTR)szFileName);
 
 		// Now perform opening this file !!!
-		Map_LoadFile (szFileName);	
-	}
-	else
+		Map_LoadFile(szFileName);
+	} else
 		// Remove the file on MRU.
 		DelMenuItem(g_qeglobals.d_lpMruMenu,wId,TRUE);
 
 	// Refresh the File menu.
 	PlaceMenuMRUItem(g_qeglobals.d_lpMruMenu,GetSubMenu(GetMenu(hWnd),0),
-			ID_FILE_EXIT);
+	                 ID_FILE_EXIT);
 
 	return fExist;
 }
 
-void CMainFrame::OnMru(unsigned int nID) {
+void CMainFrame::OnMru(unsigned int nID)
+{
 	// DHM - _D3XP
 	if (ConfirmModified()) {
-	DoMru(GetSafeHwnd(), nID);
-}
+		DoMru(GetSafeHwnd(), nID);
+	}
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewNearest(unsigned int nID) {
+void CMainFrame::OnViewNearest(unsigned int nID)
+{
 	Texture_SetMode(nID);
 }
 
@@ -2101,7 +2176,8 @@ void CMainFrame::OnViewNearest(unsigned int nID) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTextureWad(unsigned int nID) {
+void CMainFrame::OnTextureWad(unsigned int nID)
+{
 	Sys_BeginWait();
 
 	// FIXME: idMaterial Texture_ShowDirectory (nID);
@@ -2120,7 +2196,8 @@ RunBsp
 This is the new all-internal bsp
 ============
 */
-void RunBsp (const char *command) {
+void RunBsp(const char *command)
+{
 	char	sys[2048];
 	char	name[2048];
 	char	*in;
@@ -2129,24 +2206,27 @@ void RunBsp (const char *command) {
 	g_Inspectors->SetMode(W_CONSOLE);
 
 	// decide if we are doing a .map or a .reg
-	strcpy (name, currentmap);
-	if ( region_active ) {
-		Map_SaveFile (name, false);
-		StripExtension (name);
-		strcat (name, ".reg");
+	strcpy(name, currentmap);
+
+	if (region_active) {
+		Map_SaveFile(name, false);
+		StripExtension(name);
+		strcat(name, ".reg");
 	}
 
-	if ( !Map_SaveFile ( name, region_active ) ) {
+	if (!Map_SaveFile(name, region_active)) {
 		return;
 	}
 
 	// name should be a full pathname, but we only
 	// want to pass the maps/ part to dmap
 	in = strstr(name, "maps/");
-	if ( !in ) {
+
+	if (!in) {
 		in = strstr(name, "maps\\");
 	}
-	if ( !in ) {
+
+	if (!in) {
 		in = name;
 	}
 
@@ -2155,46 +2235,52 @@ void RunBsp (const char *command) {
 		STARTUPINFO	startupinfo;
 		char buff[2048];
 
-		idStr base = cvarSystem->GetCVarString( "fs_basepath" );
-		idStr cd = cvarSystem->GetCVarString( "fs_cdpath" );
+		idStr base = cvarSystem->GetCVarString("fs_basepath");
+		idStr cd = cvarSystem->GetCVarString("fs_cdpath");
 		idStr paths;
+
 		if (base.Length()) {
 			paths += "+set fs_basepath ";
 			paths += base;
 		}
+
 		if (cd.Length()) {
 			paths += "+set fs_cdpath ";
 			paths += cd;
 		}
 
 		::GetModuleFileName(AfxGetApp()->m_hInstance, buff, sizeof(buff));
+
 		if (strlen(command) > strlen("bspext")) {
-			idStr::snPrintf( sys, sizeof(sys), "%s %s +set r_fullscreen 0 +dmap editorOutput %s %s +quit", buff, paths.c_str(), command + strlen("bspext"), in );
+			idStr::snPrintf(sys, sizeof(sys), "%s %s +set r_fullscreen 0 +dmap editorOutput %s %s +quit", buff, paths.c_str(), command + strlen("bspext"), in);
 		} else {
-			idStr::snPrintf( sys, sizeof(sys), "%s %s +set r_fullscreen 0 +dmap editorOutput %s +quit", buff, paths.c_str(), in );
+			idStr::snPrintf(sys, sizeof(sys), "%s %s +set r_fullscreen 0 +dmap editorOutput %s +quit", buff, paths.c_str(), in);
 		}
-		
-		::GetStartupInfo (&startupinfo);
+
+		::GetStartupInfo(&startupinfo);
+
 		if (!CreateProcess(NULL, sys, NULL, NULL, FALSE, 0, NULL, NULL, &startupinfo, &ProcessInformation)) {
-			common->Printf("Could not start bsp process %s %s/n", buff, sys);  
+			common->Printf("Could not start bsp process %s %s/n", buff, sys);
 		}
+
 		g_pParentWnd->SetFocus();
 
 	} else { // assumes bsp is the command
 		if (strlen(command) > strlen("bsp")) {
-			idStr::snPrintf( sys, sizeof(sys), "dmap %s %s", command + strlen("bsp"), in );
+			idStr::snPrintf(sys, sizeof(sys), "dmap %s %s", command + strlen("bsp"), in);
 		} else {
-			idStr::snPrintf( sys, sizeof(sys), "dmap %s", in );
+			idStr::snPrintf(sys, sizeof(sys), "dmap %s", in);
 		}
 
-		cmdSystem->BufferCommandText( CMD_EXEC_NOW, "disconnect\n" );
+		cmdSystem->BufferCommandText(CMD_EXEC_NOW, "disconnect\n");
 
 		// issue the bsp command
-		Dmap_f( idCmdArgs( sys, false ) );
+		Dmap_f(idCmdArgs(sys, false));
 	}
 }
 
-void CMainFrame::OnBspCommand(unsigned int nID) {
+void CMainFrame::OnBspCommand(unsigned int nID)
+{
 	if (g_PrefsDlg.m_bSnapShots && stricmp(currentmap, "unnamed.map") != 0) {
 		Map_Snapshot();
 	}
@@ -2209,13 +2295,14 @@ void CMainFrame::OnBspCommand(unsigned int nID) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewShowblocks() {
+void CMainFrame::OnViewShowblocks()
+{
 	g_qeglobals.show_blocks = !(g_qeglobals.show_blocks);
 	CheckMenuItem
 	(
-		::GetMenu(GetSafeHwnd()),
-		ID_VIEW_SHOWBLOCKS,
-		MF_BYCOMMAND | (g_qeglobals.show_blocks ? MF_CHECKED : MF_UNCHECKED)
+	        ::GetMenu(GetSafeHwnd()),
+	        ID_VIEW_SHOWBLOCKS,
+	        MF_BYCOMMAND | (g_qeglobals.show_blocks ? MF_CHECKED : MF_UNCHECKED)
 	);
 	Sys_UpdateWindows(W_XY);
 }
@@ -2224,11 +2311,11 @@ void CMainFrame::OnViewShowblocks() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewShowclip() {
+void CMainFrame::OnViewShowclip()
+{
 	if ((g_qeglobals.d_savedinfo.exclude ^= EXCLUDE_CLIP) & EXCLUDE_CLIP) {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWCLIP, MF_BYCOMMAND | MF_UNCHECKED);
-	}
-	else {
+	} else {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWCLIP, MF_BYCOMMAND | MF_CHECKED);
 	}
 
@@ -2239,11 +2326,11 @@ void CMainFrame::OnViewShowclip() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewShowTriggers() {
+void CMainFrame::OnViewShowTriggers()
+{
 	if ((g_qeglobals.d_savedinfo.exclude ^= EXCLUDE_TRIGGERS) & EXCLUDE_TRIGGERS) {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWTRIGGERS, MF_BYCOMMAND | MF_UNCHECKED);
-	}
-	else {
+	} else {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWTRIGGERS, MF_BYCOMMAND | MF_CHECKED);
 	}
 
@@ -2254,13 +2341,14 @@ void CMainFrame::OnViewShowTriggers() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewShowcoordinates() {
+void CMainFrame::OnViewShowcoordinates()
+{
 	g_qeglobals.d_savedinfo.show_coordinates ^= 1;
 	CheckMenuItem
 	(
-		::GetMenu(GetSafeHwnd()),
-		ID_VIEW_SHOWCOORDINATES,
-		MF_BYCOMMAND | (g_qeglobals.d_savedinfo.show_coordinates ? MF_CHECKED : MF_UNCHECKED)
+	        ::GetMenu(GetSafeHwnd()),
+	        ID_VIEW_SHOWCOORDINATES,
+	        MF_BYCOMMAND | (g_qeglobals.d_savedinfo.show_coordinates ? MF_CHECKED : MF_UNCHECKED)
 	);
 	Sys_UpdateWindows(W_XY);
 }
@@ -2269,11 +2357,11 @@ void CMainFrame::OnViewShowcoordinates() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewShowent() {
+void CMainFrame::OnViewShowent()
+{
 	if ((g_qeglobals.d_savedinfo.exclude ^= EXCLUDE_ENT) & EXCLUDE_ENT) {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWENT, MF_BYCOMMAND | MF_UNCHECKED);
-	}
-	else {
+	} else {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWENT, MF_BYCOMMAND | MF_CHECKED);
 	}
 
@@ -2284,11 +2372,11 @@ void CMainFrame::OnViewShowent() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewShowlights() {
+void CMainFrame::OnViewShowlights()
+{
 	if ((g_qeglobals.d_savedinfo.exclude ^= EXCLUDE_LIGHTS) & EXCLUDE_LIGHTS) {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWLIGHTS, MF_BYCOMMAND | MF_UNCHECKED);
-	}
-	else {
+	} else {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWLIGHTS, MF_BYCOMMAND | MF_CHECKED);
 	}
 
@@ -2299,13 +2387,14 @@ void CMainFrame::OnViewShowlights() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewShownames() {
+void CMainFrame::OnViewShownames()
+{
 	g_qeglobals.d_savedinfo.show_names = !(g_qeglobals.d_savedinfo.show_names);
 	CheckMenuItem
 	(
-		::GetMenu(GetSafeHwnd()),
-		ID_VIEW_SHOWNAMES,
-		MF_BYCOMMAND | (g_qeglobals.d_savedinfo.show_names ? MF_CHECKED : MF_UNCHECKED)
+	        ::GetMenu(GetSafeHwnd()),
+	        ID_VIEW_SHOWNAMES,
+	        MF_BYCOMMAND | (g_qeglobals.d_savedinfo.show_names ? MF_CHECKED : MF_UNCHECKED)
 	);
 	Map_BuildBrushData();
 	Sys_UpdateWindows(W_XY);
@@ -2315,11 +2404,11 @@ void CMainFrame::OnViewShownames() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewShowpath() {
+void CMainFrame::OnViewShowpath()
+{
 	if ((g_qeglobals.d_savedinfo.exclude ^= EXCLUDE_PATHS) & EXCLUDE_PATHS) {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWPATH, MF_BYCOMMAND | MF_UNCHECKED);
-	}
-	else {
+	} else {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWPATH, MF_BYCOMMAND | MF_CHECKED);
 	}
 
@@ -2330,11 +2419,11 @@ void CMainFrame::OnViewShowpath() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewShowCombatNodes() {
+void CMainFrame::OnViewShowCombatNodes()
+{
 	if ((g_qeglobals.d_savedinfo.exclude ^= EXCLUDE_COMBATNODES) & EXCLUDE_COMBATNODES) {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWCOMBATNODES, MF_BYCOMMAND | MF_UNCHECKED);
-	}
-	else {
+	} else {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWCOMBATNODES, MF_BYCOMMAND | MF_CHECKED);
 	}
 
@@ -2345,11 +2434,11 @@ void CMainFrame::OnViewShowCombatNodes() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewShowwater() {
+void CMainFrame::OnViewShowwater()
+{
 	if ((g_qeglobals.d_savedinfo.exclude ^= EXCLUDE_DYNAMICS) & EXCLUDE_DYNAMICS) {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWWATER, MF_BYCOMMAND | MF_UNCHECKED);
-	}
-	else {
+	} else {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWWATER, MF_BYCOMMAND | MF_CHECKED);
 	}
 
@@ -2360,11 +2449,11 @@ void CMainFrame::OnViewShowwater() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewShowworld() {
+void CMainFrame::OnViewShowworld()
+{
 	if ((g_qeglobals.d_savedinfo.exclude ^= EXCLUDE_WORLD) & EXCLUDE_WORLD) {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWWORLD, MF_BYCOMMAND | MF_UNCHECKED);
-	}
-	else {
+	} else {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWWORLD, MF_BYCOMMAND | MF_CHECKED);
 	}
 
@@ -2375,7 +2464,8 @@ void CMainFrame::OnViewShowworld() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewTexture() {
+void CMainFrame::OnViewTexture()
+{
 	g_Inspectors->SetMode(W_TEXTURE);
 }
 
@@ -2383,7 +2473,8 @@ void CMainFrame::OnViewTexture() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewUpfloor() {
+void CMainFrame::OnViewUpfloor()
+{
 	m_pCamWnd->Cam_ChangeFloor(true);
 }
 
@@ -2391,7 +2482,8 @@ void CMainFrame::OnViewUpfloor() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewXy() {
+void CMainFrame::OnViewXy()
+{
 	m_pXYWnd->SetViewType(XY);
 	m_pXYWnd->PositionView();
 	Sys_UpdateWindows(W_XY);
@@ -2401,7 +2493,8 @@ void CMainFrame::OnViewXy() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewZ100() {
+void CMainFrame::OnViewZ100()
+{
 	z.scale = 1;
 	Sys_UpdateWindows(W_Z | W_Z_OVERLAY);
 }
@@ -2410,54 +2503,29 @@ void CMainFrame::OnViewZ100() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewZoomin() {
-	if ( m_pXYWnd && m_pXYWnd->Active() ) {
-		m_pXYWnd->SetScale( m_pXYWnd->Scale() * 5.0f / 4.0f );
-		if ( m_pXYWnd->Scale() > 256.0f ) {
-			m_pXYWnd->SetScale( 256.0f );
+void CMainFrame::OnViewZoomin()
+{
+	if (m_pXYWnd && m_pXYWnd->Active()) {
+		m_pXYWnd->SetScale(m_pXYWnd->Scale() * 5.0f / 4.0f);
+
+		if (m_pXYWnd->Scale() > 256.0f) {
+			m_pXYWnd->SetScale(256.0f);
 		}
 	}
 
-	if ( m_pXZWnd && m_pXZWnd->Active() ) {
-		m_pXZWnd->SetScale( m_pXZWnd->Scale() * 5.0f / 4.0f );
-		if ( m_pXZWnd->Scale() > 256.0f ) {
-			m_pXZWnd->SetScale( 256.0f );
+	if (m_pXZWnd && m_pXZWnd->Active()) {
+		m_pXZWnd->SetScale(m_pXZWnd->Scale() * 5.0f / 4.0f);
+
+		if (m_pXZWnd->Scale() > 256.0f) {
+			m_pXZWnd->SetScale(256.0f);
 		}
 	}
 
-	if ( m_pYZWnd && m_pYZWnd->Active() ) {
-		m_pYZWnd->SetScale( m_pYZWnd->Scale() * 5.0f / 4.0f );
-		if ( m_pYZWnd->Scale() > 256.0f ) {
-			m_pYZWnd->SetScale( 256.0f );
-		}
-	}
+	if (m_pYZWnd && m_pYZWnd->Active()) {
+		m_pYZWnd->SetScale(m_pYZWnd->Scale() * 5.0f / 4.0f);
 
-	Sys_UpdateWindows( W_XY | W_XY_OVERLAY );
-}
-
-/*
- =======================================================================================================================
- =======================================================================================================================
- */
-void CMainFrame::OnViewZoomout() {
-	if ( m_pXYWnd && m_pXYWnd->Active() ) {
-		m_pXYWnd->SetScale( m_pXYWnd->Scale() * 4.0f / 5.0f );
-		if ( m_pXYWnd->Scale() < 0.1f / 32.0f ) {
-			m_pXYWnd->SetScale( 0.1f / 32.0f );
-		}
-	}
-
-	if ( m_pXZWnd && m_pXZWnd->Active() ) {
-		m_pXZWnd->SetScale( m_pXZWnd->Scale() * 4.0f / 5.0f );
-		if ( m_pXZWnd->Scale() < 0.1f / 32.0f ) {
-			m_pXZWnd->SetScale( 0.1f / 32.0f );
-		}
-	}
-
-	if ( m_pYZWnd && m_pYZWnd->Active() ) {
-		m_pYZWnd->SetScale( m_pYZWnd->Scale() * 4.0f / 5.0f );
-		if ( m_pYZWnd->Scale() < 0.1f / 32.0f ) {
-			m_pYZWnd->SetScale( 0.1f / 32.0f );
+		if (m_pYZWnd->Scale() > 256.0f) {
+			m_pYZWnd->SetScale(256.0f);
 		}
 	}
 
@@ -2468,9 +2536,44 @@ void CMainFrame::OnViewZoomout() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewZzoomin() {
+void CMainFrame::OnViewZoomout()
+{
+	if (m_pXYWnd && m_pXYWnd->Active()) {
+		m_pXYWnd->SetScale(m_pXYWnd->Scale() * 4.0f / 5.0f);
+
+		if (m_pXYWnd->Scale() < 0.1f / 32.0f) {
+			m_pXYWnd->SetScale(0.1f / 32.0f);
+		}
+	}
+
+	if (m_pXZWnd && m_pXZWnd->Active()) {
+		m_pXZWnd->SetScale(m_pXZWnd->Scale() * 4.0f / 5.0f);
+
+		if (m_pXZWnd->Scale() < 0.1f / 32.0f) {
+			m_pXZWnd->SetScale(0.1f / 32.0f);
+		}
+	}
+
+	if (m_pYZWnd && m_pYZWnd->Active()) {
+		m_pYZWnd->SetScale(m_pYZWnd->Scale() * 4.0f / 5.0f);
+
+		if (m_pYZWnd->Scale() < 0.1f / 32.0f) {
+			m_pYZWnd->SetScale(0.1f / 32.0f);
+		}
+	}
+
+	Sys_UpdateWindows(W_XY | W_XY_OVERLAY);
+}
+
+/*
+ =======================================================================================================================
+ =======================================================================================================================
+ */
+void CMainFrame::OnViewZzoomin()
+{
 	z.scale *= 5.0f / 4.0f;
-	if ( z.scale > 4.0f ) {
+
+	if (z.scale > 4.0f) {
 		z.scale = 4.0f;
 	}
 
@@ -2481,9 +2584,11 @@ void CMainFrame::OnViewZzoomin() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewZzoomout() {
+void CMainFrame::OnViewZzoomout()
+{
 	z.scale *= 4.0f / 5.0f;
-	if ( z.scale < 0.125f ) {
+
+	if (z.scale < 0.125f) {
 		z.scale = 0.125f;
 	}
 
@@ -2494,7 +2599,8 @@ void CMainFrame::OnViewZzoomout() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewSide() {
+void CMainFrame::OnViewSide()
+{
 	m_pXYWnd->SetViewType(XZ);
 	m_pXYWnd->PositionView();
 	Sys_UpdateWindows(W_XY);
@@ -2512,9 +2618,9 @@ static void UpdateGrid(void)
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnGrid1(unsigned int nID) {
-	switch (nID)
-	{
+void CMainFrame::OnGrid1(unsigned int nID)
+{
+	switch (nID) {
 		case ID_GRID_1:
 			g_qeglobals.d_gridsize = 1;
 			break;
@@ -2545,9 +2651,9 @@ void CMainFrame::OnGrid1(unsigned int nID) {
 		case ID_GRID_POINT125:
 			g_qeglobals.d_gridsize = 0.125f;
 			break;
-		//case ID_GRID_POINT0625:
-		//	g_qeglobals.d_gridsize = 0.0625f;
-		//	break;
+			//case ID_GRID_POINT0625:
+			//	g_qeglobals.d_gridsize = 0.0625f;
+			//	break;
 	}
 
 	UpdateGrid();
@@ -2561,7 +2667,8 @@ void CMainFrame::OnGrid1(unsigned int nID) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTexturesShowinuse() {
+void CMainFrame::OnTexturesShowinuse()
+{
 	Sys_BeginWait();
 	Texture_ShowInuse();
 	g_Inspectors->texWnd.RedrawWindow();
@@ -2574,7 +2681,8 @@ extern bool texture_showinuse;
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnUpdateTexturesShowinuse(CCmdUI *pCmdUI) {
+void CMainFrame::OnUpdateTexturesShowinuse(CCmdUI *pCmdUI)
+{
 	pCmdUI->SetCheck(texture_showinuse);
 }
 
@@ -2582,7 +2690,8 @@ void CMainFrame::OnUpdateTexturesShowinuse(CCmdUI *pCmdUI) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTexturesInspector() {
+void CMainFrame::OnTexturesInspector()
+{
 	DoSurface();
 }
 
@@ -2590,7 +2699,8 @@ void CMainFrame::OnTexturesInspector() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnMiscFindbrush() {
+void CMainFrame::OnMiscFindbrush()
+{
 	DoFind();
 }
 
@@ -2598,9 +2708,11 @@ void CMainFrame::OnMiscFindbrush() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnMiscGamma() {
+void CMainFrame::OnMiscGamma()
+{
 	float	fSave = g_qeglobals.d_savedinfo.fGamma;
 	DoGamma();
+
 	if (fSave != g_qeglobals.d_savedinfo.fGamma) {
 		MessageBox("You must restart Q3Radiant for Gamma settings to take place");
 	}
@@ -2610,7 +2722,8 @@ void CMainFrame::OnMiscGamma() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnMiscNextleakspot() {
+void CMainFrame::OnMiscNextleakspot()
+{
 	Pointfile_Next();
 }
 
@@ -2618,7 +2731,8 @@ void CMainFrame::OnMiscNextleakspot() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnMiscPreviousleakspot() {
+void CMainFrame::OnMiscPreviousleakspot()
+{
 	Pointfile_Prev();
 }
 
@@ -2626,7 +2740,8 @@ void CMainFrame::OnMiscPreviousleakspot() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnMiscPrintxy() {
+void CMainFrame::OnMiscPrintxy()
+{
 	WXY_Print();
 }
 
@@ -2635,27 +2750,29 @@ void CMainFrame::OnMiscPrintxy() {
  =======================================================================================================================
  */
 
-void UpdateRadiantColor( float r, float g, float b, float a ) {
-	if ( g_pParentWnd ) {
+void UpdateRadiantColor(float r, float g, float b, float a)
+{
+	if (g_pParentWnd) {
 		g_pParentWnd->RoutineProcessing();
 	}
 }
 
-bool DoColor( int iIndex ) {
+bool DoColor(int iIndex)
+{
 	COLORREF cr = (int)(g_qeglobals.d_savedinfo.colors[iIndex][0]*255) +
-				(((int)(g_qeglobals.d_savedinfo.colors[iIndex][1]*255))<<8) +
-					(((int)(g_qeglobals.d_savedinfo.colors[iIndex][2]*255))<<16);
+	              (((int)(g_qeglobals.d_savedinfo.colors[iIndex][1]*255))<<8) +
+	              (((int)(g_qeglobals.d_savedinfo.colors[iIndex][2]*255))<<16);
 
 	CDialogColorPicker dlg(cr);
 
 	dlg.UpdateParent = UpdateRadiantColor;
 
-	if ( dlg.DoModal() == IDOK ) {
+	if (dlg.DoModal() == IDOK) {
 		g_qeglobals.d_savedinfo.colors[iIndex][0] = (dlg.GetColor() & 255)/255.0;
 		g_qeglobals.d_savedinfo.colors[iIndex][1] = ((dlg.GetColor() >> 8)&255)/255.0;
 		g_qeglobals.d_savedinfo.colors[iIndex][2] = ((dlg.GetColor() >> 16)&255)/255.0;
 
-		Sys_UpdateWindows (W_ALL);
+		Sys_UpdateWindows(W_ALL);
 		return true;
 	} else {
 		return false;
@@ -2667,15 +2784,19 @@ bool DoColor( int iIndex ) {
  =======================================================================================================================
  */
 extern void Select_SetKeyVal(const char *key, const char *val);
-void CMainFrame::OnMiscSelectentitycolor() {
+void CMainFrame::OnMiscSelectentitycolor()
+{
 
 	entity_t *ent = NULL;
+
 	if (QE_SingleBrush(true, true)) {
 		ent = selected_brushes.next->owner;
 		CString strColor = ValueForKey(ent, "_color");
+
 		if (strColor.GetLength() > 0) {
 			float	fR, fG, fB;
 			int		n = sscanf(strColor, "%f %f %f", &fR, &fG, &fB);
+
 			if (n == 3) {
 				g_qeglobals.d_savedinfo.colors[COLOR_ENTITY][0] = fR;
 				g_qeglobals.d_savedinfo.colors[COLOR_ENTITY][1] = fG;
@@ -2688,9 +2809,11 @@ void CMainFrame::OnMiscSelectentitycolor() {
 		char	buffer[100];
 		sprintf(buffer, "%f %f %f", g_qeglobals.d_savedinfo.colors[COLOR_ENTITY][0], g_qeglobals.d_savedinfo.colors[COLOR_ENTITY][1],g_qeglobals.d_savedinfo.colors[COLOR_ENTITY][2]);
 		Select_SetKeyVal("_color", buffer);
+
 		if (ent) {
 			g_Inspectors->UpdateEntitySel(ent->eclass);
 		}
+
 		Sys_UpdateWindows(W_ALL);
 	}
 }
@@ -2701,7 +2824,7 @@ CString strReplaceKey;
 CString strReplaceValue;
 bool    gbWholeStringMatchOnly = true;
 bool	gbSelectAllMatchingEnts= false;
-brush_t* gpPrevEntBrushFound = NULL;
+brush_t *gpPrevEntBrushFound = NULL;
 
 // all this because there's no ansi stristr(), sigh...
 //
@@ -2711,11 +2834,10 @@ LPCSTR String_ToLower(LPCSTR psString)
 	static char sString[8][iBufferSize];
 	static int iIndex=0;
 
-	if (strlen(psString)>=iBufferSize)
-	{
+	if (strlen(psString)>=iBufferSize) {
 		assert(0);
 		common->Printf("String_ToLower(): Warning, input string was %d bytes too large, performing strlwr() inline!\n",strlen(psString)-(iBufferSize-1));
-		return strlwr(const_cast<char*>(psString));
+		return strlwr(const_cast<char *>(psString));
 	}
 
 	iIndex = ++ iIndex & 7;
@@ -2727,8 +2849,8 @@ LPCSTR String_ToLower(LPCSTR psString)
 }
 
 
-bool FindNextBrush(brush_t* pPrevFoundBrush)	// can be NULL for fresh search
-{	
+bool FindNextBrush(brush_t *pPrevFoundBrush)	// can be NULL for fresh search
+{
 	bool bFoundSomething = false;
 	entity_t *pLastFoundEnt;
 	brush_t  *pLastFoundBrush;
@@ -2741,37 +2863,36 @@ bool FindNextBrush(brush_t* pPrevFoundBrush)	// can be NULL for fresh search
 	//
 	brush_t *pStartBrush = active_brushes.next;
 
-	if (pPrevFoundBrush && !gbSelectAllMatchingEnts)
-	{
+	if (pPrevFoundBrush && !gbSelectAllMatchingEnts) {
 		brush_t *pPrev = NULL;
-		for (brush_t* b = active_brushes.next ; b != &active_brushes ; b = b->next)
-		{
-			if (pPrev == pPrevFoundBrush && pPrevFoundBrush)
-			{
+
+		for (brush_t *b = active_brushes.next ; b != &active_brushes ; b = b->next) {
+			if (pPrev == pPrevFoundBrush && pPrevFoundBrush) {
 				pStartBrush = b;
 				break;
 			}
+
 			pPrev = b;
 		}
 	}
 
 	// now do the search proper...
-	//	
+	//
 	int iBrushesScanned = 0;
 	int iBrushesSelected=0;
 	int iEntsScanned = 0;
 
-	brush_t* pNextBrush;		
-	for (brush_t* b = pStartBrush; b != &active_brushes ; b = pNextBrush)
-	{	
-		// setup the <nextbrush> ptr before going any further (because selecting a brush down below moves it to a 
+	brush_t *pNextBrush;
+
+	for (brush_t *b = pStartBrush; b != &active_brushes ; b = pNextBrush) {
+		// setup the <nextbrush> ptr before going any further (because selecting a brush down below moves it to a
 		//	different link list), but we need to ensure that the next brush has a different ent-owner than the current
 		//	one, or multi-brush ents will confuse the list process if they get selected (infinite loop badness)...
 		//
 		// pNextBrush = &active_brushes;	// default to loop-stop condition
 		pNextBrush = b->next;
-		while (pNextBrush->owner == b->owner && pNextBrush!=&active_brushes)
-		{
+
+		while (pNextBrush->owner == b->owner && pNextBrush!=&active_brushes) {
 			pNextBrush = pNextBrush->next;
 		}
 
@@ -2780,60 +2901,55 @@ bool FindNextBrush(brush_t* pPrevFoundBrush)	// can be NULL for fresh search
 		// a simple progress bar so they don't think it's locked up on long searches...
 		//
 		static int iDotBodge=0;
+
 		if (!(++iDotBodge&15))
-			common->Printf(".");	// cut down on printing		
+			common->Printf(".");	// cut down on printing
 
 		bool bMatch = false;
-		entity_t* ent = b->owner;
+		entity_t *ent = b->owner;
 
-		if (ent && ent!= world_entity)	// needed!
-		{
+		if (ent && ent!= world_entity) {	// needed!
 			iEntsScanned++;
-	 		if (FilterBrush (b))
-	 			continue;			
+
+			if (FilterBrush(b))
+				continue;
 
 			// only check the find-key if there was one specified...
 			//
-			if (!strFindKey.IsEmpty())
-			{
+			if (!strFindKey.IsEmpty()) {
 				const char *psEntFoundValue = ValueForKey(ent, strFindKey);
 
 				if (strlen(psEntFoundValue)
-						&&
-						(
+				    &&
+				    (
 //							(stricmp(strFindValue, psEntFoundValue)==0)	// found this exact key/value
-							(
-							(gbWholeStringMatchOnly && stricmp(psEntFoundValue, strFindValue)==0)
-							||
-							(!gbWholeStringMatchOnly && strstr(String_ToLower(psEntFoundValue), String_ToLower(strFindValue)))
-							)
-							||											//  or
-							(strFindValue.IsEmpty())					// any value for this key if blank value search specified
-						)
-					)
-				{
+				            (
+				                    (gbWholeStringMatchOnly && stricmp(psEntFoundValue, strFindValue)==0)
+				                    ||
+				                    (!gbWholeStringMatchOnly && strstr(String_ToLower(psEntFoundValue), String_ToLower(strFindValue)))
+				            )
+				            ||											//  or
+				            (strFindValue.IsEmpty())					// any value for this key if blank value search specified
+				    )
+				   ) {
 					bMatch = true;
 				}
-			}
-			else
-			{
+			} else {
 				// no FIND key specified, so just scan all of them...
 				//
 				int iNumEntKeys = GetNumKeys(ent);
-				for (int i=0; i<iNumEntKeys; i++)
-				{
+
+				for (int i=0; i<iNumEntKeys; i++) {
 					const char *psEntFoundValue = ValueForKey(ent, GetKeyString(ent, i));
-					if (psEntFoundValue)
-					{
-						if (	(strlen(psEntFoundValue) &&	strFindValue.IsEmpty())	// if blank <value> search specified then any found-value is ok
-								||
-								(gbWholeStringMatchOnly && stricmp(psEntFoundValue, strFindValue)==0)
-								||
-								(!gbWholeStringMatchOnly && strstr(String_ToLower(psEntFoundValue), String_ToLower(strFindValue)))
-							)
-						{
-							if (!gbWholeStringMatchOnly && strstr(String_ToLower(psEntFoundValue), String_ToLower(strFindValue)))
-							{
+
+					if (psEntFoundValue) {
+						if ((strlen(psEntFoundValue) &&	strFindValue.IsEmpty())	// if blank <value> search specified then any found-value is ok
+						    ||
+						    (gbWholeStringMatchOnly && stricmp(psEntFoundValue, strFindValue)==0)
+						    ||
+						    (!gbWholeStringMatchOnly && strstr(String_ToLower(psEntFoundValue), String_ToLower(strFindValue)))
+						   ) {
+							if (!gbWholeStringMatchOnly && strstr(String_ToLower(psEntFoundValue), String_ToLower(strFindValue))) {
 //								OutputDebugString(va("Matching because: psEntFoundValue '%s' & strFindValue '%s'\n",psEntFoundValue, strFindValue));
 //								Sys_Printf("Matching because: psEntFoundValue '%s' & strFindValue '%s'\n",psEntFoundValue, strFindValue);
 
@@ -2842,6 +2958,7 @@ bool FindNextBrush(brush_t* pPrevFoundBrush)	// can be NULL for fresh search
 //									DebugBreak();
 //								}
 							}
+
 							bMatch = true;
 							break;
 						}
@@ -2849,16 +2966,15 @@ bool FindNextBrush(brush_t* pPrevFoundBrush)	// can be NULL for fresh search
 				}
 			}
 
-			if (bMatch)
-			{
+			if (bMatch) {
 				bFoundSomething = true;
 				pLastFoundEnt	= ent;
 				pLastFoundBrush	= b;
 				iBrushesSelected++;
 
 				g_bScreenUpdates = false;	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				
-					Select_Brush(b);
+
+				Select_Brush(b);
 
 				g_bScreenUpdates = true;	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -2867,21 +2983,17 @@ bool FindNextBrush(brush_t* pPrevFoundBrush)	// can be NULL for fresh search
 			}
 		}
 	}
-	if (gbSelectAllMatchingEnts)
-	{
+
+	if (gbSelectAllMatchingEnts) {
 		common->Printf("\nBrushes Selected: %d           (Brushes Scanned %d, Ents Scanned %d)\n", iBrushesSelected, iBrushesScanned, iEntsScanned);
 	}
 
-	if (bFoundSomething)
-	{
+	if (bFoundSomething) {
 		idVec3 v3Origin;
 
-		if (pLastFoundEnt->origin[0] != 0.0f || pLastFoundEnt->origin[1] != 0.0f || pLastFoundEnt->origin[2] != 0.0f)
-		{
+		if (pLastFoundEnt->origin[0] != 0.0f || pLastFoundEnt->origin[1] != 0.0f || pLastFoundEnt->origin[2] != 0.0f) {
 			VectorCopy(pLastFoundEnt->origin,v3Origin);
-		}
-		else
-		{
+		} else {
 			// pLastFoundEnt's origin is zero, so use average point of brush mins maxs instead...
 			//
 			v3Origin[0] = (pLastFoundBrush->mins[0] + pLastFoundBrush->maxs[0])/2;
@@ -2892,7 +3004,7 @@ bool FindNextBrush(brush_t* pPrevFoundBrush)	// can be NULL for fresh search
 		// got one, jump the camera to it...
 		//
 		VectorCopy(v3Origin, g_pParentWnd->GetCamera()->Camera().origin);
-							 g_pParentWnd->GetCamera()->Camera().origin[1] -= 32;	// back off a touch to look at it
+		g_pParentWnd->GetCamera()->Camera().origin[1] -= 32;	// back off a touch to look at it
 		g_pParentWnd->GetCamera()->Camera().angles[0] = 0;
 		g_pParentWnd->GetCamera()->Camera().angles[1] = 90;
 		g_pParentWnd->GetCamera()->Camera().angles[2] = 0;
@@ -2902,7 +3014,7 @@ bool FindNextBrush(brush_t* pPrevFoundBrush)	// can be NULL for fresh search
 		g_pParentWnd->SetActiveXY(g_pParentWnd->GetXYWnd());
 		g_pParentWnd->GetXYWnd()->PositionView();
 
-		Sys_UpdateWindows (W_ALL);
+		Sys_UpdateWindows(W_ALL);
 		//
 		// and record for next find request (F3)...
 		//
@@ -2916,54 +3028,49 @@ bool FindNextBrush(brush_t* pPrevFoundBrush)	// can be NULL for fresh search
 void CMainFrame::OnMiscFindOrReplaceEntity()
 {
 	CEntKeyFindReplace FindReplace(&strFindKey, &strFindValue, &strReplaceKey, &strReplaceValue, &gbWholeStringMatchOnly, &gbSelectAllMatchingEnts);
-	switch (FindReplace.DoModal())
-	{
-		case ID_RET_REPLACE:
-		{	
-			brush_t* next = NULL;
-			int iOccurences = 0;
-			for (brush_t* b = active_brushes.next ; b != &active_brushes ; b = next)
-			{
-				next = b->next;	// important to do this here, in case brush gets linked to a different list
-				entity_t* ent = b->owner;
 
-				if (ent)	// needed!
-				{
-	 				if (FilterBrush (b))
-	 					continue;
+	switch (FindReplace.DoModal()) {
+		case ID_RET_REPLACE: {
+			brush_t *next = NULL;
+			int iOccurences = 0;
+
+			for (brush_t *b = active_brushes.next ; b != &active_brushes ; b = next) {
+				next = b->next;	// important to do this here, in case brush gets linked to a different list
+				entity_t *ent = b->owner;
+
+				if (ent) {	// needed!
+					if (FilterBrush(b))
+						continue;
 
 					const char *psEntFoundValue = ValueForKey(ent, strFindKey);
 
 					if (stricmp(strFindValue, psEntFoundValue)==0 ||		// found this exact key/value
-						(strlen(psEntFoundValue) &&	strFindValue.IsEmpty()) // or any value for this key if blank value search specified
-						)
-					{
+					    (strlen(psEntFoundValue) &&	strFindValue.IsEmpty()) // or any value for this key if blank value search specified
+					   ) {
 						// found this search key/value, so delete it...
 						//
 						DeleteKey(ent,strFindKey);
+
 						//
 						// and replace with the new key/value (if specified)...
 						//
-						if (!strReplaceKey.IsEmpty() && !strReplaceValue.IsEmpty())
-						{
-							SetKeyValue (ent, strReplaceKey, strReplaceValue);
+						if (!strReplaceKey.IsEmpty() && !strReplaceValue.IsEmpty()) {
+							SetKeyValue(ent, strReplaceKey, strReplaceValue);
 						}
+
 						iOccurences++;
 					}
 				}
 			}
-			if (iOccurences)
-			{
+
+			if (iOccurences) {
 				common->Printf("%d occurence(s) replaced\n",iOccurences);
-			}
-			else
-			{
+			} else {
 				common->Printf("Nothing found to replace\n");
 			}
 		}
 		break;
-		case ID_RET_FIND:
-		{
+		case ID_RET_FIND: {
 			gpPrevEntBrushFound = NULL;
 			FindNextBrush(NULL);
 		}
@@ -2974,8 +3081,7 @@ void CMainFrame::OnMiscFindNextEntity()
 {
 	// try it once, if it fails, try it again from top, and give up if still failed after that...
 	//
-	if (!FindNextBrush(gpPrevEntBrushFound))
-	{
+	if (!FindNextBrush(gpPrevEntBrushFound)) {
 		gpPrevEntBrushFound = NULL;
 		FindNextBrush(NULL);
 	}
@@ -2984,30 +3090,28 @@ void CMainFrame::OnMiscFindNextEntity()
 void CMainFrame::OnMiscSetViewPos()
 {
 	CString psNewCoords = GetString("Input coords (x y z [rot])\n\nUse spaces to seperate numbers");
-	if (!psNewCoords.IsEmpty())
-	{
+
+	if (!psNewCoords.IsEmpty()) {
 		idVec3 v3Viewpos;
 		float fYaw = 0;
 
 		psNewCoords.Remove(',');
 		int iArgsFound = sscanf(psNewCoords,"%f %f %f",&v3Viewpos[0], &v3Viewpos[1], &v3Viewpos[2]);
-		if (iArgsFound == 3)
-		{
+
+		if (iArgsFound == 3) {
 			// try for an optional 4th (note how this wasn't part of the sscanf() above, so I can check 1st-3, not just any 3)
 			//
 			int iArgsFound = sscanf(psNewCoords,"%f %f %f %f", &v3Viewpos[0], &v3Viewpos[1], &v3Viewpos[2], &fYaw);
-			if (iArgsFound != 4)
-			{
+
+			if (iArgsFound != 4) {
 				fYaw = 0;	// jic
 			}
 
 			g_pParentWnd->GetCamera()->Camera().angles[YAW] = fYaw;
-			VectorCopy (v3Viewpos, g_pParentWnd->GetCamera()->Camera().origin);
-			VectorCopy (v3Viewpos, g_pParentWnd->GetXYWnd()->GetOrigin());
-			Sys_UpdateWindows (W_ALL);
-		}
-		else
-		{
+			VectorCopy(v3Viewpos, g_pParentWnd->GetCamera()->Camera().origin);
+			VectorCopy(v3Viewpos, g_pParentWnd->GetXYWnd()->GetOrigin());
+			Sys_UpdateWindows(W_ALL);
+		} else {
 			ErrorBox(va("\"%s\" wasn't 3 valid floats with spaces",psNewCoords));
 		}
 	}
@@ -3017,7 +3121,8 @@ void CMainFrame::OnMiscSetViewPos()
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTexturebk() {
+void CMainFrame::OnTexturebk()
+{
 	DoColor(COLOR_TEXTUREBACK);
 	Sys_UpdateWindows(W_ALL);
 }
@@ -3026,7 +3131,8 @@ void CMainFrame::OnTexturebk() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnColorsMajor() {
+void CMainFrame::OnColorsMajor()
+{
 	DoColor(COLOR_GRIDMAJOR);
 	Sys_UpdateWindows(W_ALL);
 }
@@ -3035,7 +3141,8 @@ void CMainFrame::OnColorsMajor() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnColorsMinor() {
+void CMainFrame::OnColorsMinor()
+{
 	DoColor(COLOR_GRIDMINOR);
 	Sys_UpdateWindows(W_ALL);
 }
@@ -3044,7 +3151,8 @@ void CMainFrame::OnColorsMinor() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnColorsXybk() {
+void CMainFrame::OnColorsXybk()
+{
 	DoColor(COLOR_GRIDBACK);
 	Sys_UpdateWindows(W_ALL);
 }
@@ -3053,7 +3161,8 @@ void CMainFrame::OnColorsXybk() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBrush3sided() {
+void CMainFrame::OnBrush3sided()
+{
 	Undo_Start("3 sided");
 	Undo_AddBrushList(&selected_brushes);
 	Brush_MakeSided(3);
@@ -3065,7 +3174,8 @@ void CMainFrame::OnBrush3sided() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBrush4sided() {
+void CMainFrame::OnBrush4sided()
+{
 	Undo_Start("4 sided");
 	Undo_AddBrushList(&selected_brushes);
 	Brush_MakeSided(4);
@@ -3077,7 +3187,8 @@ void CMainFrame::OnBrush4sided() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBrush5sided() {
+void CMainFrame::OnBrush5sided()
+{
 	Undo_Start("5 sided");
 	Undo_AddBrushList(&selected_brushes);
 	Brush_MakeSided(5);
@@ -3089,7 +3200,8 @@ void CMainFrame::OnBrush5sided() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBrush6sided() {
+void CMainFrame::OnBrush6sided()
+{
 	Undo_Start("6 sided");
 	Undo_AddBrushList(&selected_brushes);
 	Brush_MakeSided(6);
@@ -3101,7 +3213,8 @@ void CMainFrame::OnBrush6sided() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBrush7sided() {
+void CMainFrame::OnBrush7sided()
+{
 	Undo_Start("7 sided");
 	Undo_AddBrushList(&selected_brushes);
 	Brush_MakeSided(7);
@@ -3113,7 +3226,8 @@ void CMainFrame::OnBrush7sided() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBrush8sided() {
+void CMainFrame::OnBrush8sided()
+{
 	Undo_Start("8 sided");
 	Undo_AddBrushList(&selected_brushes);
 	Brush_MakeSided(8);
@@ -3125,7 +3239,8 @@ void CMainFrame::OnBrush8sided() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBrush9sided() {
+void CMainFrame::OnBrush9sided()
+{
 	Undo_Start("9 sided");
 	Undo_AddBrushList(&selected_brushes);
 	Brush_MakeSided(9);
@@ -3137,7 +3252,8 @@ void CMainFrame::OnBrush9sided() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBrushArbitrarysided() {
+void CMainFrame::OnBrushArbitrarysided()
+{
 	Undo_Start("arbitrary sided");
 	Undo_AddBrushList(&selected_brushes);
 	DoSides();
@@ -3149,12 +3265,14 @@ void CMainFrame::OnBrushArbitrarysided() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBrushFlipx() {
+void CMainFrame::OnBrushFlipx()
+{
 	Undo_Start("flip X");
 	Undo_AddBrushList(&selected_brushes);
 
 	Select_FlipAxis(0);
-	for (brush_t * b = selected_brushes.next; b != &selected_brushes; b = b->next) {
+
+	for (brush_t *b = selected_brushes.next; b != &selected_brushes; b = b->next) {
 		if (b->owner->eclass->fixedsize) {
 			char	buf[16];
 			float	a = FloatForKey(b->owner, "angle");
@@ -3163,7 +3281,8 @@ void CMainFrame::OnBrushFlipx() {
 			Brush_Build(b);
 		}
 	}
-    Patch_ToggleInverted();
+
+	Patch_ToggleInverted();
 	Undo_EndBrushList(&selected_brushes);
 	Undo_End();
 }
@@ -3172,31 +3291,30 @@ void CMainFrame::OnBrushFlipx() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBrushFlipy() {
+void CMainFrame::OnBrushFlipy()
+{
 	Undo_Start("flip Y");
 	Undo_AddBrushList(&selected_brushes);
 
 	Select_FlipAxis(1);
-	for (brush_t * b = selected_brushes.next; b != &selected_brushes; b = b->next) {
+
+	for (brush_t *b = selected_brushes.next; b != &selected_brushes; b = b->next) {
 		if (b->owner->eclass->fixedsize) {
 			float	a = FloatForKey(b->owner, "angle");
+
 			if (a == 0 || a == 180 || a == 360) {
 				continue;
 			}
 
 			if (a == 90 || a == 270) {
 				a += 180;
-			}
-			else if (a > 270) {
+			} else if (a > 270) {
 				a += 90;
-			}
-			else if (a > 180) {
+			} else if (a > 180) {
 				a -= 90;
-			}
-			else if (a > 90) {
+			} else if (a > 90) {
 				a += 90;
-			}
-			else {
+			} else {
 				a -= 90;
 			}
 
@@ -3207,7 +3325,8 @@ void CMainFrame::OnBrushFlipy() {
 			Brush_Build(b);
 		}
 	}
-    Patch_ToggleInverted();
+
+	Patch_ToggleInverted();
 	Undo_EndBrushList(&selected_brushes);
 	Undo_End();
 }
@@ -3216,7 +3335,8 @@ void CMainFrame::OnBrushFlipy() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBrushFlipz() {
+void CMainFrame::OnBrushFlipz()
+{
 	Undo_Start("flip Z");
 	Undo_AddBrushList(&selected_brushes);
 	Select_FlipAxis(2);
@@ -3229,7 +3349,8 @@ void CMainFrame::OnBrushFlipz() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBrushRotatex() {
+void CMainFrame::OnBrushRotatex()
+{
 	Undo_Start("rotate X");
 	Undo_AddBrushList(&selected_brushes);
 	Select_RotateAxis(0, 90);
@@ -3241,7 +3362,8 @@ void CMainFrame::OnBrushRotatex() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBrushRotatey() {
+void CMainFrame::OnBrushRotatey()
+{
 	Undo_Start("rotate Y");
 	Undo_AddBrushList(&selected_brushes);
 	Select_RotateAxis(1, 90);
@@ -3253,7 +3375,8 @@ void CMainFrame::OnBrushRotatey() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBrushRotatez() {
+void CMainFrame::OnBrushRotatez()
+{
 	Undo_Start("rotate Z");
 	Undo_AddBrushList(&selected_brushes);
 	Select_RotateAxis(2, 90);
@@ -3265,7 +3388,8 @@ void CMainFrame::OnBrushRotatez() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnRegionOff() {
+void CMainFrame::OnRegionOff()
+{
 	Map_RegionOff();
 }
 
@@ -3273,7 +3397,8 @@ void CMainFrame::OnRegionOff() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnRegionSetbrush() {
+void CMainFrame::OnRegionSetbrush()
+{
 	Map_RegionBrush();
 }
 
@@ -3281,7 +3406,8 @@ void CMainFrame::OnRegionSetbrush() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnRegionSetselection() {
+void CMainFrame::OnRegionSetselection()
+{
 	Map_RegionSelectedBrushes();
 }
 
@@ -3289,7 +3415,8 @@ void CMainFrame::OnRegionSetselection() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnRegionSettallbrush() {
+void CMainFrame::OnRegionSettallbrush()
+{
 	Map_RegionTallBrush();
 }
 
@@ -3297,7 +3424,8 @@ void CMainFrame::OnRegionSettallbrush() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnRegionSetxy() {
+void CMainFrame::OnRegionSetxy()
+{
 	Map_RegionXY();
 }
 
@@ -3305,7 +3433,8 @@ void CMainFrame::OnRegionSetxy() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionArbitraryrotation() {
+void CMainFrame::OnSelectionArbitraryrotation()
+{
 	// if (ActiveXY()) ActiveXY()->UndoCopy();
 	Undo_Start("arbitrary rotation");
 	Undo_AddBrushList(&selected_brushes);
@@ -3322,7 +3451,8 @@ void CMainFrame::OnSelectionArbitraryrotation() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionClone() {
+void CMainFrame::OnSelectionClone()
+{
 	// if (ActiveXY()) ActiveXY()->UndoCopy();
 	Select_Clone();
 }
@@ -3331,7 +3461,8 @@ void CMainFrame::OnSelectionClone() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionConnect() {
+void CMainFrame::OnSelectionConnect()
+{
 	ConnectEntities();
 }
 
@@ -3339,7 +3470,8 @@ void CMainFrame::OnSelectionConnect() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionMakehollow() {
+void CMainFrame::OnSelectionMakehollow()
+{
 	// if (ActiveXY()) ActiveXY()->UndoCopy();
 	Undo_Start("hollow");
 	Undo_AddBrushList(&selected_brushes);
@@ -3352,7 +3484,8 @@ void CMainFrame::OnSelectionMakehollow() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionCsgsubtract() {
+void CMainFrame::OnSelectionCsgsubtract()
+{
 	// if (ActiveXY()) ActiveXY()->UndoCopy();
 	Undo_Start("CSG subtract");
 	CSG_Subtract();
@@ -3363,7 +3496,8 @@ void CMainFrame::OnSelectionCsgsubtract() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionCsgmerge() {
+void CMainFrame::OnSelectionCsgmerge()
+{
 	// if (ActiveXY()) ActiveXY()->UndoCopy();
 	Undo_Start("CSG merge");
 	Undo_AddBrushList(&selected_brushes);
@@ -3376,7 +3510,8 @@ void CMainFrame::OnSelectionCsgmerge() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionDelete() {
+void CMainFrame::OnSelectionDelete()
+{
 	brush_t *brush;
 
 	// if (ActiveXY()) ActiveXY()->UndoCopy();
@@ -3398,7 +3533,8 @@ void CMainFrame::OnSelectionDelete() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionDeselect() {
+void CMainFrame::OnSelectionDeselect()
+{
 	if (!ByeByeSurfaceDialog()) {
 		if (g_bClipMode) {
 			OnViewClipper();
@@ -3429,13 +3565,14 @@ void CMainFrame::OnSelectionDeselect() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionDragedges() {
+void CMainFrame::OnSelectionDragedges()
+{
 	if (g_qeglobals.d_select_mode == sel_edge) {
 		g_qeglobals.d_select_mode = sel_brush;
 		Sys_UpdateWindows(W_ALL);
-	}
-	else {
+	} else {
 		SetupVertexSelection();
+
 		if (g_qeglobals.d_numpoints) {
 			g_qeglobals.d_select_mode = sel_edge;
 		}
@@ -3448,18 +3585,18 @@ void CMainFrame::OnSelectionDragedges() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionDragvertecies() {
+void CMainFrame::OnSelectionDragvertecies()
+{
 	if (g_qeglobals.d_select_mode == sel_vertex || g_qeglobals.d_select_mode == sel_curvepoint) {
 		g_qeglobals.d_select_mode = sel_brush;
 		Sys_UpdateWindows(W_ALL);
-	}
-	else {
+	} else {
 		// --if (QE_SingleBrush() && selected_brushes.next->patchBrush)
 		if (OnlyPatchesSelected()) {
 			Patch_EditPatch();
-		}
-		else if (!AnyPatchesSelected()) {
+		} else if (!AnyPatchesSelected()) {
 			SetupVertexSelection();
+
 			if (g_qeglobals.d_numpoints) {
 				g_qeglobals.d_select_mode = sel_vertex;
 			}
@@ -3473,7 +3610,8 @@ void CMainFrame::OnSelectionDragvertecies() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionCenterOrigin() {
+void CMainFrame::OnSelectionCenterOrigin()
+{
 	Undo_Start("center origin");
 	Undo_AddBrushList(&selected_brushes);
 	Select_CenterOrigin();
@@ -3485,7 +3623,8 @@ void CMainFrame::OnSelectionCenterOrigin() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionSelectcompletetall() {
+void CMainFrame::OnSelectionSelectcompletetall()
+{
 	//if (ActiveXY()) {
 	//	ActiveXY()->UndoCopy();
 	//}
@@ -3497,7 +3636,8 @@ void CMainFrame::OnSelectionSelectcompletetall() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionSelectinside() {
+void CMainFrame::OnSelectionSelectinside()
+{
 	Select_Inside();
 }
 
@@ -3505,7 +3645,8 @@ void CMainFrame::OnSelectionSelectinside() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionSelectpartialtall() {
+void CMainFrame::OnSelectionSelectpartialtall()
+{
 	Select_PartialTall();
 }
 
@@ -3513,7 +3654,8 @@ void CMainFrame::OnSelectionSelectpartialtall() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionSelecttouching() {
+void CMainFrame::OnSelectionSelecttouching()
+{
 	Select_Touching();
 }
 
@@ -3521,17 +3663,18 @@ void CMainFrame::OnSelectionSelecttouching() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionUngroupentity() {
+void CMainFrame::OnSelectionUngroupentity()
+{
 	Select_Ungroup();
 }
 
 void CMainFrame::OnAutocaulk()
 {
-	Select_AutoCaulk();	
+	Select_AutoCaulk();
 }
-void CMainFrame::OnUpdateAutocaulk(CCmdUI* pCmdUI)
+void CMainFrame::OnUpdateAutocaulk(CCmdUI *pCmdUI)
 {
-	pCmdUI->Enable( selected_brushes.next != &selected_brushes);
+	pCmdUI->Enable(selected_brushes.next != &selected_brushes);
 }
 
 
@@ -3539,7 +3682,8 @@ void CMainFrame::OnUpdateAutocaulk(CCmdUI* pCmdUI)
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTexturesPopup() {
+void CMainFrame::OnTexturesPopup()
+{
 	HandlePopup(this, IDR_POPUP_TEXTURE);
 }
 
@@ -3547,7 +3691,8 @@ void CMainFrame::OnTexturesPopup() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSplinesPopup() {
+void CMainFrame::OnSplinesPopup()
+{
 	HandlePopup(this, IDR_POPUP_SPLINE);
 }
 
@@ -3555,7 +3700,8 @@ void CMainFrame::OnSplinesPopup() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnPopupSelection() {
+void CMainFrame::OnPopupSelection()
+{
 	HandlePopup(this, IDR_POPUP_SELECTION);
 }
 
@@ -3563,7 +3709,8 @@ void CMainFrame::OnPopupSelection() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewChange() {
+void CMainFrame::OnViewChange()
+{
 	OnViewNextview();
 }
 
@@ -3571,21 +3718,24 @@ void CMainFrame::OnViewChange() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewCameraupdate() {
+void CMainFrame::OnViewCameraupdate()
+{
 	g_qeglobals.flatRotation++;
-	
+
 	if (g_qeglobals.flatRotation > 2) {
 		g_qeglobals.flatRotation = 0;
 	}
 
 	if (g_qeglobals.flatRotation) {
 		g_qeglobals.rotateAxis = 0;
+
 		if (ActiveXY()->GetViewType() == XY) {
 			g_qeglobals.rotateAxis = 2;
 		} else if (ActiveXY()->GetViewType() == XZ) {
 			g_qeglobals.rotateAxis = 1;
 		}
 	}
+
 	Select_InitializeRotation();
 	Sys_UpdateWindows(W_CAMERA | W_XY);
 }
@@ -3595,7 +3745,8 @@ void CMainFrame::OnViewCameraupdate() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSizing(UINT fwSide, LPRECT pRect) {
+void CMainFrame::OnSizing(UINT fwSide, LPRECT pRect)
+{
 	CFrameWnd::OnSizing(fwSide, pRect);
 	GetClientRect(g_rctOld);
 }
@@ -3604,7 +3755,8 @@ void CMainFrame::OnSizing(UINT fwSide, LPRECT pRect) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnHelpAbout() {
+void CMainFrame::OnHelpAbout()
+{
 	DoAbout();
 }
 
@@ -3612,13 +3764,13 @@ void CMainFrame::OnHelpAbout() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewClipper() {
+void CMainFrame::OnViewClipper()
+{
 	if (ActiveXY()) {
 		if (ActiveXY()->ClipMode()) {
 			ActiveXY()->SetClipMode(false);
 			m_wndToolBar.GetToolBarCtrl().CheckButton(ID_VIEW_CLIPPER, FALSE);
-		}
-		else {
+		} else {
 			if (ActiveXY()->RotateMode()) {
 				OnSelectMouserotate();
 			}
@@ -3633,8 +3785,10 @@ void CMainFrame::OnViewClipper() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCameraAngledown() {
+void CMainFrame::OnCameraAngledown()
+{
 	m_pCamWnd->Camera().angles[0] -= SPEED_TURN;
+
 	if (m_pCamWnd->Camera().angles[0] < -85) {
 		m_pCamWnd->Camera().angles[0] = -85;
 	}
@@ -3646,8 +3800,10 @@ void CMainFrame::OnCameraAngledown() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCameraAngleup() {
+void CMainFrame::OnCameraAngleup()
+{
 	m_pCamWnd->Camera().angles[0] += SPEED_TURN;
+
 	if (m_pCamWnd->Camera().angles[0] > 85) {
 		m_pCamWnd->Camera().angles[0] = 85;
 	}
@@ -3659,7 +3815,8 @@ void CMainFrame::OnCameraAngleup() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCameraBack() {
+void CMainFrame::OnCameraBack()
+{
 	VectorMA(m_pCamWnd->Camera().origin, -SPEED_MOVE, m_pCamWnd->Camera().forward, m_pCamWnd->Camera().origin);
 
 	int nUpdate = (g_PrefsDlg.m_bCamXYUpdate) ? (W_CAMERA | W_XY) : (W_CAMERA);
@@ -3670,7 +3827,8 @@ void CMainFrame::OnCameraBack() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCameraDown() {
+void CMainFrame::OnCameraDown()
+{
 	m_pCamWnd->Camera().origin[2] -= SPEED_MOVE;
 	Sys_UpdateWindows(W_CAMERA | W_XY | W_Z);
 }
@@ -3679,7 +3837,8 @@ void CMainFrame::OnCameraDown() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCameraForward() {
+void CMainFrame::OnCameraForward()
+{
 	VectorMA(m_pCamWnd->Camera().origin, SPEED_MOVE, m_pCamWnd->Camera().forward, m_pCamWnd->Camera().origin);
 
 	int nUpdate = (g_PrefsDlg.m_bCamXYUpdate) ? (W_CAMERA | W_XY) : (W_CAMERA);
@@ -3690,7 +3849,8 @@ void CMainFrame::OnCameraForward() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCameraLeft() {
+void CMainFrame::OnCameraLeft()
+{
 	m_pCamWnd->Camera().angles[1] += SPEED_TURN;
 
 	int nUpdate = (g_PrefsDlg.m_bCamXYUpdate) ? (W_CAMERA | W_XY) : (W_CAMERA);
@@ -3701,7 +3861,8 @@ void CMainFrame::OnCameraLeft() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCameraRight() {
+void CMainFrame::OnCameraRight()
+{
 	m_pCamWnd->Camera().angles[1] -= SPEED_TURN;
 
 	int nUpdate = (g_PrefsDlg.m_bCamXYUpdate) ? (W_CAMERA | W_XY) : (W_CAMERA);
@@ -3712,7 +3873,8 @@ void CMainFrame::OnCameraRight() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCameraStrafeleft() {
+void CMainFrame::OnCameraStrafeleft()
+{
 	VectorMA(m_pCamWnd->Camera().origin, -SPEED_MOVE, m_pCamWnd->Camera().right, m_pCamWnd->Camera().origin);
 
 	int nUpdate = (g_PrefsDlg.m_bCamXYUpdate) ? (W_CAMERA | W_XY) : (W_CAMERA);
@@ -3723,7 +3885,8 @@ void CMainFrame::OnCameraStrafeleft() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCameraStraferight() {
+void CMainFrame::OnCameraStraferight()
+{
 	VectorMA(m_pCamWnd->Camera().origin, SPEED_MOVE, m_pCamWnd->Camera().right, m_pCamWnd->Camera().origin);
 
 	int nUpdate = (g_PrefsDlg.m_bCamXYUpdate) ? (W_CAMERA | W_XY) : (W_CAMERA);
@@ -3734,7 +3897,8 @@ void CMainFrame::OnCameraStraferight() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCameraUp() {
+void CMainFrame::OnCameraUp()
+{
 	m_pCamWnd->Camera().origin[2] += SPEED_MOVE;
 	Sys_UpdateWindows(W_CAMERA | W_XY | W_Z);
 }
@@ -3743,7 +3907,8 @@ void CMainFrame::OnCameraUp() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnGridToggle() {
+void CMainFrame::OnGridToggle()
+{
 	g_qeglobals.d_showgrid ^= 1;
 	Sys_UpdateWindows(W_XY | W_Z);
 }
@@ -3752,9 +3917,11 @@ void CMainFrame::OnGridToggle() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnPrefs() {
+void CMainFrame::OnPrefs()
+{
 	BOOL	bToolbar = g_PrefsDlg.m_bWideToolbar;
 	g_PrefsDlg.LoadPrefs();
+
 	if (g_PrefsDlg.DoModal() == IDOK) {
 		if (g_PrefsDlg.m_bWideToolbar != bToolbar) {
 			MessageBox("You need to restart Q3Radiant for the view changes to take place.");
@@ -3763,6 +3930,7 @@ void CMainFrame::OnPrefs() {
 		g_Inspectors->texWnd.UpdatePrefs();
 
 		CMenu	*pMenu = GetMenu();
+
 		if (pMenu) {
 			pMenu->CheckMenuItem(ID_SNAPTOGRID, MF_BYCOMMAND | (!g_PrefsDlg.m_bNoClamp) ? MF_CHECKED : MF_UNCHECKED);
 		}
@@ -3774,14 +3942,16 @@ void CMainFrame::OnPrefs() {
 //    0 = radiant styel 1 = qe4 style
 // =======================================================================================================================
 //
-void CMainFrame::SetWindowStyle(int nStyle) {
+void CMainFrame::SetWindowStyle(int nStyle)
+{
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTogglecamera() {
+void CMainFrame::OnTogglecamera()
+{
 	if (m_pCamWnd->IsWindowVisible()) {
 		m_pCamWnd->ShowWindow(SW_HIDE);
 	} else {
@@ -3794,7 +3964,8 @@ void CMainFrame::OnTogglecamera() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnToggleview() {
+void CMainFrame::OnToggleview()
+{
 	if (m_pXYWnd && m_pXYWnd->GetSafeHwnd()) {
 		if (m_pXYWnd->IsWindowVisible()) {
 			m_pXYWnd->ShowWindow(SW_HIDE);
@@ -3808,7 +3979,8 @@ void CMainFrame::OnToggleview() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTogglez() {
+void CMainFrame::OnTogglez()
+{
 	if (m_pZWnd && m_pZWnd->GetSafeHwnd()) {
 		if (m_pZWnd->IsWindowVisible()) {
 			m_pZWnd->ShowWindow(SW_HIDE);
@@ -3822,10 +3994,12 @@ void CMainFrame::OnTogglez() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnToggleLock() {
+void CMainFrame::OnToggleLock()
+{
 	g_PrefsDlg.m_bTextureLock = !g_PrefsDlg.m_bTextureLock;
 
 	CMenu	*pMenu = GetMenu();
+
 	if (pMenu) {
 		pMenu->CheckMenuItem(ID_TOGGLE_LOCK, MF_BYCOMMAND | (g_PrefsDlg.m_bTextureLock) ? MF_CHECKED : MF_UNCHECKED);
 	}
@@ -3838,7 +4012,8 @@ void CMainFrame::OnToggleLock() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnEditMapinfo() {
+void CMainFrame::OnEditMapinfo()
+{
 	CMapInfo	dlg;
 	dlg.DoModal();
 }
@@ -3847,7 +4022,8 @@ void CMainFrame::OnEditMapinfo() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnEditEntityinfo() {
+void CMainFrame::OnEditEntityinfo()
+{
 	CEntityListDlg::ShowDialog();
 }
 
@@ -3855,26 +4031,28 @@ void CMainFrame::OnEditEntityinfo() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewNextview() {
+void CMainFrame::OnViewNextview()
+{
 	if (m_pXYWnd->GetViewType() == XY) {
 		m_pXYWnd->SetViewType(XZ);
-	}
-	else if (m_pXYWnd->GetViewType() == XZ) {
+	} else if (m_pXYWnd->GetViewType() == XZ) {
 		m_pXYWnd->SetViewType(YZ);
-	}
-	else {
+	} else {
 		m_pXYWnd->SetViewType(XY);
 	}
 
 	m_pXYWnd->PositionView();
+
 	if (g_qeglobals.flatRotation) {
 		g_qeglobals.rotateAxis = 0;
+
 		if (ActiveXY()->GetViewType() == XY) {
 			g_qeglobals.rotateAxis = 2;
 		} else if (ActiveXY()->GetViewType() == XZ) {
 			g_qeglobals.rotateAxis = 1;
 		}
 	}
+
 	Sys_UpdateWindows(W_XY | W_CAMERA);
 }
 
@@ -3882,16 +4060,19 @@ void CMainFrame::OnViewNextview() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnHelpCommandlist() {
+void CMainFrame::OnHelpCommandlist()
+{
 	CCommandsDlg	dlg;
 	dlg.DoModal();
 #if 0
+
 	if (g_b3Dfx) {
 		C3DFXCamWnd *pWnd = new C3DFXCamWnd();
 		CRect		rect(50, 50, 400, 400);
 		pWnd->Create(_3DFXCAMERA_WINDOW_CLASS, "", QE3_CHILDSTYLE, rect, this, 1234);
 		pWnd->ShowWindow(SW_SHOW);
 	}
+
 #endif
 }
 
@@ -3907,7 +4088,8 @@ void CMainFrame::OnFileNewproject()
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::UpdateStatusText() {
+void CMainFrame::UpdateStatusText()
+{
 	for (int n = 0; n < 6; n++) {
 		if (m_strStatus[n].GetLength() >= 0 && m_wndStatusBar.GetSafeHwnd()) {
 			m_wndStatusBar.SetPaneText(n, m_strStatus[n]);
@@ -3919,7 +4101,8 @@ void CMainFrame::UpdateStatusText() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::SetStatusText(int nPane, const char *pText) {
+void CMainFrame::SetStatusText(int nPane, const char *pText)
+{
 	if (pText && nPane <= 5 && nPane >= 0) {
 		m_strStatus[nPane] = pText;
 		UpdateStatusText();
@@ -3930,7 +4113,8 @@ void CMainFrame::SetStatusText(int nPane, const char *pText) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::UpdateWindows(int nBits) {
+void CMainFrame::UpdateWindows(int nBits)
+{
 
 	if (!g_bScreenUpdates) {
 		return;
@@ -3971,11 +4155,11 @@ void CMainFrame::UpdateWindows(int nBits) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void WINAPI Sys_UpdateWindows(int nBits) {
+void WINAPI Sys_UpdateWindows(int nBits)
+{
 	if (g_PrefsDlg.m_bQE4Painting) {
 		g_nUpdateBits |= nBits;
-	}
-	else if ( g_pParentWnd ) {
+	} else if (g_pParentWnd) {
 		g_pParentWnd->UpdateWindows(nBits);
 	}
 }
@@ -3984,7 +4168,8 @@ void WINAPI Sys_UpdateWindows(int nBits) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFlipClip() {
+void CMainFrame::OnFlipClip()
+{
 	if (m_pActiveXY) {
 		m_pActiveXY->FlipClip();
 	}
@@ -3994,7 +4179,8 @@ void CMainFrame::OnFlipClip() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnClipSelected() {
+void CMainFrame::OnClipSelected()
+{
 	if (m_pActiveXY && m_pActiveXY->ClipMode()) {
 		Undo_Start("clip selected");
 		Undo_AddBrushList(&selected_brushes);
@@ -4007,6 +4193,7 @@ void CMainFrame::OnClipSelected() {
 		} else if (g_bAxialMode) {
 
 		}
+
 		//else if (g_bPatchBendMode) {
 		//	Patch_InsDelHandleENTER();
 		//}
@@ -4017,7 +4204,8 @@ void CMainFrame::OnClipSelected() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSplitSelected() {
+void CMainFrame::OnSplitSelected()
+{
 	if (m_pActiveXY) {
 		Undo_Start("split selected");
 		Undo_AddBrushList(&selected_brushes);
@@ -4031,7 +4219,8 @@ void CMainFrame::OnSplitSelected() {
  =======================================================================================================================
  =======================================================================================================================
  */
-CXYWnd *CMainFrame::ActiveXY() {
+CXYWnd *CMainFrame::ActiveXY()
+{
 	return m_pActiveXY;
 }
 
@@ -4039,10 +4228,12 @@ CXYWnd *CMainFrame::ActiveXY() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnToggleviewXz() {
+void CMainFrame::OnToggleviewXz()
+{
 	if (m_pXZWnd && m_pXZWnd->GetSafeHwnd()) {
 		// get windowplacement doesn't actually save this so we will here
 		g_PrefsDlg.m_bXZVis = m_pXZWnd->IsWindowVisible();
+
 		if (g_PrefsDlg.m_bXZVis) {
 			m_pXZWnd->ShowWindow(SW_HIDE);
 		} else {
@@ -4058,9 +4249,11 @@ void CMainFrame::OnToggleviewXz() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnToggleviewYz() {
+void CMainFrame::OnToggleviewYz()
+{
 	if (m_pYZWnd && m_pYZWnd->GetSafeHwnd()) {
 		g_PrefsDlg.m_bYZVis = m_pYZWnd->IsWindowVisible();
+
 		if (g_PrefsDlg.m_bYZVis) {
 			m_pYZWnd->ShowWindow(SW_HIDE);
 		} else {
@@ -4092,7 +4285,8 @@ void CMainFrame::OnToggleTextureBar()
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnColorsBrush() {
+void CMainFrame::OnColorsBrush()
+{
 	DoColor(COLOR_BRUSHES);
 	Sys_UpdateWindows(W_ALL);
 }
@@ -4101,7 +4295,8 @@ void CMainFrame::OnColorsBrush() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnColorsClipper() {
+void CMainFrame::OnColorsClipper()
+{
 	DoColor(COLOR_CLIPPER);
 	Sys_UpdateWindows(W_ALL);
 }
@@ -4110,7 +4305,8 @@ void CMainFrame::OnColorsClipper() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnColorsGridtext() {
+void CMainFrame::OnColorsGridtext()
+{
 	DoColor(COLOR_GRIDTEXT);
 	Sys_UpdateWindows(W_ALL);
 }
@@ -4119,7 +4315,8 @@ void CMainFrame::OnColorsGridtext() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnColorsSelectedbrush() {
+void CMainFrame::OnColorsSelectedbrush()
+{
 	DoColor(COLOR_SELBRUSHES);
 	Sys_UpdateWindows(W_ALL);
 }
@@ -4128,7 +4325,8 @@ void CMainFrame::OnColorsSelectedbrush() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnColorsGridblock() {
+void CMainFrame::OnColorsGridblock()
+{
 	DoColor(COLOR_GRIDBLOCK);
 	Sys_UpdateWindows(W_ALL);
 }
@@ -4137,7 +4335,8 @@ void CMainFrame::OnColorsGridblock() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnColorsViewname() {
+void CMainFrame::OnColorsViewname()
+{
 	DoColor(COLOR_VIEWNAME);
 	Sys_UpdateWindows(W_ALL);
 }
@@ -4146,7 +4345,8 @@ void CMainFrame::OnColorsViewname() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnColorSetoriginal() {
+void CMainFrame::OnColorSetoriginal()
+{
 	for (int i = 0; i < 3; i++) {
 		g_qeglobals.d_savedinfo.colors[COLOR_TEXTUREBACK][i] = 0.0f;
 		g_qeglobals.d_savedinfo.colors[COLOR_GRIDBACK][i] = 1.0f;
@@ -4190,7 +4390,8 @@ void CMainFrame::OnColorSetoriginal() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnColorSetqer() {
+void CMainFrame::OnColorSetqer()
+{
 	for (int i = 0; i < 3; i++) {
 		g_qeglobals.d_savedinfo.colors[COLOR_TEXTUREBACK][i] = 0.0f;
 		g_qeglobals.d_savedinfo.colors[COLOR_GRIDBACK][i] = 1.0f;
@@ -4231,7 +4432,8 @@ void CMainFrame::OnColorSetqer() {
 }
 
 //FIXME: these just need to be read from a def file
-void CMainFrame::OnColorSetSuperMal() {
+void CMainFrame::OnColorSetSuperMal()
+{
 	OnColorSetqer();
 	g_qeglobals.d_savedinfo.colors[COLOR_TEXTUREBACK][0] = 0.0f;
 	g_qeglobals.d_savedinfo.colors[COLOR_TEXTUREBACK][1] = 0.0f;
@@ -4266,7 +4468,8 @@ void CMainFrame::OnColorSetSuperMal() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnColorSetblack() {
+void CMainFrame::OnColorSetblack()
+{
 	for (int i = 0; i < 3; i++) {
 		g_qeglobals.d_savedinfo.colors[COLOR_TEXTUREBACK][i] = 0.0f;
 		g_qeglobals.d_savedinfo.colors[COLOR_GRIDBACK][i] = 0.0f;
@@ -4309,7 +4512,8 @@ void CMainFrame::OnColorSetblack() {
 	Sys_UpdateWindows(W_ALL);
 }
 
-void CMainFrame::OnColorSetMax() {
+void CMainFrame::OnColorSetMax()
+{
 	for (int i=0 ; i<3 ; i++) {
 		g_qeglobals.d_savedinfo.colors[COLOR_TEXTUREBACK][i] = 0.25f;
 		g_qeglobals.d_savedinfo.colors[COLOR_GRIDBACK][i] = 0.77f;
@@ -4317,7 +4521,7 @@ void CMainFrame::OnColorSetMax() {
 		g_qeglobals.d_savedinfo.colors[COLOR_GRIDMAJOR][i] = 0.89f;
 		g_qeglobals.d_savedinfo.colors[COLOR_CAMERABACK][i] = 0.25f;
 	}
-	
+
 	g_qeglobals.d_savedinfo.colors[COLOR_GRIDBLOCK][0] = 1.0f;
 	g_qeglobals.d_savedinfo.colors[COLOR_GRIDBLOCK][1] = 1.0f;
 	g_qeglobals.d_savedinfo.colors[COLOR_GRIDBLOCK][2] = 1.0f;
@@ -4344,20 +4548,22 @@ void CMainFrame::OnColorSetMax() {
 	g_qeglobals.d_savedinfo.colors[COLOR_PRECISION_CROSSHAIR][0] = 1.0f;
 	g_qeglobals.d_savedinfo.colors[COLOR_PRECISION_CROSSHAIR][1] = 0.0f;
 	g_qeglobals.d_savedinfo.colors[COLOR_PRECISION_CROSSHAIR][2] = 1.0f;
-	
-	Sys_UpdateWindows (W_ALL);
-	
+
+	Sys_UpdateWindows(W_ALL);
+
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSnaptogrid() {
+void CMainFrame::OnSnaptogrid()
+{
 	g_PrefsDlg.m_bNoClamp ^= 1;
 	g_PrefsDlg.SavePrefs();
 
 	CMenu	*pMenu = GetMenu();
+
 	if (pMenu) {
 		pMenu->CheckMenuItem(ID_SNAPTOGRID, MF_BYCOMMAND | (!g_PrefsDlg.m_bNoClamp) ? MF_CHECKED : MF_UNCHECKED);
 	}
@@ -4367,18 +4573,19 @@ void CMainFrame::OnSnaptogrid() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectScale() {
+void CMainFrame::OnSelectScale()
+{
 	// if (ActiveXY()) ActiveXY()->UndoCopy();
 	Undo_Start("scale");
 	Undo_AddBrushList(&selected_brushes);
 
 	CScaleDialog	dlg;
+
 	if (dlg.DoModal() == IDOK) {
 		if (dlg.m_fX > 0 && dlg.m_fY > 0 && dlg.m_fZ > 0) {
 			Select_Scale(dlg.m_fX, dlg.m_fY, dlg.m_fZ);
 			Sys_UpdateWindows(W_ALL);
-		}
-		else {
+		} else {
 			common->Printf("Warning.. Tried to scale by a zero value.");
 		}
 	}
@@ -4391,7 +4598,8 @@ void CMainFrame::OnSelectScale() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectMouserotate() {
+void CMainFrame::OnSelectMouserotate()
+{
 	if (ActiveXY()) {
 		if (ActiveXY()->ClipMode()) {
 			OnViewClipper();
@@ -4401,23 +4609,24 @@ void CMainFrame::OnSelectMouserotate() {
 			ActiveXY()->SetRotateMode(false);
 			m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SELECT_MOUSEROTATE, FALSE);
 			Map_BuildBrushData();
-		}
-		else {
+		} else {
 			// may not work if no brush selected, see return value
 			if (ActiveXY()->SetRotateMode(true)) {
 				g_qeglobals.rotateAxis = 0;
+
 				if (ActiveXY()->GetViewType() == XY) {
 					g_qeglobals.rotateAxis = 2;
 				} else if (ActiveXY()->GetViewType() == XZ) {
 					g_qeglobals.rotateAxis = 1;
 				}
+
 				m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SELECT_MOUSEROTATE, TRUE);
-			}
-			else {	// if MFC called, we need to set back to FALSE ourselves
+			} else {	// if MFC called, we need to set back to FALSE ourselves
 				m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SELECT_MOUSEROTATE, FALSE);
 			}
 		}
 	}
+
 	Sys_UpdateWindows(W_CAMERA | W_XY);
 }
 
@@ -4425,7 +4634,8 @@ void CMainFrame::OnSelectMouserotate() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnEditCopybrush() {
+void CMainFrame::OnEditCopybrush()
+{
 	if (ActiveXY()) {
 		ActiveXY()->Copy();
 	}
@@ -4435,7 +4645,8 @@ void CMainFrame::OnEditCopybrush() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnEditPastebrush() {
+void CMainFrame::OnEditPastebrush()
+{
 	if (ActiveXY()) {
 		ActiveXY()->Paste();
 	}
@@ -4445,7 +4656,8 @@ void CMainFrame::OnEditPastebrush() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnEditUndo() {
+void CMainFrame::OnEditUndo()
+{
 	// if (ActiveXY()) ActiveXY()->Undo();
 	Undo_Undo();
 }
@@ -4454,7 +4666,8 @@ void CMainFrame::OnEditUndo() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnEditRedo() {
+void CMainFrame::OnEditRedo()
+{
 	Undo_Redo();
 }
 
@@ -4462,7 +4675,8 @@ void CMainFrame::OnEditRedo() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnUpdateEditUndo(CCmdUI *pCmdUI) {
+void CMainFrame::OnUpdateEditUndo(CCmdUI *pCmdUI)
+{
 	/*
 	 * BOOL bEnable = false; if (ActiveXY()) bEnable = ActiveXY()->UndoAvailable();
 	 * pCmdUI->Enable(bEnable);
@@ -4474,7 +4688,8 @@ void CMainFrame::OnUpdateEditUndo(CCmdUI *pCmdUI) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnUpdateEditRedo(CCmdUI *pCmdUI) {
+void CMainFrame::OnUpdateEditRedo(CCmdUI *pCmdUI)
+{
 	pCmdUI->Enable(Undo_RedoAvailable());
 }
 
@@ -4482,9 +4697,11 @@ void CMainFrame::OnUpdateEditRedo(CCmdUI *pCmdUI) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionTextureDec() {
+void CMainFrame::OnSelectionTextureDec()
+{
 	g_qeglobals.d_savedinfo.m_nTextureTweak -= 1.0f;
-	if ( g_qeglobals.d_savedinfo.m_nTextureTweak == 0.0f ) {
+
+	if (g_qeglobals.d_savedinfo.m_nTextureTweak == 0.0f) {
 		g_qeglobals.d_savedinfo.m_nTextureTweak -= 1.0f;
 	}
 
@@ -4495,17 +4712,20 @@ void CMainFrame::OnSelectionTextureDec() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionTextureFit() {
-	Select_FitTexture( 1.0f, 1.0f );
+void CMainFrame::OnSelectionTextureFit()
+{
+	Select_FitTexture(1.0f, 1.0f);
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionTextureInc() {
+void CMainFrame::OnSelectionTextureInc()
+{
 	g_qeglobals.d_savedinfo.m_nTextureTweak += 1.0f;
-	if ( g_qeglobals.d_savedinfo.m_nTextureTweak == 0.0f ) {
+
+	if (g_qeglobals.d_savedinfo.m_nTextureTweak == 0.0f) {
 		g_qeglobals.d_savedinfo.m_nTextureTweak += 1.0f;
 	}
 
@@ -4516,7 +4736,8 @@ void CMainFrame::OnSelectionTextureInc() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionTextureRotateclock() {
+void CMainFrame::OnSelectionTextureRotateclock()
+{
 	Select_RotateTexture(abs(g_PrefsDlg.m_nRotation));
 }
 
@@ -4524,7 +4745,8 @@ void CMainFrame::OnSelectionTextureRotateclock() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionTextureRotatecounter() {
+void CMainFrame::OnSelectionTextureRotatecounter()
+{
 	Select_RotateTexture(-abs(g_PrefsDlg.m_nRotation));
 }
 
@@ -4532,7 +4754,8 @@ void CMainFrame::OnSelectionTextureRotatecounter() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionTextureScaledown() {
+void CMainFrame::OnSelectionTextureScaledown()
+{
 	Select_ScaleTexture(0, -g_qeglobals.d_savedinfo.m_nTextureTweak);
 }
 
@@ -4540,7 +4763,8 @@ void CMainFrame::OnSelectionTextureScaledown() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionTextureScaleup() {
+void CMainFrame::OnSelectionTextureScaleup()
+{
 	Select_ScaleTexture(0, g_qeglobals.d_savedinfo.m_nTextureTweak);
 }
 
@@ -4548,7 +4772,8 @@ void CMainFrame::OnSelectionTextureScaleup() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionTextureScaleLeft() {
+void CMainFrame::OnSelectionTextureScaleLeft()
+{
 	Select_ScaleTexture(g_qeglobals.d_savedinfo.m_nTextureTweak, 0);
 }
 
@@ -4556,7 +4781,8 @@ void CMainFrame::OnSelectionTextureScaleLeft() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionTextureScaleRight() {
+void CMainFrame::OnSelectionTextureScaleRight()
+{
 	Select_ScaleTexture(g_qeglobals.d_savedinfo.m_nTextureTweak, 0);
 }
 
@@ -4564,7 +4790,8 @@ void CMainFrame::OnSelectionTextureScaleRight() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionTextureShiftdown() {
+void CMainFrame::OnSelectionTextureShiftdown()
+{
 	Select_ShiftTexture(0, -g_qeglobals.d_savedinfo.m_nTextureTweak, true);
 }
 
@@ -4572,7 +4799,8 @@ void CMainFrame::OnSelectionTextureShiftdown() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionTextureShiftleft() {
+void CMainFrame::OnSelectionTextureShiftleft()
+{
 	Select_ShiftTexture(-g_qeglobals.d_savedinfo.m_nTextureTweak, 0, true);
 }
 
@@ -4580,7 +4808,8 @@ void CMainFrame::OnSelectionTextureShiftleft() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionTextureShiftright() {
+void CMainFrame::OnSelectionTextureShiftright()
+{
 	Select_ShiftTexture(g_qeglobals.d_savedinfo.m_nTextureTweak, 0, true);
 }
 
@@ -4588,7 +4817,8 @@ void CMainFrame::OnSelectionTextureShiftright() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionTextureShiftup() {
+void CMainFrame::OnSelectionTextureShiftup()
+{
 	Select_ShiftTexture(0, g_qeglobals.d_savedinfo.m_nTextureTweak, true);
 }
 
@@ -4596,7 +4826,8 @@ void CMainFrame::OnSelectionTextureShiftup() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::SetGridChecks(int id) {
+void CMainFrame::SetGridChecks(int id)
+{
 	HMENU	hMenu = ::GetMenu(GetSafeHwnd());
 	CheckMenuItem(hMenu, ID_GRID_1, MF_BYCOMMAND | MF_UNCHECKED);
 	CheckMenuItem(hMenu, ID_GRID_2, MF_BYCOMMAND | MF_UNCHECKED);
@@ -4616,7 +4847,8 @@ void CMainFrame::SetGridChecks(int id) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnGridNext() {
+void CMainFrame::OnGridNext()
+{
 	if (g_qeglobals.d_gridsize >= MAX_GRID) {
 		return;
 	}
@@ -4642,7 +4874,8 @@ void CMainFrame::OnGridNext() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnGridPrev() {
+void CMainFrame::OnGridPrev()
+{
 	if (g_qeglobals.d_gridsize <= MIN_GRID) {
 		return;
 	}
@@ -4668,22 +4901,23 @@ void CMainFrame::OnGridPrev() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::SetGridStatus() {
+void CMainFrame::SetGridStatus()
+{
 	CString strStatus;
 	char	c1;
 	char	c2;
 	c1 = (g_PrefsDlg.m_bTextureLock) ? 'M' : ' ';
 	c2 = (g_PrefsDlg.m_bRotateLock) ? 'R' : ' ';
 	strStatus.Format
-		(
-			"G:%1.2f T:%1.2f R:%i C:%i L:%c%c",
-			g_qeglobals.d_gridsize,
-			g_qeglobals.d_savedinfo.m_nTextureTweak,
-			g_PrefsDlg.m_nRotation,
-			g_PrefsDlg.m_nCubicScale,
-			c1,
-			c2
-		);
+	(
+	        "G:%1.2f T:%1.2f R:%i C:%i L:%c%c",
+	        g_qeglobals.d_gridsize,
+	        g_qeglobals.d_savedinfo.m_nTextureTweak,
+	        g_PrefsDlg.m_nRotation,
+	        g_PrefsDlg.m_nCubicScale,
+	        c1,
+	        c2
+	);
 	SetStatusText(4, strStatus);
 }
 
@@ -4691,7 +4925,8 @@ void CMainFrame::SetGridStatus() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::SetTexValStatus() {
+void CMainFrame::SetTexValStatus()
+{
 	//
 	// CString strStatus; strStatus.Format("T: %i C: %i", g_nTextureTweak,
 	// g_nCubicScale); SetStatusText(5, strStatus.GetBuffer(0));
@@ -4703,7 +4938,8 @@ void CMainFrame::SetTexValStatus() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTextureReplaceall() {
+void CMainFrame::OnTextureReplaceall()
+{
 	CFindTextureDlg::show();
 }
 
@@ -4711,11 +4947,11 @@ void CMainFrame::OnTextureReplaceall() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnScalelockx() {
+void CMainFrame::OnScalelockx()
+{
 	if (g_nScaleHow & SCALE_X) {
 		m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SCALELOCKX, FALSE);
-	}
-	else {
+	} else {
 		m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SCALELOCKX);
 	}
 
@@ -4726,11 +4962,11 @@ void CMainFrame::OnScalelockx() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnScalelocky() {
+void CMainFrame::OnScalelocky()
+{
 	if (g_nScaleHow & SCALE_Y) {
 		m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SCALELOCKY, FALSE);
-	}
-	else {
+	} else {
 		m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SCALELOCKY);
 	}
 
@@ -4741,11 +4977,11 @@ void CMainFrame::OnScalelocky() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnScalelockz() {
+void CMainFrame::OnScalelockz()
+{
 	if (g_nScaleHow & SCALE_Z) {
 		m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SCALELOCKZ, FALSE);
-	}
-	else {
+	} else {
 		m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SCALELOCKZ);
 	}
 
@@ -4756,7 +4992,8 @@ void CMainFrame::OnScalelockz() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectMousescale() {
+void CMainFrame::OnSelectMousescale()
+{
 	if (ActiveXY()) {
 		if (ActiveXY()->ClipMode()) {
 			OnViewClipper();
@@ -4771,8 +5008,7 @@ void CMainFrame::OnSelectMousescale() {
 		if (ActiveXY()->ScaleMode()) {
 			ActiveXY()->SetScaleMode(false);
 			m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SELECT_MOUSESCALE, FALSE);
-		}
-		else {
+		} else {
 			ActiveXY()->SetScaleMode(true);
 			m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SELECT_MOUSESCALE);
 		}
@@ -4783,14 +5019,16 @@ void CMainFrame::OnSelectMousescale() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFileImport() {
+void CMainFrame::OnFileImport()
+{
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFileProjectsettings() {
+void CMainFrame::OnFileProjectsettings()
+{
 	DoProjectSettings();
 }
 
@@ -4798,7 +5036,8 @@ void CMainFrame::OnFileProjectsettings() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnUpdateFileImport(CCmdUI *pCmdUI) {
+void CMainFrame::OnUpdateFileImport(CCmdUI *pCmdUI)
+{
 	pCmdUI->Enable(FALSE);
 }
 
@@ -4806,8 +5045,10 @@ void CMainFrame::OnUpdateFileImport(CCmdUI *pCmdUI) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewCubein() {
+void CMainFrame::OnViewCubein()
+{
 	g_PrefsDlg.m_nCubicScale--;
+
 	if (g_PrefsDlg.m_nCubicScale < 1) {
 		g_PrefsDlg.m_nCubicScale = 1;
 	}
@@ -4821,8 +5062,10 @@ void CMainFrame::OnViewCubein() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewCubeout() {
+void CMainFrame::OnViewCubeout()
+{
 	g_PrefsDlg.m_nCubicScale++;
+
 	if (g_PrefsDlg.m_nCubicScale > 99) {
 		g_PrefsDlg.m_nCubicScale = 99;
 	}
@@ -4836,16 +5079,18 @@ void CMainFrame::OnViewCubeout() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewCubicclipping() {
+void CMainFrame::OnViewCubicclipping()
+{
 	g_PrefsDlg.m_bCubicClipping ^= 1;
 
 	CMenu	*pMenu = GetMenu();
+
 	if (pMenu) {
 		pMenu->CheckMenuItem
-			(
-				ID_VIEW_CUBICCLIPPING,
-				MF_BYCOMMAND | (g_PrefsDlg.m_bCubicClipping) ? MF_CHECKED : MF_UNCHECKED
-			);
+		(
+		        ID_VIEW_CUBICCLIPPING,
+		        MF_BYCOMMAND | (g_PrefsDlg.m_bCubicClipping) ? MF_CHECKED : MF_UNCHECKED
+		);
 	}
 
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_VIEW_CUBICCLIPPING, (g_PrefsDlg.m_bCubicClipping) ? TRUE : FALSE);
@@ -4858,7 +5103,8 @@ void CMainFrame::OnViewCubicclipping() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFileSaveregion() {
+void CMainFrame::OnFileSaveregion()
+{
 	SaveAsDialog(true);
 }
 
@@ -4866,15 +5112,17 @@ void CMainFrame::OnFileSaveregion() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnUpdateFileSaveregion(CCmdUI *pCmdUI) {
-	pCmdUI->Enable (static_cast<BOOL>(region_active));
+void CMainFrame::OnUpdateFileSaveregion(CCmdUI *pCmdUI)
+{
+	pCmdUI->Enable(static_cast<BOOL>(region_active));
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionMovedown() {
+void CMainFrame::OnSelectionMovedown()
+{
 	Undo_Start("move up");
 	Undo_AddBrushList(&selected_brushes);
 
@@ -4892,7 +5140,8 @@ void CMainFrame::OnSelectionMovedown() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionMoveup() {
+void CMainFrame::OnSelectionMoveup()
+{
 	idVec3	vAmt;
 	vAmt[0] = vAmt[1] = 0.0f;
 	vAmt[2] = g_qeglobals.d_gridsize;
@@ -4904,22 +5153,25 @@ void CMainFrame::OnSelectionMoveup() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnToolbarMain() {
+void CMainFrame::OnToolbarMain()
+{
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnToolbarTexture() {
+void CMainFrame::OnToolbarTexture()
+{
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionPrint() {
-	for (brush_t * b = selected_brushes.next; b != &selected_brushes; b = b->next) {
+void CMainFrame::OnSelectionPrint()
+{
+	for (brush_t *b = selected_brushes.next; b != &selected_brushes; b = b->next) {
 		Brush_Print(b);
 	}
 }
@@ -4928,7 +5180,8 @@ void CMainFrame::OnSelectionPrint() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::UpdateTextureBar() {
+void CMainFrame::UpdateTextureBar()
+{
 	if (m_wndTextureBar.GetSafeHwnd()) {
 		m_wndTextureBar.GetSurfaceAttributes();
 	}
@@ -4941,17 +5194,17 @@ bool	g_bOriginalFlag;
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionTogglesizepaint() {
+void CMainFrame::OnSelectionTogglesizepaint()
+{
 	if (::GetAsyncKeyState('Q')) {
 		if (!g_bTABDown) {
 			g_bTABDown = true;
-			g_bOriginalFlag = ( g_PrefsDlg.m_bSizePaint != FALSE );
+			g_bOriginalFlag = (g_PrefsDlg.m_bSizePaint != FALSE);
 			g_PrefsDlg.m_bSizePaint = !g_bOriginalFlag;
 			Sys_UpdateWindows(W_XY);
 			return;
 		}
-	}
-	else {
+	} else {
 		g_bTABDown = false;
 		g_PrefsDlg.m_bSizePaint = g_bOriginalFlag;
 		Sys_UpdateWindows(W_XY);
@@ -4963,7 +5216,8 @@ void CMainFrame::OnSelectionTogglesizepaint() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBrushMakecone() {
+void CMainFrame::OnBrushMakecone()
+{
 	Undo_Start("make cone");
 	Undo_AddBrushList(&selected_brushes);
 	DoSides(true);
@@ -4975,7 +5229,8 @@ void CMainFrame::OnBrushMakecone() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTexturesLoad() {
+void CMainFrame::OnTexturesLoad()
+{
 	BROWSEINFO	bi;
 	CString		strPath;
 	char		*p = strPath.GetBuffer(MAX_PATH + 1);
@@ -4990,6 +5245,7 @@ void CMainFrame::OnTexturesLoad() {
 
 	LPITEMIDLIST	pidlBrowse;
 	pidlBrowse = SHBrowseForFolder(&bi);
+
 	if (pidlBrowse) {
 		SHGetPathFromIDList(pidlBrowse, p);
 		strPath.ReleaseBuffer();
@@ -5003,12 +5259,15 @@ void CMainFrame::OnTexturesLoad() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnToggleRotatelock() {
+void CMainFrame::OnToggleRotatelock()
+{
 	g_qeglobals.flatRotation = false;
 	g_qeglobals.rotateAxis++;
+
 	if (g_qeglobals.rotateAxis > 2) {
 		g_qeglobals.rotateAxis = 0;
 	}
+
 	Select_InitializeRotation();
 	Sys_UpdateWindows(W_CAMERA | W_XY);
 }
@@ -5017,7 +5276,8 @@ void CMainFrame::OnToggleRotatelock() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveBevel() {
+void CMainFrame::OnCurveBevel()
+{
 	// Curve_MakeCurvedBrush (false, false, false, false, false, true, true);
 }
 
@@ -5025,7 +5285,8 @@ void CMainFrame::OnCurveBevel() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveCylinder() {
+void CMainFrame::OnCurveCylinder()
+{
 	// Curve_MakeCurvedBrush (false, false, false, true, true, true, true);
 }
 
@@ -5033,7 +5294,8 @@ void CMainFrame::OnCurveCylinder() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveEighthsphere() {
+void CMainFrame::OnCurveEighthsphere()
+{
 	// Curve_MakeCurvedBrush (false, true, false, true, true, false, false);
 }
 
@@ -5041,7 +5303,8 @@ void CMainFrame::OnCurveEighthsphere() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveEndcap() {
+void CMainFrame::OnCurveEndcap()
+{
 	// Curve_MakeCurvedBrush (false, false, false, false, true, true, true);
 }
 
@@ -5049,7 +5312,8 @@ void CMainFrame::OnCurveEndcap() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveHemisphere() {
+void CMainFrame::OnCurveHemisphere()
+{
 	// Curve_MakeCurvedBrush (false, true, false, true, true, true, true);
 }
 
@@ -5057,7 +5321,8 @@ void CMainFrame::OnCurveHemisphere() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveInvertcurve() {
+void CMainFrame::OnCurveInvertcurve()
+{
 	// Curve_Invert ();
 }
 
@@ -5065,7 +5330,8 @@ void CMainFrame::OnCurveInvertcurve() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveQuarter() {
+void CMainFrame::OnCurveQuarter()
+{
 	// Curve_MakeCurvedBrush (false, true, false, true, true, true, false);
 }
 
@@ -5073,7 +5339,8 @@ void CMainFrame::OnCurveQuarter() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveSphere() {
+void CMainFrame::OnCurveSphere()
+{
 	// Curve_MakeCurvedBrush (false, true, true, true, true, true, true);
 }
 
@@ -5081,8 +5348,10 @@ void CMainFrame::OnCurveSphere() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFileImportmap() {
+void CMainFrame::OnFileImportmap()
+{
 	CFileDialog dlgFile(TRUE, NULL, NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, "Map files (*.map)|*.map||", this);
+
 	if (dlgFile.DoModal() == IDOK) {
 		Map_ImportFile(dlgFile.GetPathName().GetBuffer(0));
 	}
@@ -5092,8 +5361,10 @@ void CMainFrame::OnFileImportmap() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnFileExportmap() {
+void CMainFrame::OnFileExportmap()
+{
 	CFileDialog dlgFile(FALSE, "map", NULL, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, "Map files (*.map)|*.map||", this);
+
 	if (dlgFile.DoModal() == IDOK) {
 		Map_SaveSelected(dlgFile.GetPathName().GetBuffer(0));
 	}
@@ -5103,11 +5374,11 @@ void CMainFrame::OnFileExportmap() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewShowcurves() {
+void CMainFrame::OnViewShowcurves()
+{
 	if ((g_qeglobals.d_savedinfo.exclude ^= EXCLUDE_CURVES) & EXCLUDE_CURVES) {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWCURVES, MF_BYCOMMAND | MF_UNCHECKED);
-	}
-	else {
+	} else {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWCURVES, MF_BYCOMMAND | MF_CHECKED);
 	}
 
@@ -5118,7 +5389,8 @@ void CMainFrame::OnViewShowcurves() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionSelectNudgedown() {
+void CMainFrame::OnSelectionSelectNudgedown()
+{
 	NudgeSelection(3, g_qeglobals.d_savedinfo.m_nTextureTweak);
 }
 
@@ -5126,7 +5398,8 @@ void CMainFrame::OnSelectionSelectNudgedown() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionSelectNudgeleft() {
+void CMainFrame::OnSelectionSelectNudgeleft()
+{
 	NudgeSelection(0, g_qeglobals.d_savedinfo.m_nTextureTweak);
 }
 
@@ -5134,7 +5407,8 @@ void CMainFrame::OnSelectionSelectNudgeleft() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionSelectNudgeright() {
+void CMainFrame::OnSelectionSelectNudgeright()
+{
 	NudgeSelection(2, g_qeglobals.d_savedinfo.m_nTextureTweak);
 }
 
@@ -5142,7 +5416,8 @@ void CMainFrame::OnSelectionSelectNudgeright() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionSelectNudgeup() {
+void CMainFrame::OnSelectionSelectNudgeup()
+{
 	NudgeSelection(1, g_qeglobals.d_savedinfo.m_nTextureTweak);
 }
 
@@ -5150,9 +5425,11 @@ void CMainFrame::OnSelectionSelectNudgeup() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::NudgeSelection(int nDirection, float fAmount) {
+void CMainFrame::NudgeSelection(int nDirection, float fAmount)
+{
 	if (ActiveXY()->RotateMode()) {
 		int nAxis = 0;
+
 		if (ActiveXY()->GetViewType() == XY) {
 			nAxis = 2;
 		} else if (g_pParentWnd->ActiveXY()->GetViewType() == XZ) {
@@ -5170,29 +5447,28 @@ void CMainFrame::NudgeSelection(int nDirection, float fAmount) {
 
 		CString strStatus;
 		strStatus.Format
-			(
-				"Rotation x:: %.1f  y:: %.1f  z:: %.1f",
-				g_pParentWnd->ActiveXY()->Rotation()[0],
-				g_pParentWnd->ActiveXY()->Rotation()[1],
-				g_pParentWnd->ActiveXY()->Rotation()[2]
-			);
+		(
+		        "Rotation x:: %.1f  y:: %.1f  z:: %.1f",
+		        g_pParentWnd->ActiveXY()->Rotation()[0],
+		        g_pParentWnd->ActiveXY()->Rotation()[1],
+		        g_pParentWnd->ActiveXY()->Rotation()[2]
+		);
 		g_pParentWnd->SetStatusText(2, strStatus);
 		Select_RotateAxis(nAxis, fDeg, false, true);
 		Sys_UpdateWindows(W_ALL);
-	}
-	else if (ActiveXY()->ScaleMode()) {
+	} else if (ActiveXY()->ScaleMode()) {
 		if (nDirection == 0 || nDirection == 3) {
 			fAmount = -fAmount;
 		}
 
 		idVec3	v;
 		v[0] = v[1] = v[2] = 1.0f;
+
 		if (fAmount > 0) {
 			v[0] = 1.1f;
 			v[1] = 1.1f;
 			v[2] = 1.1f;
-		}
-		else {
+		} else {
 			v[0] = 0.9f;
 			v[1] = 0.9f;
 			v[2] = 0.9f;
@@ -5200,26 +5476,23 @@ void CMainFrame::NudgeSelection(int nDirection, float fAmount) {
 
 		Select_Scale
 		(
-			(g_nScaleHow & SCALE_X) ? v[0] : 1.0f,
-			(g_nScaleHow & SCALE_Y) ? v[1] : 1.0f,
-			(g_nScaleHow & SCALE_Z) ? v[2] : 1.0f
+		        (g_nScaleHow & SCALE_X) ? v[0] : 1.0f,
+		        (g_nScaleHow & SCALE_Y) ? v[1] : 1.0f,
+		        (g_nScaleHow & SCALE_Z) ? v[2] : 1.0f
 		);
 		Sys_UpdateWindows(W_ALL);
-	}
-	else {
+	} else {
 		// 0 - left, 1 - up, 2 - right, 3 - down
 		int nDim;
+
 		if (nDirection == 0) {
 			nDim = ActiveXY()->GetViewType() == YZ ? 1 : 0;
 			fAmount = -fAmount;
-		}
-		else if (nDirection == 1) {
+		} else if (nDirection == 1) {
 			nDim = ActiveXY()->GetViewType() == XY ? 1 : 2;
-		}
-		else if (nDirection == 2) {
+		} else if (nDirection == 2) {
 			nDim = ActiveXY()->GetViewType() == YZ ? 1 : 0;
-		}
-		else {
+		} else {
 			nDim = ActiveXY()->GetViewType() == XY ? 1 : 2;
 			fAmount = -fAmount;
 		}
@@ -5232,7 +5505,8 @@ void CMainFrame::NudgeSelection(int nDirection, float fAmount) {
  =======================================================================================================================
  =======================================================================================================================
  */
-BOOL CMainFrame::PreTranslateMessage(MSG *pMsg) {
+BOOL CMainFrame::PreTranslateMessage(MSG *pMsg)
+{
 	return CFrameWnd::PreTranslateMessage(pMsg);
 }
 
@@ -5240,7 +5514,8 @@ BOOL CMainFrame::PreTranslateMessage(MSG *pMsg) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::Nudge(int nDim, float fNudge) {
+void CMainFrame::Nudge(int nDim, float fNudge)
+{
 	idVec3	vMove;
 	vMove[0] = vMove[1] = vMove[2] = 0;
 	vMove[nDim] = fNudge;
@@ -5252,7 +5527,8 @@ void CMainFrame::Nudge(int nDim, float fNudge) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTexturesLoadlist() {
+void CMainFrame::OnTexturesLoadlist()
+{
 	CDialogTextures dlg;
 	dlg.DoModal();
 }
@@ -5261,20 +5537,22 @@ void CMainFrame::OnTexturesLoadlist() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectByBoundingBrush() {
+void CMainFrame::OnSelectByBoundingBrush()
+{
 	g_PrefsDlg.m_selectByBoundingBrush ^= 1;
 	m_wndToolBar.GetToolBarCtrl().CheckButton
-		(
-			ID_SELECT_BYBOUNDINGBRUSH,
-			(g_PrefsDlg.m_selectByBoundingBrush) ? TRUE : FALSE
-		);
+	(
+	        ID_SELECT_BYBOUNDINGBRUSH,
+	        (g_PrefsDlg.m_selectByBoundingBrush) ? TRUE : FALSE
+	);
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectBrushesOnly() {
+void CMainFrame::OnSelectBrushesOnly()
+{
 	g_PrefsDlg.m_selectOnlyBrushes ^= 1;
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SELECT_BRUSHESONLY, (g_PrefsDlg.m_selectOnlyBrushes) ? TRUE : FALSE);
 }
@@ -5286,7 +5564,8 @@ void CMainFrame::OnSelectBrushesOnly() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnDynamicLighting() {
+void CMainFrame::OnDynamicLighting()
+{
 	CCamWnd *pCam = new CCamWnd();
 	CRect	rect(100, 100, 300, 300);
 	pCam->Create(CAMERA_WINDOW_CLASS, "", WS_OVERLAPPEDWINDOW, rect, GetDesktopWindow(), 12345);
@@ -5297,7 +5576,8 @@ void CMainFrame::OnDynamicLighting() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveSimplepatchmesh() {
+void CMainFrame::OnCurveSimplepatchmesh()
+{
 	Undo_Start("make simpe patch mesh");
 	Undo_AddBrushList(&selected_brushes);
 
@@ -5312,7 +5592,8 @@ void CMainFrame::OnCurveSimplepatchmesh() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnPatchToggleBox() {
+void CMainFrame::OnPatchToggleBox()
+{
 	g_bPatchShowBounds ^= 1;
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_PATCH_SHOWBOUNDINGBOX, (g_bPatchShowBounds) ? TRUE : FALSE);
 	Sys_UpdateWindows(W_ALL);
@@ -5322,7 +5603,8 @@ void CMainFrame::OnPatchToggleBox() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnPatchWireframe() {
+void CMainFrame::OnPatchWireframe()
+{
 	g_bPatchWireFrame ^= 1;
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_PATCH_WIREFRAME, (g_bPatchWireFrame) ? TRUE : FALSE);
 	Sys_UpdateWindows(W_ALL);
@@ -5332,7 +5614,8 @@ void CMainFrame::OnPatchWireframe() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurvePatchcone() {
+void CMainFrame::OnCurvePatchcone()
+{
 	Undo_Start("make curve cone");
 	Undo_AddBrushList(&selected_brushes);
 	Patch_BrushToMesh(true);
@@ -5345,7 +5628,8 @@ void CMainFrame::OnCurvePatchcone() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurvePatchtube() {
+void CMainFrame::OnCurvePatchtube()
+{
 	Undo_Start("make curve cylinder");
 	Undo_AddBrushList(&selected_brushes);
 	Patch_BrushToMesh(false);
@@ -5358,7 +5642,8 @@ void CMainFrame::OnCurvePatchtube() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnPatchWeld() {
+void CMainFrame::OnPatchWeld()
+{
 	g_bPatchWeld ^= 1;
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_PATCH_WELD, (g_bPatchWeld) ? TRUE : FALSE);
 	Sys_UpdateWindows(W_ALL);
@@ -5368,7 +5653,8 @@ void CMainFrame::OnPatchWeld() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurvePatchbevel() {
+void CMainFrame::OnCurvePatchbevel()
+{
 	Undo_Start("make bevel");
 	Undo_AddBrushList(&selected_brushes);
 	Patch_BrushToMesh(false, true, false);
@@ -5381,7 +5667,8 @@ void CMainFrame::OnCurvePatchbevel() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurvePatchendcap() {
+void CMainFrame::OnCurvePatchendcap()
+{
 	Undo_Start("make end cap");
 	Undo_AddBrushList(&selected_brushes);
 	Patch_BrushToMesh(false, false, true);
@@ -5394,7 +5681,8 @@ void CMainFrame::OnCurvePatchendcap() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurvePatchinvertedbevel() {
+void CMainFrame::OnCurvePatchinvertedbevel()
+{
 	// Patch_BrushToMesh(false, true, false, true); Sys_UpdateWindows (W_ALL);
 }
 
@@ -5402,7 +5690,8 @@ void CMainFrame::OnCurvePatchinvertedbevel() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurvePatchinvertedendcap() {
+void CMainFrame::OnCurvePatchinvertedendcap()
+{
 	// Patch_BrushToMesh(false, false, true, true); Sys_UpdateWindows (W_ALL);
 }
 
@@ -5410,7 +5699,8 @@ void CMainFrame::OnCurvePatchinvertedendcap() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnPatchDrilldown() {
+void CMainFrame::OnPatchDrilldown()
+{
 	g_bPatchDrillDown ^= 1;
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_PATCH_DRILLDOWN, (g_bPatchDrillDown) ? TRUE : FALSE);
 	Sys_UpdateWindows(W_ALL);
@@ -5420,7 +5710,8 @@ void CMainFrame::OnPatchDrilldown() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveInsertcolumn() {
+void CMainFrame::OnCurveInsertcolumn()
+{
 	Undo_Start("insert colum");
 	Undo_AddBrushList(&selected_brushes);
 
@@ -5435,7 +5726,8 @@ void CMainFrame::OnCurveInsertcolumn() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveInsertrow() {
+void CMainFrame::OnCurveInsertrow()
+{
 	Undo_Start("insert row");
 	Undo_AddBrushList(&selected_brushes);
 
@@ -5450,7 +5742,8 @@ void CMainFrame::OnCurveInsertrow() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveDeletecolumn() {
+void CMainFrame::OnCurveDeletecolumn()
+{
 	Undo_Start("delete column");
 	Undo_AddBrushList(&selected_brushes);
 	Patch_AdjustSelected(false, true, true);
@@ -5463,7 +5756,8 @@ void CMainFrame::OnCurveDeletecolumn() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveDeleterow() {
+void CMainFrame::OnCurveDeleterow()
+{
 	Undo_Start("delete row");
 	Undo_AddBrushList(&selected_brushes);
 	Patch_AdjustSelected(false, false, true);
@@ -5476,7 +5770,8 @@ void CMainFrame::OnCurveDeleterow() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveInsertAddcolumn() {
+void CMainFrame::OnCurveInsertAddcolumn()
+{
 	Undo_Start("add (2) columns");
 	Undo_AddBrushList(&selected_brushes);
 	Patch_AdjustSelected(true, true, true);
@@ -5489,7 +5784,8 @@ void CMainFrame::OnCurveInsertAddcolumn() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveInsertAddrow() {
+void CMainFrame::OnCurveInsertAddrow()
+{
 	Undo_Start("add (2) rows");
 	Undo_AddBrushList(&selected_brushes);
 	Patch_AdjustSelected(true, false, true);
@@ -5502,7 +5798,8 @@ void CMainFrame::OnCurveInsertAddrow() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveInsertInsertcolumn() {
+void CMainFrame::OnCurveInsertInsertcolumn()
+{
 	Undo_Start("insert (2) columns");
 	Undo_AddBrushList(&selected_brushes);
 	Patch_AdjustSelected(true, true, false);
@@ -5515,7 +5812,8 @@ void CMainFrame::OnCurveInsertInsertcolumn() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveInsertInsertrow() {
+void CMainFrame::OnCurveInsertInsertrow()
+{
 	Undo_Start("insert (2) rows");
 	Undo_AddBrushList(&selected_brushes);
 	Patch_AdjustSelected(true, false, false);
@@ -5528,7 +5826,8 @@ void CMainFrame::OnCurveInsertInsertrow() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveNegative() {
+void CMainFrame::OnCurveNegative()
+{
 	Patch_ToggleInverted();
 
 	// Sys_UpdateWindows(W_ALL);
@@ -5538,7 +5837,8 @@ void CMainFrame::OnCurveNegative() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveNegativeTextureX() {
+void CMainFrame::OnCurveNegativeTextureX()
+{
 	Select_FlipTexture(false);
 
 	// Sys_UpdateWindows(W_ALL);
@@ -5548,7 +5848,8 @@ void CMainFrame::OnCurveNegativeTextureX() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveNegativeTextureY() {
+void CMainFrame::OnCurveNegativeTextureY()
+{
 	Select_FlipTexture(true);
 	// Sys_UpdateWindows(W_ALL);
 }
@@ -5557,7 +5858,8 @@ void CMainFrame::OnCurveNegativeTextureY() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveDeleteFirstcolumn() {
+void CMainFrame::OnCurveDeleteFirstcolumn()
+{
 	Undo_Start("delete first (2) columns");
 	Undo_AddBrushList(&selected_brushes);
 	Patch_AdjustSelected(false, true, true);
@@ -5570,7 +5872,8 @@ void CMainFrame::OnCurveDeleteFirstcolumn() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveDeleteFirstrow() {
+void CMainFrame::OnCurveDeleteFirstrow()
+{
 	Undo_Start("delete first (2) rows");
 	Undo_AddBrushList(&selected_brushes);
 	Patch_AdjustSelected(false, false, true);
@@ -5583,7 +5886,8 @@ void CMainFrame::OnCurveDeleteFirstrow() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveDeleteLastcolumn() {
+void CMainFrame::OnCurveDeleteLastcolumn()
+{
 	Undo_Start("delete last (2) columns");
 	Undo_AddBrushList(&selected_brushes);
 	Patch_AdjustSelected(false, true, false);
@@ -5596,7 +5900,8 @@ void CMainFrame::OnCurveDeleteLastcolumn() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveDeleteLastrow() {
+void CMainFrame::OnCurveDeleteLastrow()
+{
 	Undo_Start("delete last (2) rows");
 	Undo_AddBrushList(&selected_brushes);
 	Patch_AdjustSelected(false, false, false);
@@ -5609,7 +5914,8 @@ void CMainFrame::OnCurveDeleteLastrow() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnPatchBend() {
+void CMainFrame::OnPatchBend()
+{
 	Patch_BendToggle();
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_PATCH_BEND, (g_bPatchBendMode) ? TRUE : FALSE);
 	Sys_UpdateWindows(W_ALL);
@@ -5619,7 +5925,8 @@ void CMainFrame::OnPatchBend() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnPatchInsdel() {
+void CMainFrame::OnPatchInsdel()
+{
 	Patch_InsDelToggle();
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_PATCH_INSDEL, (g_bPatchInsertMode) ? TRUE : FALSE);
 	Sys_UpdateWindows(W_ALL);
@@ -5629,7 +5936,8 @@ void CMainFrame::OnPatchInsdel() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnPatchEnter() {
+void CMainFrame::OnPatchEnter()
+{
 }
 
 /*
@@ -5637,23 +5945,25 @@ void CMainFrame::OnPatchEnter() {
  =======================================================================================================================
  */
 extern bool Sys_KeyDown(int key);
-void CMainFrame::OnPatchTab() {
+void CMainFrame::OnPatchTab()
+{
 	if (g_bPatchBendMode) {
 		Patch_BendHandleTAB();
-	}
-	else if (g_bPatchInsertMode) {
+	} else if (g_bPatchInsertMode) {
 		Patch_InsDelHandleTAB();
-	}
-	else if (g_bAxialMode) {
+	} else if (g_bAxialMode) {
 		int faceCount = g_ptrSelectedFaces.GetSize();
+
 		if (faceCount > 0) {
-			face_t	*selFace = reinterpret_cast < face_t * > (g_ptrSelectedFaces.GetAt(0));
+			face_t	*selFace = reinterpret_cast < face_t * >(g_ptrSelectedFaces.GetAt(0));
 			int *ip = (Sys_KeyDown(VK_SHIFT)) ? &g_axialAnchor : &g_axialDest;
 			(*ip)++;
-			if ( *ip >= selFace->face_winding->GetNumPoints() ) {
+
+			if (*ip >= selFace->face_winding->GetNumPoints()) {
 				*ip = 0;
 			}
 		}
+
 		Sys_UpdateWindows(W_CAMERA);
 	} else {
 		//
@@ -5662,11 +5972,13 @@ void CMainFrame::OnPatchTab() {
 		//
 		brush_t		*b = selected_brushes.next;
 		entity_t	*e;
+
 		if (b != &selected_brushes) {
-			if ( idStr::Icmp(b->owner->eclass->name, "worldspawn") != 0 ) {
+			if (idStr::Icmp(b->owner->eclass->name, "worldspawn") != 0) {
 				e = b->owner;
 				Select_Deselect();
 				brush_t *b2;
+
 				for (b2 = e->brushes.onext; b2 != &e->brushes; b2 = b2->onext) {
 					if (b == b2) {
 						b2 = b2->onext;
@@ -5681,7 +5993,7 @@ void CMainFrame::OnPatchTab() {
 				Select_Brush(b2, false);
 				Sys_UpdateWindows(W_ALL);
 			}
-		} 
+		}
 	}
 }
 
@@ -5689,7 +6001,8 @@ void CMainFrame::OnPatchTab() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::UpdatePatchToolbarButtons() {
+void CMainFrame::UpdatePatchToolbarButtons()
+{
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_PATCH_BEND, (g_bPatchBendMode) ? TRUE : FALSE);
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_PATCH_INSDEL, (g_bPatchInsertMode) ? TRUE : FALSE);
 }
@@ -5698,7 +6011,8 @@ void CMainFrame::UpdatePatchToolbarButtons() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurvePatchdensetube() {
+void CMainFrame::OnCurvePatchdensetube()
+{
 	Undo_Start("dense cylinder");
 	Undo_AddBrushList(&selected_brushes);
 
@@ -5715,7 +6029,8 @@ void CMainFrame::OnCurvePatchdensetube() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurvePatchverydensetube() {
+void CMainFrame::OnCurvePatchverydensetube()
+{
 	Undo_Start("very dense cylinder");
 	Undo_AddBrushList(&selected_brushes);
 
@@ -5734,7 +6049,8 @@ void CMainFrame::OnCurvePatchverydensetube() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveCap() {
+void CMainFrame::OnCurveCap()
+{
 	Patch_CapCurrent();
 	Sys_UpdateWindows(W_ALL);
 }
@@ -5743,7 +6059,8 @@ void CMainFrame::OnCurveCap() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveCapInvertedbevel() {
+void CMainFrame::OnCurveCapInvertedbevel()
+{
 	Patch_CapCurrent(true);
 	Sys_UpdateWindows(W_ALL);
 }
@@ -5752,7 +6069,8 @@ void CMainFrame::OnCurveCapInvertedbevel() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveCapInvertedendcap() {
+void CMainFrame::OnCurveCapInvertedendcap()
+{
 	Patch_CapCurrent(false, true);
 	Sys_UpdateWindows(W_ALL);
 }
@@ -5761,7 +6079,8 @@ void CMainFrame::OnCurveCapInvertedendcap() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveRedisperseCols() {
+void CMainFrame::OnCurveRedisperseCols()
+{
 	Patch_DisperseColumns();
 	Sys_UpdateWindows(W_ALL);
 }
@@ -5770,7 +6089,8 @@ void CMainFrame::OnCurveRedisperseCols() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveRedisperseRows() {
+void CMainFrame::OnCurveRedisperseRows()
+{
 	Patch_DisperseRows();
 	Sys_UpdateWindows(W_ALL);
 }
@@ -5779,7 +6099,8 @@ void CMainFrame::OnCurveRedisperseRows() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnPatchNaturalize() {
+void CMainFrame::OnPatchNaturalize()
+{
 	Patch_NaturalizeSelected();
 	Sys_UpdateWindows(W_ALL);
 }
@@ -5788,7 +6109,8 @@ void CMainFrame::OnPatchNaturalize() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnPatchNaturalizeAlt() {
+void CMainFrame::OnPatchNaturalizeAlt()
+{
 	Patch_NaturalizeSelected(false, false, true);
 	Sys_UpdateWindows(W_ALL);
 }
@@ -5797,7 +6119,8 @@ void CMainFrame::OnPatchNaturalizeAlt() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSnapToGrid() {
+void CMainFrame::OnSnapToGrid()
+{
 	Select_SnapToGrid();
 	Sys_UpdateWindows(W_ALL);
 }
@@ -5806,7 +6129,8 @@ void CMainFrame::OnSnapToGrid() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurvePatchsquare() {
+void CMainFrame::OnCurvePatchsquare()
+{
 	Undo_Start("square cylinder");
 	Undo_AddBrushList(&selected_brushes);
 
@@ -5821,8 +6145,10 @@ void CMainFrame::OnCurvePatchsquare() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::CheckTextureScale(int id) {
+void CMainFrame::CheckTextureScale(int id)
+{
 	CMenu	*pMenu = GetMenu();
+
 	if (pMenu) {
 		pMenu->CheckMenuItem(ID_TEXTURES_TEXTUREWINDOWSCALE_10, MF_BYCOMMAND | MF_UNCHECKED);
 		pMenu->CheckMenuItem(ID_TEXTURES_TEXTUREWINDOWSCALE_25, MF_BYCOMMAND | MF_UNCHECKED);
@@ -5842,7 +6168,8 @@ void CMainFrame::CheckTextureScale(int id) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTexturesTexturewindowscale10() {
+void CMainFrame::OnTexturesTexturewindowscale10()
+{
 	g_PrefsDlg.m_nTextureScale = 10;
 	CheckTextureScale(ID_TEXTURES_TEXTUREWINDOWSCALE_10);
 }
@@ -5851,7 +6178,8 @@ void CMainFrame::OnTexturesTexturewindowscale10() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTexturesTexturewindowscale100() {
+void CMainFrame::OnTexturesTexturewindowscale100()
+{
 	g_PrefsDlg.m_nTextureScale = 100;
 	CheckTextureScale(ID_TEXTURES_TEXTUREWINDOWSCALE_100);
 }
@@ -5860,7 +6188,8 @@ void CMainFrame::OnTexturesTexturewindowscale100() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTexturesTexturewindowscale200() {
+void CMainFrame::OnTexturesTexturewindowscale200()
+{
 	g_PrefsDlg.m_nTextureScale = 200;
 	CheckTextureScale(ID_TEXTURES_TEXTUREWINDOWSCALE_200);
 }
@@ -5869,7 +6198,8 @@ void CMainFrame::OnTexturesTexturewindowscale200() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTexturesTexturewindowscale25() {
+void CMainFrame::OnTexturesTexturewindowscale25()
+{
 	g_PrefsDlg.m_nTextureScale = 25;
 	CheckTextureScale(ID_TEXTURES_TEXTUREWINDOWSCALE_25);
 }
@@ -5878,7 +6208,8 @@ void CMainFrame::OnTexturesTexturewindowscale25() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTexturesTexturewindowscale50() {
+void CMainFrame::OnTexturesTexturewindowscale50()
+{
 	g_PrefsDlg.m_nTextureScale = 50;
 	CheckTextureScale(ID_TEXTURES_TEXTUREWINDOWSCALE_50);
 }
@@ -5887,7 +6218,8 @@ void CMainFrame::OnTexturesTexturewindowscale50() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTexturesFlush() {
+void CMainFrame::OnTexturesFlush()
+{
 	//FIXME: idMaterial
 	//Texture_Flush();
 	Sys_UpdateWindows(W_ALL);
@@ -5897,7 +6229,8 @@ void CMainFrame::OnTexturesFlush() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveOverlayClear() {
+void CMainFrame::OnCurveOverlayClear()
+{
 	Patch_ClearOverlays();
 	Sys_UpdateWindows(W_ALL);
 }
@@ -5906,7 +6239,8 @@ void CMainFrame::OnCurveOverlayClear() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveOverlaySet() {
+void CMainFrame::OnCurveOverlaySet()
+{
 	Patch_SetOverlays();
 	Sys_UpdateWindows(W_ALL);
 }
@@ -5915,13 +6249,15 @@ void CMainFrame::OnCurveOverlaySet() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveThicken() {
+void CMainFrame::OnCurveThicken()
+{
 	Undo_Start("curve thicken");
 	Undo_AddBrushList(&selected_brushes);
 
 	CDialogThick	dlg;
-	if ( dlg.DoModal() == IDOK ) {
-		Patch_Thicken( dlg.m_nAmount, ( dlg.m_bSeams != FALSE ) );
+
+	if (dlg.DoModal() == IDOK) {
+		Patch_Thicken(dlg.m_nAmount, (dlg.m_bSeams != FALSE));
 		Sys_UpdateWindows(W_ALL);
 	}
 
@@ -5933,12 +6269,14 @@ void CMainFrame::OnCurveThicken() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveCyclecap() {
+void CMainFrame::OnCurveCyclecap()
+{
 	Patch_NaturalizeSelected(true, true);
 	Sys_UpdateWindows(W_ALL);
 }
 
-void CMainFrame::OnCurveCyclecapAlt() {
+void CMainFrame::OnCurveCyclecapAlt()
+{
 	Patch_NaturalizeSelected(true, true, true);
 	Sys_UpdateWindows(W_ALL);
 }
@@ -5947,7 +6285,8 @@ void CMainFrame::OnCurveCyclecapAlt() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveMatrixTranspose() {
+void CMainFrame::OnCurveMatrixTranspose()
+{
 	Patch_Transpose();
 	Sys_UpdateWindows(W_ALL);
 }
@@ -5956,9 +6295,10 @@ void CMainFrame::OnCurveMatrixTranspose() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTexturesReloadshaders() {
+void CMainFrame::OnTexturesReloadshaders()
+{
 	CWaitCursor wait;
-	declManager->Reload( false );
+	declManager->Reload(false);
 	Sys_UpdateWindows(W_ALL);
 }
 
@@ -5966,8 +6306,10 @@ void CMainFrame::OnTexturesReloadshaders() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::SetEntityCheck() {
+void CMainFrame::SetEntityCheck()
+{
 	CMenu	*pMenu = GetMenu();
+
 	if (pMenu) {
 		pMenu->CheckMenuItem(ID_VIEW_ENTITIESAS_WIREFRAME, MF_BYCOMMAND | (g_PrefsDlg.m_nEntityShowState == ENTITY_WIRE) ? MF_CHECKED : MF_UNCHECKED);
 		pMenu->CheckMenuItem(ID_VIEW_ENTITIESAS_SKINNED, MF_BYCOMMAND | (g_PrefsDlg.m_nEntityShowState == ENTITY_SKINNED) ? MF_CHECKED : MF_UNCHECKED);
@@ -5978,7 +6320,8 @@ void CMainFrame::SetEntityCheck() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnShowEntities() {
+void CMainFrame::OnShowEntities()
+{
 	HandlePopup(this, IDR_POPUP_ENTITY);
 }
 
@@ -5986,7 +6329,8 @@ void CMainFrame::OnShowEntities() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewEntitiesasSkinned() {
+void CMainFrame::OnViewEntitiesasSkinned()
+{
 	g_PrefsDlg.m_nEntityShowState = ENTITY_SKINNED;
 	SetEntityCheck();
 	g_PrefsDlg.SavePrefs();
@@ -5997,7 +6341,8 @@ void CMainFrame::OnViewEntitiesasSkinned() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewEntitiesasWireframe() {
+void CMainFrame::OnViewEntitiesasWireframe()
+{
 	g_PrefsDlg.m_nEntityShowState = ENTITY_WIRE;
 	SetEntityCheck();
 	g_PrefsDlg.SavePrefs();
@@ -6008,11 +6353,11 @@ void CMainFrame::OnViewEntitiesasWireframe() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewShowhint() {
+void CMainFrame::OnViewShowhint()
+{
 	if ((g_qeglobals.d_savedinfo.exclude ^= EXCLUDE_HINT) & EXCLUDE_HINT) {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWHINT, MF_BYCOMMAND | MF_UNCHECKED);
-	}
-	else {
+	} else {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWHINT, MF_BYCOMMAND | MF_CHECKED);
 	}
 
@@ -6023,11 +6368,13 @@ void CMainFrame::OnViewShowhint() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTexturesShowall() {
+void CMainFrame::OnTexturesShowall()
+{
 	Texture_ShowAll();
 }
 
-void CMainFrame::OnTexturesHideall() {
+void CMainFrame::OnTexturesHideall()
+{
 	Texture_HideAll();
 }
 
@@ -6035,7 +6382,8 @@ void CMainFrame::OnTexturesHideall() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnPatchInspector() {
+void CMainFrame::OnPatchInspector()
+{
 	DoPatchInspector();
 }
 
@@ -6043,14 +6391,15 @@ void CMainFrame::OnPatchInspector() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewOpengllighting() {
+void CMainFrame::OnViewOpengllighting()
+{
 	g_PrefsDlg.m_bGLLighting ^= 1;
 	g_PrefsDlg.SavePrefs();
 	CheckMenuItem
 	(
-		::GetMenu(GetSafeHwnd()),
-		ID_VIEW_OPENGLLIGHTING,
-		MF_BYCOMMAND | (g_PrefsDlg.m_bGLLighting) ? MF_CHECKED : MF_UNCHECKED
+	        ::GetMenu(GetSafeHwnd()),
+	        ID_VIEW_OPENGLLIGHTING,
+	        MF_BYCOMMAND | (g_PrefsDlg.m_bGLLighting) ? MF_CHECKED : MF_UNCHECKED
 	);
 	Sys_UpdateWindows(W_XY | W_CAMERA);
 }
@@ -6059,7 +6408,8 @@ void CMainFrame::OnViewOpengllighting() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectAll() {
+void CMainFrame::OnSelectAll()
+{
 	Select_AllOfType();
 }
 
@@ -6067,11 +6417,11 @@ void CMainFrame::OnSelectAll() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewShowcaulk() {
+void CMainFrame::OnViewShowcaulk()
+{
 	if ((g_qeglobals.d_savedinfo.exclude ^= EXCLUDE_CAULK) & EXCLUDE_CAULK) {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWCAULK, MF_BYCOMMAND | MF_UNCHECKED);
-	}
-	else {
+	} else {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWCAULK, MF_BYCOMMAND | MF_CHECKED);
 	}
 
@@ -6082,7 +6432,8 @@ void CMainFrame::OnViewShowcaulk() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveFreeze() {
+void CMainFrame::OnCurveFreeze()
+{
 	Patch_Freeze();
 }
 
@@ -6090,7 +6441,8 @@ void CMainFrame::OnCurveFreeze() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveUnFreeze() {
+void CMainFrame::OnCurveUnFreeze()
+{
 	Patch_UnFreeze(false);
 }
 
@@ -6098,7 +6450,8 @@ void CMainFrame::OnCurveUnFreeze() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveUnFreezeAll() {
+void CMainFrame::OnCurveUnFreezeAll()
+{
 	Patch_UnFreeze(true);
 }
 
@@ -6106,7 +6459,8 @@ void CMainFrame::OnCurveUnFreezeAll() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectReselect() {
+void CMainFrame::OnSelectReselect()
+{
 	Select_Reselect();
 }
 
@@ -6114,11 +6468,11 @@ void CMainFrame::OnSelectReselect() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewShowangles() {
+void CMainFrame::OnViewShowangles()
+{
 	if ((g_qeglobals.d_savedinfo.exclude ^= EXCLUDE_ANGLES) & EXCLUDE_ANGLES) {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWANGLES, MF_BYCOMMAND | MF_UNCHECKED);
-	}
-	else {
+	} else {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOWANGLES, MF_BYCOMMAND | MF_CHECKED);
 	}
 
@@ -6129,20 +6483,22 @@ void CMainFrame::OnViewShowangles() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnEditSaveprefab() {
+void CMainFrame::OnEditSaveprefab()
+{
 	CFileDialog dlgFile
-				(
-					FALSE,
-					"pfb",
-					NULL,
-					OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
-					"Prefab files (*.pfb)|*.pfb||",
-					this
-				);
+	(
+	        FALSE,
+	        "pfb",
+	        NULL,
+	        OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+	        "Prefab files (*.pfb)|*.pfb||",
+	        this
+	);
 	char		CurPath[1024];
 	::GetCurrentDirectory(1024, CurPath);
 
 	dlgFile.m_ofn.lpstrInitialDir = CurPath;
+
 	if (dlgFile.DoModal() == IDOK) {
 		Map_SaveSelected(dlgFile.GetPathName().GetBuffer(0));
 	}
@@ -6152,19 +6508,21 @@ void CMainFrame::OnEditSaveprefab() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnEditLoadprefab() {
+void CMainFrame::OnEditLoadprefab()
+{
 	CFileDialog dlgFile
-				(
-					TRUE,
-					"pfb",
-					NULL,
-					OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
-					"Prefab files (*.pfb)|*.pfb||",
-					this
-				);
+	(
+	        TRUE,
+	        "pfb",
+	        NULL,
+	        OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
+	        "Prefab files (*.pfb)|*.pfb||",
+	        this
+	);
 	char		CurPath[1024];
 	::GetCurrentDirectory(1024, CurPath);
 	dlgFile.m_ofn.lpstrInitialDir = CurPath;
+
 	if (dlgFile.DoModal() == IDOK) {
 		Map_ImportFile(dlgFile.GetPathName().GetBuffer(0));
 	}
@@ -6174,7 +6532,8 @@ void CMainFrame::OnEditLoadprefab() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveMoreendcapsbevelsSquarebevel() {
+void CMainFrame::OnCurveMoreendcapsbevelsSquarebevel()
+{
 	Undo_Start("square bevel");
 	Undo_AddBrushList(&selected_brushes);
 
@@ -6189,7 +6548,8 @@ void CMainFrame::OnCurveMoreendcapsbevelsSquarebevel() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveMoreendcapsbevelsSquareendcap() {
+void CMainFrame::OnCurveMoreendcapsbevelsSquareendcap()
+{
 	Undo_Start("square endcap");
 	Undo_AddBrushList(&selected_brushes);
 
@@ -6204,7 +6564,8 @@ void CMainFrame::OnCurveMoreendcapsbevelsSquareendcap() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnBrushPrimitivesSphere() {
+void CMainFrame::OnBrushPrimitivesSphere()
+{
 	Undo_Start("make sphere");
 	Undo_AddBrushList(&selected_brushes);
 
@@ -6220,7 +6581,8 @@ extern bool g_bCrossHairs;
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewCrosshair() {
+void CMainFrame::OnViewCrosshair()
+{
 	g_bCrossHairs ^= 1;
 	Sys_UpdateWindows(W_XY);
 }
@@ -6229,12 +6591,14 @@ void CMainFrame::OnViewCrosshair() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewHideshowHideselected() {
+void CMainFrame::OnViewHideshowHideselected()
+{
 	Select_Hide();
 	Select_Deselect();
 }
 
-void CMainFrame::OnViewHideshowHideNotselected() {
+void CMainFrame::OnViewHideshowHideNotselected()
+{
 	Select_Hide(true);
 	Select_Deselect();
 }
@@ -6243,7 +6607,8 @@ void CMainFrame::OnViewHideshowHideNotselected() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnViewHideshowShowhidden() {
+void CMainFrame::OnViewHideshowShowhidden()
+{
 	Select_ShowAllHidden();
 }
 
@@ -6251,7 +6616,8 @@ void CMainFrame::OnViewHideshowShowhidden() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTexturesShadersShow() {
+void CMainFrame::OnTexturesShadersShow()
+{
 	//
 	// g_PrefsDlg.m_bShowShaders ^= 1; CheckMenuItem (
 	// ::GetMenu(GetSafeHwnd()), ID_TEXTURES_SHADERS_SHOW, MF_BYCOMMAND |
@@ -6264,7 +6630,8 @@ void CMainFrame::OnTexturesShadersShow() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnTexturesFlushUnused() {
+void CMainFrame::OnTexturesFlushUnused()
+{
 	//FIXME: idMaterial
 	//Texture_FlushUnused();
 	Sys_UpdateWindows(W_TEXTURE);
@@ -6274,7 +6641,8 @@ void CMainFrame::OnTexturesFlushUnused() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionInvert() {
+void CMainFrame::OnSelectionInvert()
+{
 	Select_Invert();
 	Sys_UpdateWindows(W_XY | W_Z | W_CAMERA);
 }
@@ -6283,15 +6651,17 @@ void CMainFrame::OnSelectionInvert() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnProjectedLight() {
-	LightEditorInit( NULL );
+void CMainFrame::OnProjectedLight()
+{
+	LightEditorInit(NULL);
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnShowLighttextures() {
+void CMainFrame::OnShowLighttextures()
+{
 	g_bShowLightTextures ^= 1;
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SHOW_LIGHTTEXTURES, (g_bShowLightTextures) ? TRUE : FALSE);
 	Sys_UpdateWindows(W_ALL);
@@ -6301,7 +6671,8 @@ void CMainFrame::OnShowLighttextures() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnShowLightvolumes() {
+void CMainFrame::OnShowLightvolumes()
+{
 	g_bShowLightVolumes ^= 1;
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SHOW_LIGHTVOLUMES, (g_bShowLightVolumes) ? TRUE : FALSE);
 	Sys_UpdateWindows(W_ALL);
@@ -6311,20 +6682,21 @@ void CMainFrame::OnShowLightvolumes() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized) {
+void CMainFrame::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
+{
 	CFrameWnd::OnActivate(nState, pWndOther, bMinimized);
 
-	if ( nState != WA_INACTIVE ) {
-		common->ActivateTool( true );
+	if (nState != WA_INACTIVE) {
+		common->ActivateTool(true);
+
 		if (::IsWindowVisible(win32.hWnd)) {
 			::ShowWindow(win32.hWnd, SW_HIDE);
 		}
 
 		// start playing the editor sound world
-		soundSystem->SetPlayingSoundWorld( g_qeglobals.sw );
-	}
-	else {
-		 //com_editorActive = false;
+		soundSystem->SetPlayingSoundWorld(g_qeglobals.sw);
+	} else {
+		//com_editorActive = false;
 	}
 }
 
@@ -6332,7 +6704,8 @@ void CMainFrame::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized) {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSplinesMode() {
+void CMainFrame::OnSplinesMode()
+{
 	g_qeglobals.d_select_mode = sel_addpoint;
 	g_splineList->clear();
 	g_splineList->startEdit(true);
@@ -6344,7 +6717,8 @@ void CMainFrame::OnSplinesMode() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSplinesLoad() {
+void CMainFrame::OnSplinesLoad()
+{
 	g_splineList->load("maps/test.camera");
 	g_splineList->buildCamera();
 }
@@ -6353,7 +6727,8 @@ void CMainFrame::OnSplinesLoad() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSplinesSave() {
+void CMainFrame::OnSplinesSave()
+{
 	g_splineList->save("maps/test.camera");
 }
 
@@ -6361,7 +6736,8 @@ void CMainFrame::OnSplinesSave() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSplinesEdit() {
+void CMainFrame::OnSplinesEdit()
+{
 	showCameraInspector();
 	Sys_UpdateWindows(W_ALL);
 }
@@ -6372,7 +6748,8 @@ extern void testCamSpeed();
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSplineTest() {
+void CMainFrame::OnSplineTest()
+{
 	long	start = GetTickCount();
 	g_splineList->startCamera(start);
 
@@ -6398,21 +6775,24 @@ void CMainFrame::OnSplineTest() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSplinesTargetPoints() {
+void CMainFrame::OnSplinesTargetPoints()
+{
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSplinesCameraPoints() {
+void CMainFrame::OnSplinesCameraPoints()
+{
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnPopupNewcameraInterpolated() {
+void CMainFrame::OnPopupNewcameraInterpolated()
+{
 	g_qeglobals.d_select_mode = sel_addpoint;
 	g_qeglobals.selectObject = g_splineList->startNewCamera(idCameraPosition::INTERPOLATED);
 	OnSplinesEdit();
@@ -6422,7 +6802,8 @@ void CMainFrame::OnPopupNewcameraInterpolated() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnPopupNewcameraSpline() {
+void CMainFrame::OnPopupNewcameraSpline()
+{
 	g_qeglobals.d_select_mode = sel_addpoint;
 	g_qeglobals.selectObject = g_splineList->startNewCamera(idCameraPosition::SPLINE);
 	OnSplinesEdit();
@@ -6432,7 +6813,8 @@ void CMainFrame::OnPopupNewcameraSpline() {
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnPopupNewcameraFixed() {
+void CMainFrame::OnPopupNewcameraFixed()
+{
 	g_qeglobals.d_select_mode = sel_addpoint;
 	g_qeglobals.selectObject = g_splineList->startNewCamera(idCameraPosition::FIXED);
 	OnSplinesEdit();
@@ -6444,50 +6826,55 @@ extern void Patch_AdjustSubdivisions(float hadj, float vadj);
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveIncreaseVert() {
-	Patch_AdjustSubdivisions( 0.0f, -0.5f );
+void CMainFrame::OnCurveIncreaseVert()
+{
+	Patch_AdjustSubdivisions(0.0f, -0.5f);
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveDecreaseVert() {
-	Patch_AdjustSubdivisions( 0.0f, 0.5f );
+void CMainFrame::OnCurveDecreaseVert()
+{
+	Patch_AdjustSubdivisions(0.0f, 0.5f);
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveIncreaseHorz() {
-	Patch_AdjustSubdivisions( -0.5f, 0.0f );
+void CMainFrame::OnCurveIncreaseHorz()
+{
+	Patch_AdjustSubdivisions(-0.5f, 0.0f);
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnCurveDecreaseHorz() {
-	Patch_AdjustSubdivisions( 0.5f, 0.0f );
+void CMainFrame::OnCurveDecreaseHorz()
+{
+	Patch_AdjustSubdivisions(0.5f, 0.0f);
 }
 
 /*
  =======================================================================================================================
  =======================================================================================================================
  */
-void CMainFrame::OnSelectionMoveonly() {
+void CMainFrame::OnSelectionMoveonly()
+{
 	g_moveOnly ^= 1;
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SELECTION_MOVEONLY, (g_moveOnly) ? TRUE : FALSE);
 }
 
-void CMainFrame::OnSelectBrushlight() 
+void CMainFrame::OnSelectBrushlight()
 {
 	// TODO: Add your command handler code here
-	
+
 }
 
-void CMainFrame::OnSelectionCombine() 
+void CMainFrame::OnSelectionCombine()
 {
 	if (g_qeglobals.d_select_count < 2) {
 		Sys_Status("Must have at least two things selected.", 0);
@@ -6506,24 +6893,29 @@ void CMainFrame::OnSelectionCombine()
 	idStr str;
 	idMat3 mat;
 	idVec3 v;
+
 	if (e1->eclass->nShowFlags & ECLASS_LIGHT) {
-		// copy the lights origin and rotation matrix to 
+		// copy the lights origin and rotation matrix to
 		// light_origin and light_rotation
 		e1->trackLightOrigin = true;
 		e1->brushes.onext->trackLightOrigin = true;
+
 		if (GetVectorForKey(e1, "origin", v)) {
 			SetKeyVec3(e1, "light_origin", v);
 			e1->lightOrigin = v;
 		}
+
 		if (!GetMatrixForKey(e1, "rotation", mat)) {
 			mat.Identity();
 		}
+
 		sprintf(str, "%g %g %g %g %g %g %g %g %g", mat[0][0], mat[0][1], mat[0][2], mat[1][0], mat[1][1], mat[1][2], mat[2][0], mat[2][1], mat[2][2]);
 		SetKeyValue(e1, "light_rotation", str, false);
 		e1->lightRotation = mat;
 	}
 
 	bool setModel = true;
+
 	for (brush_t *b = selected_brushes.next; b != &selected_brushes; b = b->next) {
 		if (b->owner != e1) {
 			if (e1->eclass->nShowFlags & ECLASS_LIGHT) {
@@ -6531,12 +6923,14 @@ void CMainFrame::OnSelectionCombine()
 					e1->origin = b->owner->origin;
 					SetKeyVec3(e1, "origin", b->owner->origin);
 				}
+
 				if (GetMatrixForKey(b->owner, "rotation", mat)) {
 					e1->rotation = b->owner->rotation;
 					mat = b->owner->rotation;
 					sprintf(str, "%g %g %g %g %g %g %g %g %g", mat[0][0], mat[0][1], mat[0][2], mat[1][0], mat[1][1], mat[1][2], mat[2][0], mat[2][1], mat[2][2]);
 					SetKeyValue(e1, "rotation", str, false);
 				}
+
 				if (b->modelHandle) {
 					SetKeyValue(e1, "model", ValueForKey(b->owner, "model"));
 					setModel = false;
@@ -6544,6 +6938,7 @@ void CMainFrame::OnSelectionCombine()
 					b->entityModel = true;
 				}
 			}
+
 			Entity_UnlinkBrush(b);
 			Entity_LinkBrush(e1, b);
 		}
@@ -6559,9 +6954,11 @@ void CMainFrame::OnSelectionCombine()
 }
 
 extern void Patch_Weld(patchMesh_t *p, patchMesh_t *p2);
-void CMainFrame::OnPatchCombine() {
+void CMainFrame::OnPatchCombine()
+{
 	patchMesh_t *p, *p2;
 	p = p2 = NULL;
+
 	for (brush_t *b = selected_brushes.next; b != &selected_brushes; b = b->next) {
 		if (b->pPatch) {
 			if (p == NULL) {
@@ -6575,46 +6972,50 @@ void CMainFrame::OnPatchCombine() {
 	}
 }
 
-void CMainFrame::OnShowDoom() 
+void CMainFrame::OnShowDoom()
 {
 	int show = ::IsWindowVisible(win32.hWnd) ? SW_HIDE : SW_NORMAL;
+
 	if (show == SW_NORMAL) {
 		g_Inspectors->SetMode(W_TEXTURE);
 	}
+
 	::ShowWindow(win32.hWnd, show);
 }
 
-void CMainFrame::OnViewRendermode() 
+void CMainFrame::OnViewRendermode()
 {
 	m_pCamWnd->ToggleRenderMode();
 	CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_RENDERMODE, MF_BYCOMMAND | (m_pCamWnd->GetRenderMode()) ? MF_CHECKED : MF_UNCHECKED);
 	Sys_UpdateWindows(W_ALL);
 }
 
-void CMainFrame::OnViewRebuildrenderdata() 
+void CMainFrame::OnViewRebuildrenderdata()
 {
 	m_pCamWnd->BuildRendererState();
+
 	if (!m_pCamWnd->GetRenderMode()) {
 		OnViewRendermode();
 	}
+
 	Sys_UpdateWindows(W_ALL);
 }
 
-void CMainFrame::OnViewRealtimerebuild() 
+void CMainFrame::OnViewRealtimerebuild()
 {
 	m_pCamWnd->ToggleRebuildMode();
 	CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_REALTIMEREBUILD, MF_BYCOMMAND | (m_pCamWnd->GetRebuildMode()) ? MF_CHECKED : MF_UNCHECKED);
 	Sys_UpdateWindows(W_ALL);
 }
 
-void CMainFrame::OnViewRenderentityoutlines() 
+void CMainFrame::OnViewRenderentityoutlines()
 {
 	m_pCamWnd->ToggleEntityMode();
 	CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_RENDERENTITYOUTLINES, MF_BYCOMMAND | (m_pCamWnd->GetEntityMode()) ? MF_CHECKED : MF_UNCHECKED);
 	Sys_UpdateWindows(W_ALL);
 }
 
-void CMainFrame::OnViewMaterialanimation() 
+void CMainFrame::OnViewMaterialanimation()
 {
 	m_pCamWnd->ToggleAnimationMode();
 	CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_MATERIALANIMATION, MF_BYCOMMAND | (m_pCamWnd->GetAnimationMode()) ? MF_CHECKED : MF_UNCHECKED);
@@ -6622,48 +7023,56 @@ void CMainFrame::OnViewMaterialanimation()
 }
 
 extern void Face_SetAxialScale_BrushPrimit(face_t *face, bool y);
-void CMainFrame::OnAxialTextureByWidth() {
+void CMainFrame::OnAxialTextureByWidth()
+{
 	// temp test code
 	int faceCount = g_ptrSelectedFaces.GetSize();
-	
+
 	if (faceCount > 0) {
 		for (int i = 0; i < faceCount; i++) {
-			face_t	*selFace = reinterpret_cast < face_t * > (g_ptrSelectedFaces.GetAt(i));
+			face_t	*selFace = reinterpret_cast < face_t * >(g_ptrSelectedFaces.GetAt(i));
 			Face_SetAxialScale_BrushPrimit(selFace, false);
 		}
+
 		Sys_UpdateWindows(W_CAMERA);
 	}
 
 }
 
-void CMainFrame::OnAxialTextureByHeight() {
+void CMainFrame::OnAxialTextureByHeight()
+{
 	// temp test code
 	int faceCount = g_ptrSelectedFaces.GetSize();
-	
+
 	if (faceCount > 0) {
 		for (int i = 0; i < faceCount; i++) {
-			face_t	*selFace = reinterpret_cast < face_t * > (g_ptrSelectedFaces.GetAt(i));
+			face_t	*selFace = reinterpret_cast < face_t * >(g_ptrSelectedFaces.GetAt(i));
 			Face_SetAxialScale_BrushPrimit(selFace, true);
 		}
+
 		Sys_UpdateWindows(W_CAMERA);
 	}
 }
 
-void CMainFrame::OnAxialTextureArbitrary() {
+void CMainFrame::OnAxialTextureArbitrary()
+{
 	if (g_bAxialMode) {
 		g_bAxialMode = false;
 	}
+
 	int faceCount = g_ptrSelectedFaces.GetSize();
+
 	if (faceCount > 0) {
 		g_axialAnchor = 0;
 		g_axialDest = 1;
 		g_bAxialMode = true;
 	}
+
 	Sys_UpdateWindows(W_CAMERA);
 }
 
 extern void Select_ToOBJ();
-void CMainFrame::OnSelectionExportToobj() 
+void CMainFrame::OnSelectionExportToobj()
 {
 	Select_ToOBJ();
 }
@@ -6674,54 +7083,56 @@ void CMainFrame::OnSelectionExportToCM()
 	Select_ToCM();
 }
 
-void CMainFrame::OnSelectionWireFrameOff() {
-	Select_WireFrame( false );
+void CMainFrame::OnSelectionWireFrameOff()
+{
+	Select_WireFrame(false);
 }
 
-void CMainFrame::OnSelectionWireFrameOn() {
-	Select_WireFrame( true );
+void CMainFrame::OnSelectionWireFrameOn()
+{
+	Select_WireFrame(true);
 }
 
-void CMainFrame::OnSelectionVisibleOn() {
-	Select_ForceVisible( true );
+void CMainFrame::OnSelectionVisibleOn()
+{
+	Select_ForceVisible(true);
 }
 
-void CMainFrame::OnSelectionVisibleOff() {
-	Select_ForceVisible( false );
+void CMainFrame::OnSelectionVisibleOff()
+{
+	Select_ForceVisible(false);
 }
 
 
-void CMainFrame::OnViewRenderselection() 
+void CMainFrame::OnViewRenderselection()
 {
 	m_pCamWnd->ToggleSelectMode();
 	CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_RENDERSELECTION, MF_BYCOMMAND | (m_pCamWnd->GetSelectMode()) ? MF_CHECKED : MF_UNCHECKED);
 	Sys_UpdateWindows(W_CAMERA);
 }
 
-void CMainFrame::OnSelectNomodels() 
+void CMainFrame::OnSelectNomodels()
 {
 	g_PrefsDlg.m_selectNoModels ^= 1;
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SELECT_NOMODELS, (g_PrefsDlg.m_selectNoModels) ? TRUE : FALSE);
 }
 
-void CMainFrame::OnViewShowShowvisportals() 
+void CMainFrame::OnViewShowShowvisportals()
 {
 	if ((g_qeglobals.d_savedinfo.exclude ^= EXCLUDE_VISPORTALS) & EXCLUDE_VISPORTALS) {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOW_SHOWVISPORTALS, MF_BYCOMMAND | MF_UNCHECKED);
-	}
-	else {
+	} else {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOW_SHOWVISPORTALS, MF_BYCOMMAND | MF_CHECKED);
 	}
 
 	Sys_UpdateWindows(W_XY | W_CAMERA);
 }
 
-void CMainFrame::OnViewShowNoDraw() 
+void CMainFrame::OnViewShowNoDraw()
 {
 	if ((g_qeglobals.d_savedinfo.exclude ^= EXCLUDE_NODRAW) & EXCLUDE_NODRAW) {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOW_NODRAW, MF_BYCOMMAND | MF_UNCHECKED);
-	}
-	else {
+	} else {
 		CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_SHOW_NODRAW, MF_BYCOMMAND | MF_CHECKED);
 	}
 
@@ -6730,7 +7141,7 @@ void CMainFrame::OnViewShowNoDraw()
 
 
 
-void CMainFrame::OnViewRendersound() 
+void CMainFrame::OnViewRendersound()
 {
 	m_pCamWnd->ToggleSoundMode();
 	CheckMenuItem(::GetMenu(GetSafeHwnd()), ID_VIEW_RENDERSOUND, MF_BYCOMMAND | (m_pCamWnd->GetSoundMode()) ? MF_CHECKED : MF_UNCHECKED);
@@ -6738,48 +7149,58 @@ void CMainFrame::OnViewRendersound()
 }
 
 
-void CMainFrame::OnSoundShowsoundvolumes() 
+void CMainFrame::OnSoundShowsoundvolumes()
 {
 	g_qeglobals.d_savedinfo.showSoundAlways ^= 1;
+
 	if (g_qeglobals.d_savedinfo.showSoundAlways) {
 		g_qeglobals.d_savedinfo.showSoundWhenSelected = false;
 	}
+
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SOUND_SHOWSOUNDVOLUMES,g_qeglobals.d_savedinfo.showSoundAlways);
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SOUND_SHOWSELECTEDSOUNDVOLUMES,g_qeglobals.d_savedinfo.showSoundWhenSelected);
 	Sys_UpdateWindows(W_XY | W_CAMERA);
 }
 
-void CMainFrame::OnNurbEditor() {
+void CMainFrame::OnNurbEditor()
+{
 	nurbMode ^= 1;
+
 	if (nurbMode) {
 		int num = nurb.GetNumValues();
 		idStr temp = va("%i 3 ", num);
+
 		for (int i = 0; i < num; i++) {
 			temp += va("(%i %i) ", (int)nurb.GetValue(i).x, (int)nurb.GetValue(i).y);
 		}
+
 		temp += "\r\n";
+
 		if (OpenClipboard()) {
 			::EmptyClipboard();
-	        HGLOBAL clip;
-			char* buff;
+			HGLOBAL clip;
+			char *buff;
 			clip = ::GlobalAlloc(GMEM_DDESHARE, temp.Length()+1);
-			buff = (char*)::GlobalLock(clip);
+			buff = (char *)::GlobalLock(clip);
 			strcpy(buff, temp);
 			::GlobalUnlock(clip);
 			::SetClipboardData(CF_TEXT, clip);
 			::CloseClipboard();
 		}
+
 		nurb.Clear();
 	}
 }
 
 
-void CMainFrame::OnSoundShowselectedsoundvolumes() 
+void CMainFrame::OnSoundShowselectedsoundvolumes()
 {
 	g_qeglobals.d_savedinfo.showSoundWhenSelected ^= 1;
+
 	if (g_qeglobals.d_savedinfo.showSoundWhenSelected) {
 		g_qeglobals.d_savedinfo.showSoundAlways = false;
 	}
+
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SOUND_SHOWSOUNDVOLUMES,g_qeglobals.d_savedinfo.showSoundAlways);
 	m_wndToolBar.GetToolBarCtrl().CheckButton(ID_SOUND_SHOWSELECTEDSOUNDVOLUMES,g_qeglobals.d_savedinfo.showSoundWhenSelected);
 	Sys_UpdateWindows(W_XY | W_CAMERA);
@@ -6793,26 +7214,26 @@ void CMainFrame::OnSelectAlltargets()
 
 void CMainFrame::OnSelectCompleteEntity()
 {
-    brush_t* b = NULL;
-    entity_t* e = NULL;
+	brush_t *b = NULL;
+	entity_t *e = NULL;
 
-    b = selected_brushes.next;
-    if ( b == &selected_brushes )
-    {
-        return; //no brushes selected
-    }
-    
-    e = b->owner;
-    if ( b->owner == world_entity )
-    {
-        return; //don't select the world entity
-    }
+	b = selected_brushes.next;
 
-    for (b = e->brushes.onext; b != &e->brushes; b = b->onext) 
-    {
-        Select_Brush ( b , false );
-    }
-    Sys_UpdateWindows ( W_ALL );
+	if (b == &selected_brushes) {
+		return; //no brushes selected
+	}
+
+	e = b->owner;
+
+	if (b->owner == world_entity) {
+		return; //don't select the world entity
+	}
+
+	for (b = e->brushes.onext; b != &e->brushes; b = b->onext) {
+		Select_Brush(b , false);
+	}
+
+	Sys_UpdateWindows(W_ALL);
 }
 
 
@@ -6820,7 +7241,7 @@ void CMainFrame::OnSelectCompleteEntity()
 
 //---------------------------------------------------------------------------
 // OnPrecisionCursorCycle
-// 
+//
 // Called when the user presses the "cycle precision cursor mode" key.
 // Cycles the precision cursor among the following three modes:
 //		PRECISION_CURSOR_NONE
@@ -6837,46 +7258,47 @@ void CMainFrame::OnGenerateMaterialsList()
 	idStrList mtrList;
 	idStr     mtrName,mtrFileName;
 
-	
-	g_Inspectors->consoleWnd.ExecuteCommand ( "clear" );
-	Sys_BeginWait ();
-	common->Printf ( "Generating list of active materials...\n" );
 
-	for ( brush_t* b = active_brushes.next ; b != &active_brushes ; b=b->next ) {
-		if ( b->pPatch ){
+	g_Inspectors->consoleWnd.ExecuteCommand("clear");
+	Sys_BeginWait();
+	common->Printf("Generating list of active materials...\n");
+
+	for (brush_t *b = active_brushes.next ; b != &active_brushes ; b=b->next) {
+		if (b->pPatch) {
 			mtrName = b->pPatch->d_texture->GetName();
-			if ( !mtrList.Find( mtrName) ) {
-				mtrList.Insert ( mtrName );
+
+			if (!mtrList.Find(mtrName)) {
+				mtrList.Insert(mtrName);
 			}
 
-		}
-		else {
-			for ( face_t* f = b->brush_faces ; f != NULL ; f=f->next)
-			{
+		} else {
+			for (face_t *f = b->brush_faces ; f != NULL ; f=f->next) {
 				mtrName = f->d_texture->GetName();
-				if ( !mtrList.Find( mtrName) ) {
-					mtrList.Insert ( mtrName );
+
+				if (!mtrList.Find(mtrName)) {
+					mtrList.Insert(mtrName);
 				}
 
 			}
-		}				
+		}
 	}
 
 	mtrList.Sort();
-	for ( int i = 0 ; i < mtrList.Num() ; i++ ) {
-		common->Printf ( "%s\n" , mtrList[i].c_str());
+
+	for (int i = 0 ; i < mtrList.Num() ; i++) {
+		common->Printf("%s\n" , mtrList[i].c_str());
 	}
-	
+
 	mtrFileName = currentmap;
 //	mtrFileName.ExtractFileName( mtrFileName );
 	mtrFileName = mtrFileName.StripPath();
 
-	common->Printf ( "Done...found %i unique materials\n" , mtrList.Num());
-	mtrFileName = mtrFileName + idStr ( "_Materials.txt" );
-	g_Inspectors->SetMode ( W_CONSOLE , true );
-	g_Inspectors->consoleWnd.SetConsoleText ( va ( "condump %s" , mtrFileName.c_str()) );
+	common->Printf("Done...found %i unique materials\n" , mtrList.Num());
+	mtrFileName = mtrFileName + idStr("_Materials.txt");
+	g_Inspectors->SetMode(W_CONSOLE , true);
+	g_Inspectors->consoleWnd.SetConsoleText(va("condump %s" , mtrFileName.c_str()));
 
-	Sys_EndWait ();
+	Sys_EndWait();
 }
 
 /*
@@ -6885,18 +7307,22 @@ void CMainFrame::OnGenerateMaterialsList()
 */
 
 
-void CMainFrame::OnSplinesAddPoints() {
+void CMainFrame::OnSplinesAddPoints()
+{
 	g_Inspectors->entityDlg.AddCurvePoints();
 }
 
-void CMainFrame::OnSplinesEditPoints() {
+void CMainFrame::OnSplinesEditPoints()
+{
 	g_Inspectors->entityDlg.EditCurvePoints();
 }
 
-void CMainFrame::OnSplinesDeletePoint() {
+void CMainFrame::OnSplinesDeletePoint()
+{
 	g_Inspectors->entityDlg.DeleteCurvePoint();
 }
 
-void CMainFrame::OnSplinesInsertPoint() {
+void CMainFrame::OnSplinesInsertPoint()
+{
 	g_Inspectors->entityDlg.InsertCurvePoint();
 }

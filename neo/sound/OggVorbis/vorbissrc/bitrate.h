@@ -24,54 +24,54 @@
 
 /* encode side bitrate tracking */
 typedef struct bitrate_manager_state {
-  ogg_uint32_t  *queue_binned;
-  ogg_uint32_t  *queue_actual;
-  int            queue_size;
+	ogg_uint32_t  *queue_binned;
+	ogg_uint32_t  *queue_actual;
+	int            queue_size;
 
-  int            queue_head;
-  int            queue_bins;
+	int            queue_head;
+	int            queue_bins;
 
-  long          *avg_binacc;
-  int            avg_center;
-  int            avg_tail;
-  ogg_uint32_t   avg_centeracc;
-  ogg_uint32_t   avg_sampleacc;
-  ogg_uint32_t   avg_sampledesired;
-  ogg_uint32_t   avg_centerdesired;
+	long          *avg_binacc;
+	int            avg_center;
+	int            avg_tail;
+	ogg_uint32_t   avg_centeracc;
+	ogg_uint32_t   avg_sampleacc;
+	ogg_uint32_t   avg_sampledesired;
+	ogg_uint32_t   avg_centerdesired;
 
-  long          *minmax_binstack;
-  long          *minmax_posstack;
-  long          *minmax_limitstack;
-  long           minmax_stackptr;
+	long          *minmax_binstack;
+	long          *minmax_posstack;
+	long          *minmax_limitstack;
+	long           minmax_stackptr;
 
-  long           minmax_acctotal;
-  int            minmax_tail;
-  ogg_uint32_t   minmax_sampleacc;
-  ogg_uint32_t   minmax_sampledesired;
+	long           minmax_acctotal;
+	int            minmax_tail;
+	ogg_uint32_t   minmax_sampleacc;
+	ogg_uint32_t   minmax_sampledesired;
 
-  int            next_to_flush;
-  int            last_to_flush;
-  
-  double         avgfloat;
+	int            next_to_flush;
+	int            last_to_flush;
 
-  /* unfortunately, we need to hold queued packet data somewhere */
-  oggpack_buffer *packetbuffers;
-  ogg_packet     *packets;
+	double         avgfloat;
+
+	/* unfortunately, we need to hold queued packet data somewhere */
+	oggpack_buffer *packetbuffers;
+	ogg_packet     *packets;
 
 } bitrate_manager_state;
 
-typedef struct bitrate_manager_info{
-  /* detailed bitrate management setup */
-  double queue_avg_time;
-  double queue_avg_center;
-  double queue_minmax_time;
-  double queue_hardmin;
-  double queue_hardmax;
-  double queue_avgmin;
-  double queue_avgmax;
+typedef struct bitrate_manager_info {
+	/* detailed bitrate management setup */
+	double queue_avg_time;
+	double queue_avg_center;
+	double queue_minmax_time;
+	double queue_hardmin;
+	double queue_hardmax;
+	double queue_avgmin;
+	double queue_avgmax;
 
-  double avgfloat_downslew_max;
-  double avgfloat_upslew_max;
+	double avgfloat_downslew_max;
+	double avgfloat_upslew_max;
 
 } bitrate_manager_info;
 

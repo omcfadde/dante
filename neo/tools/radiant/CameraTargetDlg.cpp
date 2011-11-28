@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ static char THIS_FILE[] = __FILE__;
 // CCameraTargetDlg dialog
 
 
-CCameraTargetDlg::CCameraTargetDlg(CWnd* pParent /*=NULL*/)
+CCameraTargetDlg::CCameraTargetDlg(CWnd *pParent /*=NULL*/)
 	: CDialog(CCameraTargetDlg::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CCameraTargetDlg)
@@ -52,7 +52,7 @@ CCameraTargetDlg::CCameraTargetDlg(CWnd* pParent /*=NULL*/)
 }
 
 
-void CCameraTargetDlg::DoDataExchange(CDataExchange* pDX)
+void CCameraTargetDlg::DoDataExchange(CDataExchange *pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CCameraTargetDlg)
@@ -71,8 +71,8 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CCameraTargetDlg message handlers
 
-void CCameraTargetDlg::OnPopupNewcameraFixed() 
+void CCameraTargetDlg::OnPopupNewcameraFixed()
 {
 	// TODO: Add your command handler code here
-	
+
 }

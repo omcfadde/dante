@@ -34,4 +34,4 @@
 # endif
 #endif /* defined (vms) */
 
-time_t curl_getdate PARAMS ((const char *p, const time_t *now));
+time_t curl_getdate PARAMS((const char *p, const time_t *now));

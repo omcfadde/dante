@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -40,33 +40,33 @@ class MEMainFrame;
 class FindDialog : public CDialog
 {
 
-public:
-	enum { IDD = IDD_FIND };
-	
-public:
-	FindDialog(CWnd* pParent = NULL);
-	virtual ~FindDialog();
+	public:
+		enum { IDD = IDD_FIND };
 
-	BOOL					Create();
+	public:
+		FindDialog(CWnd *pParent = NULL);
+		virtual ~FindDialog();
 
-protected:
-	DECLARE_DYNAMIC(FindDialog)
+		BOOL					Create();
 
-	//Overrides
-	virtual void			DoDataExchange(CDataExchange* pDX);
-	virtual BOOL			OnInitDialog();
+	protected:
+		DECLARE_DYNAMIC(FindDialog)
 
-	//Messages
-	afx_msg void			OnBnClickedFindNext();
-	virtual void			OnCancel();
-	DECLARE_MESSAGE_MAP()
+		//Overrides
+		virtual void			DoDataExchange(CDataExchange *pDX);
+		virtual BOOL			OnInitDialog();
 
-	//Protected Operations
-	void					LoadFindSettings();
-	void					SaveFindSettings();
+		//Messages
+		afx_msg void			OnBnClickedFindNext();
+		virtual void			OnCancel();
+		DECLARE_MESSAGE_MAP()
 
-protected:
-	MEMainFrame*			parent;
-	MaterialSearchData_t	searchData;
-	rvRegistryOptions		registry;
+		//Protected Operations
+		void					LoadFindSettings();
+		void					SaveFindSettings();
+
+	protected:
+		MEMainFrame			*parent;
+		MaterialSearchData_t	searchData;
+		rvRegistryOptions		registry;
 };

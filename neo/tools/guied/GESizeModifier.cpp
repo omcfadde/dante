@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -32,10 +32,10 @@ If you have questions concerning this license or the applicable additional terms
 #include "GEApp.h"
 #include "GESizeModifier.h"
 
-rvGESizeModifier::rvGESizeModifier ( const char* name, idWindow* window, float l, float t, float r, float b ) :
-	rvGEModifier ( name, window  )
+rvGESizeModifier::rvGESizeModifier(const char *name, idWindow *window, float l, float t, float r, float b) :
+	rvGEModifier(name, window)
 {
-	mOldRect = mWrapper->GetClientRect ( );
+	mOldRect = mWrapper->GetClientRect();
 
 	mNewRect[0] = mOldRect[0] + l;
 	mNewRect[1] = mOldRect[1] + t;
@@ -43,35 +43,34 @@ rvGESizeModifier::rvGESizeModifier ( const char* name, idWindow* window, float l
 	mNewRect[3] = mOldRect[3] + b - t;
 }
 
-bool rvGESizeModifier::Merge ( rvGEModifier* mergebase )
+bool rvGESizeModifier::Merge(rvGEModifier *mergebase)
 {
-	rvGESizeModifier* merge = (rvGESizeModifier*) mergebase;
-	
+	rvGESizeModifier *merge = (rvGESizeModifier *) mergebase;
+
 	mNewRect = merge->mNewRect;
-			
-	return true;
-} 
-
-bool rvGESizeModifier::Apply ( void )
-{
-	mWrapper->SetRect ( mNewRect );
 
 	return true;
 }
 
-bool rvGESizeModifier::Undo ( void )
+bool rvGESizeModifier::Apply(void)
 {
-	mWrapper->SetRect ( mOldRect );
-	
+	mWrapper->SetRect(mNewRect);
+
 	return true;
 }
 
-bool rvGESizeModifier::IsValid ( void )
+bool rvGESizeModifier::Undo(void)
 {
-	if ( !mWindow->GetParent ( ) )
-	{
+	mWrapper->SetRect(mOldRect);
+
+	return true;
+}
+
+bool rvGESizeModifier::IsValid(void)
+{
+	if (!mWindow->GetParent()) {
 		return false;
 	}
-	
+
 	return true;
 }

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -47,13 +47,15 @@ END_MESSAGE_MAP()
 * Constructor for ConsoleView.
 */
 ConsoleView::ConsoleView()
-: CFormView(ConsoleView::IDD) {
+	: CFormView(ConsoleView::IDD)
+{
 }
 
 /**
 * Destructor for ConsoleView.
 */
-ConsoleView::~ConsoleView() {
+ConsoleView::~ConsoleView()
+{
 }
 
 /**
@@ -62,9 +64,10 @@ ConsoleView::~ConsoleView() {
 * \todo: BMatt Nerve: Fix scroll code so the output window will scroll as text
 * is added if the cursor is at the end of the window.
 */
-void ConsoleView::AddText( const char *msg ) {
+void ConsoleView::AddText(const char *msg)
+{
 
-	if(!editConsole.GetSafeHwnd())
+	if (!editConsole.GetSafeHwnd())
 		return;
 
 	idStr work;
@@ -72,18 +75,20 @@ void ConsoleView::AddText( const char *msg ) {
 
 	work = msg;
 	work.RemoveColors();
-	work = TranslateString( work.c_str() );
+	work = TranslateString(work.c_str());
 
-	editConsole.GetWindowText( work2 );
+	editConsole.GetWindowText(work2);
 	int len = work2.GetLength();
-	if ( len + work.Length() > (int)editConsole.GetLimitText() ) {
-		work2 = work2.Right( editConsole.GetLimitText() * .75f );
+
+	if (len + work.Length() > (int)editConsole.GetLimitText()) {
+		work2 = work2.Right(editConsole.GetLimitText() * .75f);
 		len = work2.GetLength();
 		editConsole.SetWindowText(work2);
 	}
-	editConsole.SetSel( len, len );
-	editConsole.ReplaceSel( work );
-	
+
+	editConsole.SetSel(len, len);
+	editConsole.ReplaceSel(work);
+
 	//Hack: scrolls down a bit
 	editConsole.LineScroll(100);
 }
@@ -92,9 +97,10 @@ void ConsoleView::AddText( const char *msg ) {
 * Replaces the text in the console window with the specified text.
 * @param text The text to place in the console window.
 */
-void ConsoleView::SetConsoleText ( const idStr& text ) {
-	editInput.Clear ();
-	editInput.SetWindowText ( text.c_str() );
+void ConsoleView::SetConsoleText(const idStr &text)
+{
+	editInput.Clear();
+	editInput.SetWindowText(text.c_str());
 }
 
 /**
@@ -104,128 +110,133 @@ void ConsoleView::SetConsoleText ( const idStr& text ) {
 * @param cmd The text to execute. If this string is empty then the
 * input edit box text is used.
 */
-void ConsoleView::ExecuteCommand ( const idStr& cmd ) {
+void ConsoleView::ExecuteCommand(const idStr &cmd)
+{
 
 	CString str;
-	if ( cmd.Length() > 0 ) {
+
+	if (cmd.Length() > 0) {
 		str = cmd;
-	}
-	else {
+	} else {
 		editInput.GetWindowText(str);
 	}
 
-	if ( str != "" ) {			
+	if (str != "") {
 		editInput.SetWindowText("");
-		common->Printf("%s\n", str.GetBuffer(0));		
+		common->Printf("%s\n", str.GetBuffer(0));
 
 		//avoid adding multiple identical commands in a row
-		int index = consoleHistory.Num ();
+		int index = consoleHistory.Num();
 
-		if ( index == 0 || str.GetBuffer(0) != consoleHistory[index-1]) {					
+		if (index == 0 || str.GetBuffer(0) != consoleHistory[index-1]) {
 			//keep the history to 16 commands, removing the oldest command
-			if ( consoleHistory.Num () > 16 ) {
-				consoleHistory.RemoveIndex ( 0 );
+			if (consoleHistory.Num() > 16) {
+				consoleHistory.RemoveIndex(0);
 			}
-			currentHistoryPosition = consoleHistory.Append ( str.GetBuffer (0) );    
-		}
-		else {
-			currentHistoryPosition = consoleHistory.Num () - 1;
+
+			currentHistoryPosition = consoleHistory.Append(str.GetBuffer(0));
+		} else {
+			currentHistoryPosition = consoleHistory.Num() - 1;
 		}
 
-		currentCommand.Clear ();
+		currentCommand.Clear();
 
 		bool propogateCommand = true;
 
 		//process some of our own special commands
-		if ( str.CompareNoCase ( "clear" ) == 0) {
-			editConsole.SetSel ( 0 , -1 );
-			editConsole.Clear ();
-		}
-		else if ( str.CompareNoCase ( "edit" ) == 0) {
+		if (str.CompareNoCase("clear") == 0) {
+			editConsole.SetSel(0 , -1);
+			editConsole.Clear();
+		} else if (str.CompareNoCase("edit") == 0) {
 			propogateCommand = false;
 		}
-		if ( propogateCommand ) {
+
+		if (propogateCommand) {
 			cmdSystem->BufferCommandText(CMD_EXEC_NOW, str);
 		}
 	}
 }
 
 /**
-* Handles keyboard input to process the "Enter" key to execute 
+* Handles keyboard input to process the "Enter" key to execute
 * commands and command history.
 */
-BOOL ConsoleView::PreTranslateMessage(MSG* pMsg) {
+BOOL ConsoleView::PreTranslateMessage(MSG *pMsg)
+{
 
 	if (pMsg->hwnd == editInput.GetSafeHwnd()) {
 
-		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN ) {
+		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN) {
 			this->ExecuteCommand();
 			return TRUE;
 		}
 
-		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_UP ) {     
+		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_UP) {
 			//save off the current in-progress command so we can get back to it
-			if ( saveCurrentCommand == true ) {
+			if (saveCurrentCommand == true) {
 				CString str;
-				editInput.GetWindowText ( str );
-				currentCommand = str.GetBuffer ( 0 );
+				editInput.GetWindowText(str);
+				currentCommand = str.GetBuffer(0);
 				saveCurrentCommand = false;
 			}
 
-			if ( consoleHistory.Num () > 0 ) {
-				editInput.SetWindowText ( consoleHistory[currentHistoryPosition] );
+			if (consoleHistory.Num() > 0) {
+				editInput.SetWindowText(consoleHistory[currentHistoryPosition]);
 
-				int selLocation = consoleHistory[currentHistoryPosition].Length ();
-				editInput.SetSel ( selLocation , selLocation + 1);
+				int selLocation = consoleHistory[currentHistoryPosition].Length();
+				editInput.SetSel(selLocation , selLocation + 1);
 			}
 
-			if ( currentHistoryPosition > 0) {
+			if (currentHistoryPosition > 0) {
 				--currentHistoryPosition;
 			}
 
 			return TRUE;
 		}
 
-		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_DOWN ) {  
+		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_DOWN) {
 			int selLocation = 0;
-			if ( currentHistoryPosition < consoleHistory.Num () - 1 ) {
+
+			if (currentHistoryPosition < consoleHistory.Num() - 1) {
 				++currentHistoryPosition;
-				editInput.SetWindowText ( consoleHistory[currentHistoryPosition] );
-				selLocation = consoleHistory[currentHistoryPosition].Length ();
-			}
-			else {
-				editInput.SetWindowText ( currentCommand );
-				selLocation = currentCommand.Length ();
-				currentCommand.Clear ();
+				editInput.SetWindowText(consoleHistory[currentHistoryPosition]);
+				selLocation = consoleHistory[currentHistoryPosition].Length();
+			} else {
+				editInput.SetWindowText(currentCommand);
+				selLocation = currentCommand.Length();
+				currentCommand.Clear();
 				saveCurrentCommand = true;
 			}
 
-			editInput.SetSel ( selLocation , selLocation + 1);
+			editInput.SetSel(selLocation , selLocation + 1);
 
 			return TRUE;
 		}
-		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_TAB ) {  
-			common->Printf ( "Command History\n----------------\n" );
-			for ( int i = 0 ; i < consoleHistory.Num ();i++ )
-			{
-				common->Printf ( "[cmd %d]:  %s\n" , i , consoleHistory[i].c_str() );
+
+		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_TAB) {
+			common->Printf("Command History\n----------------\n");
+
+			for (int i = 0 ; i < consoleHistory.Num(); i++) {
+				common->Printf("[cmd %d]:  %s\n" , i , consoleHistory[i].c_str());
 			}
-			common->Printf ( "----------------\n" );
-		}
-		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_NEXT) {  
-			editConsole.LineScroll ( 10 );	
+
+			common->Printf("----------------\n");
 		}
 
-		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_PRIOR ) {  
-			editConsole.LineScroll ( -10 );	
+		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_NEXT) {
+			editConsole.LineScroll(10);
 		}
 
-		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_HOME ) {  
-			editConsole.LineScroll ( -editConsole.GetLineCount() );	
+		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_PRIOR) {
+			editConsole.LineScroll(-10);
 		}
 
-		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_END ) {  
-			editConsole.LineScroll ( editConsole.GetLineCount() );	
+		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_HOME) {
+			editConsole.LineScroll(-editConsole.GetLineCount());
+		}
+
+		if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_END) {
+			editConsole.LineScroll(editConsole.GetLineCount());
 		}
 	}
 
@@ -235,7 +246,8 @@ BOOL ConsoleView::PreTranslateMessage(MSG* pMsg) {
 /**
 * Transfers data to and from the controls in the console.
 */
-void ConsoleView::DoDataExchange(CDataExchange* pDX) {
+void ConsoleView::DoDataExchange(CDataExchange *pDX)
+{
 	CFormView::DoDataExchange(pDX);
 
 	DDX_Control(pDX, IDC_CONSOLE_OUTPUT, editConsole);
@@ -245,50 +257,53 @@ void ConsoleView::DoDataExchange(CDataExchange* pDX) {
 /**
 * Transfers data to and from the controls in the console.
 */
-void ConsoleView::OnInitialUpdate() {
-	
+void ConsoleView::OnInitialUpdate()
+{
+
 	CFormView::OnInitialUpdate();
 
 	CRect rect;
 	GetWindowRect(rect);
 
-	if(editConsole.m_hWnd)
+	if (editConsole.m_hWnd)
 		editConsole.MoveWindow(0, 0, rect.Width(), rect.Height()-EDIT_HEIGHT);
 
-	if(editInput.m_hWnd)
+	if (editInput.m_hWnd)
 		editInput.MoveWindow(0, rect.Height()-EDIT_HEIGHT, rect.Width(), EDIT_HEIGHT);
 }
 
 /**
 * Windows message called when the window is resized.
 */
-void ConsoleView::OnSize(UINT nType, int cx, int cy) {
+void ConsoleView::OnSize(UINT nType, int cx, int cy)
+{
 	CFormView::OnSize(nType, cx, cy);
 
 	//Move the edit windows around
-	if(editConsole.GetSafeHwnd())
+	if (editConsole.GetSafeHwnd())
 		editConsole.MoveWindow(0, 0, cx, cy-EDIT_HEIGHT);
 
-	if(editInput.GetSafeHwnd())
+	if (editInput.GetSafeHwnd())
 		editInput.MoveWindow(0, cy-EDIT_HEIGHT, cx, EDIT_HEIGHT);
 }
 
 /**
 * Replaces \\n with \\r\\n for carriage returns in an edit control.
 */
-const char *ConsoleView::TranslateString(const char *buf) {
+const char *ConsoleView::TranslateString(const char *buf)
+{
 	static char buf2[32768];
 	int			i, l;
 	char		*out;
 
 	l = strlen(buf);
 	out = buf2;
+
 	for (i = 0; i < l; i++) {
 		if (buf[i] == '\n') {
 			*out++ = '\r';
 			*out++ = '\n';
-		}
-		else {
+		} else {
 			*out++ = buf[i];
 		}
 	}

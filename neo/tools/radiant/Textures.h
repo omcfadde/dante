@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,12 +29,12 @@ If you have questions concerning this license or the applicable additional terms
 // a texturename of the form (0 0 0) will
 // create a solid color texture
 
-void		Texture_Init (bool bHardInit = true);
-void		Texture_FlushUnused ();
-void		Texture_Flush (bool bReload = false);
-void		Texture_ClearInuse (void);
-void		Texture_ShowInuse (void);
-void		Texture_ShowDirectory (int menunum, bool bLinked = false);
+void		Texture_Init(bool bHardInit = true);
+void		Texture_FlushUnused();
+void		Texture_Flush(bool bReload = false);
+void		Texture_ClearInuse(void);
+void		Texture_ShowInuse(void);
+void		Texture_ShowDirectory(int menunum, bool bLinked = false);
 void		Texture_ShowAll();
 void		Texture_HideAll();
 void		Texture_Cleanup(CStringList *pList = NULL);
@@ -45,8 +45,8 @@ void		Texture_Cleanup(CStringList *pList = NULL);
 
 const idMaterial *Texture_ForName(const char *name);
 
-void		Texture_Init (void);
-void		Texture_SetTexture (texdef_t *texdef, brushprimit_texdef_t *brushprimit_texdef, bool bFitScale = false, bool bSetSelection = true);
+void		Texture_Init(void);
+void		Texture_SetTexture(texdef_t *texdef, brushprimit_texdef_t *brushprimit_texdef, bool bFitScale = false, bool bSetSelection = true);
 
 void		Texture_SetMode(int iMenu);	// GL_TEXTURE_NEAREST, etc..
 void		Texture_ResetPosition();
@@ -55,5 +55,5 @@ void		FreeShaders();
 void		LoadShaders();
 void		ReloadShaders();
 int			WINAPI Texture_LoadSkin(char *pName, int *pnWidth, int *pnHeight);
-void		Texture_StartPos (void);
-qtexture_t *Texture_NextPos (int *x, int *y);
+void		Texture_StartPos(void);
+qtexture_t *Texture_NextPos(int *x, int *y);

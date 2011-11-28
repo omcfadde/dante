@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -46,108 +46,108 @@ If you have questions concerning this license or the applicable additional terms
 */
 class MEMainFrame : public CFrameWnd, public MaterialView
 {
-	
-public:
-	MEMainFrame();
-	virtual ~MEMainFrame();
 
-	//Public Operations
-	void						PrintConsoleMessage(const char *msg);
+	public:
+		MEMainFrame();
+		virtual ~MEMainFrame();
 
-protected: 
-	DECLARE_DYNAMIC(MEMainFrame)
+		//Public Operations
+		void						PrintConsoleMessage(const char *msg);
 
-	// Overrides
-	virtual BOOL 				PreCreateWindow(CREATESTRUCT& cs);
-	virtual BOOL 				OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
+	protected:
+		DECLARE_DYNAMIC(MEMainFrame)
 
-	//Message Handlers
-	afx_msg int					OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void 				OnDestroy();
-	afx_msg void 				OnSize(UINT nType, int cx, int cy);
-	afx_msg void 				OnTcnSelChange(NMHDR *pNMHDR, LRESULT *pResult);
+		// Overrides
+		virtual BOOL 				PreCreateWindow(CREATESTRUCT &cs);
+		virtual BOOL 				OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext *pContext);
 
-	//Menu Message Handlers
-	afx_msg void 				OnFileExit();
-	afx_msg void 				OnFileSaveMaterial();
-	afx_msg void 				OnFileSaveFile();
-	afx_msg void 				OnFileSaveAll();
-	afx_msg void 				OnFileSaveMaterialUpdate(CCmdUI *pCmdUI);
-	afx_msg void 				OnFileSaveFileUpdate(CCmdUI *pCmdUI);
-	afx_msg void 				OnFileSaveAllUpdate(CCmdUI *pCmdUI);
+		//Message Handlers
+		afx_msg int					OnCreate(LPCREATESTRUCT lpCreateStruct);
+		afx_msg void 				OnDestroy();
+		afx_msg void 				OnSize(UINT nType, int cx, int cy);
+		afx_msg void 				OnTcnSelChange(NMHDR *pNMHDR, LRESULT *pResult);
 
-	afx_msg void 				OnApplyMaterial();
-	afx_msg void 				OnApplyFile();
-	afx_msg void 				OnApplyAll();
-	afx_msg void 				OnApplyMaterialUpdate(CCmdUI *pCmdUI);
-	afx_msg void 				OnApplyFileUpdate(CCmdUI *pCmdUI);
-	afx_msg void 				OnApplyAllUpdate(CCmdUI *pCmdUI);
+		//Menu Message Handlers
+		afx_msg void 				OnFileExit();
+		afx_msg void 				OnFileSaveMaterial();
+		afx_msg void 				OnFileSaveFile();
+		afx_msg void 				OnFileSaveAll();
+		afx_msg void 				OnFileSaveMaterialUpdate(CCmdUI *pCmdUI);
+		afx_msg void 				OnFileSaveFileUpdate(CCmdUI *pCmdUI);
+		afx_msg void 				OnFileSaveAllUpdate(CCmdUI *pCmdUI);
 
-	afx_msg void 				OnEditCut();
-	afx_msg void 				OnEditCopy();
-	afx_msg void 				OnEditPaste();
-	afx_msg void 				OnEditDelete();
-	afx_msg void 				OnEditRename();
-	afx_msg void 				OnEditCutUpdate(CCmdUI *pCmdUI);
-	afx_msg void 				OnEditCopyUpdate(CCmdUI *pCmdUI);
-	afx_msg void 				OnEditPasteUpdate(CCmdUI *pCmdUI);
-	afx_msg void 				OnEditDeleteUpdate(CCmdUI *pCmdUI);
-	afx_msg void 				OnEditRenameUpdate(CCmdUI *pCmdUI);
+		afx_msg void 				OnApplyMaterial();
+		afx_msg void 				OnApplyFile();
+		afx_msg void 				OnApplyAll();
+		afx_msg void 				OnApplyMaterialUpdate(CCmdUI *pCmdUI);
+		afx_msg void 				OnApplyFileUpdate(CCmdUI *pCmdUI);
+		afx_msg void 				OnApplyAllUpdate(CCmdUI *pCmdUI);
 
-	afx_msg void 				OnEditFind();
-	afx_msg void 				OnEditFindNext();
+		afx_msg void 				OnEditCut();
+		afx_msg void 				OnEditCopy();
+		afx_msg void 				OnEditPaste();
+		afx_msg void 				OnEditDelete();
+		afx_msg void 				OnEditRename();
+		afx_msg void 				OnEditCutUpdate(CCmdUI *pCmdUI);
+		afx_msg void 				OnEditCopyUpdate(CCmdUI *pCmdUI);
+		afx_msg void 				OnEditPasteUpdate(CCmdUI *pCmdUI);
+		afx_msg void 				OnEditDeleteUpdate(CCmdUI *pCmdUI);
+		afx_msg void 				OnEditRenameUpdate(CCmdUI *pCmdUI);
 
-	afx_msg void 				OnEditUndo();
-	afx_msg void 				OnEditRedo();
-	afx_msg void 				OnEditUndoUpdate(CCmdUI *pCmdUI);
-	afx_msg void 				OnEditRedoUpdate(CCmdUI *pCmdUI);
-	
-	afx_msg void 				OnViewIncludeFile();
-	afx_msg void 				OnReloadArbPrograms();
-	afx_msg void 				OnReloadImages();
-	
-	DECLARE_MESSAGE_MAP()
+		afx_msg void 				OnEditFind();
+		afx_msg void 				OnEditFindNext();
 
-	//Methods for Find interactions
-	friend						FindDialog;
-	void						CloseFind();
-	void						FindNext(MaterialSearchData_t* search);
+		afx_msg void 				OnEditUndo();
+		afx_msg void 				OnEditRedo();
+		afx_msg void 				OnEditUndoUpdate(CCmdUI *pCmdUI);
+		afx_msg void 				OnEditRedoUpdate(CCmdUI *pCmdUI);
 
-	//MaterialView Interface
-	virtual void	MV_OnMaterialSelectionChange(MaterialDoc* pMaterial);
-	
-protected:
-	//Status and Toolbars
-	CStatusBar  				m_wndStatusBar;
-	CToolBar    				m_wndToolBar;
+		afx_msg void 				OnViewIncludeFile();
+		afx_msg void 				OnReloadArbPrograms();
+		afx_msg void 				OnReloadImages();
 
-	//Splitter windows
-	CTabCtrl					m_tabs;
-	CSplitterWnd				m_splitterWnd;
-	CSplitterWnd				m_editSplitter;
-	CSplitterWnd				m_previewSplitter;
-	CSplitterWnd*				m_materialEditSplitter;
+		DECLARE_MESSAGE_MAP()
 
-	//Child Views
-	MaterialTreeView*			m_materialTreeView;
-	StageView*					m_stageView;
-	MaterialPropTreeView*		m_materialPropertyView;
-	MaterialPreviewView*		m_materialPreviewView;
-	MaterialPreviewPropView*	m_previewPropertyView;
-	ConsoleView*				m_consoleView;
+		//Methods for Find interactions
+		friend						FindDialog;
+		void						CloseFind();
+		void						FindNext(MaterialSearchData_t *search);
 
-	MaterialEditView*			m_materialEditView;
+		//MaterialView Interface
+		virtual void	MV_OnMaterialSelectionChange(MaterialDoc *pMaterial);
 
-	//Find Data
-	FindDialog*					m_find;
-	MaterialSearchData_t		searchData;
+	protected:
+		//Status and Toolbars
+		CStatusBar  				m_wndStatusBar;
+		CToolBar    				m_wndToolBar;
 
-	//Document Management
-	MaterialDocManager			materialDocManager;
-	MaterialDoc*				currentDoc;
+		//Splitter windows
+		CTabCtrl					m_tabs;
+		CSplitterWnd				m_splitterWnd;
+		CSplitterWnd				m_editSplitter;
+		CSplitterWnd				m_previewSplitter;
+		CSplitterWnd				*m_materialEditSplitter;
 
-	//Options
-	MEOptions					options;
+		//Child Views
+		MaterialTreeView			*m_materialTreeView;
+		StageView					*m_stageView;
+		MaterialPropTreeView		*m_materialPropertyView;
+		MaterialPreviewView		*m_materialPreviewView;
+		MaterialPreviewPropView	*m_previewPropertyView;
+		ConsoleView				*m_consoleView;
+
+		MaterialEditView			*m_materialEditView;
+
+		//Find Data
+		FindDialog					*m_find;
+		MaterialSearchData_t		searchData;
+
+		//Document Management
+		MaterialDocManager			materialDocManager;
+		MaterialDoc				*currentDoc;
+
+		//Options
+		MEOptions					options;
 
 };
 

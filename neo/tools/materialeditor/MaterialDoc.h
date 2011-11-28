@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -44,19 +44,22 @@ typedef struct {
 */
 typedef struct {
 	idDict				materialData;
-	idList<MEStage_t*>	stages;
+	idList<MEStage_t *>	stages;
 } MEMaterial_t;
 
 /**
 * Implemented by the edit window that is responsible for modifying the material source text.
 */
-class SourceModifyOwner {
+class SourceModifyOwner
+{
 
-public:
-	SourceModifyOwner() {};
-	virtual ~SourceModifyOwner() {};
+	public:
+		SourceModifyOwner() {};
+		virtual ~SourceModifyOwner() {};
 
-	virtual idStr GetSourceText() { return ""; };
+		virtual idStr GetSourceText() {
+			return "";
+		};
 };
 
 class MaterialDocManager;
@@ -64,93 +67,94 @@ class MaterialDocManager;
 /**
 * Responsible for managing a single material that is being viewed and/or edited.
 */
-class MaterialDoc {
+class MaterialDoc
+{
 
-public:
-	MaterialDocManager*		manager;
-	idStr					name;
-	idMaterial*				renderMaterial;
-	MEMaterial_t			editMaterial;
-	
-	bool					modified;
-	bool					applyWaiting;
-	bool					deleted;
+	public:
+		MaterialDocManager		*manager;
+		idStr					name;
+		idMaterial				*renderMaterial;
+		MEMaterial_t			editMaterial;
 
-	bool					sourceModify;
-	SourceModifyOwner*		sourceModifyOwner;
-	
-public:
-	MaterialDoc(void);
-	~MaterialDoc(void);
+		bool					modified;
+		bool					applyWaiting;
+		bool					deleted;
 
-	/**
-	* Define the types of stages in a material.
-	*/
-	enum {
-		STAGE_TYPE_NORMAL,
-		STAGE_TYPE_SPECIALMAP
-	};
+		bool					sourceModify;
+		SourceModifyOwner		*sourceModifyOwner;
 
-	//Initialization Methods
-	void			SetRenderMaterial(idMaterial* material, bool parseMaterial = true, bool parseRenderMatierial = false);
+	public:
+		MaterialDoc(void);
+		~MaterialDoc(void);
 
-	//Stage Info Methods
-	int				GetStageCount();
-	int				FindStage(int stageType, const char* name);
-	MEStage_t		GetStage(int stage);
-	void			EnableStage(int stage, bool enabled);
-	void			EnableAllStages(bool enabled);
-	bool			IsStageEnabled(int stage);
+		/**
+		* Define the types of stages in a material.
+		*/
+		enum {
+			STAGE_TYPE_NORMAL,
+			STAGE_TYPE_SPECIALMAP
+		};
 
-	//Get Attributes
-	const char*		GetAttribute(int stage, const char* attribName, const char* defaultString = "");
-	int				GetAttributeInt(int stage, const char* attribName, const char* defaultString = "0");
-	float			GetAttributeFloat(int stage, const char* attribName, const char* defaultString = "0");
-	bool			GetAttributeBool(int stage, const char* attribName, const char* defaultString = "0");
+		//Initialization Methods
+		void			SetRenderMaterial(idMaterial *material, bool parseMaterial = true, bool parseRenderMatierial = false);
 
-	//Set Attribute Methods
-	void			SetAttribute(int stage, const char* attribName, const char* value, bool addUndo = true);
-	void			SetAttributeInt(int stage, const char* attribName, int value, bool addUndo = true);
-	void			SetAttributeFloat(int stage, const char* attribName, float value, bool addUndo = true);
-	void			SetAttributeBool(int stage, const char* attribName, bool value, bool addUndo = true);
-	void			SetMaterialName(const char* materialName, bool addUndo = true);
-	void			SetData(int stage, idDict* data);
+		//Stage Info Methods
+		int				GetStageCount();
+		int				FindStage(int stageType, const char *name);
+		MEStage_t		GetStage(int stage);
+		void			EnableStage(int stage, bool enabled);
+		void			EnableAllStages(bool enabled);
+		bool			IsStageEnabled(int stage);
 
-	//Source Editing Methods
-	void			SourceModify(SourceModifyOwner* owner);
-	bool			IsSourceModified();
-	void			ApplySourceModify(idStr& text);
-	const char*		GetEditSourceText();
+		//Get Attributes
+		const char		*GetAttribute(int stage, const char *attribName, const char *defaultString = "");
+		int				GetAttributeInt(int stage, const char *attribName, const char *defaultString = "0");
+		float			GetAttributeFloat(int stage, const char *attribName, const char *defaultString = "0");
+		bool			GetAttributeBool(int stage, const char *attribName, const char *defaultString = "0");
 
-	//Stage Modification Methods
-	void			AddStage(int stageType, const char* stageName, bool addUndo = true);
-	void			InsertStage(int stage, int stageType, const char* stageName, bool addUndo = true);
-	void			RemoveStage(int stage, bool addUndo = true);
-	void			ClearStages();
-	void			MoveStage(int from, int to, bool addUndo = true);
+		//Set Attribute Methods
+		void			SetAttribute(int stage, const char *attribName, const char *value, bool addUndo = true);
+		void			SetAttributeInt(int stage, const char *attribName, int value, bool addUndo = true);
+		void			SetAttributeFloat(int stage, const char *attribName, float value, bool addUndo = true);
+		void			SetAttributeBool(int stage, const char *attribName, bool value, bool addUndo = true);
+		void			SetMaterialName(const char *materialName, bool addUndo = true);
+		void			SetData(int stage, idDict *data);
 
-	void			ApplyMaterialChanges(bool force = false);
-	void			Save();
-	void			Delete();
-	
-protected:
+		//Source Editing Methods
+		void			SourceModify(SourceModifyOwner *owner);
+		bool			IsSourceModified();
+		void			ApplySourceModify(idStr &text);
+		const char		*GetEditSourceText();
 
-	//Internal Notifications
-	void			OnMaterialChanged();
-		
-	//Load Material Methods
-	void			ParseMaterialText(const char* source);
-	void			ParseMaterial(idLexer* src);
-	void			ParseStage(idLexer* src);
-	void			AddSpecialMapStage(const char* stageName, const char* map);
-	bool			ParseMaterialDef(idToken* token, idLexer* src, int type, idDict* dict);
-	void			ClearEditMaterial();
+		//Stage Modification Methods
+		void			AddStage(int stageType, const char *stageName, bool addUndo = true);
+		void			InsertStage(int stage, int stageType, const char *stageName, bool addUndo = true);
+		void			RemoveStage(int stage, bool addUndo = true);
+		void			ClearStages();
+		void			MoveStage(int from, int to, bool addUndo = true);
 
-	//Save/Apply Material Methods
-	const char*		GenerateSourceText();
-	void			ReplaceSourceText();
-	void			WriteStage(int stage, idFile_Memory* file);
-	void			WriteSpecialMapStage(int stage, idFile_Memory* file);
-	void			WriteMaterialDef(int stage, idFile_Memory* file, int type, int indent);
+		void			ApplyMaterialChanges(bool force = false);
+		void			Save();
+		void			Delete();
+
+	protected:
+
+		//Internal Notifications
+		void			OnMaterialChanged();
+
+		//Load Material Methods
+		void			ParseMaterialText(const char *source);
+		void			ParseMaterial(idLexer *src);
+		void			ParseStage(idLexer *src);
+		void			AddSpecialMapStage(const char *stageName, const char *map);
+		bool			ParseMaterialDef(idToken *token, idLexer *src, int type, idDict *dict);
+		void			ClearEditMaterial();
+
+		//Save/Apply Material Methods
+		const char		*GenerateSourceText();
+		void			ReplaceSourceText();
+		void			WriteStage(int stage, idFile_Memory *file);
+		void			WriteSpecialMapStage(int stage, idFile_Memory *file);
+		void			WriteMaterialDef(int stage, idFile_Memory *file, int type, int indent);
 };
 

@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -33,8 +33,9 @@ If you have questions concerning this license or the applicable additional terms
 /**
 * Constructor for MEOptions.
 */
-MEOptions::MEOptions ( ) {
-	
+MEOptions::MEOptions()
+{
+
 	registry.Init("Software\\id Software\\DOOM3\\Tools\\MaterialEditor");
 
 	materialTreeWidth = 0;
@@ -49,13 +50,15 @@ MEOptions::MEOptions ( ) {
 /**
 * Destructor for MEOptions.
 */
-MEOptions::~MEOptions() {
+MEOptions::~MEOptions()
+{
 }
 
 /**
 * Saves the material editor options to the registry.
 */
-bool MEOptions::Save (void) {
+bool MEOptions::Save(void)
+{
 
 	registry.SetFloat("materialTreeWidth", materialTreeWidth);
 	registry.SetFloat("stageWidth", stageWidth);
@@ -70,12 +73,13 @@ bool MEOptions::Save (void) {
 /**
 * Loads the material editor options from the registry.
 */
-bool MEOptions::Load (void) {
-	
-	if(!registry.Load()) {
+bool MEOptions::Load(void)
+{
+
+	if (!registry.Load()) {
 		return false;
 	}
-	
+
 	materialTreeWidth = (int)registry.GetFloat("materialTreeWidth");
 	stageWidth = (int)registry.GetFloat("stageWidth");
 	previewPropertiesWidth = (int)registry.GetFloat("previewPropertiesWidth");
@@ -84,5 +88,5 @@ bool MEOptions::Load (void) {
 	previewPropHeadingWidth = (int)registry.GetFloat("previewPropHeadingWidth");
 
 	return true;
-	
+
 }

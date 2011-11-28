@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -31,48 +31,48 @@ If you have questions concerning this license or the applicable additional terms
 
 /**
 * View in the Material Editor that functions as a Doom III
-* console. It allows users to view console output as well as issue 
+* console. It allows users to view console output as well as issue
 * console commands to the engine.
 */
 class ConsoleView : public CFormView
 {
 
-public:
-	enum{ IDD = IDD_CONSOLE_FORM };
+	public:
+		enum { IDD = IDD_CONSOLE_FORM };
 
-	CEdit			editConsole;
-	CEdit			editInput;
-	
-	idStr			consoleStr;
-	idStrList		consoleHistory;
-	idStr			currentCommand;
-	int				currentHistoryPosition;
-	bool			saveCurrentCommand;
+		CEdit			editConsole;
+		CEdit			editInput;
 
-public:
-	virtual			~ConsoleView();
+		idStr			consoleStr;
+		idStrList		consoleHistory;
+		idStr			currentCommand;
+		int				currentHistoryPosition;
+		bool			saveCurrentCommand;
 
-	//Public Operations
-	void			AddText(const char *msg);
-	void			SetConsoleText ( const idStr& text );
-	void			ExecuteCommand ( const idStr& cmd = "" );
-		
-	
-protected:
-	ConsoleView();
-	DECLARE_DYNCREATE(ConsoleView)
+	public:
+		virtual			~ConsoleView();
 
-	//CFormView Overrides
-	virtual BOOL	PreTranslateMessage(MSG* pMsg);
-	virtual void	DoDataExchange(CDataExchange* pDX);
-	virtual void	OnInitialUpdate();
+		//Public Operations
+		void			AddText(const char *msg);
+		void			SetConsoleText(const idStr &text);
+		void			ExecuteCommand(const idStr &cmd = "");
 
-	//Message Handlers
-	afx_msg void	OnSize(UINT nType, int cx, int cy);
-	DECLARE_MESSAGE_MAP()	
 
-	//Protected Operations
-	const char*		TranslateString(const char *buf);
+	protected:
+		ConsoleView();
+		DECLARE_DYNCREATE(ConsoleView)
+
+		//CFormView Overrides
+		virtual BOOL	PreTranslateMessage(MSG *pMsg);
+		virtual void	DoDataExchange(CDataExchange *pDX);
+		virtual void	OnInitialUpdate();
+
+		//Message Handlers
+		afx_msg void	OnSize(UINT nType, int cx, int cy);
+		DECLARE_MESSAGE_MAP()
+
+		//Protected Operations
+		const char		*TranslateString(const char *buf);
 
 
 };

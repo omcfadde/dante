@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -43,25 +43,21 @@ static char THIS_FILE[] = __FILE__;
 // CFindTextureDlg dialog
 
 CFindTextureDlg g_TexFindDlg;
-CFindTextureDlg& g_dlgFind = g_TexFindDlg;
+CFindTextureDlg &g_dlgFind = g_TexFindDlg;
 static bool g_bFindActive = true;
 
 void CFindTextureDlg::updateTextures(const char *p)
 {
-  if (isOpen())
-  {
-    if (g_bFindActive)
-    {
-      setFindStr(p);
-    }
-    else
-    {
-      setReplaceStr(p);
-    }
-  }
+	if (isOpen()) {
+		if (g_bFindActive) {
+			setFindStr(p);
+		} else {
+			setReplaceStr(p);
+		}
+	}
 }
 
-CFindTextureDlg::CFindTextureDlg(CWnd* pParent /*=NULL*/)
+CFindTextureDlg::CFindTextureDlg(CWnd *pParent /*=NULL*/)
 	: CDialog(CFindTextureDlg::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CFindTextureDlg)
@@ -74,7 +70,7 @@ CFindTextureDlg::CFindTextureDlg(CWnd* pParent /*=NULL*/)
 }
 
 
-void CFindTextureDlg::DoDataExchange(CDataExchange* pDX)
+void CFindTextureDlg::DoDataExchange(CDataExchange *pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CFindTextureDlg)
@@ -95,88 +91,87 @@ BEGIN_MESSAGE_MAP(CFindTextureDlg, CDialog)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-void CFindTextureDlg::OnBtnApply() 
+void CFindTextureDlg::OnBtnApply()
 {
 	UpdateData(TRUE);
 	CRect rct;
 	GetWindowRect(rct);
 	SaveRegistryInfo("Radiant::TextureFindWindow", &rct, sizeof(rct));
-	FindReplaceTextures( m_strFind, m_strReplace, ( m_bSelectedOnly != FALSE ), ( m_bForce != FALSE ) );
+	FindReplaceTextures(m_strFind, m_strReplace, (m_bSelectedOnly != FALSE), (m_bForce != FALSE));
 }
 
-void CFindTextureDlg::OnOK() 
+void CFindTextureDlg::OnOK()
 {
 	UpdateData(TRUE);
 	CRect rct;
 	GetWindowRect(rct);
 	SaveRegistryInfo("Radiant::TextureFindWindow", &rct, sizeof(rct));
-	FindReplaceTextures( m_strFind, m_strReplace, ( m_bSelectedOnly != FALSE ), ( m_bForce != FALSE ) );
+	FindReplaceTextures(m_strFind, m_strReplace, (m_bSelectedOnly != FALSE), (m_bForce != FALSE));
 	CDialog::OnOK();
 }
 
 void CFindTextureDlg::show()
 {
-  if (g_dlgFind.GetSafeHwnd() == NULL || IsWindow(g_dlgFind.GetSafeHwnd()) == FALSE)
-  {
-    g_dlgFind.Create(IDD_DIALOG_FINDREPLACE);
-    g_dlgFind.ShowWindow(SW_SHOW);
-  }
-  else
-  {
-    g_dlgFind.ShowWindow(SW_SHOW);
-  }
-  CRect rct;
-  LONG lSize = sizeof(rct);
-  if (LoadRegistryInfo("Radiant::TextureFindWindow", &rct, &lSize))
-    g_dlgFind.SetWindowPos(NULL, rct.left, rct.top, 0,0, SWP_NOSIZE | SWP_SHOWWINDOW);
-}		
+	if (g_dlgFind.GetSafeHwnd() == NULL || IsWindow(g_dlgFind.GetSafeHwnd()) == FALSE) {
+		g_dlgFind.Create(IDD_DIALOG_FINDREPLACE);
+		g_dlgFind.ShowWindow(SW_SHOW);
+	} else {
+		g_dlgFind.ShowWindow(SW_SHOW);
+	}
+
+	CRect rct;
+	LONG lSize = sizeof(rct);
+
+	if (LoadRegistryInfo("Radiant::TextureFindWindow", &rct, &lSize))
+		g_dlgFind.SetWindowPos(NULL, rct.left, rct.top, 0,0, SWP_NOSIZE | SWP_SHOWWINDOW);
+}
 
 
 bool CFindTextureDlg::isOpen()
 {
-  return (g_dlgFind.GetSafeHwnd() == NULL || ::IsWindowVisible(g_dlgFind.GetSafeHwnd()) == FALSE) ? false : true;
+	return (g_dlgFind.GetSafeHwnd() == NULL || ::IsWindowVisible(g_dlgFind.GetSafeHwnd()) == FALSE) ? false : true;
 }
 
-void CFindTextureDlg::setFindStr(const char * p)
+void CFindTextureDlg::setFindStr(const char *p)
 {
-  g_dlgFind.UpdateData(TRUE);
-  if (g_dlgFind.m_bLive)
-  {
-    g_dlgFind.m_strFind = p;
-    g_dlgFind.UpdateData(FALSE);
-  }
+	g_dlgFind.UpdateData(TRUE);
+
+	if (g_dlgFind.m_bLive) {
+		g_dlgFind.m_strFind = p;
+		g_dlgFind.UpdateData(FALSE);
+	}
 }
 
-void CFindTextureDlg::setReplaceStr(const char * p)
+void CFindTextureDlg::setReplaceStr(const char *p)
 {
-  g_dlgFind.UpdateData(TRUE);
-  if (g_dlgFind.m_bLive)
-  {
-    g_dlgFind.m_strReplace = p;
-    g_dlgFind.UpdateData(FALSE);
-  }
+	g_dlgFind.UpdateData(TRUE);
+
+	if (g_dlgFind.m_bLive) {
+		g_dlgFind.m_strReplace = p;
+		g_dlgFind.UpdateData(FALSE);
+	}
 }
 
 
-void CFindTextureDlg::OnCancel() 
+void CFindTextureDlg::OnCancel()
 {
-  CRect rct;
-  GetWindowRect(rct);
-  SaveRegistryInfo("Radiant::TextureFindWindow", &rct, sizeof(rct));
+	CRect rct;
+	GetWindowRect(rct);
+	SaveRegistryInfo("Radiant::TextureFindWindow", &rct, sizeof(rct));
 	CDialog::OnCancel();
 }
 
-BOOL CFindTextureDlg::DestroyWindow() 
+BOOL CFindTextureDlg::DestroyWindow()
 {
 	return CDialog::DestroyWindow();
 }
 
-void CFindTextureDlg::OnSetfocusEditFind() 
+void CFindTextureDlg::OnSetfocusEditFind()
 {
-  g_bFindActive = true;
+	g_bFindActive = true;
 }
 
-void CFindTextureDlg::OnSetfocusEditReplace() 
+void CFindTextureDlg::OnSetfocusEditReplace()
 {
-  g_bFindActive = false;
+	g_bFindActive = false;
 }

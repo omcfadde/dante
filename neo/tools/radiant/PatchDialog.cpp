@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ static char THIS_FILE[] = __FILE__;
 
 CPatchDialog g_PatchDialog;
 
-CPatchDialog::CPatchDialog(CWnd* pParent /*=NULL*/)
+CPatchDialog::CPatchDialog(CWnd *pParent /*=NULL*/)
 	: CDialog(CPatchDialog::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CPatchDialog)
@@ -64,7 +64,7 @@ CPatchDialog::CPatchDialog(CWnd* pParent /*=NULL*/)
 }
 
 
-void CPatchDialog::DoDataExchange(CDataExchange* pDX)
+void CPatchDialog::DoDataExchange(CDataExchange *pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CPatchDialog)
@@ -113,107 +113,110 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CPatchDialog message handlers
 
-void CPatchDialog::OnBtnPatchdetails() 
+void CPatchDialog::OnBtnPatchdetails()
 {
-  Patch_NaturalizeSelected(true);
-  Sys_UpdateWindows(W_ALL);
+	Patch_NaturalizeSelected(true);
+	Sys_UpdateWindows(W_ALL);
 }
 
-void CPatchDialog::OnBtnPatchfit() 
+void CPatchDialog::OnBtnPatchfit()
 {
-  Patch_FitTexturing();
-  Sys_UpdateWindows(W_ALL);
+	Patch_FitTexturing();
+	Sys_UpdateWindows(W_ALL);
 }
 
-void CPatchDialog::OnBtnPatchnatural() 
+void CPatchDialog::OnBtnPatchnatural()
 {
-  Patch_NaturalizeSelected();
-  Sys_UpdateWindows(W_ALL);
+	Patch_NaturalizeSelected();
+	Sys_UpdateWindows(W_ALL);
 }
 
-void CPatchDialog::OnBtnPatchreset() 
+void CPatchDialog::OnBtnPatchreset()
 {
-  //CTextureLayout dlg;
-  //if (dlg.DoModal() == IDOK)
-  //{
-  //  Patch_ResetTexturing(dlg.m_fX, dlg.m_fY);
-  //}
-  //Sys_UpdateWindows(W_ALL);
+	//CTextureLayout dlg;
+	//if (dlg.DoModal() == IDOK)
+	//{
+	//  Patch_ResetTexturing(dlg.m_fX, dlg.m_fY);
+	//}
+	//Sys_UpdateWindows(W_ALL);
 }
 
-void CPatchDialog::OnSelchangeComboCol() 
+void CPatchDialog::OnSelchangeComboCol()
 {
-  UpdateRowColInfo();
+	UpdateRowColInfo();
 }
 
-void CPatchDialog::OnSelchangeComboRow() 
+void CPatchDialog::OnSelchangeComboRow()
 {
-  UpdateRowColInfo();
+	UpdateRowColInfo();
 }
 
-void CPatchDialog::OnSelchangeComboType() 
+void CPatchDialog::OnSelchangeComboType()
 {
 	// TODO: Add your control notification handler code here
-	
+
 }
 
-void CPatchDialog::OnOK() 
+void CPatchDialog::OnOK()
 {
-  m_Patch = NULL;
-	
+	m_Patch = NULL;
+
 	CDialog::OnOK();
 }
 
-void CPatchDialog::OnDeltaposSpin(NMHDR* pNMHDR, LRESULT* pResult) 
+void CPatchDialog::OnDeltaposSpin(NMHDR *pNMHDR, LRESULT *pResult)
 {
-	NM_UPDOWN* pNMUpDown = (NM_UPDOWN*)pNMHDR;
-  UpdateSpinners((pNMUpDown->iDelta > 0), pNMUpDown->hdr.idFrom);
+	NM_UPDOWN *pNMUpDown = (NM_UPDOWN *)pNMHDR;
+	UpdateSpinners((pNMUpDown->iDelta > 0), pNMUpDown->hdr.idFrom);
 	*pResult = 0;
 }
 
-BOOL CPatchDialog::OnInitDialog() 
+BOOL CPatchDialog::OnInitDialog()
 {
 	CDialog::OnInitDialog();
-	
-  m_wndHScale.SetRange(0, 1000);
-  m_wndVScale.SetRange(0, 1000);
-  m_wndHShift.SetRange(0, 1000);
-  m_wndVShift.SetRange(0, 1000);
-  m_wndRotate.SetRange(0, 1000);
 
-  GetPatchInfo();
+	m_wndHScale.SetRange(0, 1000);
+	m_wndVScale.SetRange(0, 1000);
+	m_wndHShift.SetRange(0, 1000);
+	m_wndVShift.SetRange(0, 1000);
+	m_wndRotate.SetRange(0, 1000);
+
+	GetPatchInfo();
 
 	// TODO: Add extra initialization here
-	
+
 	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	// EXCEPTION: OCX Property Pages should return FALSE
 }
 
 
 
 void CPatchDialog::GetPatchInfo()
 {
-  m_Patch = SinglePatchSelected();
-  if (m_Patch != NULL)
-  {
-    CString str;
-    int i;
-    m_wndRows.ResetContent();
-    for (i = 0; i < m_Patch->height; i++)
-    {
-      str.Format("%i", i);
-      m_wndRows.AddString(str);
-    }
-    m_wndRows.SetCurSel(0);
-    m_wndCols.ResetContent();
-    for (i = 0; i < m_Patch->width; i++)
-    {
-      str.Format("%i", i);
-      m_wndCols.AddString(str);
-    }
-    m_wndCols.SetCurSel(0);
-  }
-  UpdateRowColInfo();
+	m_Patch = SinglePatchSelected();
+
+	if (m_Patch != NULL) {
+		CString str;
+		int i;
+		m_wndRows.ResetContent();
+
+		for (i = 0; i < m_Patch->height; i++) {
+			str.Format("%i", i);
+			m_wndRows.AddString(str);
+		}
+
+		m_wndRows.SetCurSel(0);
+		m_wndCols.ResetContent();
+
+		for (i = 0; i < m_Patch->width; i++) {
+			str.Format("%i", i);
+			m_wndCols.AddString(str);
+		}
+
+		m_wndCols.SetCurSel(0);
+	}
+
+	UpdateRowColInfo();
 }
 
 void CPatchDialog::SetPatchInfo()
@@ -223,136 +226,127 @@ void CPatchDialog::SetPatchInfo()
 
 void DoPatchInspector()
 {
-  if (g_PatchDialog.GetSafeHwnd() == NULL)
-  {
-    g_PatchDialog.Create(IDD_DIALOG_PATCH);
-    CRect rct;
-	  LONG lSize = sizeof(rct);
-	  if (LoadRegistryInfo("Radiant::PatchWindow", &rct, &lSize))
-    {
-      g_PatchDialog.SetWindowPos(NULL, rct.left, rct.top, 0,0, SWP_NOSIZE);
-    }
-  }
-  g_PatchDialog.ShowWindow(SW_SHOW);
-  g_PatchDialog.GetPatchInfo();
+	if (g_PatchDialog.GetSafeHwnd() == NULL) {
+		g_PatchDialog.Create(IDD_DIALOG_PATCH);
+		CRect rct;
+		LONG lSize = sizeof(rct);
+
+		if (LoadRegistryInfo("Radiant::PatchWindow", &rct, &lSize)) {
+			g_PatchDialog.SetWindowPos(NULL, rct.left, rct.top, 0,0, SWP_NOSIZE);
+		}
+	}
+
+	g_PatchDialog.ShowWindow(SW_SHOW);
+	g_PatchDialog.GetPatchInfo();
 }
 
 void UpdatePatchInspector()
 {
-  if (g_PatchDialog.GetSafeHwnd() != NULL)
-  {
-    g_PatchDialog.UpdateInfo();
-  }
+	if (g_PatchDialog.GetSafeHwnd() != NULL) {
+		g_PatchDialog.UpdateInfo();
+	}
 
 }
 
-void CPatchDialog::OnDestroy() 
+void CPatchDialog::OnDestroy()
 {
-  if (GetSafeHwnd())
-  {
-    CRect rct;
-    GetWindowRect(rct);
-	  SaveRegistryInfo("Radiant::PatchWindow", &rct, sizeof(rct));
-  }
+	if (GetSafeHwnd()) {
+		CRect rct;
+		GetWindowRect(rct);
+		SaveRegistryInfo("Radiant::PatchWindow", &rct, sizeof(rct));
+	}
+
 	CDialog::OnDestroy();
 }
 
 void CPatchDialog::UpdateRowColInfo()
 {
-  m_fX = m_fY = m_fZ = m_fS = m_fT = 0.0;
+	m_fX = m_fY = m_fZ = m_fS = m_fT = 0.0;
 
-  if (m_Patch != NULL)
-  {
-    int r = m_wndRows.GetCurSel();
-    int c = m_wndCols.GetCurSel();
-    if (r >= 0 && r < m_Patch->height && c >= 0 && c < m_Patch->width)
-    {
-      m_fX = m_Patch->ctrl(c,r).xyz[0];
-      m_fY = m_Patch->ctrl(c,r).xyz[1];
-      m_fZ = m_Patch->ctrl(c,r).xyz[2];
-      m_fS = m_Patch->ctrl(c,r).st[0];
-      m_fT = m_Patch->ctrl(c,r).st[1];
-    }
-  }
-  UpdateData(FALSE);
+	if (m_Patch != NULL) {
+		int r = m_wndRows.GetCurSel();
+		int c = m_wndCols.GetCurSel();
+
+		if (r >= 0 && r < m_Patch->height && c >= 0 && c < m_Patch->width) {
+			m_fX = m_Patch->ctrl(c,r).xyz[0];
+			m_fY = m_Patch->ctrl(c,r).xyz[1];
+			m_fZ = m_Patch->ctrl(c,r).xyz[2];
+			m_fS = m_Patch->ctrl(c,r).st[0];
+			m_fT = m_Patch->ctrl(c,r).st[1];
+		}
+	}
+
+	UpdateData(FALSE);
 }
 
 void CPatchDialog::UpdateInfo()
 {
-  GetPatchInfo();
+	GetPatchInfo();
 }
 
-void CPatchDialog::OnApply() 
+void CPatchDialog::OnApply()
 {
 	UpdateData(TRUE);
-  if (m_Patch != NULL)
-  {
-    int r = m_wndRows.GetCurSel();
-    int c = m_wndCols.GetCurSel();
-    if (r >= 0 && r < m_Patch->height && c >= 0 && c < m_Patch->width)
-    {
-      m_Patch->ctrl(c,r).xyz[0] = m_fX;
-      m_Patch->ctrl(c,r).xyz[1] = m_fY;
-      m_Patch->ctrl(c,r).xyz[2] = m_fZ;
-      m_Patch->ctrl(c,r).st[0] = m_fS;
-      m_Patch->ctrl(c,r).st[1] = m_fT;
-	  Patch_MakeDirty(m_Patch);
-      Sys_UpdateWindows(W_ALL);
-    }
-  }
+
+	if (m_Patch != NULL) {
+		int r = m_wndRows.GetCurSel();
+		int c = m_wndCols.GetCurSel();
+
+		if (r >= 0 && r < m_Patch->height && c >= 0 && c < m_Patch->width) {
+			m_Patch->ctrl(c,r).xyz[0] = m_fX;
+			m_Patch->ctrl(c,r).xyz[1] = m_fY;
+			m_Patch->ctrl(c,r).xyz[2] = m_fZ;
+			m_Patch->ctrl(c,r).st[0] = m_fS;
+			m_Patch->ctrl(c,r).st[1] = m_fT;
+			Patch_MakeDirty(m_Patch);
+			Sys_UpdateWindows(W_ALL);
+		}
+	}
 }
 
 void CPatchDialog::UpdateSpinners(bool bUp, int nID)
 {
-  texdef_t td;
+	texdef_t td;
 
-  td.rotate = 0.0;
-  td.scale[0] = td.scale[1] = 0.0;
-  td.shift[0] = td.shift[1] = 0.0;
-  td.value = 0;
+	td.rotate = 0.0;
+	td.scale[0] = td.scale[1] = 0.0;
+	td.shift[0] = td.shift[1] = 0.0;
+	td.value = 0;
 
 
-  UpdateData(TRUE);
+	UpdateData(TRUE);
 
-  if (nID == IDC_SPIN_ROTATE)
-  {
-	  if (bUp)
-		  td.rotate = m_fRotate;
+	if (nID == IDC_SPIN_ROTATE) {
+		if (bUp)
+			td.rotate = m_fRotate;
 		else
-		  td.rotate = -m_fRotate;
+			td.rotate = -m_fRotate;
+	} else if (nID == IDC_SPIN_HSCALE) {
+		if (bUp)
+			td.scale[0] = 1 - m_fHScale;
+		else
+			td.scale[0] = 1 + m_fHScale;
+	} else if (nID == IDC_SPIN_VSCALE) {
+		if (bUp)
+			td.scale[1] = 1 - m_fVScale;
+		else
+			td.scale[1] = 1 + m_fVScale;
 	}
-  else if (nID == IDC_SPIN_HSCALE)
-	{
-	  if (bUp)
-	    td.scale[0] = 1 - m_fHScale;
-	  else
-		  td.scale[0] = 1 + m_fHScale;
-  } 
-  else if (nID == IDC_SPIN_VSCALE)
-	{
-	  if (bUp)
-		  td.scale[1] = 1 - m_fVScale;
+
+	else if (nID == IDC_SPIN_HSHIFT) {
+		if (bUp)
+			td.shift[0] = m_fHShift;
 		else
-		  td.scale[1] = 1 + m_fVScale;
-  } 
-	  
-  else if (nID == IDC_SPIN_HSHIFT)
-	{
-	  if (bUp)
-		  td.shift[0] = m_fHShift;
+			td.shift[0] = -m_fHShift;
+	} else if (nID == IDC_SPIN_VSHIFT) {
+		if (bUp)
+			td.shift[1] = m_fVShift;
 		else
-		  td.shift[0] = -m_fHShift;
+			td.shift[1] = -m_fVShift;
 	}
-  else if (nID == IDC_SPIN_VSHIFT)
-	{
-	  if (bUp)
-	    td.shift[1] = m_fVShift;
-		else
-		  td.shift[1] = -m_fVShift;
-	}
-  
-  Patch_SetTextureInfo(&td);
-  Sys_UpdateWindows(W_CAMERA);
+
+	Patch_SetTextureInfo(&td);
+	Sys_UpdateWindows(W_CAMERA);
 }
 
 

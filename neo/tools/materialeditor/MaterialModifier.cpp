@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -39,7 +39,8 @@ If you have questions concerning this license or the applicable additional terms
 /**
 * Constructor for MaterialModifier
 */
-MaterialModifier::MaterialModifier(MaterialDocManager* manager, const char* materialName) {
+MaterialModifier::MaterialModifier(MaterialDocManager *manager, const char *materialName)
+{
 	this->manager = manager;
 	this->materialName = materialName;
 }
@@ -51,12 +52,13 @@ MaterialModifier::MaterialModifier(MaterialDocManager* manager, const char* mate
 /**
 * Constructor for AttributeMaterialModifier
 */
-AttributeMaterialModifier::AttributeMaterialModifier(MaterialDocManager* manager, const char* materialName, int stage, const char* key) 
-: MaterialModifier(manager, materialName) {
-	
+AttributeMaterialModifier::AttributeMaterialModifier(MaterialDocManager *manager, const char *materialName, int stage, const char *key)
+	: MaterialModifier(manager, materialName)
+{
+
 	this->stage = stage;
 	this->key = key;
-	
+
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -66,8 +68,9 @@ AttributeMaterialModifier::AttributeMaterialModifier(MaterialDocManager* manager
 /**
 * Constructor for AttributeMaterialModifierString
 */
-AttributeMaterialModifierString::AttributeMaterialModifierString(MaterialDocManager* manager, const char* materialName, int stage, const char* key, const char* value, const char* oldValue) 
-: AttributeMaterialModifier(manager, materialName, stage, key) {
+AttributeMaterialModifierString::AttributeMaterialModifierString(MaterialDocManager *manager, const char *materialName, int stage, const char *key, const char *value, const char *oldValue)
+	: AttributeMaterialModifier(manager, materialName, stage, key)
+{
 
 	this->value = value;
 	this->oldValue = oldValue;
@@ -76,16 +79,18 @@ AttributeMaterialModifierString::AttributeMaterialModifierString(MaterialDocMana
 /**
 * Performs an undo operation of a string attribute change.
 */
-void AttributeMaterialModifierString::Undo() {
-	MaterialDoc* material = manager->CreateMaterialDoc(materialName);
+void AttributeMaterialModifierString::Undo()
+{
+	MaterialDoc *material = manager->CreateMaterialDoc(materialName);
 	material->SetAttribute(stage, key, oldValue, false);
 }
 
 /**
 * Performs a redo operation of a string attribute change.
 */
-void AttributeMaterialModifierString::Redo() {
-	MaterialDoc* material = manager->CreateMaterialDoc(materialName);
+void AttributeMaterialModifierString::Redo()
+{
+	MaterialDoc *material = manager->CreateMaterialDoc(materialName);
 	material->SetAttribute(stage, key, value, false);
 }
 
@@ -96,8 +101,9 @@ void AttributeMaterialModifierString::Redo() {
 /**
 * Constructor for AttributeMaterialModifierBool
 */
-AttributeMaterialModifierBool::AttributeMaterialModifierBool(MaterialDocManager* manager, const char* materialName, int stage, const char* key, bool value, bool oldValue) 
-: AttributeMaterialModifier(manager, materialName, stage, key) {
+AttributeMaterialModifierBool::AttributeMaterialModifierBool(MaterialDocManager *manager, const char *materialName, int stage, const char *key, bool value, bool oldValue)
+	: AttributeMaterialModifier(manager, materialName, stage, key)
+{
 
 	this->value = value;
 	this->oldValue = oldValue;
@@ -106,16 +112,18 @@ AttributeMaterialModifierBool::AttributeMaterialModifierBool(MaterialDocManager*
 /**
 * Performs an undo operation of a boolean attribute change.
 */
-void AttributeMaterialModifierBool::Undo() {
-	MaterialDoc* material = manager->CreateMaterialDoc(materialName);
+void AttributeMaterialModifierBool::Undo()
+{
+	MaterialDoc *material = manager->CreateMaterialDoc(materialName);
 	material->SetAttributeBool(stage, key, oldValue, false);
 }
 
 /**
 * Performs a redo operation of a boolean attribute change.
 */
-void AttributeMaterialModifierBool::Redo() {
-	MaterialDoc* material = manager->CreateMaterialDoc(materialName);
+void AttributeMaterialModifierBool::Redo()
+{
+	MaterialDoc *material = manager->CreateMaterialDoc(materialName);
 	material->SetAttributeBool(stage, key, value, false);
 }
 
@@ -126,8 +134,9 @@ void AttributeMaterialModifierBool::Redo() {
 /**
 * Constructor for StageMoveModifier
 */
-StageMoveModifier::StageMoveModifier(MaterialDocManager* manager, const char* materialName, int from, int to)
-: MaterialModifier(manager, materialName) {
+StageMoveModifier::StageMoveModifier(MaterialDocManager *manager, const char *materialName, int from, int to)
+	: MaterialModifier(manager, materialName)
+{
 	this->from = from;
 	this->to = to;
 }
@@ -135,16 +144,18 @@ StageMoveModifier::StageMoveModifier(MaterialDocManager* manager, const char* ma
 /**
 * Performs an undo operation of a stage move.
 */
-void StageMoveModifier::Undo() {
-	MaterialDoc* material = manager->CreateMaterialDoc(materialName);
+void StageMoveModifier::Undo()
+{
+	MaterialDoc *material = manager->CreateMaterialDoc(materialName);
 	material->MoveStage(to, from, false);
 }
 
 /**
 * Performs a redo operation of a moved stage.
 */
-void StageMoveModifier::Redo() {
-	MaterialDoc* material = manager->CreateMaterialDoc(materialName);
+void StageMoveModifier::Redo()
+{
+	MaterialDoc *material = manager->CreateMaterialDoc(materialName);
 	material->MoveStage(from, to, false);
 }
 
@@ -155,8 +166,9 @@ void StageMoveModifier::Redo() {
 /**
 * Constructor for StageDeleteModifier
 */
-StageDeleteModifier::StageDeleteModifier(MaterialDocManager* manager, const char* materialName, int stageNum, idDict stageData) 
-: MaterialModifier(manager, materialName) {
+StageDeleteModifier::StageDeleteModifier(MaterialDocManager *manager, const char *materialName, int stageNum, idDict stageData)
+	: MaterialModifier(manager, materialName)
+{
 	this->stageNum = stageNum;
 	this->stageData = stageData;
 }
@@ -164,9 +176,10 @@ StageDeleteModifier::StageDeleteModifier(MaterialDocManager* manager, const char
 /**
 * Performs an undo operation of a deleted stage.
 */
-void StageDeleteModifier::Undo() {
+void StageDeleteModifier::Undo()
+{
 
-	MaterialDoc* material = manager->CreateMaterialDoc(materialName);
+	MaterialDoc *material = manager->CreateMaterialDoc(materialName);
 	material->InsertStage(stageNum, stageData.GetInt("stagetype"), stageData.GetString("name"), false);
 	material->SetData(stageNum, &stageData);
 
@@ -175,8 +188,9 @@ void StageDeleteModifier::Undo() {
 /**
 * Performs a redo operation of a deleted stage.
 */
-void StageDeleteModifier::Redo() {
-	MaterialDoc* material = manager->CreateMaterialDoc(materialName);
+void StageDeleteModifier::Redo()
+{
+	MaterialDoc *material = manager->CreateMaterialDoc(materialName);
 	material->RemoveStage(stageNum, false);
 }
 
@@ -187,8 +201,9 @@ void StageDeleteModifier::Redo() {
 /**
 * Constructor for StageInsertModifier
 */
-StageInsertModifier::StageInsertModifier(MaterialDocManager* manager, const char* materialName, int stageNum, int stageType, const char* stageName)
-: MaterialModifier(manager, materialName) {
+StageInsertModifier::StageInsertModifier(MaterialDocManager *manager, const char *materialName, int stageNum, int stageType, const char *stageName)
+	: MaterialModifier(manager, materialName)
+{
 	this->stageNum = stageNum;
 	this->stageType = stageType;
 	this->stageName = stageName;
@@ -197,17 +212,19 @@ StageInsertModifier::StageInsertModifier(MaterialDocManager* manager, const char
 /**
 * Performs an undo operation of an inserted stage.
 */
-void StageInsertModifier::Undo() {
+void StageInsertModifier::Undo()
+{
 
-	MaterialDoc* material = manager->CreateMaterialDoc(materialName);
+	MaterialDoc *material = manager->CreateMaterialDoc(materialName);
 	material->RemoveStage(stageNum, false);
 }
 
 /**
 * Performs a redo operation of an inserted stage.
 */
-void StageInsertModifier::Redo() {
-	MaterialDoc* material = manager->CreateMaterialDoc(materialName);
+void StageInsertModifier::Redo()
+{
+	MaterialDoc *material = manager->CreateMaterialDoc(materialName);
 	material->InsertStage(stageNum, stageType, stageName, false);
 }
 
@@ -218,23 +235,26 @@ void StageInsertModifier::Redo() {
 /**
 * Constructor for AddMaterialModifier
 */
-AddMaterialModifier::AddMaterialModifier(MaterialDocManager* manager, const char* materialName, const char* materialFile)
-: MaterialModifier(manager, materialName) {
+AddMaterialModifier::AddMaterialModifier(MaterialDocManager *manager, const char *materialName, const char *materialFile)
+	: MaterialModifier(manager, materialName)
+{
 	this->materialFile = materialFile;
 }
 
 /**
 * Performs an undo operation of an added material.
 */
-void AddMaterialModifier::Undo() {
-	MaterialDoc* material = manager->CreateMaterialDoc(materialName);
+void AddMaterialModifier::Undo()
+{
+	MaterialDoc *material = manager->CreateMaterialDoc(materialName);
 	manager->DeleteMaterial(material, false);
 }
 
 /**
 * Performs a redo operation of an added material.
 */
-void AddMaterialModifier::Redo() {
+void AddMaterialModifier::Redo()
+{
 	manager->RedoAddMaterial(materialName);
 }
 
@@ -245,24 +265,27 @@ void AddMaterialModifier::Redo() {
 /**
 * Constructor for DeleteMaterialModifier
 */
-DeleteMaterialModifier::DeleteMaterialModifier(MaterialDocManager* manager, const char* materialName)
-: MaterialModifier(manager, materialName) {
+DeleteMaterialModifier::DeleteMaterialModifier(MaterialDocManager *manager, const char *materialName)
+	: MaterialModifier(manager, materialName)
+{
 }
 
 /**
 * Performs an undo operation of a deleted material.
 */
-void DeleteMaterialModifier::Undo() {
-	
-	manager->RedoAddMaterial(materialName, false);	
+void DeleteMaterialModifier::Undo()
+{
+
+	manager->RedoAddMaterial(materialName, false);
 }
 
 /**
 * Performs a redo operation of a deleted material.
 */
-void DeleteMaterialModifier::Redo() {
-	
-	MaterialDoc* material = manager->CreateMaterialDoc(materialName);
+void DeleteMaterialModifier::Redo()
+{
+
+	MaterialDoc *material = manager->CreateMaterialDoc(materialName);
 	manager->DeleteMaterial(material, false);
 }
 
@@ -274,8 +297,9 @@ void DeleteMaterialModifier::Redo() {
 /**
 * Constructor for MoveMaterialModifier
 */
-MoveMaterialModifier::MoveMaterialModifier(MaterialDocManager* manager, const char* materialName, const char* materialFile, const char* copyMaterial)
-: MaterialModifier(manager, materialName) {
+MoveMaterialModifier::MoveMaterialModifier(MaterialDocManager *manager, const char *materialName, const char *materialFile, const char *copyMaterial)
+	: MaterialModifier(manager, materialName)
+{
 	this->materialFile = materialFile;
 	this->copyMaterial = copyMaterial;
 }
@@ -283,10 +307,11 @@ MoveMaterialModifier::MoveMaterialModifier(MaterialDocManager* manager, const ch
 /**
 * Performs an undo operation of a moved material
 */
-void MoveMaterialModifier::Undo() {
-	
+void MoveMaterialModifier::Undo()
+{
+
 	//Delete New Material
-	MaterialDoc* material = manager->CreateMaterialDoc(materialName);
+	MaterialDoc *material = manager->CreateMaterialDoc(materialName);
 	manager->DeleteMaterial(material, false);
 
 	//RedoAdd Old Material
@@ -296,9 +321,10 @@ void MoveMaterialModifier::Undo() {
 /**
 * Performs a redo operation of a moved material.
 */
-void MoveMaterialModifier::Redo() {
+void MoveMaterialModifier::Redo()
+{
 	//Delete Old Material
-	MaterialDoc* material = manager->CreateMaterialDoc(copyMaterial);
+	MaterialDoc *material = manager->CreateMaterialDoc(copyMaterial);
 	manager->DeleteMaterial(material, false);
 
 	//Redo Add New Material
@@ -311,26 +337,29 @@ void MoveMaterialModifier::Redo() {
 /**
 * Constructor for RenameMaterialModifier
 */
-RenameMaterialModifier::RenameMaterialModifier(MaterialDocManager* manager, const char* materialName, const char* oldName)
-: MaterialModifier(manager, materialName) {
+RenameMaterialModifier::RenameMaterialModifier(MaterialDocManager *manager, const char *materialName, const char *oldName)
+	: MaterialModifier(manager, materialName)
+{
 	this->oldName = oldName;
 }
 
 /**
 * Performs an undo operation of a renamed material
 */
-void RenameMaterialModifier::Undo() {
+void RenameMaterialModifier::Undo()
+{
 
-	MaterialDoc* material = manager->CreateMaterialDoc(materialName);
+	MaterialDoc *material = manager->CreateMaterialDoc(materialName);
 	material->SetMaterialName(oldName, false);
 }
 
 /**
 * Performs a redo operation of a renamed material.
 */
-void RenameMaterialModifier::Redo() {
-	
-	MaterialDoc* material = manager->CreateMaterialDoc(oldName);
+void RenameMaterialModifier::Redo()
+{
+
+	MaterialDoc *material = manager->CreateMaterialDoc(oldName);
 	material->SetMaterialName(materialName, false);
 }
 
@@ -340,8 +369,9 @@ void RenameMaterialModifier::Redo() {
 /**
 * Constructor for AddMaterialFolderModifier
 */
-AddMaterialFolderModifier::AddMaterialFolderModifier(MaterialDocManager* manager, const char* materialName, MaterialTreeView* view, HTREEITEM item, HTREEITEM parent)
-: MaterialModifier(manager, materialName) {
+AddMaterialFolderModifier::AddMaterialFolderModifier(MaterialDocManager *manager, const char *materialName, MaterialTreeView *view, HTREEITEM item, HTREEITEM parent)
+	: MaterialModifier(manager, materialName)
+{
 	this->view = view;
 	this->item = item;
 	this->parent = parent;
@@ -350,14 +380,16 @@ AddMaterialFolderModifier::AddMaterialFolderModifier(MaterialDocManager* manager
 /**
 * Performs an undo operation of an added material folder.
 */
-void AddMaterialFolderModifier::Undo() {
+void AddMaterialFolderModifier::Undo()
+{
 	view->DeleteFolder(item, false);
 }
 
 /**
 * Performs a redo operation of an added material folder.
 */
-void AddMaterialFolderModifier::Redo() {
+void AddMaterialFolderModifier::Redo()
+{
 	view->AddFolder(materialName, parent);
 }
 
@@ -368,8 +400,9 @@ void AddMaterialFolderModifier::Redo() {
 /**
 * Constructor for RenameMaterialFolderModifier
 */
-RenameMaterialFolderModifier::RenameMaterialFolderModifier(MaterialDocManager* manager, const char* materialName, MaterialTreeView* view, HTREEITEM item, const char* oldName)
-: MaterialModifier(manager, materialName) {
+RenameMaterialFolderModifier::RenameMaterialFolderModifier(MaterialDocManager *manager, const char *materialName, MaterialTreeView *view, HTREEITEM item, const char *oldName)
+	: MaterialModifier(manager, materialName)
+{
 	this->view = view;
 	this->item = item;
 	this->oldName = oldName;
@@ -378,14 +411,16 @@ RenameMaterialFolderModifier::RenameMaterialFolderModifier(MaterialDocManager* m
 /**
 * Performs an undo operation of a renamed material folder.
 */
-void RenameMaterialFolderModifier::Undo() {
+void RenameMaterialFolderModifier::Undo()
+{
 	view->RenameFolder(item, oldName);
 }
 
 /**
 * Performs a redo operation of a renamed material folder.
 */
-void RenameMaterialFolderModifier::Redo() {
+void RenameMaterialFolderModifier::Redo()
+{
 	view->RenameFolder(item, materialName);
 }
 
@@ -397,8 +432,9 @@ void RenameMaterialFolderModifier::Redo() {
 /**
 * Constructor for DeleteMaterialFolderModifier
 */
-DeleteMaterialFolderModifier::DeleteMaterialFolderModifier(MaterialDocManager* manager, const char* materialName, MaterialTreeView* view, HTREEITEM parent, idStrList* affectedMaterials)
-: MaterialModifier(manager, materialName) {
+DeleteMaterialFolderModifier::DeleteMaterialFolderModifier(MaterialDocManager *manager, const char *materialName, MaterialTreeView *view, HTREEITEM parent, idStrList *affectedMaterials)
+	: MaterialModifier(manager, materialName)
+{
 	this->view = view;
 	this->parent = parent;
 	this->affectedMaterials = *affectedMaterials;
@@ -407,13 +443,14 @@ DeleteMaterialFolderModifier::DeleteMaterialFolderModifier(MaterialDocManager* m
 /**
 * Performs an undo operation of a deleted material folder.
 */
-void DeleteMaterialFolderModifier::Undo() {
-	
+void DeleteMaterialFolderModifier::Undo()
+{
+
 	//Add the folder back and save the folder position for the redo
 	item = view->AddFolder(materialName, parent);
 
 	//Add each of the children back
-	for(int i = 0; i < affectedMaterials.Num(); i++) {
+	for (int i = 0; i < affectedMaterials.Num(); i++) {
 		manager->RedoAddMaterial(affectedMaterials[i], false);
 	}
 }
@@ -421,7 +458,8 @@ void DeleteMaterialFolderModifier::Undo() {
 /**
 * Performs a redo operation of a deleted material folder.
 */
-void DeleteMaterialFolderModifier::Redo() {
+void DeleteMaterialFolderModifier::Redo()
+{
 
 	view->DeleteFolder(item, false);
 }

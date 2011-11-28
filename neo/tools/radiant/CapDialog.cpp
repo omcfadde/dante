@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ static char THIS_FILE[] = __FILE__;
 // CCapDialog dialog
 
 
-CCapDialog::CCapDialog(CWnd* pParent /*=NULL*/)
+CCapDialog::CCapDialog(CWnd *pParent /*=NULL*/)
 	: CDialog(CCapDialog::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CCapDialog)
@@ -52,7 +52,7 @@ CCapDialog::CCapDialog(CWnd* pParent /*=NULL*/)
 }
 
 
-void CCapDialog::DoDataExchange(CDataExchange* pDX)
+void CCapDialog::DoDataExchange(CDataExchange *pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CCapDialog)
@@ -63,7 +63,7 @@ void CCapDialog::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CCapDialog, CDialog)
 	//{{AFX_MSG_MAP(CCapDialog)
-		// NOTE: the ClassWizard will add message map macros here
+	// NOTE: the ClassWizard will add message map macros here
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 

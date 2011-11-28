@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -38,131 +38,140 @@ const int VIRTUAL_WIDTH = 640;
 const int VIRTUAL_HEIGHT = 480;
 const int BLINK_DIVISOR = 200;
 
-class idDeviceContext {
-public:
-	idDeviceContext();
-	~idDeviceContext() { }
-	
-	void				Init();
-	void				Shutdown();
-	bool				Initialized() { return initialized; }
-	void				EnableLocalization();
+class idDeviceContext
+{
+	public:
+		idDeviceContext();
+		~idDeviceContext() { }
 
-	void				GetTransformInfo(idVec3& origin, idMat3& mat );
+		void				Init();
+		void				Shutdown();
+		bool				Initialized() {
+			return initialized;
+		}
+		void				EnableLocalization();
 
-	void				SetTransformInfo(const idVec3 &origin, const idMat3 &mat);
-	void				DrawMaterial(float x, float y, float w, float h, const idMaterial *mat, const idVec4 &color, float scalex = 1.0, float scaley = 1.0);
-	void				DrawRect(float x, float y, float width, float height, float size, const idVec4 &color);
-	void				DrawFilledRect(float x, float y, float width, float height, const idVec4 &color);
-	int					DrawText(const char *text, float textScale, int textAlign, idVec4 color, idRectangle rectDraw, bool wrap, int cursor = -1, bool calcOnly = false, idList<int> *breaks = NULL, int limit = 0 );
-	void				DrawMaterialRect( float x, float y, float w, float h, float size, const idMaterial *mat, const idVec4 &color);
-	void				DrawStretchPic(float x, float y, float w, float h, float s0, float t0, float s1, float t1, const idMaterial *mat);
+		void				GetTransformInfo(idVec3 &origin, idMat3 &mat);
 
-	void				DrawMaterialRotated(float x, float y, float w, float h, const idMaterial *mat, const idVec4 &color, float scalex = 1.0, float scaley = 1.0, float angle = 0.0f);
-	void				DrawStretchPicRotated(float x, float y, float w, float h, float s0, float t0, float s1, float t1, const idMaterial *mat, float angle = 0.0f);
+		void				SetTransformInfo(const idVec3 &origin, const idMat3 &mat);
+		void				DrawMaterial(float x, float y, float w, float h, const idMaterial *mat, const idVec4 &color, float scalex = 1.0, float scaley = 1.0);
+		void				DrawRect(float x, float y, float width, float height, float size, const idVec4 &color);
+		void				DrawFilledRect(float x, float y, float width, float height, const idVec4 &color);
+		int					DrawText(const char *text, float textScale, int textAlign, idVec4 color, idRectangle rectDraw, bool wrap, int cursor = -1, bool calcOnly = false, idList<int> *breaks = NULL, int limit = 0);
+		void				DrawMaterialRect(float x, float y, float w, float h, float size, const idMaterial *mat, const idVec4 &color);
+		void				DrawStretchPic(float x, float y, float w, float h, float s0, float t0, float s1, float t1, const idMaterial *mat);
 
-	int					CharWidth( const char c, float scale );
-	int					TextWidth(const char *text, float scale, int limit);
-	int					TextHeight(const char *text, float scale, int limit);
-	int					MaxCharHeight(float scale);
-	int					MaxCharWidth(float scale);
+		void				DrawMaterialRotated(float x, float y, float w, float h, const idMaterial *mat, const idVec4 &color, float scalex = 1.0, float scaley = 1.0, float angle = 0.0f);
+		void				DrawStretchPicRotated(float x, float y, float w, float h, float s0, float t0, float s1, float t1, const idMaterial *mat, float angle = 0.0f);
 
-	int					FindFont( const char *name );
-	void				SetupFonts();
+		int					CharWidth(const char c, float scale);
+		int					TextWidth(const char *text, float scale, int limit);
+		int					TextHeight(const char *text, float scale, int limit);
+		int					MaxCharHeight(float scale);
+		int					MaxCharWidth(float scale);
 
-	idRegion			*GetTextRegion(const char *text, float textScale, idRectangle rectDraw, float xStart, float yStart);
+		int					FindFont(const char *name);
+		void				SetupFonts();
 
-	void				SetSize(float width, float height);
+		idRegion			*GetTextRegion(const char *text, float textScale, idRectangle rectDraw, float xStart, float yStart);
 
-	const idMaterial	*GetScrollBarImage(int index);
+		void				SetSize(float width, float height);
 
-	void				DrawCursor(float *x, float *y, float size);
-	void				SetCursor(int n);
+		const idMaterial	*GetScrollBarImage(int index);
 
-	void				AdjustCoords(float *x, float *y, float *w, float *h);
-	bool				ClippedCoords(float *x, float *y, float *w, float *h);
-	bool				ClippedCoords(float *x, float *y, float *w, float *h, float *s1, float *t1, float *s2, float *t2);
+		void				DrawCursor(float *x, float *y, float size);
+		void				SetCursor(int n);
 
-	void				PushClipRect(float x, float y, float w, float h);
-	void				PushClipRect(idRectangle r);
-	void				PopClipRect();
+		void				AdjustCoords(float *x, float *y, float *w, float *h);
+		bool				ClippedCoords(float *x, float *y, float *w, float *h);
+		bool				ClippedCoords(float *x, float *y, float *w, float *h, float *s1, float *t1, float *s2, float *t2);
 
-	void				EnableClipping(bool b) { enableClipping = b; };
-	void				SetFont( int num );
+		void				PushClipRect(float x, float y, float w, float h);
+		void				PushClipRect(idRectangle r);
+		void				PopClipRect();
 
-	void				SetOverStrike(bool b) { overStrikeMode = b; }
+		void				EnableClipping(bool b) {
+			enableClipping = b;
+		};
+		void				SetFont(int num);
 
-	bool				GetOverStrike() { return overStrikeMode; }
+		void				SetOverStrike(bool b) {
+			overStrikeMode = b;
+		}
 
-	void				DrawEditCursor(float x, float y, float scale);
+		bool				GetOverStrike() {
+			return overStrikeMode;
+		}
 
-	enum {
-		CURSOR_ARROW,
-		CURSOR_HAND,
-		CURSOR_COUNT
-	};
+		void				DrawEditCursor(float x, float y, float scale);
 
-	enum {
-		ALIGN_LEFT,
-		ALIGN_CENTER,
-		ALIGN_RIGHT
-	};
+		enum {
+			CURSOR_ARROW,
+			CURSOR_HAND,
+			CURSOR_COUNT
+		};
 
-	enum {
-		SCROLLBAR_HBACK,
-		SCROLLBAR_VBACK,
-		SCROLLBAR_THUMB,
-		SCROLLBAR_RIGHT,
-		SCROLLBAR_LEFT,
-		SCROLLBAR_UP,
-		SCROLLBAR_DOWN,
-		SCROLLBAR_COUNT
-	};
+		enum {
+			ALIGN_LEFT,
+			ALIGN_CENTER,
+			ALIGN_RIGHT
+		};
 
-	static idVec4 colorPurple;
-	static idVec4 colorOrange;
-	static idVec4 colorYellow;
-	static idVec4 colorGreen;
-	static idVec4 colorBlue;
-	static idVec4 colorRed;
-	static idVec4 colorWhite;
-	static idVec4 colorBlack;
-	static idVec4 colorNone;
+		enum {
+			SCROLLBAR_HBACK,
+			SCROLLBAR_VBACK,
+			SCROLLBAR_THUMB,
+			SCROLLBAR_RIGHT,
+			SCROLLBAR_LEFT,
+			SCROLLBAR_UP,
+			SCROLLBAR_DOWN,
+			SCROLLBAR_COUNT
+		};
 
-private:
-	int					DrawText(float x, float y, float scale, idVec4 color, const char *text, float adjust, int limit, int style, int cursor = -1);
-	void				PaintChar(float x,float y,float width,float height,float scale,float	s,float	t,float	s2,float t2,const idMaterial *hShader);
-	void				SetFontByScale( float scale );
-	void				Clear( void );
+		static idVec4 colorPurple;
+		static idVec4 colorOrange;
+		static idVec4 colorYellow;
+		static idVec4 colorGreen;
+		static idVec4 colorBlue;
+		static idVec4 colorRed;
+		static idVec4 colorWhite;
+		static idVec4 colorBlack;
+		static idVec4 colorNone;
 
-	const idMaterial	*cursorImages[CURSOR_COUNT];
-	const idMaterial	*scrollBarImages[SCROLLBAR_COUNT];
-	const idMaterial	*whiteImage;
-	fontInfoEx_t		*activeFont;
-	fontInfo_t			*useFont;
-	idStr				fontName;
-	float				xScale;
-	float				yScale;
+	private:
+		int					DrawText(float x, float y, float scale, idVec4 color, const char *text, float adjust, int limit, int style, int cursor = -1);
+		void				PaintChar(float x,float y,float width,float height,float scale,float	s,float	t,float	s2,float t2,const idMaterial *hShader);
+		void				SetFontByScale(float scale);
+		void				Clear(void);
 
-	float				vidHeight;
-	float				vidWidth;
+		const idMaterial	*cursorImages[CURSOR_COUNT];
+		const idMaterial	*scrollBarImages[SCROLLBAR_COUNT];
+		const idMaterial	*whiteImage;
+		fontInfoEx_t		*activeFont;
+		fontInfo_t			*useFont;
+		idStr				fontName;
+		float				xScale;
+		float				yScale;
 
-	int					cursor;
+		float				vidHeight;
+		float				vidWidth;
 
-	idList<idRectangle>	clipRects;
-	
-	static idList<fontInfoEx_t> fonts;
-	idStr fontLang;
+		int					cursor;
 
-	bool				enableClipping;
+		idList<idRectangle>	clipRects;
 
-	bool				overStrikeMode;
+		static idList<fontInfoEx_t> fonts;
+		idStr fontLang;
 
-	idMat3				mat;
-	idVec3				origin;
-	bool				initialized;
+		bool				enableClipping;
 
-	bool				mbcs;
+		bool				overStrikeMode;
+
+		idMat3				mat;
+		idVec3				origin;
+		bool				initialized;
+
+		bool				mbcs;
 };
 
 #endif /* !__DEVICECONTEXT_H__ */

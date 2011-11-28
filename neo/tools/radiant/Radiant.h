@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@ If you have questions concerning this license or the applicable additional terms
 #endif // _MSC_VER >= 1000
 
 #ifndef __AFXWIN_H__
-	#error include 'stdafx.h' before including this file for PCH
+#error include 'stdafx.h' before including this file for PCH
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
@@ -45,25 +45,25 @@ If you have questions concerning this license or the applicable additional terms
 class CRadiantApp : public CWinApp
 {
 
-public:
-	CRadiantApp();
+	public:
+		CRadiantApp();
 
 // Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CRadiantApp)
+		// ClassWizard generated virtual function overrides
+		//{{AFX_VIRTUAL(CRadiantApp)
 	public:
-	virtual BOOL InitInstance();
-	virtual int ExitInstance();
-	virtual BOOL OnIdle(LONG lCount);
-	virtual int Run( void );
-	//}}AFX_VIRTUAL
+		virtual BOOL InitInstance();
+		virtual int ExitInstance();
+		virtual BOOL OnIdle(LONG lCount);
+		virtual int Run(void);
+		//}}AFX_VIRTUAL
 
 // Implementation
 
-	//{{AFX_MSG(CRadiantApp)
-	afx_msg void OnHelp();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+		//{{AFX_MSG(CRadiantApp)
+		afx_msg void OnHelp();
+		//}}AFX_MSG
+		DECLARE_MESSAGE_MAP()
 };
 
 

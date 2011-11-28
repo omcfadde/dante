@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -40,48 +40,58 @@ If you have questions concerning this license or the applicable additional terms
 #define idQueue( type, next )		idQueueTemplate<type, (int)&(((type*)NULL)->next)>
 
 template< class type, int nextOffset >
-class idQueueTemplate {
-public:
-							idQueueTemplate( void );
+class idQueueTemplate
+{
+	public:
+		idQueueTemplate(void);
 
-	void					Add( type *element );
-	type *					Get( void );
+		void					Add(type *element);
+		type 					*Get(void);
 
-private:
-	type *					first;
-	type *					last;
+	private:
+		type 					*first;
+		type 					*last;
 };
 
 #define QUEUE_NEXT_PTR( element )		(*((type**)(((byte*)element)+nextOffset)))
 
 template< class type, int nextOffset >
-idQueueTemplate<type,nextOffset>::idQueueTemplate( void ) {
+idQueueTemplate<type,nextOffset>::idQueueTemplate(void)
+{
 	first = last = NULL;
 }
 
 template< class type, int nextOffset >
-void idQueueTemplate<type,nextOffset>::Add( type *element ) {
+void idQueueTemplate<type,nextOffset>::Add(type *element)
+{
 	QUEUE_NEXT_PTR(element) = NULL;
-	if ( last ) {
+
+	if (last) {
 		QUEUE_NEXT_PTR(last) = element;
 	} else {
 		first = element;
 	}
+
 	last = element;
 }
 
 template< class type, int nextOffset >
-type *idQueueTemplate<type,nextOffset>::Get( void ) {
+type *idQueueTemplate<type,nextOffset>::Get(void)
+{
 	type *element;
 
 	element = first;
-	if ( element ) {
+
+	if (element) {
 		first = QUEUE_NEXT_PTR(first);
-		if ( last == element ) {
+
+		if (last == element) {
 			last = NULL;
 		}
+
 		QUEUE_NEXT_PTR(element) = NULL;
 	}
+
 	return element;
 }
 

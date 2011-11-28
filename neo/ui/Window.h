@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -105,7 +105,7 @@ typedef enum {
 } wexpRegister_t;
 
 typedef struct {
-	wexpOpType_t opType;	
+	wexpOpType_t opType;
 	int	a, b, c, d;
 } wexpOp_t;
 
@@ -135,24 +135,21 @@ struct idTimeLineEvent {
 
 class rvNamedEvent
 {
-public:
+	public:
 
-	rvNamedEvent(const char* name)
-	{
-		mEvent = new idGuiScriptList;
-		mName  = name;
-	}
-	~rvNamedEvent(void)
-	{
-		delete mEvent;
-	}
-	size_t Size() 
-	{
-		return sizeof(*this) + mEvent->Size();
-	}
-	
-	idStr				mName;
-	idGuiScriptList*	mEvent;
+		rvNamedEvent(const char *name) {
+			mEvent = new idGuiScriptList;
+			mName  = name;
+		}
+		~rvNamedEvent(void) {
+			delete mEvent;
+		}
+		size_t Size() {
+			return sizeof(*this) + mEvent->Size();
+		}
+
+		idStr				mName;
+		idGuiScriptList	*mEvent;
 };
 
 struct idTransitionData {
@@ -163,293 +160,313 @@ struct idTransitionData {
 
 
 class idUserInterfaceLocal;
-class idWindow {
-public:
-	idWindow(idUserInterfaceLocal *gui);
-	idWindow(idDeviceContext *d, idUserInterfaceLocal *gui);
-	virtual ~idWindow();
+class idWindow
+{
+	public:
+		idWindow(idUserInterfaceLocal *gui);
+		idWindow(idDeviceContext *d, idUserInterfaceLocal *gui);
+		virtual ~idWindow();
 
-	enum {
-		ON_MOUSEENTER = 0,
-		ON_MOUSEEXIT,
-		ON_ACTION,
-		ON_ACTIVATE,
-		ON_DEACTIVATE,
-		ON_ESC,
-		ON_FRAME,
-		ON_TRIGGER,
-		ON_ACTIONRELEASE,
-		ON_ENTER,
-		ON_ENTERRELEASE,
-		SCRIPT_COUNT
-	};
+		enum {
+			ON_MOUSEENTER = 0,
+			ON_MOUSEEXIT,
+			ON_ACTION,
+			ON_ACTIVATE,
+			ON_DEACTIVATE,
+			ON_ESC,
+			ON_FRAME,
+			ON_TRIGGER,
+			ON_ACTIONRELEASE,
+			ON_ENTER,
+			ON_ENTERRELEASE,
+			SCRIPT_COUNT
+		};
 
-	enum {
-		ADJUST_MOVE = 0,
-		ADJUST_TOP,
-		ADJUST_RIGHT,
-		ADJUST_BOTTOM,
-		ADJUST_LEFT,
-		ADJUST_TOPLEFT,
-		ADJUST_BOTTOMRIGHT,
-		ADJUST_TOPRIGHT,
-		ADJUST_BOTTOMLEFT
-	};
+		enum {
+			ADJUST_MOVE = 0,
+			ADJUST_TOP,
+			ADJUST_RIGHT,
+			ADJUST_BOTTOM,
+			ADJUST_LEFT,
+			ADJUST_TOPLEFT,
+			ADJUST_BOTTOMRIGHT,
+			ADJUST_TOPRIGHT,
+			ADJUST_BOTTOMLEFT
+		};
 
-	static const char *ScriptNames[SCRIPT_COUNT];
+		static const char *ScriptNames[SCRIPT_COUNT];
 
-	static const idRegEntry RegisterVars[];
-	static const int		NumRegisterVars;
+		static const idRegEntry RegisterVars[];
+		static const int		NumRegisterVars;
 
-	void SetDC(idDeviceContext *d);
+		void SetDC(idDeviceContext *d);
 
-	idDeviceContext*	GetDC ( void ) { return dc; }
+		idDeviceContext	*GetDC(void) {
+			return dc;
+		}
 
-	idWindow *SetFocus(idWindow *w, bool scripts = true);
+		idWindow *SetFocus(idWindow *w, bool scripts = true);
 
-	idWindow *SetCapture(idWindow *w);
-	void SetParent(idWindow *w);
-	void SetFlag(unsigned int f);
-	void ClearFlag(unsigned int f);
-	unsigned GetFlags() {return flags;};
-	void Move(float x, float y);
-	void BringToTop(idWindow *w);
-	void Adjust(float xd, float yd);
-	void SetAdjustMode(idWindow *child);
-	void Size(float x, float y, float w, float h);
-	void SetupFromState();
-	void SetupBackground();
-	drawWin_t *FindChildByName(const char *name);
-	idSimpleWindow *FindSimpleWinByName(const char *_name);
-	idWindow *GetParent() { return parent; }
-	idUserInterfaceLocal *GetGui() {return gui;};
-	bool Contains(float x, float y);
-	size_t Size();
-	virtual size_t Allocated();
-	idStr* GetStrPtrByName(const char *_name);
+		idWindow *SetCapture(idWindow *w);
+		void SetParent(idWindow *w);
+		void SetFlag(unsigned int f);
+		void ClearFlag(unsigned int f);
+		unsigned GetFlags() {
+			return flags;
+		};
+		void Move(float x, float y);
+		void BringToTop(idWindow *w);
+		void Adjust(float xd, float yd);
+		void SetAdjustMode(idWindow *child);
+		void Size(float x, float y, float w, float h);
+		void SetupFromState();
+		void SetupBackground();
+		drawWin_t *FindChildByName(const char *name);
+		idSimpleWindow *FindSimpleWinByName(const char *_name);
+		idWindow *GetParent() {
+			return parent;
+		}
+		idUserInterfaceLocal *GetGui() {
+			return gui;
+		};
+		bool Contains(float x, float y);
+		size_t Size();
+		virtual size_t Allocated();
+		idStr *GetStrPtrByName(const char *_name);
 
-	virtual idWinVar *GetWinVarByName	(const char *_name, bool winLookup = false, drawWin_t** owner = NULL);
+		virtual idWinVar *GetWinVarByName(const char *_name, bool winLookup = false, drawWin_t **owner = NULL);
 
-	int  GetWinVarOffset( idWinVar *wv, drawWin_t *dw );
-	float GetMaxCharHeight();
-	float GetMaxCharWidth();
-	void SetFont();
-	void SetInitialState(const char *_name);
-	void AddChild(idWindow *win);
-	void DebugDraw(int time, float x, float y);
-	void CalcClientRect(float xofs, float yofs);
-	void CommonInit();
-	void CleanUp();
-	void DrawBorderAndCaption(const idRectangle &drawRect);
-	void DrawCaption(int time, float x, float y);
-	void SetupTransforms(float x, float y);
-	bool Contains(const idRectangle &sr, float x, float y);
-	const char *GetName() { return name; };
+		int  GetWinVarOffset(idWinVar *wv, drawWin_t *dw);
+		float GetMaxCharHeight();
+		float GetMaxCharWidth();
+		void SetFont();
+		void SetInitialState(const char *_name);
+		void AddChild(idWindow *win);
+		void DebugDraw(int time, float x, float y);
+		void CalcClientRect(float xofs, float yofs);
+		void CommonInit();
+		void CleanUp();
+		void DrawBorderAndCaption(const idRectangle &drawRect);
+		void DrawCaption(int time, float x, float y);
+		void SetupTransforms(float x, float y);
+		bool Contains(const idRectangle &sr, float x, float y);
+		const char *GetName() {
+			return name;
+		};
 
-	virtual bool Parse(idParser *src, bool rebuild = true);
-	virtual const char *HandleEvent(const sysEvent_t *event, bool *updateVisuals);
-	void	CalcRects(float x, float y);
-	virtual void Redraw(float x, float y);
+		virtual bool Parse(idParser *src, bool rebuild = true);
+		virtual const char *HandleEvent(const sysEvent_t *event, bool *updateVisuals);
+		void	CalcRects(float x, float y);
+		virtual void Redraw(float x, float y);
 
-	virtual void ArchiveToDictionary(idDict *dict, bool useNames = true);
-	virtual void InitFromDictionary(idDict *dict, bool byName = true);
-	virtual void PostParse();
-	virtual void Activate( bool activate, idStr &act );
-	virtual void Trigger();
-	virtual void GainFocus();
-	virtual void LoseFocus();
-	virtual void GainCapture();
-	virtual void LoseCapture();
-	virtual void Sized();
-	virtual void Moved();
-	virtual void Draw(int time, float x, float y);
-	virtual void MouseExit();
-	virtual void MouseEnter();
-	virtual void DrawBackground(const idRectangle &drawRect);
-	virtual const char *RouteMouseCoords(float xd, float yd);
-	virtual void SetBuddy(idWindow *buddy) {};
-	virtual void HandleBuddyUpdate(idWindow *buddy) {};
-	virtual void StateChanged( bool redraw );
-	virtual void ReadFromDemoFile( class idDemoFile *f, bool rebuild = true );
-	virtual void WriteToDemoFile( class idDemoFile *f );
+		virtual void ArchiveToDictionary(idDict *dict, bool useNames = true);
+		virtual void InitFromDictionary(idDict *dict, bool byName = true);
+		virtual void PostParse();
+		virtual void Activate(bool activate, idStr &act);
+		virtual void Trigger();
+		virtual void GainFocus();
+		virtual void LoseFocus();
+		virtual void GainCapture();
+		virtual void LoseCapture();
+		virtual void Sized();
+		virtual void Moved();
+		virtual void Draw(int time, float x, float y);
+		virtual void MouseExit();
+		virtual void MouseEnter();
+		virtual void DrawBackground(const idRectangle &drawRect);
+		virtual const char *RouteMouseCoords(float xd, float yd);
+		virtual void SetBuddy(idWindow *buddy) {};
+		virtual void HandleBuddyUpdate(idWindow *buddy) {};
+		virtual void StateChanged(bool redraw);
+		virtual void ReadFromDemoFile(class idDemoFile *f, bool rebuild = true);
+		virtual void WriteToDemoFile(class idDemoFile *f);
 
-	// SaveGame support
-	void			WriteSaveGameString( const char *string, idFile *savefile );
-	void			WriteSaveGameTransition( idTransitionData &trans, idFile *savefile );
-	virtual void	WriteToSaveGame( idFile *savefile );
-	void			ReadSaveGameString( idStr &string, idFile *savefile );
-	void			ReadSaveGameTransition( idTransitionData & trans, idFile *savefile );
-	virtual void	ReadFromSaveGame( idFile *savefile );
-	void			FixupTransitions();
-	virtual void HasAction(){};
-	virtual void HasScripts(){};
+		// SaveGame support
+		void			WriteSaveGameString(const char *string, idFile *savefile);
+		void			WriteSaveGameTransition(idTransitionData &trans, idFile *savefile);
+		virtual void	WriteToSaveGame(idFile *savefile);
+		void			ReadSaveGameString(idStr &string, idFile *savefile);
+		void			ReadSaveGameTransition(idTransitionData &trans, idFile *savefile);
+		virtual void	ReadFromSaveGame(idFile *savefile);
+		void			FixupTransitions();
+		virtual void HasAction() {};
+		virtual void HasScripts() {};
 
-	void FixupParms();
-	void GetScriptString(const char *name, idStr &out);
-	void SetScriptParams();
-	bool HasOps() {	return (ops.Num() > 0); };
-	float EvalRegs(int test = -1, bool force = false);
-	void StartTransition();
-	void AddTransition(idWinVar *dest, idVec4 from, idVec4 to, int time, float accelTime, float decelTime);
-	void ResetTime(int time);
-	void ResetCinematics();
+		void FixupParms();
+		void GetScriptString(const char *name, idStr &out);
+		void SetScriptParams();
+		bool HasOps() {
+			return (ops.Num() > 0);
+		};
+		float EvalRegs(int test = -1, bool force = false);
+		void StartTransition();
+		void AddTransition(idWinVar *dest, idVec4 from, idVec4 to, int time, float accelTime, float decelTime);
+		void ResetTime(int time);
+		void ResetCinematics();
 
-	int NumTransitions();
+		int NumTransitions();
 
-	bool ParseScript(idParser *src, idGuiScriptList &list, int *timeParm = NULL, bool allowIf = false);
-	bool RunScript(int n);
-	bool RunScriptList(idGuiScriptList *src);
-	void SetRegs(const char *key, const char *val);
-	int ParseExpression( idParser *src, idWinVar *var = NULL, int component = 0 );
-	int ExpressionConstant(float f);
-	idRegisterList *RegList() { return &regList; }
-	void AddCommand(const char *cmd);
-	void AddUpdateVar(idWinVar *var);
-	bool Interactive();
-	bool ContainsStateVars();
-	void SetChildWinVarVal(const char *name, const char *var, const char *val);
-	idWindow *GetFocusedChild();
-	idWindow *GetCaptureChild();
-	const char *GetComment() { return comment;  }
-	void SetComment( const char * p) { comment = p; }
+		bool ParseScript(idParser *src, idGuiScriptList &list, int *timeParm = NULL, bool allowIf = false);
+		bool RunScript(int n);
+		bool RunScriptList(idGuiScriptList *src);
+		void SetRegs(const char *key, const char *val);
+		int ParseExpression(idParser *src, idWinVar *var = NULL, int component = 0);
+		int ExpressionConstant(float f);
+		idRegisterList *RegList() {
+			return &regList;
+		}
+		void AddCommand(const char *cmd);
+		void AddUpdateVar(idWinVar *var);
+		bool Interactive();
+		bool ContainsStateVars();
+		void SetChildWinVarVal(const char *name, const char *var, const char *val);
+		idWindow *GetFocusedChild();
+		idWindow *GetCaptureChild();
+		const char *GetComment() {
+			return comment;
+		}
+		void SetComment(const char *p) {
+			comment = p;
+		}
 
-	idStr cmd;
+		idStr cmd;
 
-	virtual void RunNamedEvent		( const char* eventName );
+		virtual void RunNamedEvent(const char *eventName);
 
-	void		AddDefinedVar		( idWinVar* var );
+		void		AddDefinedVar(idWinVar *var);
 
-	idWindow*	FindChildByPoint	( float x, float y, idWindow* below = NULL );
-	int			GetChildIndex		( idWindow* window );
-	int			GetChildCount		( void );
-	idWindow*	GetChild			( int index );
-	void		RemoveChild			( idWindow *win );
-	bool		InsertChild			( idWindow *win, idWindow* before );
+		idWindow	*FindChildByPoint(float x, float y, idWindow *below = NULL);
+		int			GetChildIndex(idWindow *window);
+		int			GetChildCount(void);
+		idWindow	*GetChild(int index);
+		void		RemoveChild(idWindow *win);
+		bool		InsertChild(idWindow *win, idWindow *before);
 
-	void		ScreenToClient		( idRectangle* rect );
-	void		ClientToScreen		( idRectangle* rect );
+		void		ScreenToClient(idRectangle *rect);
+		void		ClientToScreen(idRectangle *rect);
 
-	bool		UpdateFromDictionary ( idDict& dict );
+		bool		UpdateFromDictionary(idDict &dict);
 
-protected:
+	protected:
 
-	friend		class rvGEWindowWrapper;
+		friend		class rvGEWindowWrapper;
 
-	idWindow*	FindChildByPoint	( float x, float y, idWindow** below );
-	void		SetDefaults			( void );
+		idWindow	*FindChildByPoint(float x, float y, idWindow **below);
+		void		SetDefaults(void);
 
-	friend class idSimpleWindow;
-	friend class idUserInterfaceLocal;
-	bool IsSimple();
-	void UpdateWinVars();
-	void DisableRegister(const char *_name);
-	void Transition();
-	void Time();
-	bool RunTimeEvents(int time);
-	void Dump();
+		friend class idSimpleWindow;
+		friend class idUserInterfaceLocal;
+		bool IsSimple();
+		void UpdateWinVars();
+		void DisableRegister(const char *_name);
+		void Transition();
+		void Time();
+		bool RunTimeEvents(int time);
+		void Dump();
 
-	int ExpressionTemporary();
-	wexpOp_t *ExpressionOp();
-	int EmitOp( int a, int b, wexpOpType_t opType, wexpOp_t **opp = NULL );
-	int ParseEmitOp( idParser *src, int a, wexpOpType_t opType, int priority, wexpOp_t **opp = NULL );
-	int ParseTerm( idParser *src, idWinVar *var = NULL, int component = 0 );
-	int ParseExpressionPriority( idParser *src, int priority, idWinVar *var = NULL, int component = 0 );
-	void EvaluateRegisters(float *registers);
-	void SaveExpressionParseState();
-	void RestoreExpressionParseState();
-	void ParseBracedExpression(idParser *src);
-	bool ParseScriptEntry(const char *name, idParser *src);
-	bool ParseRegEntry(const char *name, idParser *src);
-	virtual bool ParseInternalVar(const char *name, idParser *src);
-	void ParseString(idParser *src, idStr &out);
-	void ParseVec4(idParser *src, idVec4 &out);
-	void ConvertRegEntry(const char *name, idParser *src, idStr &out, int tabs);
+		int ExpressionTemporary();
+		wexpOp_t *ExpressionOp();
+		int EmitOp(int a, int b, wexpOpType_t opType, wexpOp_t **opp = NULL);
+		int ParseEmitOp(idParser *src, int a, wexpOpType_t opType, int priority, wexpOp_t **opp = NULL);
+		int ParseTerm(idParser *src, idWinVar *var = NULL, int component = 0);
+		int ParseExpressionPriority(idParser *src, int priority, idWinVar *var = NULL, int component = 0);
+		void EvaluateRegisters(float *registers);
+		void SaveExpressionParseState();
+		void RestoreExpressionParseState();
+		void ParseBracedExpression(idParser *src);
+		bool ParseScriptEntry(const char *name, idParser *src);
+		bool ParseRegEntry(const char *name, idParser *src);
+		virtual bool ParseInternalVar(const char *name, idParser *src);
+		void ParseString(idParser *src, idStr &out);
+		void ParseVec4(idParser *src, idVec4 &out);
+		void ConvertRegEntry(const char *name, idParser *src, idStr &out, int tabs);
 
-	float actualX;					// physical coords
-	float actualY;					// ''
-	int	  childID;					// this childs id
-	unsigned int flags;             // visible, focus, mouseover, cursor, border, etc.. 
-	int lastTimeRun;				//
-	idRectangle drawRect;			// overall rect
-	idRectangle clientRect;			// client area
-	idVec2	origin;
+		float actualX;					// physical coords
+		float actualY;					// ''
+		int	  childID;					// this childs id
+		unsigned int flags;             // visible, focus, mouseover, cursor, border, etc..
+		int lastTimeRun;				//
+		idRectangle drawRect;			// overall rect
+		idRectangle clientRect;			// client area
+		idVec2	origin;
 
-	int timeLine;					// time stamp used for various fx
-	float xOffset;			
-	float yOffset;
-	float forceAspectWidth;
-	float forceAspectHeight;
-	float matScalex;
-	float matScaley;
-	float borderSize;
-	float textAlignx;
-	float textAligny;
-	idStr	name;
-	idStr	comment;
-	idVec2	shear;
+		int timeLine;					// time stamp used for various fx
+		float xOffset;
+		float yOffset;
+		float forceAspectWidth;
+		float forceAspectHeight;
+		float matScalex;
+		float matScaley;
+		float borderSize;
+		float textAlignx;
+		float textAligny;
+		idStr	name;
+		idStr	comment;
+		idVec2	shear;
 
-	signed char	textShadow;
-	unsigned char fontNum;
-	unsigned char cursor;					//
-	signed char	textAlign;
+		signed char	textShadow;
+		unsigned char fontNum;
+		unsigned char cursor;					//
+		signed char	textAlign;
 
-	idWinBool	noTime;					// 
-	idWinBool	visible;				// 
-	idWinBool	noEvents;
-	idWinRectangle rect;				// overall rect
-	idWinVec4	backColor;
-	idWinVec4	matColor;
-	idWinVec4	foreColor;
-	idWinVec4	hoverColor;
-	idWinVec4	borderColor;
-	idWinFloat	textScale;
-	idWinFloat	rotate;
-	idWinStr	text;
-	idWinBackground	backGroundName;			// 
+		idWinBool	noTime;					//
+		idWinBool	visible;				//
+		idWinBool	noEvents;
+		idWinRectangle rect;				// overall rect
+		idWinVec4	backColor;
+		idWinVec4	matColor;
+		idWinVec4	foreColor;
+		idWinVec4	hoverColor;
+		idWinVec4	borderColor;
+		idWinFloat	textScale;
+		idWinFloat	rotate;
+		idWinStr	text;
+		idWinBackground	backGroundName;			//
 
-	idList<idWinVar*> definedVars;
-	idList<idWinVar*> updateVars;
+		idList<idWinVar *> definedVars;
+		idList<idWinVar *> updateVars;
 
-	idRectangle textRect;			// text extented rect
-	const idMaterial *background;         // background asset  
+		idRectangle textRect;			// text extented rect
+		const idMaterial *background;         // background asset
 
-	idWindow *parent;				// parent window
-	idList<idWindow*> children;		// child windows	
-	idList<drawWin_t> drawWindows;		
+		idWindow *parent;				// parent window
+		idList<idWindow *> children;		// child windows
+		idList<drawWin_t> drawWindows;
 
-	idWindow *focusedChild;			// if a child window has the focus
-	idWindow *captureChild;			// if a child window has mouse capture
-	idWindow *overChild;			// if a child window has mouse capture
-	bool hover;
+		idWindow *focusedChild;			// if a child window has the focus
+		idWindow *captureChild;			// if a child window has mouse capture
+		idWindow *overChild;			// if a child window has mouse capture
+		bool hover;
 
-	idDeviceContext *dc;
+		idDeviceContext *dc;
 
-	idUserInterfaceLocal *gui;
+		idUserInterfaceLocal *gui;
 
-	static idCVar gui_debug;
-	static idCVar gui_edit;
+		static idCVar gui_debug;
+		static idCVar gui_edit;
 
-	idGuiScriptList *scripts[SCRIPT_COUNT];
-	bool *saveTemps;
+		idGuiScriptList *scripts[SCRIPT_COUNT];
+		bool *saveTemps;
 
-	idList<idTimeLineEvent*> timeLineEvents;
-	idList<idTransitionData> transitions;
+		idList<idTimeLineEvent *> timeLineEvents;
+		idList<idTransitionData> transitions;
 
-	static bool registerIsTemporary[MAX_EXPRESSION_REGISTERS]; // statics to assist during parsing
+		static bool registerIsTemporary[MAX_EXPRESSION_REGISTERS]; // statics to assist during parsing
 
-	idList<wexpOp_t> ops;			   	// evaluate to make expressionRegisters
-	idList<float> expressionRegisters;
-	idList<wexpOp_t> *saveOps;			   	// evaluate to make expressionRegisters
-	idList<rvNamedEvent*>		namedEvents;		//  added named events
-	idList<float> *saveRegs;
+		idList<wexpOp_t> ops;			   	// evaluate to make expressionRegisters
+		idList<float> expressionRegisters;
+		idList<wexpOp_t> *saveOps;			   	// evaluate to make expressionRegisters
+		idList<rvNamedEvent *>		namedEvents;		//  added named events
+		idList<float> *saveRegs;
 
-	idRegisterList regList;
+		idRegisterList regList;
 
-	idWinBool	hideCursor;
+		idWinBool	hideCursor;
 };
 
-ID_INLINE void idWindow::AddDefinedVar( idWinVar* var ) {
-	definedVars.AddUnique( var );
+ID_INLINE void idWindow::AddDefinedVar(idWinVar *var)
+{
+	definedVars.AddUnique(var);
 }
 
 #endif /* !__WINDOW_H__ */

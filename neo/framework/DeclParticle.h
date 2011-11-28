@@ -2,9 +2,9 @@
 ===========================================================================
 
 Doom 3 GPL Source Code
-Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company. 
+Copyright (C) 1999-2011 id Software LLC, a ZeniMax Media company.
 
-This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).  
+This file is part of the Doom 3 GPL Source Code (?Doom 3 Source Code?).
 
 Doom 3 Source Code is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -37,16 +37,20 @@ If you have questions concerning this license or the applicable additional terms
 ===============================================================================
 */
 
-class idParticleParm {
-public:
-							idParticleParm( void ) { table = NULL; from = to = 0.0f; }
+class idParticleParm
+{
+	public:
+		idParticleParm(void) {
+			table = NULL;
+			from = to = 0.0f;
+		}
 
-	const idDeclTable *		table;
-	float					from;
-	float					to;
-	
-	float					Eval( float frac, idRandom &rand ) const;
-	float					Integrate( float frac, idRandom &rand ) const;
+		const idDeclTable 		*table;
+		float					from;
+		float					to;
+
+		float					Eval(float frac, idRandom &rand) const;
+		float					Integrate(float frac, idRandom &rand) const;
 };
 
 
@@ -54,8 +58,8 @@ typedef enum {
 	PDIST_RECT,				// ( sizeX sizeY sizeZ )
 	PDIST_CYLINDER,			// ( sizeX sizeY sizeZ )
 	PDIST_SPHERE			// ( sizeX sizeY sizeZ ringFraction )
-							// a ringFraction of zero allows the entire sphere, 0.9 would only
-							// allow the outer 10% of the sphere
+	// a ringFraction of zero allows the entire sphere, 0.9 would only
+	// allow the outer 10% of the sphere
 } prtDistribution_t;
 
 typedef enum {
@@ -83,8 +87,8 @@ typedef struct renderEntity_s renderEntity_t;
 typedef struct renderView_s renderView_t;
 
 typedef struct {
-	const renderEntity_t *	renderEnt;			// for shaderParms, etc
-	const renderView_t *	renderView;
+	const renderEntity_t 	*renderEnt;			// for shaderParms, etc
+	const renderView_t 	*renderView;
 	int						index;				// particle number in the system
 	float					frac;				// 0.0 to 1.0
 	idRandom				random;
@@ -101,118 +105,120 @@ typedef struct {
 //
 // single particle stage
 //
-class idParticleStage {
-public:
-							idParticleStage( void );
-	virtual					~idParticleStage( void ) {}
+class idParticleStage
+{
+	public:
+		idParticleStage(void);
+		virtual					~idParticleStage(void) {}
 
-	void					Default();
-	virtual int				NumQuadsPerParticle() const;	// includes trails and cross faded animations
-	// returns the number of verts created, which will range from 0 to 4*NumQuadsPerParticle()
-	virtual int				CreateParticle( particleGen_t *g, idDrawVert *verts ) const;
+		void					Default();
+		virtual int				NumQuadsPerParticle() const;	// includes trails and cross faded animations
+		// returns the number of verts created, which will range from 0 to 4*NumQuadsPerParticle()
+		virtual int				CreateParticle(particleGen_t *g, idDrawVert *verts) const;
 
-	void					ParticleOrigin( particleGen_t *g, idVec3 &origin ) const;
-	int						ParticleVerts( particleGen_t *g, const idVec3 origin, idDrawVert *verts ) const;
-	void					ParticleTexCoords( particleGen_t *g, idDrawVert *verts ) const;
-	void					ParticleColors( particleGen_t *g, idDrawVert *verts ) const;
+		void					ParticleOrigin(particleGen_t *g, idVec3 &origin) const;
+		int						ParticleVerts(particleGen_t *g, const idVec3 origin, idDrawVert *verts) const;
+		void					ParticleTexCoords(particleGen_t *g, idDrawVert *verts) const;
+		void					ParticleColors(particleGen_t *g, idDrawVert *verts) const;
 
-	const char *			GetCustomPathName();
-	const char *			GetCustomPathDesc();
-	int						NumCustomPathParms();
-	void					SetCustomPathType( const char *p );
-	void					operator=( const idParticleStage &src );
+		const char 			*GetCustomPathName();
+		const char 			*GetCustomPathDesc();
+		int						NumCustomPathParms();
+		void					SetCustomPathType(const char *p);
+		void					operator=(const idParticleStage &src);
 
 
-	//------------------------------
+		//------------------------------
 
-	const idMaterial *		material;
+		const idMaterial 		*material;
 
-	int						totalParticles;		// total number of particles, although some may be invisible at a given time
-	float					cycles;				// allows things to oneShot ( 1 cycle ) or run for a set number of cycles
-												// on a per stage basis
+		int						totalParticles;		// total number of particles, although some may be invisible at a given time
+		float					cycles;				// allows things to oneShot ( 1 cycle ) or run for a set number of cycles
+		// on a per stage basis
 
-	int						cycleMsec;			// ( particleLife + deadTime ) in msec
+		int						cycleMsec;			// ( particleLife + deadTime ) in msec
 
-	float					spawnBunching;		// 0.0 = all come out at first instant, 1.0 = evenly spaced over cycle time
-	float					particleLife;		// total seconds of life for each particle
-	float					timeOffset;			// time offset from system start for the first particle to spawn
-	float					deadTime;			// time after particleLife before respawning
-	
-	//-------------------------------	// standard path parms
-		
-	prtDistribution_t		distributionType;
-	float					distributionParms[4];
-	
-	prtDirection_t			directionType;
-	float					directionParms[4];
-	
-	idParticleParm			speed;
-	float					gravity;				// can be negative to float up
-	bool					worldGravity;			// apply gravity in world space
-	bool					randomDistribution;		// randomly orient the quad on emission ( defaults to true ) 
-	bool					entityColor;			// force color from render entity ( fadeColor is still valid )
-	
-	//------------------------------	// custom path will completely replace the standard path calculations
-	
-	prtCustomPth_t			customPathType;		// use custom C code routines for determining the origin
-	float					customPathParms[8];
-	
-	//--------------------------------
-	
-	idVec3					offset;				// offset from origin to spawn all particles, also applies to customPath
-	
-	int						animationFrames;	// if > 1, subdivide the texture S axis into frames and crossfade
-	float					animationRate;		// frames per second
+		float					spawnBunching;		// 0.0 = all come out at first instant, 1.0 = evenly spaced over cycle time
+		float					particleLife;		// total seconds of life for each particle
+		float					timeOffset;			// time offset from system start for the first particle to spawn
+		float					deadTime;			// time after particleLife before respawning
 
-	float					initialAngle;		// in degrees, random angle is used if zero ( default ) 
-	idParticleParm			rotationSpeed;		// half the particles will have negative rotation speeds
-	
-	prtOrientation_t		orientation;	// view, aimed, or axis fixed
-	float					orientationParms[4];
+		//-------------------------------	// standard path parms
 
-	idParticleParm			size;
-	idParticleParm			aspect;				// greater than 1 makes the T axis longer
+		prtDistribution_t		distributionType;
+		float					distributionParms[4];
 
-	idVec4					color;
-	idVec4					fadeColor;			// either 0 0 0 0 for additive, or 1 1 1 0 for blended materials
-	float					fadeInFraction;		// in 0.0 to 1.0 range
-	float					fadeOutFraction;	// in 0.0 to 1.0 range
-	float					fadeIndexFraction;	// in 0.0 to 1.0 range, causes later index smokes to be more faded 
+		prtDirection_t			directionType;
+		float					directionParms[4];
 
-	bool					hidden;				// for editor use
-	//-----------------------------------
+		idParticleParm			speed;
+		float					gravity;				// can be negative to float up
+		bool					worldGravity;			// apply gravity in world space
+		bool					randomDistribution;		// randomly orient the quad on emission ( defaults to true )
+		bool					entityColor;			// force color from render entity ( fadeColor is still valid )
 
-	float					boundsExpansion;	// user tweak to fix poorly calculated bounds
+		//------------------------------	// custom path will completely replace the standard path calculations
 
-	idBounds				bounds;				// derived
+		prtCustomPth_t			customPathType;		// use custom C code routines for determining the origin
+		float					customPathParms[8];
+
+		//--------------------------------
+
+		idVec3					offset;				// offset from origin to spawn all particles, also applies to customPath
+
+		int						animationFrames;	// if > 1, subdivide the texture S axis into frames and crossfade
+		float					animationRate;		// frames per second
+
+		float					initialAngle;		// in degrees, random angle is used if zero ( default )
+		idParticleParm			rotationSpeed;		// half the particles will have negative rotation speeds
+
+		prtOrientation_t		orientation;	// view, aimed, or axis fixed
+		float					orientationParms[4];
+
+		idParticleParm			size;
+		idParticleParm			aspect;				// greater than 1 makes the T axis longer
+
+		idVec4					color;
+		idVec4					fadeColor;			// either 0 0 0 0 for additive, or 1 1 1 0 for blended materials
+		float					fadeInFraction;		// in 0.0 to 1.0 range
+		float					fadeOutFraction;	// in 0.0 to 1.0 range
+		float					fadeIndexFraction;	// in 0.0 to 1.0 range, causes later index smokes to be more faded
+
+		bool					hidden;				// for editor use
+		//-----------------------------------
+
+		float					boundsExpansion;	// user tweak to fix poorly calculated bounds
+
+		idBounds				bounds;				// derived
 };
 
 
 //
 // group of particle stages
 //
-class idDeclParticle : public idDecl {
-public:
+class idDeclParticle : public idDecl
+{
+	public:
 
-	virtual size_t			Size( void ) const;
-	virtual const char *	DefaultDefinition( void ) const;
-	virtual bool			Parse( const char *text, const int textLength );
-	virtual void			FreeData( void );
+		virtual size_t			Size(void) const;
+		virtual const char 	*DefaultDefinition(void) const;
+		virtual bool			Parse(const char *text, const int textLength);
+		virtual void			FreeData(void);
 
-	bool					Save( const char *fileName = NULL );
+		bool					Save(const char *fileName = NULL);
 
-	idList<idParticleStage *>stages;
-	idBounds				bounds;
-	float					depthHack;
+		idList<idParticleStage *>stages;
+		idBounds				bounds;
+		float					depthHack;
 
-private:
-	bool					RebuildTextSource( void );
-	void					GetStageBounds( idParticleStage *stage );
-	idParticleStage *		ParseParticleStage( idLexer &src );
-	void					ParseParms( idLexer &src, float *parms, int maxParms );
-	void					ParseParametric( idLexer &src, idParticleParm *parm );
-	void					WriteStage( idFile *f, idParticleStage *stage );
-	void					WriteParticleParm( idFile *f, idParticleParm *parm, const char *name );
+	private:
+		bool					RebuildTextSource(void);
+		void					GetStageBounds(idParticleStage *stage);
+		idParticleStage 		*ParseParticleStage(idLexer &src);
+		void					ParseParms(idLexer &src, float *parms, int maxParms);
+		void					ParseParametric(idLexer &src, idParticleParm *parm);
+		void					WriteStage(idFile *f, idParticleStage *stage);
+		void					WriteParticleParm(idFile *f, idParticleParm *parm, const char *name);
 };
 
 #endif /* !__DECLPARTICLE_H__ */

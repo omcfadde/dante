@@ -2,7 +2,7 @@
 
 @class NSDictionary;
 
-extern NSDictionary *Sys_GetMatchingDisplayMode( glimpParms_t parms );
+extern NSDictionary *Sys_GetMatchingDisplayMode(glimpParms_t parms);
 
 extern void Sys_StoreGammaTables();
 extern void Sys_GetGammaTable(glwgamma_t *table);
