@@ -759,9 +759,8 @@ class idRenderSystemLocal : public idRenderSystem
 		int						viewportOffset[2];	// for doing larger-than-window tiled renderings
 		int						tiledViewport[2];
 
-		// determines which back end to use, and if vertex programs are in use
+		// determines which back end to use
 		backEndName_t			backEndRenderer;
-		bool					backEndRendererHasVertexPrograms;
 		float					backEndRendererMaxLight;	// 1.0 for standard, unlimited for floats
 		// determines how much overbrighting needs
 		// to be done post-process

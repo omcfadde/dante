@@ -308,80 +308,6 @@ void R_WobbleskyTexGen(drawSurf_t *surf, const idVec3 &viewOrg)
 	surf->dynamicTexCoords = vertexCache.AllocFrameTemp(texCoords, size);
 }
 
-/*
-=================
-R_SpecularTexGen
-
-Calculates the specular coordinates for cards without vertex programs.
-=================
-*/
-static void R_SpecularTexGen(drawSurf_t *surf, const idVec3 &globalLightOrigin, const idVec3 &viewOrg)
-{
-	const srfTriangles_t *tri;
-	idVec3	localLightOrigin;
-	idVec3	localViewOrigin;
-
-	R_GlobalPointToLocal(surf->space->modelMatrix, globalLightOrigin, localLightOrigin);
-	R_GlobalPointToLocal(surf->space->modelMatrix, viewOrg, localViewOrigin);
-
-	tri = surf->geo;
-
-	// FIXME: change to 3 component?
-	int	size = tri->numVerts * sizeof(idVec4);
-	idVec4 *texCoords = (idVec4 *) _alloca16(size);
-
-#if 1
-
-	SIMDProcessor->CreateSpecularTextureCoords(texCoords, localLightOrigin, localViewOrigin,
-	                tri->verts, tri->numVerts, tri->indexes, tri->numIndexes);
-
-#else
-
-	bool *used = (bool *)_alloca16(tri->numVerts * sizeof(used[0]));
-	memset(used, 0, tri->numVerts * sizeof(used[0]));
-
-	// because the interaction may be a very small subset of the full surface,
-	// it makes sense to only deal with the verts used
-	for (int j = 0; j < tri->numIndexes; j++) {
-		int i = tri->indexes[j];
-
-		if (used[i]) {
-			continue;
-		}
-
-		used[i] = true;
-
-		float ilength;
-
-		const idDrawVert *v = &tri->verts[i];
-
-		idVec3 lightDir = localLightOrigin - v->xyz;
-		idVec3 viewDir = localViewOrigin - v->xyz;
-
-		ilength = idMath::RSqrt(lightDir * lightDir);
-		lightDir[0] *= ilength;
-		lightDir[1] *= ilength;
-		lightDir[2] *= ilength;
-
-		ilength = idMath::RSqrt(viewDir * viewDir);
-		viewDir[0] *= ilength;
-		viewDir[1] *= ilength;
-		viewDir[2] *= ilength;
-
-		lightDir += viewDir;
-
-		texCoords[i][0] = lightDir * v->tangents[0];
-		texCoords[i][1] = lightDir * v->tangents[1];
-		texCoords[i][2] = lightDir * v->normal;
-		texCoords[i][3] = 1;
-	}
-
-#endif
-
-	surf->dynamicTexCoords = vertexCache.AllocFrameTemp(texCoords, size);
-}
-
-
 //=======================================================================================================
 
 /*
@@ -728,16 +654,6 @@ void R_LinkLightSurf(const drawSurf_t **link, const srfTriangles_t *tri, const v
 			float *regs = (float *)R_FrameAlloc(shader->GetNumRegisters() * sizeof(float));
 			drawSurf->shaderRegisters = regs;
 			shader->EvaluateRegisters(regs, space->entityDef->parms.shaderParms, tr.viewDef, space->entityDef->parms.referenceSound);
-		}
-
-		// calculate the specular coordinates if we aren't using vertex programs
-		if (!tr.backEndRendererHasVertexPrograms && !r_skipSpecular.GetBool()) {
-			R_SpecularTexGen(drawSurf, light->globalLightOrigin, tr.viewDef->renderView.vieworg);
-
-			// if we failed to allocate space for the specular calculations, drop the surface
-			if (!drawSurf->dynamicTexCoords) {
-				return;
-			}
 		}
 	}
 

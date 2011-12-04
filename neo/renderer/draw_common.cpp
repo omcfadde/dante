@@ -1104,8 +1104,7 @@ static void RB_T_Shadow(const drawSurf_t *surf)
 	const srfTriangles_t	*tri;
 
 	// set the light position if we are using a vertex program to project the rear surfaces
-	if (tr.backEndRendererHasVertexPrograms && r_useShadowVertexProgram.GetBool()
-	    && surf->space != backEnd.currentSpace) {
+	if (r_useShadowVertexProgram.GetBool() && surf->space != backEnd.currentSpace) {
 		idVec4 localLight;
 
 		R_GlobalPointToLocal(surf->space->modelMatrix, backEnd.vLight->globalLightOrigin, localLight.ToVec3());

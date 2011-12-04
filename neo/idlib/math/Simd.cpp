@@ -3513,78 +3513,6 @@ void TestGetTextureSpaceLightVectors(void)
 
 /*
 ============
-TestGetSpecularTextureCoords
-============
-*/
-void TestGetSpecularTextureCoords(void)
-{
-	int i, j;
-	TIME_TYPE start, end, bestClocksGeneric, bestClocksSIMD;
-	ALIGN16(idDrawVert drawVerts[COUNT]);
-	ALIGN16(idVec4 texCoords1[COUNT]);
-	ALIGN16(idVec4 texCoords2[COUNT]);
-	ALIGN16(int indexes[COUNT*3]);
-	ALIGN16(idVec3 lightVectors1[COUNT]);
-	ALIGN16(idVec3 lightVectors2[COUNT]);
-	idVec3 lightOrigin, viewOrigin;
-	const char *result;
-
-	idRandom srnd(RANDOM_SEED);
-
-	for (i = 0; i < COUNT; i++) {
-		for (j = 0; j < 3; j++) {
-			drawVerts[i].xyz[j] = srnd.CRandomFloat() * 100.0f;
-			drawVerts[i].normal[j] = srnd.CRandomFloat();
-			drawVerts[i].tangents[0][j] = srnd.CRandomFloat();
-			drawVerts[i].tangents[1][j] = srnd.CRandomFloat();
-		}
-	}
-
-	for (i = 0; i < COUNT; i++) {
-		indexes[i*3+0] = (i + 0) % COUNT;
-		indexes[i*3+1] = (i + 1) % COUNT;
-		indexes[i*3+2] = (i + 2) % COUNT;
-	}
-
-	lightOrigin[0] = srnd.CRandomFloat() * 100.0f;
-	lightOrigin[1] = srnd.CRandomFloat() * 100.0f;
-	lightOrigin[2] = srnd.CRandomFloat() * 100.0f;
-	viewOrigin[0] = srnd.CRandomFloat() * 100.0f;
-	viewOrigin[1] = srnd.CRandomFloat() * 100.0f;
-	viewOrigin[2] = srnd.CRandomFloat() * 100.0f;
-
-	bestClocksGeneric = 0;
-
-	for (i = 0; i < NUMTESTS; i++) {
-		StartRecordTime(start);
-		p_generic->CreateSpecularTextureCoords(texCoords1, lightOrigin, viewOrigin, drawVerts, COUNT, indexes, COUNT*3);
-		StopRecordTime(end);
-		GetBest(start, end, bestClocksGeneric);
-	}
-
-	PrintClocks("generic->CreateSpecularTextureCoords()", COUNT, bestClocksGeneric);
-
-	bestClocksSIMD = 0;
-
-	for (i = 0; i < NUMTESTS; i++) {
-		StartRecordTime(start);
-		p_simd->CreateSpecularTextureCoords(texCoords2, lightOrigin, viewOrigin, drawVerts, COUNT, indexes, COUNT*3);
-		StopRecordTime(end);
-		GetBest(start, end, bestClocksSIMD);
-	}
-
-	for (i = 0; i < COUNT; i++) {
-		if (!texCoords1[i].Compare(texCoords2[i], 1e-2f)) {
-			break;
-		}
-	}
-
-	result = (i >= COUNT) ? "ok" : S_COLOR_RED"X";
-	PrintClocks(va("   simd->CreateSpecularTextureCoords() %s", result), COUNT, bestClocksSIMD, bestClocksGeneric);
-}
-
-/*
-============
 TestCreateShadowCache
 ============
 */
@@ -4671,7 +4599,6 @@ void idSIMD::Test_f(const idCmdArgs &args)
 	TestDeriveUnsmoothedTangents();
 	TestNormalizeTangents();
 	TestGetTextureSpaceLightVectors();
-	TestGetSpecularTextureCoords();
 	TestCreateShadowCache();
 
 	idLib::common->Printf("====================================\n");
