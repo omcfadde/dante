@@ -41,7 +41,6 @@ renderer_string = ' \
 	RenderWorld_load.cpp \
 	RenderWorld_portals.cpp \
 	VertexCache.cpp \
-	cg_explicit.cpp \
 	draw_arb.cpp \
 	draw_arb2.cpp \
 	draw_common.cpp \

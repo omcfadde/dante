@@ -845,9 +845,6 @@ extern idCVar r_brightness;				// changes gamma tables
 
 extern idCVar r_renderer;
 
-extern idCVar r_cgVertexProfile;		// arbvp1, vp20, vp30
-extern idCVar r_cgFragmentProfile;		// arbfp1, fp30
-
 extern idCVar r_checkBounds;			// compare all surface bounds with precalculated ones
 
 extern idCVar r_useLightPortalFlow;		// 1 = do a more precise area reference determination
