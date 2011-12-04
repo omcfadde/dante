@@ -48,7 +48,6 @@ renderer_string = ' \
 	draw_exp_stub.cpp \
 	draw_nv10.cpp \
 	draw_nv20.cpp \
-	draw_r200.cpp \
 	tr_backend.cpp \
 	tr_deform.cpp \
 	tr_font.cpp \

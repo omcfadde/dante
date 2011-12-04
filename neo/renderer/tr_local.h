@@ -678,7 +678,6 @@ typedef enum {
 	BE_ARB,
 	BE_NV10,
 	BE_NV20,
-	BE_R200,
 	BE_ARB2,
 	BE_BAD
 } backEndName_t;
@@ -847,7 +846,7 @@ extern idCVar r_flareSize;				// scale the flare deforms from the material def
 extern idCVar r_gamma;					// changes gamma tables
 extern idCVar r_brightness;				// changes gamma tables
 
-extern idCVar r_renderer;				// arb, nv10, nv20, r200, gl2, etc
+extern idCVar r_renderer;				// arb, nv10, nv20, gl2, etc
 
 extern idCVar r_cgVertexProfile;		// arbvp1, vp20, vp30
 extern idCVar r_cgFragmentProfile;		// arbfp1, fp30
@@ -1303,9 +1302,6 @@ DRAW_*
 
 void	RB_ARB_DrawInteractions(void);
 
-void	R_R200_Init(void);
-void	RB_R200_DrawInteractions(void);
-
 void	R_NV10_Init(void);
 void	RB_NV10_DrawInteractions(void);
 
@@ -1322,7 +1318,6 @@ typedef enum {
 	VPROG_INTERACTION,
 	VPROG_ENVIRONMENT,
 	VPROG_BUMPY_ENVIRONMENT,
-	VPROG_R200_INTERACTION,
 	VPROG_STENCIL_SHADOW,
 	VPROG_NV20_BUMP_AND_LIGHT,
 	VPROG_NV20_DIFFUSE_COLOR,
