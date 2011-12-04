@@ -45,7 +45,6 @@ renderer_string = ' \
 	draw_arb.cpp \
 	draw_arb2.cpp \
 	draw_common.cpp \
-	draw_exp_stub.cpp \
 	tr_backend.cpp \
 	tr_deform.cpp \
 	tr_font.cpp \
