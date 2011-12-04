@@ -34,10 +34,6 @@ If you have questions concerning this license or the applicable additional terms
 #include <fcntl.h>
 #include <unistd.h>
 
-extern "C" {
-#	include "libXNVCtrl/NVCtrlLib.h"
-}
-
 idCVar sys_videoRam("sys_videoRam", "0", CVAR_SYSTEM | CVAR_ARCHIVE | CVAR_INTEGER, "Texture memory on the video card (in megabytes) - 0: autodetect", 0, 512);
 
 Display *dpy = NULL;
@@ -664,22 +660,6 @@ int Sys_GetVideoRam(void)
 
 	l_dpy = dpy;
 	l_scrnum = scrnum;
-
-	// go for nvidia ext first
-	if (XNVCTRLQueryVersion(l_dpy, &major, &minor)) {
-		common->Printf("found XNVCtrl extension %d.%d\n", major, minor);
-
-		if (XNVCTRLIsNvScreen(l_dpy, l_scrnum)) {
-			if (XNVCTRLQueryAttribute(l_dpy, l_scrnum, 0, NV_CTRL_VIDEO_RAM, &value)) {
-				run_once = value / 1024;
-				return run_once;
-			} else {
-				common->Printf("XNVCtrlQueryAttribute NV_CTRL_VIDEO_RAM failed\n");
-			}
-		} else {
-			common->Printf("default screen %d is not controlled by NVIDIA driver\n", l_scrnum);
-		}
-	}
 
 	// try ATI /proc read ( for the lack of a better option )
 	int fd;
