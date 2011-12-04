@@ -42,7 +42,7 @@ glconfig_t	glConfig;
 
 static void GfxInfo_f(void);
 
-const char *r_rendererArgs[] = { "best", "arb", "arb2", NULL };
+const char *r_rendererArgs[] = { "best", "arb2", NULL };
 
 idCVar r_inhibitFragmentProgram("r_inhibitFragmentProgram", "0", CVAR_RENDERER | CVAR_BOOL, "ignore the fragment program extension");
 idCVar r_glDriver("r_glDriver", "", CVAR_RENDERER, "\"opengl32\", etc.");
@@ -1815,15 +1815,6 @@ void GfxInfo_f(const idCmdArgs &args)
 	}
 
 	common->Printf("CPU: %s\n", Sys_GetProcessorString());
-
-	const char *active[2] = { "", " (ACTIVE)" };
-	common->Printf("ARB path ENABLED%s\n", active[tr.backEndRenderer == BE_ARB]);
-
-	if (glConfig.allowARB2Path) {
-		common->Printf("ARB2 path ENABLED%s\n", active[tr.backEndRenderer == BE_ARB2]);
-	} else {
-		common->Printf("ARB2 path disabled\n");
-	}
 
 	//=============================
 

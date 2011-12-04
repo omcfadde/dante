@@ -1802,9 +1802,6 @@ void	RB_STD_DrawView(void)
 
 	// main light renderer
 	switch (tr.backEndRenderer) {
-		case BE_ARB:
-			RB_ARB_DrawInteractions();
-			break;
 		case BE_ARB2:
 			RB_ARB2_DrawInteractions();
 			break;

@@ -424,50 +424,6 @@ void RB_BindVariableStageImage(const textureStage_t *texture, const float *shade
 
 /*
 ======================
-RB_BindStageTexture
-======================
-*/
-void RB_BindStageTexture(const float *shaderRegisters, const textureStage_t *texture, const drawSurf_t *surf)
-{
-	// image
-	RB_BindVariableStageImage(texture, shaderRegisters);
-
-	// texgens
-	if (texture->texgen == TG_DIFFUSE_CUBE) {
-		qglTexCoordPointer(3, GL_FLOAT, sizeof(idDrawVert), ((idDrawVert *)vertexCache.Position(surf->geo->ambientCache))->normal.ToFloatPtr());
-	}
-
-	if (texture->texgen == TG_SKYBOX_CUBE || texture->texgen == TG_WOBBLESKY_CUBE) {
-		qglTexCoordPointer(3, GL_FLOAT, 0, vertexCache.Position(surf->dynamicTexCoords));
-	}
-
-	if (texture->texgen == TG_REFLECT_CUBE) {
-		qglEnable(GL_TEXTURE_GEN_S);
-		qglEnable(GL_TEXTURE_GEN_T);
-		qglEnable(GL_TEXTURE_GEN_R);
-		qglTexGenf(GL_S, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP_EXT);
-		qglTexGenf(GL_T, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP_EXT);
-		qglTexGenf(GL_R, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP_EXT);
-		qglEnableClientState(GL_NORMAL_ARRAY);
-		qglNormalPointer(GL_FLOAT, sizeof(idDrawVert), ((idDrawVert *)vertexCache.Position(surf->geo->ambientCache))->normal.ToFloatPtr());
-
-		qglMatrixMode(GL_TEXTURE);
-		float	mat[16];
-
-		R_TransposeGLMatrix(backEnd.viewDef->worldSpace.modelViewMatrix, mat);
-
-		qglLoadMatrixf(mat);
-		qglMatrixMode(GL_MODELVIEW);
-	}
-
-	// matrix
-	if (texture->hasMatrix) {
-		RB_LoadShaderTextureMatrix(shaderRegisters, texture);
-	}
-}
-
-/*
-======================
 RB_FinishStageTexture
 ======================
 */

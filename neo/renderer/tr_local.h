@@ -675,7 +675,6 @@ const int MAX_GUI_SURFACES	= 1024;		// default size of the drawSurfs list for gu
 // be automatically expanded as needed
 
 typedef enum {
-	BE_ARB,
 	BE_ARB2,
 	BE_BAD
 } backEndName_t;
@@ -1278,7 +1277,6 @@ void RB_DrawElementsWithCounters(const srfTriangles_t *tri);
 void RB_DrawShadowElementsWithCounters(const srfTriangles_t *tri, int numIndexes);
 void RB_STD_FillDepthBuffer(drawSurf_t **drawSurfs, int numDrawSurfs);
 void RB_BindVariableStageImage(const textureStage_t *texture, const float *shaderRegisters);
-void RB_BindStageTexture(const float *shaderRegisters, const textureStage_t *texture, const drawSurf_t *surf);
 void RB_FinishStageTexture(const textureStage_t *texture, const drawSurf_t *surf);
 void RB_StencilShadowPass(const drawSurf_t *drawSurfs);
 void RB_STD_DrawView(void);
@@ -1292,8 +1290,6 @@ DRAW_*
 
 ============================================================
 */
-
-void	RB_ARB_DrawInteractions(void);
 
 void	R_ARB2_Init(void);
 void	RB_ARB2_DrawInteractions(void);
