@@ -86,9 +86,6 @@ typedef struct glconfig_s {
 
 	bool				isFullscreen;
 
-	bool				allowNV30Path;
-	bool				allowNV20Path;
-	bool				allowNV10Path;
 	bool				allowARB2Path;
 
 	bool				isInitialized;
@@ -247,7 +244,6 @@ class idRenderSystem
 		// to use the default tga loading code without having dimmed down areas in many places
 		virtual void			CaptureRenderToFile(const char *fileName, bool fixAlpha = false) = 0;
 		virtual void			UnCrop() = 0;
-		virtual void			GetCardCaps(bool &oldCard, bool &nv10or20) = 0;
 
 		// the image has to be already loaded ( most straightforward way would be through a FindMaterial )
 		// texture filter / mipmapping / repeat won't be modified by the upload

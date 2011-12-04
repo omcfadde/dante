@@ -583,14 +583,6 @@ void idRenderSystemLocal::SetBackEndRenderer()
 		if (glConfig.allowARB2Path) {
 			backEndRenderer = BE_ARB2;
 		}
-	} else if (idStr::Icmp(r_renderer.GetString(), "nv10") == 0) {
-		if (glConfig.allowNV10Path) {
-			backEndRenderer = BE_NV10;
-		}
-	} else if (idStr::Icmp(r_renderer.GetString(), "nv20") == 0) {
-		if (glConfig.allowNV20Path) {
-			backEndRenderer = BE_NV20;
-		}
 	}
 
 	// fallback
@@ -598,10 +590,6 @@ void idRenderSystemLocal::SetBackEndRenderer()
 		// choose the best
 		if (glConfig.allowARB2Path) {
 			backEndRenderer = BE_ARB2;
-		} else if (glConfig.allowNV20Path) {
-			backEndRenderer = BE_NV20;
-		} else if (glConfig.allowNV10Path) {
-			backEndRenderer = BE_NV10;
 		} else {
 			// the others are considered experimental
 			backEndRenderer = BE_ARB;
@@ -614,13 +602,6 @@ void idRenderSystemLocal::SetBackEndRenderer()
 	switch (backEndRenderer) {
 		case BE_ARB:
 			common->Printf("using ARB renderSystem\n");
-			break;
-		case BE_NV10:
-			common->Printf("using NV10 renderSystem\n");
-			break;
-		case BE_NV20:
-			common->Printf("using NV20 renderSystem\n");
-			backEndRendererHasVertexPrograms = true;
 			break;
 		case BE_ARB2:
 			common->Printf("using ARB2 renderSystem\n");

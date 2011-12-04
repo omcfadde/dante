@@ -42,7 +42,7 @@ glconfig_t	glConfig;
 
 static void GfxInfo_f(void);
 
-const char *r_rendererArgs[] = { "best", "arb", "arb2", "Cg", "exp", "nv10", "nv20", NULL };
+const char *r_rendererArgs[] = { "best", "arb", "arb2", "Cg", "exp", NULL };
 
 idCVar r_inhibitFragmentProgram("r_inhibitFragmentProgram", "0", CVAR_RENDERER | CVAR_BOOL, "ignore the fragment program extension");
 idCVar r_glDriver("r_glDriver", "", CVAR_RENDERER, "\"opengl32\", etc.");
@@ -56,7 +56,6 @@ idCVar r_customHeight("r_customHeight", "486", CVAR_RENDERER | CVAR_ARCHIVE | CV
 idCVar r_singleTriangle("r_singleTriangle", "0", CVAR_RENDERER | CVAR_BOOL, "only draw a single triangle per primitive");
 idCVar r_checkBounds("r_checkBounds", "0", CVAR_RENDERER | CVAR_BOOL, "compare all surface bounds with precalculated ones");
 
-idCVar r_useNV20MonoLights("r_useNV20MonoLights", "1", CVAR_RENDERER | CVAR_INTEGER, "use pass optimization for mono lights");
 idCVar r_useConstantMaterials("r_useConstantMaterials", "1", CVAR_RENDERER | CVAR_BOOL, "use pre-calculated material registers if possible");
 idCVar r_useTripleTextureARB("r_useTripleTextureARB", "1", CVAR_RENDERER | CVAR_BOOL, "cards with 3+ texture units do a two pass instead of three pass");
 idCVar r_useSilRemap("r_useSilRemap", "1", CVAR_RENDERER | CVAR_BOOL, "consider verts with the same XYZ, but different ST the same for shadows");
@@ -669,8 +668,6 @@ void R_InitOpenGL(void)
 
 	// parse our vertex and fragment programs, possibly disably support for
 	// one of the paths if there was an error
-	R_NV10_Init();
-	R_NV20_Init();
 	R_ARB2_Init();
 
 	cmdSystem->AddCommand("reloadARBprograms", R_ReloadARBPrograms_f, CMD_FL_RENDERER, "reloads ARB programs");
@@ -1874,18 +1871,6 @@ void GfxInfo_f(const idCmdArgs &args)
 	const char *active[2] = { "", " (ACTIVE)" };
 	common->Printf("ARB path ENABLED%s\n", active[tr.backEndRenderer == BE_ARB]);
 
-	if (glConfig.allowNV10Path) {
-		common->Printf("NV10 path ENABLED%s\n", active[tr.backEndRenderer == BE_NV10]);
-	} else {
-		common->Printf("NV10 path disabled\n");
-	}
-
-	if (glConfig.allowNV20Path) {
-		common->Printf("NV20 path ENABLED%s\n", active[tr.backEndRenderer == BE_NV20]);
-	} else {
-		common->Printf("NV20 path disabled\n");
-	}
-
 	if (glConfig.allowARB2Path) {
 		common->Printf("ARB2 path ENABLED%s\n", active[tr.backEndRenderer == BE_ARB2]);
 	} else {
@@ -2404,15 +2389,3 @@ int idRenderSystemLocal::GetScreenHeight(void) const
 {
 	return glConfig.vidHeight;
 }
-
-/*
-========================
-idRenderSystemLocal::GetCardCaps
-========================
-*/
-void idRenderSystemLocal::GetCardCaps(bool &oldCard, bool &nv10or20)
-{
-	nv10or20 = (tr.backEndRenderer == BE_NV10 || tr.backEndRenderer == BE_NV20);
-	oldCard = (tr.backEndRenderer == BE_ARB || tr.backEndRenderer == BE_NV10 || tr.backEndRenderer == BE_NV20);
-}
-

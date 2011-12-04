@@ -155,7 +155,7 @@ void RB_PrepareStageTexturing(const shaderStage_t *pStage,  const drawSurf_t *su
 	}
 
 	if (pStage->texture.texgen == TG_GLASSWARP) {
-		if (tr.backEndRenderer == BE_ARB2 /*|| tr.backEndRenderer == BE_NV30*/) {
+		if (tr.backEndRenderer == BE_ARB2) {
 			qglBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, FPROG_GLASSWARP);
 			qglEnable(GL_FRAGMENT_PROGRAM_ARB);
 
@@ -280,7 +280,7 @@ void RB_FinishStageTexturing(const shaderStage_t *pStage, const drawSurf_t *surf
 	}
 
 	if (pStage->texture.texgen == TG_GLASSWARP) {
-		if (tr.backEndRenderer == BE_ARB2 /*|| tr.backEndRenderer == BE_NV30*/) {
+		if (tr.backEndRenderer == BE_ARB2) {
 			GL_SelectTexture(2);
 			globalImages->BindNull();
 
@@ -1807,12 +1807,6 @@ void	RB_STD_DrawView(void)
 			break;
 		case BE_ARB2:
 			RB_ARB2_DrawInteractions();
-			break;
-		case BE_NV20:
-			RB_NV20_DrawInteractions();
-			break;
-		case BE_NV10:
-			RB_NV10_DrawInteractions();
 			break;
 	}
 

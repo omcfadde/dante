@@ -219,7 +219,7 @@ This may need to scan six cube map images
 ===============
 */
 GLenum idImage::SelectInternalFormat(const byte **dataPtrs, int numDataPtrs, int width, int height,
-                                     textureDepth_t minimumDepth, bool *monochromeResult) const
+                                     textureDepth_t minimumDepth) const
 {
 	int		i, c;
 	const byte	*scan;
@@ -236,8 +236,6 @@ GLenum idImage::SelectInternalFormat(const byte **dataPtrs, int numDataPtrs, int
 	aOr = 0;
 	aAnd = -1;
 
-	*monochromeResult = true;	// until shown otherwise
-
 	for (int side = 0 ; side < numDataPtrs ; side++) {
 		scan = dataPtrs[side];
 
@@ -252,16 +250,6 @@ GLenum idImage::SelectInternalFormat(const byte **dataPtrs, int numDataPtrs, int
 
 			// if rgb are all the same, the or and and will match
 			rgbDiffer |= (cor ^ cand);
-
-			// our "isMonochrome" test is more lax than rgbDiffer,
-			// allowing the values to be off by several units and
-			// still use the NV20 mono path
-			if (*monochromeResult) {
-				if (abs(scan[0] - scan[1]) > 16
-				    || abs(scan[0] - scan[2]) > 16) {
-					*monochromeResult = false;
-				}
-			}
 
 			rgbOr |= cor;
 			rgbAnd &= cand;
@@ -588,7 +576,7 @@ void idImage::GenerateImage(const byte *pic, int width, int height,
 	qglGenTextures(1, &texnum);
 
 	// select proper internal format before we resample
-	internalFormat = SelectInternalFormat(&pic, 1, width, height, depth, &isMonochrome);
+	internalFormat = SelectInternalFormat(&pic, 1, width, height, depth);
 
 	// copy or resample data as appropriate for first MIP level
 	if ((scaled_width == width) && (scaled_height == height)) {
@@ -810,7 +798,7 @@ void idImage::Generate3DImage(const byte *pic, int width, int height, int picDep
 
 	// select proper internal format before we resample
 	// this function doesn't need to know it is 3D, so just make it very "tall"
-	internalFormat = SelectInternalFormat(&pic, 1, width, height * picDepth, minDepthParm, &isMonochrome);
+	internalFormat = SelectInternalFormat(&pic, 1, width, height * picDepth, minDepthParm);
 
 	uploadHeight = scaled_height;
 	uploadWidth = scaled_width;
@@ -951,7 +939,7 @@ void idImage::GenerateCubeImage(const byte *pic[6], int size,
 	qglGenTextures(1, &texnum);
 
 	// select proper internal format before we resample
-	internalFormat = SelectInternalFormat(pic, 6, width, height, depth, &isMonochrome);
+	internalFormat = SelectInternalFormat(pic, 6, width, height, depth);
 
 	// don't bother with downsample for now
 	scaled_width = width;
@@ -1202,11 +1190,6 @@ void idImage::WritePrecompressedImage()
 	header.dwFlags = DDSF_CAPS | DDSF_PIXELFORMAT | DDSF_WIDTH | DDSF_HEIGHT;
 	header.dwHeight = uploadHeight;
 	header.dwWidth = uploadWidth;
-
-	// hack in our monochrome flag for the NV20 optimization
-	if (isMonochrome) {
-		header.dwFlags |= DDSF_ID_MONOCHROME;
-	}
 
 	if (FormatIsDXT(altInternalFormat)) {
 		// size (in bytes) of the compressed base image
@@ -1590,11 +1573,6 @@ void idImage::UploadPrecompressedImage(byte *data, int len)
 	} else {
 		common->Warning("Invalid uncompressed internal format\n");
 		return;
-	}
-
-	// we need the monochrome flag for the NV20 optimized path
-	if (header->dwFlags & DDSF_ID_MONOCHROME) {
-		isMonochrome = true;
 	}
 
 	type = TT_2D;			// FIXME: we may want to support pre-compressed cube maps in the future
