@@ -225,32 +225,6 @@ void (APIENTRY *qglMultiTexCoord2fvARB)(GLenum texture, GLfloat *st);
 void (APIENTRY *qglActiveTextureARB)(GLenum texture);
 void (APIENTRY *qglClientActiveTextureARB)(GLenum texture);
 
-void (APIENTRY *qglCombinerParameterfvNV)(GLenum pname, const GLfloat *params);
-void (APIENTRY *qglCombinerParameterivNV)(GLenum pname, const GLint *params);
-void (APIENTRY *qglCombinerParameterfNV)(GLenum pname, const GLfloat param);
-void (APIENTRY *qglCombinerParameteriNV)(GLenum pname, const GLint param);
-void (APIENTRY *qglCombinerInputNV)(GLenum stage, GLenum portion, GLenum variable, GLenum input,
-                                    GLenum mapping, GLenum componentUsage);
-void (APIENTRY *qglCombinerOutputNV)(GLenum stage, GLenum portion, GLenum abOutput, GLenum cdOutput,
-                                     GLenum sumOutput, GLenum scale, GLenum bias, GLboolean abDotProduct,
-                                     GLboolean cdDotProduct, GLboolean muxSum);
-void (APIENTRY *qglFinalCombinerInputNV)(GLenum variable, GLenum input, GLenum mapping, GLenum componentUsage);
-
-
-void (APIENTRY *qglVertexArrayRangeNV)(GLsizei length, void *pointer);
-// TTimo: wgl vs glX
-// http://oss.sgi.com/projects/ogl-sample/registry/NV/vertex_array_range.txt
-// since APIs are the same anyway, let's be wgl/glX agnostic
-void *(APIENTRY *qAllocateMemoryNV)(GLsizei size, float readFrequency, float writeFrequency, float priority);
-void (APIENTRY *qFreeMemoryNV)(void *pointer);
-#ifdef GLX_VERSION_1_1
-#define Q_ALLOCATE_MEMORY_NV "glXAllocateMemoryNV"
-#define Q_FREE_MEMORY_NV "glXFreeMemoryNV"
-#else
-#define Q_ALLOCATE_MEMORY_NV "wglAllocateMemoryNV"
-#define Q_FREE_MEMORY_NV "wglFreeMemoryNV"
-#endif
-
 void (APIENTRY *qglTexImage3D)(GLenum, GLint, GLint, GLsizei, GLsizei, GLsizei, GLint, GLenum, GLenum, const GLvoid *);
 
 void (APIENTRY *qglColorTableEXT)(int, int, int, int, int, const void *);
@@ -413,29 +387,6 @@ static void R_CheckPortableExtensions(void)
 	} else {
 		tr.stencilIncr = GL_INCR;
 		tr.stencilDecr = GL_DECR;
-	}
-
-	// GL_NV_register_combiners
-	glConfig.registerCombinersAvailable = R_CheckExtension("GL_NV_register_combiners");
-
-	if (glConfig.registerCombinersAvailable) {
-		qglCombinerParameterfvNV = (void (APIENTRY *)(GLenum pname, const GLfloat *params))
-		                           GLimp_ExtensionPointer("glCombinerParameterfvNV");
-		qglCombinerParameterivNV = (void (APIENTRY *)(GLenum pname, const GLint *params))
-		                           GLimp_ExtensionPointer("glCombinerParameterivNV");
-		qglCombinerParameterfNV = (void (APIENTRY *)(GLenum pname, const GLfloat param))
-		                          GLimp_ExtensionPointer("glCombinerParameterfNV");
-		qglCombinerParameteriNV = (void (APIENTRY *)(GLenum pname, const GLint param))
-		                          GLimp_ExtensionPointer("glCombinerParameteriNV");
-		qglCombinerInputNV = (void (APIENTRY *)(GLenum stage, GLenum portion, GLenum variable, GLenum input,
-		                                        GLenum mapping, GLenum componentUsage))
-		                     GLimp_ExtensionPointer("glCombinerInputNV");
-		qglCombinerOutputNV = (void (APIENTRY *)(GLenum stage, GLenum portion, GLenum abOutput, GLenum cdOutput,
-		                       GLenum sumOutput, GLenum scale, GLenum bias, GLboolean abDotProduct,
-		                       GLboolean cdDotProduct, GLboolean muxSum))
-		                      GLimp_ExtensionPointer("glCombinerOutputNV");
-		qglFinalCombinerInputNV = (void (APIENTRY *)(GLenum variable, GLenum input, GLenum mapping, GLenum componentUsage))
-		                          GLimp_ExtensionPointer("glFinalCombinerInputNV");
 	}
 
 	// GL_EXT_stencil_two_side
