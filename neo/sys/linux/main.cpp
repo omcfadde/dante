@@ -288,7 +288,8 @@ double Sys_GetClockTicks(void)
 	        : "=r"(lo), "=r"(hi));
 	return (double) lo + (double) 0xFFFFFFFF * hi;
 #else
-#error unsupported CPU
+#warning unsupported CPU
+	return 0;
 #endif
 }
 
