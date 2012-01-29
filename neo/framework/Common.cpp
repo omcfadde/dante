@@ -196,7 +196,7 @@ class idCommonLocal : public idCommon
 		idStrList					warningList;
 		idStrList					errorList;
 
-		int							gameDLL;
+		intptr_t						gameDLL;
 
 		idLangDict					languageDict;
 
@@ -229,7 +229,7 @@ idCommonLocal::idCommonLocal(void)
 	rd_buffersize = 0;
 	rd_flush = NULL;
 
-	gameDLL = 0;
+	gameDLL = NULL;
 
 #ifdef ID_WRITE_VERSION
 	config_compressor = NULL;
