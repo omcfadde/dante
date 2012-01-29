@@ -2817,7 +2817,7 @@ ID_INLINE void idMatX::SetData(int rows, int columns, float *data)
 		Mem_Free16(mat);
 	}
 
-	assert((((int) data) & 15) == 0);       // data must be 16 byte aligned
+	assert((((intptr_t) data) & 15) == 0);       // data must be 16 byte aligned
 	mat = data;
 	alloced = -1;
 	numRows = rows;
