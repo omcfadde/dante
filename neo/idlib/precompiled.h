@@ -105,6 +105,8 @@ If you have questions concerning this license or the applicable additional terms
 #include <errno.h>
 #include <math.h>
 
+#define round_up(x, y)	(((x) + ((y)-1)) & ~((y)-1))
+
 //-----------------------------------------------------
 
 // non-portable system services

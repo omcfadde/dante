@@ -96,15 +96,15 @@ idEventDef::idEventDef(const char *command, const char *formatspec, char returnT
 		switch (formatspec[ i ]) {
 			case D_EVENT_FLOAT :
 				bits |= 1 << i;
-				argsize += sizeof(float);
+				argsize += sizeof(intptr_t);
 				break;
 
 			case D_EVENT_INTEGER :
-				argsize += sizeof(int);
+				argsize += sizeof(intptr_t);
 				break;
 
 			case D_EVENT_VECTOR :
-				argsize += sizeof(idVec3);
+				argsize += round_up(sizeof(idVec3), sizeof(intptr_t));
 				break;
 
 			case D_EVENT_STRING :
