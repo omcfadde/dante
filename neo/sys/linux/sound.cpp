@@ -426,7 +426,7 @@ void idAudioHardwareOSS::Write(bool flushing)
 	}
 
 	// what to write and how much
-	int pos = (int)m_buffer + (MIXBUFFER_CHUNKS - m_writeChunks) * m_channels * 2 * MIXBUFFER_SAMPLES / MIXBUFFER_CHUNKS;
+	intptr_t pos = (intptr_t)m_buffer + (MIXBUFFER_CHUNKS - m_writeChunks) * m_channels * 2 * MIXBUFFER_SAMPLES / MIXBUFFER_CHUNKS;
 	int len = Min(m_writeChunks, m_freeWriteChunks) * m_channels * 2 * MIXBUFFER_SAMPLES / MIXBUFFER_CHUNKS;
 	assert(len > 0);
 
