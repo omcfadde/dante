@@ -215,9 +215,8 @@ void GLimp_Shutdown()
 			XF86VidModeSwitchToMode(dpy, scrnum, vidmodes[0]);
 		}
 
-		XFlush(dpy);
-
 		// FIXME: that's going to crash
+		//XFlush(dpy);
 		//XCloseDisplay( dpy );
 
 		vidmode_active = false;
