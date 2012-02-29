@@ -72,7 +72,7 @@ If you have questions concerning this license or the applicable additional terms
 // Turns on/off DeriveTriPlanes, DeriveTangents, DeriveUnsmoothedTangents, NormalizeTangents
 #define ENABLE_DERIVE
 
-// Turns on/off CreateTextureSpaceLightVectors, CreateShadowCache, CreateVertexProgramShadowCache
+// Turns on/off CreateShadowCache, CreateVertexProgramShadowCache
 #define ENABLE_CREATE
 
 // Turns on/off the sound routines
@@ -228,7 +228,6 @@ class idSIMD_AltiVec : public idSIMD_Generic
 #endif
 
 #ifdef ENABLE_CREATE
-		virtual void VPCALL CreateTextureSpaceLightVectors(idVec3 *lightVectors, const idVec3 &lightOrigin, const idDrawVert *verts, const int numVerts, const int *indexes, const int numIndexes);
 		virtual int  VPCALL CreateShadowCache(idVec4 *vertexCache, int *vertRemap, const idVec3 &lightOrigin, const idDrawVert *verts, const int numVerts);
 		virtual int  VPCALL CreateVertexProgramShadowCache(idVec4 *vertexCache, const idDrawVert *verts, const int numVerts);
 #endif

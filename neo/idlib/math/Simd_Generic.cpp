@@ -3120,42 +3120,6 @@ void VPCALL idSIMD_Generic::NormalizeTangents(idDrawVert *verts, const int numVe
 
 /*
 ============
-idSIMD_Generic::CreateTextureSpaceLightVectors
-
-	Calculates light vectors in texture space for the given triangle vertices.
-	For each vertex the direction towards the light origin is projected onto texture space.
-	The light vectors are only calculated for the vertices referenced by the indexes.
-============
-*/
-void VPCALL idSIMD_Generic::CreateTextureSpaceLightVectors(idVec3 *lightVectors, const idVec3 &lightOrigin, const idDrawVert *verts, const int numVerts, const int *indexes, const int numIndexes)
-{
-
-	bool *used = (bool *)_alloca16(numVerts * sizeof(used[0]));
-	memset(used, 0, numVerts * sizeof(used[0]));
-
-	for (int i = numIndexes - 1; i >= 0; i--) {
-		used[indexes[i]] = true;
-	}
-
-	for (int i = 0; i < numVerts; i++) {
-		if (!used[i]) {
-			continue;
-		}
-
-		const idDrawVert *v = &verts[i];
-
-		idVec3 lightDir = lightOrigin - v->xyz;
-
-		lightVectors[i][0] = lightDir * v->tangents[0];
-
-		lightVectors[i][1] = lightDir * v->tangents[1];
-
-		lightVectors[i][2] = lightDir * v->normal;
-	}
-}
-
-/*
-============
 idSIMD_Generic::CreateShadowCache
 ============
 */

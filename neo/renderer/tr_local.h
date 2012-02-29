@@ -1181,7 +1181,6 @@ void R_LinkLightSurf(const drawSurf_t **link, const srfTriangles_t *tri, const v
                      const idRenderLightLocal *light, const idMaterial *shader, const idScreenRect &scissor, bool viewInsideShadow);
 
 bool R_CreateAmbientCache(srfTriangles_t *tri, bool needsLighting);
-bool R_CreateLightingCache(const idRenderEntityLocal *ent, const idRenderLightLocal *light, srfTriangles_t *tri);
 void R_CreatePrivateShadowCache(srfTriangles_t *tri);
 void R_CreateVertexProgramShadowCache(srfTriangles_t *tri);
 

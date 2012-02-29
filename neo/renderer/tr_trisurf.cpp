@@ -358,11 +358,6 @@ void R_FreeStaticTriSurfVertexCaches(srfTriangles_t *tri)
 		// this is a real model surface
 		vertexCache.Free(tri->ambientCache);
 		tri->ambientCache = NULL;
-	} else {
-		// this is a light interaction surface that references
-		// a different ambient model surface
-		vertexCache.Free(tri->lightingCache);
-		tri->lightingCache = NULL;
 	}
 
 	if (tri->indexCache) {
