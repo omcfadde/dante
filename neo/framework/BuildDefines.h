@@ -110,11 +110,7 @@ If you have questions concerning this license or the applicable additional terms
 #endif
 
 #ifndef ID_ENFORCE_KEY
-#	if !defined( ID_DEDICATED ) && !defined( ID_DEMO_BUILD )
-#		define ID_ENFORCE_KEY 1
-#	else
-#		define ID_ENFORCE_KEY 0
-#	endif
+#	define ID_ENFORCE_KEY 0
 #endif
 
 #ifndef ID_OPENAL
