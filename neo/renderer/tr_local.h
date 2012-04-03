@@ -676,6 +676,7 @@ const int MAX_GUI_SURFACES	= 1024;		// default size of the drawSurfs list for gu
 
 typedef enum {
 	BE_ARB2,
+	BE_GLSL,
 	BE_BAD
 } backEndName_t;
 
@@ -1355,6 +1356,63 @@ typedef enum {
 
 	PP_LIGHT_FALLOFF_TQ = 20	// only for NV programs
 } programParameter_t;
+
+
+/*
+============================================================
+
+DRAW_GLSL
+
+============================================================
+*/
+
+
+typedef struct shaderProgram_s {
+	GLhandleARB	program;
+
+	GLhandleARB	vertexShader;
+	GLhandleARB	fragmentShader;
+
+	GLint		u_bumpTexture;
+	GLint		u_lightFalloffTexture;
+	GLint		u_lightProjectionTexture;
+	GLint		u_diffuseTexture;
+	GLint		u_specularTexture;
+	GLint		u_specularFalloffTexture;
+
+	GLint		modelMatrix;
+
+	GLint		localLightOrigin;
+	GLint		localViewOrigin;
+
+	GLint		lightProjectionS;
+	GLint		lightProjectionT;
+	GLint		lightProjectionQ;
+	GLint		lightFalloff;
+
+	GLint		bumpMatrixS;
+	GLint		bumpMatrixT;
+	GLint		diffuseMatrixS;
+	GLint		diffuseMatrixT;
+	GLint		specularMatrixS;
+	GLint		specularMatrixT;
+
+	GLint		colorModulate;
+	GLint		colorAdd;
+
+	GLint		diffuseColor;
+	GLint		specularColor;
+} shaderProgram_t;
+
+
+/* This file was automatically generated.  Do not edit! */
+void R_ReloadGLSLPrograms_f(const idCmdArgs &args);
+void R_GLSL_Init(void);
+void RB_GLSL_DrawInteractions(void);
+void RB_GLSL_CreateDrawInteractions(const drawSurf_t *surf);
+void RB_GLSL_DrawInteraction(const drawInteraction_t *din);
+extern shaderProgram_t shadowShader;
+extern shaderProgram_t interactionShader;
 
 
 /*

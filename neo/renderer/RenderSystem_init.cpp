@@ -73,7 +73,7 @@ idCVar r_finish("r_finish", "0", CVAR_RENDERER | CVAR_BOOL, "force a call to glF
 idCVar r_gamma("r_gamma", "1", CVAR_RENDERER | CVAR_ARCHIVE | CVAR_FLOAT, "changes gamma tables", 0.5f, 3.0f);
 idCVar r_brightness("r_brightness", "1", CVAR_RENDERER | CVAR_ARCHIVE | CVAR_FLOAT, "changes gamma tables", 0.5f, 2.0f);
 
-idCVar r_renderer("r_renderer", "arb2", CVAR_RENDERER | CVAR_ARCHIVE, "hardware specific renderer path to use");
+idCVar r_renderer("r_renderer", "glsl", CVAR_RENDERER | CVAR_ARCHIVE, "hardware specific renderer path to use");
 
 idCVar r_jitter("r_jitter", "0", CVAR_RENDERER | CVAR_BOOL, "randomly subpixel jitter the projection matrix");
 
@@ -354,6 +354,9 @@ static void R_CheckPortableExtensions(void)
 		glConfig.ARBFragmentProgramAvailable = R_CheckExtension("GL_ARB_fragment_program");
 	}
 
+	// GL_ARB_shading_language_100
+	glConfig.GLSLAvailable = R_CheckExtension("GL_ARB_shading_language_100");
+
 	// GL_EXT_depth_bounds_test
 	glConfig.depthBoundsTestAvailable = R_CheckExtension("EXT_depth_bounds_test");
 
@@ -518,9 +521,13 @@ void R_InitOpenGL(void)
 	// parse our vertex and fragment programs, possibly disably support for
 	// one of the paths if there was an error
 	R_ARB2_Init();
+	R_GLSL_Init();
 
 	cmdSystem->AddCommand("reloadARBprograms", R_ReloadARBPrograms_f, CMD_FL_RENDERER, "reloads ARB programs");
 	R_ReloadARBPrograms_f(idCmdArgs());
+
+	cmdSystem->AddCommand("reloadGLSLprograms", R_ReloadGLSLPrograms_f, CMD_FL_RENDERER, "reloads GLSL programs");
+	R_ReloadGLSLPrograms_f(idCmdArgs());
 
 	// allocate the vertex array range or vertex objects
 	vertexCache.Init();

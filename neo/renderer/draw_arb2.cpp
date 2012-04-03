@@ -361,13 +361,18 @@ void R_LoadARBProgram(int progIndex)
 {
 	int		ofs;
 	int		err;
-	idStr	fullPath = "glprogs/";
+	idStr	fullPath = "gl2progs/";
 	fullPath += progs[progIndex].name;
 	char	*fileBuffer;
 	char	*buffer;
 	char	*start, *end;
 
 	common->Printf("%s", fullPath.c_str());
+
+	if (!glConfig.allowARB2Path) {
+		common->Printf(": !glConfig.allowARB2Path\n");
+		return;
+	}
 
 	// load the program even if we don't support it, so
 	// fs_copyfiles can generate cross-platform data dumps

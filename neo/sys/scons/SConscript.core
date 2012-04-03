@@ -42,6 +42,7 @@ renderer_string = ' \
 	RenderWorld_portals.cpp \
 	VertexCache.cpp \
 	draw_arb2.cpp \
+	draw_glsl.cpp \
 	draw_common.cpp \
 	tr_backend.cpp \
 	tr_deform.cpp \

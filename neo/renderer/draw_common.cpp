@@ -1009,7 +1009,7 @@ int RB_STD_DrawShaderPasses(drawSurf_t **drawSurfs, int numDrawSurfs)
 		}
 
 		// only dump if in a 3d view
-		if (backEnd.viewDef->viewEntitys && tr.backEndRenderer == BE_ARB2) {
+		if (backEnd.viewDef->viewEntitys) {
 			globalImages->currentRenderImage->CopyFramebuffer(backEnd.viewDef->viewport.x1,
 			                backEnd.viewDef->viewport.y1,  backEnd.viewDef->viewport.x2 -  backEnd.viewDef->viewport.x1 + 1,
 			                backEnd.viewDef->viewport.y2 -  backEnd.viewDef->viewport.y1 + 1, true);
@@ -1084,7 +1084,12 @@ static void RB_T_Shadow(const drawSurf_t *surf)
 
 		R_GlobalPointToLocal(surf->space->modelMatrix, backEnd.vLight->globalLightOrigin, localLight.ToVec3());
 		localLight.w = 0.0f;
-		glProgramEnvParameter4fvARB(GL_VERTEX_PROGRAM_ARB, PP_LIGHT_ORIGIN, localLight.ToFloatPtr());
+
+		if (tr.backEndRenderer == BE_ARB2) {
+			glProgramEnvParameter4fvARB(GL_VERTEX_PROGRAM_ARB, PP_LIGHT_ORIGIN, localLight.ToFloatPtr());
+		} else {
+			glUniform4fvARB(shadowShader.localLightOrigin, 1, localLight.ToFloatPtr());
+		}
 	}
 
 	tri = surf->geo;
@@ -1778,6 +1783,9 @@ void	RB_STD_DrawView(void)
 	switch (tr.backEndRenderer) {
 		case BE_ARB2:
 			RB_ARB2_DrawInteractions();
+			break;
+		case BE_GLSL:
+			RB_GLSL_DrawInteractions();
 			break;
 	}
 

@@ -74,6 +74,7 @@ typedef struct glconfig_s {
 	bool				twoSidedStencilAvailable;
 	bool				textureNonPowerOfTwoAvailable;
 	bool				depthBoundsTestAvailable;
+	bool				GLSLAvailable;
 
 	// ati r300
 	bool				atiTwoSidedStencilAvailable;
@@ -85,6 +86,7 @@ typedef struct glconfig_s {
 	bool				isFullscreen;
 
 	bool				allowARB2Path;
+	bool				allowGLSLPath;
 
 	bool				isInitialized;
 } glconfig_t;

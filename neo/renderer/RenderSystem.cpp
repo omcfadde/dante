@@ -579,6 +579,10 @@ void idRenderSystemLocal::SetBackEndRenderer()
 		if (glConfig.allowARB2Path) {
 			backEndRenderer = BE_ARB2;
 		}
+	} else if (idStr::Icmp(r_renderer.GetString(), "glsl") == 0) {
+		if (glConfig.allowGLSLPath) {
+			backEndRenderer = BE_GLSL;
+		}
 	}
 
 	backEndRendererMaxLight = 1.0;
@@ -586,6 +590,10 @@ void idRenderSystemLocal::SetBackEndRenderer()
 	switch (backEndRenderer) {
 		case BE_ARB2:
 			common->Printf("using ARB2 renderSystem\n");
+			backEndRendererMaxLight = 999;
+			break;
+		case BE_GLSL:
+			common->Printf("using GLSL renderSystem\n");
 			backEndRendererMaxLight = 999;
 			break;
 		default:
