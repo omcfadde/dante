@@ -438,9 +438,8 @@ static void R_CheckPortableExtensions(void)
 		}
 	}
 
-	// check for minimum set
-	if (!glConfig.multitextureAvailable || !glConfig.textureEnvCombineAvailable || !glConfig.cubeMapAvailable
-	    || !glConfig.envDot3Available) {
+	// check for minimum OpenGL version
+	if (!glConfig.glVersion >= 3.0) {
 		common->Error(common->GetLanguageDict()->GetString("#str_06780"));
 	}
 
