@@ -471,7 +471,7 @@ void rvGEViewer::Render(HDC dc)
 
 	// Switch GL contexts to our dc
 	if (!qwglMakeCurrent(dc, win32.hGLRC)) {
-		common->Printf("ERROR: wglMakeCurrent failed.. Error:%i\n", qglGetError());
+		common->Printf("ERROR: wglMakeCurrent failed.. Error:%i\n", glGetError());
 		common->Printf("Please restart Q3Radiant if the Map view is not working\n");
 		return;
 	}
@@ -488,18 +488,18 @@ void rvGEViewer::Render(HDC dc)
 	mWindowWidth = rClient.right - rClient.left;
 	mWindowHeight = rClient.bottom - rClient.top;
 
-	qglViewport(0, 0, mWindowWidth, mWindowHeight);
-	qglScissor(0, 0, mWindowWidth, mWindowHeight);
-	qglClearColor(0, 0, 0, 0);
+	glViewport(0, 0, mWindowWidth, mWindowHeight);
+	glScissor(0, 0, mWindowWidth, mWindowHeight);
+	glClearColor(0, 0, 0, 0);
 
-	qglDisable(GL_DEPTH_TEST);
-	qglDisable(GL_CULL_FACE);
-	qglClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Render the workspace below
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	qglOrtho(0,mWindowWidth, mWindowHeight, 0, -1, 1);
+	glOrtho(0,mWindowWidth, mWindowHeight, 0, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
@@ -527,7 +527,7 @@ void rvGEViewer::Render(HDC dc)
 		renderSystem->EndFrame(&frontEnd, &backEnd);
 	}
 
-	qglFinish();
+	glFinish();
 	qwglSwapBuffers(dc);
 }
 

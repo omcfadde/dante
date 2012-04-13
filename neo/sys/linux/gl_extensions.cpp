@@ -26,38 +26,57 @@ If you have questions concerning this license or the applicable additional terms
 
 ===========================================================================
 */
-/*
-** QGL.H
-*/
+#include "../../idlib/precompiled.h"
+#pragma hdrstop
 
-#ifndef __QGL_H__
-#define __QGL_H__
+typedef struct {
+	const char *ext_name;
+} glExtName_t;
 
-#define GL_GLEXT_PROTOTYPES
+glExtName_t glExtNames[] = {
+	NULL
+};
 
-#include <GL/gl.h>
-#include <GL/glx.h>
+static void StubFunction(void) { }
 
-typedef void (*GLExtension_t)(void);
+GLExtension_t GLimp_ExtensionPointer(const char *name)
+{
+	if (strstr(name, "wgl") == name) {
+		common->DPrintf("WARNING: GLimp_ExtensionPointer for '%s'\n", name);
+	}
 
-#ifdef __cplusplus
-extern "C" {
+#ifdef ID_DEDICATED
+	common->Printf("GLimp_ExtensionPointer %s\n", name);
+	return StubFunction;
+#else
+#if 0
+	glExtName_t *n;
+
+	for (n = glExtNames ; n->ext_name ; n++) {
+		if (!strcmp(name, n->ext_name)) {
+			common->DPrintf("matched GL extension: %s\n", name);
+			break;
+		}
+	}
+
+	if (! n->ext_name) {
+		common->DPrintf("unmatched GL extension name: %s\n", name);
+	}
+
 #endif
+	GLExtension_t ret;
+#if defined(__linux__)
+	// for some reason glXGetProcAddressARB doesn't work on RH9?
+	ret = glXGetProcAddressARB((const GLubyte *) name);
 
-	GLExtension_t GLimp_ExtensionPointer(const char *name);
+	if (!ret) {
+		common->Printf("glXGetProcAddressARB failed: \"%s\"\n", name);
+		return StubFunction;
+	}
 
-#ifdef __cplusplus
+#else
+#error Need OS define
+#endif
+	return ret;
+#endif
 }
-#endif
-
-// GL_EXT_stencil_two_side
-extern void (APIENTRY *qglActiveStencilFaceEXT)(GLenum face);
-
-// GL_ATI_separate_stencil
-extern void (APIENTRY *qglStencilOpSeparateATI)(GLenum face, GLenum sfail, GLenum dpfail, GLenum dppass);
-extern void (APIENTRY *qglStencilFuncSeparateATI)(GLenum frontfunc, GLenum backfunc, GLint ref, GLuint mask);
-
-// GL_EXT_depth_bounds_test
-extern void (APIENTRY *qglDepthBoundsEXT)(GLclampd zmin, GLclampd zmax);
-
-#endif

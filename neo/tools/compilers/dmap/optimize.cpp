@@ -258,21 +258,21 @@ static	void DrawAllEdges(void)
 
 	Draw_ClearWindow();
 
-	qglBegin(GL_LINES);
+	glBegin(GL_LINES);
 
 	for (i = 0 ; i < numOptEdges ; i++) {
 		if (optEdges[i].v1 == NULL) {
 			continue;
 		}
 
-		qglColor3f(1, 0, 0);
-		qglVertex3fv(optEdges[i].v1->pv.ToFloatPtr());
-		qglColor3f(0, 0, 0);
-		qglVertex3fv(optEdges[i].v2->pv.ToFloatPtr());
+		glColor3f(1, 0, 0);
+		glVertex3fv(optEdges[i].v1->pv.ToFloatPtr());
+		glColor3f(0, 0, 0);
+		glVertex3fv(optEdges[i].v2->pv.ToFloatPtr());
 	}
 
-	qglEnd();
-	qglFlush();
+	glEnd();
+	glFlush();
 
 //	GLimp_SwapBuffers();
 }
@@ -290,19 +290,19 @@ static void DrawVerts(optIsland_t *island)
 		return;
 	}
 
-	qglEnable(GL_BLEND);
-	qglBlendFunc(GL_ONE, GL_ONE);
-	qglColor3f(0.3f, 0.3f, 0.3f);
-	qglPointSize(3);
-	qglBegin(GL_POINTS);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE);
+	glColor3f(0.3f, 0.3f, 0.3f);
+	glPointSize(3);
+	glBegin(GL_POINTS);
 
 	for (vert = island->verts ; vert ; vert = vert->islandLink) {
-		qglVertex3fv(vert->pv.ToFloatPtr());
+		glVertex3fv(vert->pv.ToFloatPtr());
 	}
 
-	qglEnd();
-	qglDisable(GL_BLEND);
-	qglFlush();
+	glEnd();
+	glDisable(GL_BLEND);
+	glFlush();
 }
 
 /*
@@ -320,21 +320,21 @@ static	void DrawEdges(optIsland_t *island)
 
 	Draw_ClearWindow();
 
-	qglBegin(GL_LINES);
+	glBegin(GL_LINES);
 
 	for (edge = island->edges ; edge ; edge = edge->islandLink) {
 		if (edge->v1 == NULL) {
 			continue;
 		}
 
-		qglColor3f(1, 0, 0);
-		qglVertex3fv(edge->v1->pv.ToFloatPtr());
-		qglColor3f(0, 0, 0);
-		qglVertex3fv(edge->v2->pv.ToFloatPtr());
+		glColor3f(1, 0, 0);
+		glVertex3fv(edge->v1->pv.ToFloatPtr());
+		glColor3f(0, 0, 0);
+		glVertex3fv(edge->v2->pv.ToFloatPtr());
 	}
 
-	qglEnd();
-	qglFlush();
+	glEnd();
+	glFlush();
 
 //	GLimp_SwapBuffers();
 }
@@ -523,12 +523,12 @@ static	bool TryAddNewEdge(optVertex_t *v1, optVertex_t *v2, optIsland_t *island)
 	}
 
 	if (dmapGlobals.drawflag) {
-		qglBegin(GL_LINES);
-		qglColor3f(0, (128 + orandom.RandomInt(127))/ 255.0, 0);
-		qglVertex3fv(v1->pv.ToFloatPtr());
-		qglVertex3fv(v2->pv.ToFloatPtr());
-		qglEnd();
-		qglFlush();
+		glBegin(GL_LINES);
+		glColor3f(0, (128 + orandom.RandomInt(127))/ 255.0, 0);
+		glVertex3fv(v1->pv.ToFloatPtr());
+		glVertex3fv(v2->pv.ToFloatPtr());
+		glEnd();
+		glFlush();
 	}
 
 	// add it
@@ -743,18 +743,18 @@ static	void RemoveIfColinear(optVertex_t *ov, optIsland_t *island)
 	}
 
 	if (dmapGlobals.drawflag) {
-		qglBegin(GL_LINES);
-		qglColor3f(1, 1, 0);
-		qglVertex3fv(v1->pv.ToFloatPtr());
-		qglVertex3fv(v2->pv.ToFloatPtr());
-		qglEnd();
-		qglFlush();
-		qglBegin(GL_LINES);
-		qglColor3f(0, 1, 1);
-		qglVertex3fv(v2->pv.ToFloatPtr());
-		qglVertex3fv(v3->pv.ToFloatPtr());
-		qglEnd();
-		qglFlush();
+		glBegin(GL_LINES);
+		glColor3f(1, 1, 0);
+		glVertex3fv(v1->pv.ToFloatPtr());
+		glVertex3fv(v2->pv.ToFloatPtr());
+		glEnd();
+		glFlush();
+		glBegin(GL_LINES);
+		glColor3f(0, 1, 1);
+		glVertex3fv(v2->pv.ToFloatPtr());
+		glVertex3fv(v3->pv.ToFloatPtr());
+		glEnd();
+		glFlush();
 	}
 
 	// replace the two edges with a single edge
@@ -1040,18 +1040,18 @@ static void CreateOptTri(optVertex_t *first, optEdge_t *e1, optEdge_t *e2, optIs
 
 	// identify the third edge
 	if (dmapGlobals.drawflag) {
-		qglColor3f(1,1,0);
-		qglBegin(GL_LINES);
-		qglVertex3fv(e1->v1->pv.ToFloatPtr());
-		qglVertex3fv(e1->v2->pv.ToFloatPtr());
-		qglEnd();
-		qglFlush();
-		qglColor3f(0,1,1);
-		qglBegin(GL_LINES);
-		qglVertex3fv(e2->v1->pv.ToFloatPtr());
-		qglVertex3fv(e2->v2->pv.ToFloatPtr());
-		qglEnd();
-		qglFlush();
+		glColor3f(1,1,0);
+		glBegin(GL_LINES);
+		glVertex3fv(e1->v1->pv.ToFloatPtr());
+		glVertex3fv(e1->v2->pv.ToFloatPtr());
+		glEnd();
+		glFlush();
+		glColor3f(0,1,1);
+		glBegin(GL_LINES);
+		glVertex3fv(e2->v1->pv.ToFloatPtr());
+		glVertex3fv(e2->v2->pv.ToFloatPtr());
+		glEnd();
+		glFlush();
 	}
 
 	for (opposite = second->edges ; opposite ;) {
@@ -1074,12 +1074,12 @@ static void CreateOptTri(optVertex_t *first, optEdge_t *e1, optEdge_t *e2, optIs
 	}
 
 	if (dmapGlobals.drawflag) {
-		qglColor3f(1,0,1);
-		qglBegin(GL_LINES);
-		qglVertex3fv(opposite->v1->pv.ToFloatPtr());
-		qglVertex3fv(opposite->v2->pv.ToFloatPtr());
-		qglEnd();
-		qglFlush();
+		glColor3f(1,0,1);
+		glBegin(GL_LINES);
+		glVertex3fv(opposite->v1->pv.ToFloatPtr());
+		glVertex3fv(opposite->v2->pv.ToFloatPtr());
+		glEnd();
+		glFlush();
 	}
 
 	// create new triangle
@@ -1092,12 +1092,12 @@ static void CreateOptTri(optVertex_t *first, optEdge_t *e1, optEdge_t *e2, optIs
 	island->tris = optTri;
 
 	if (dmapGlobals.drawflag) {
-		qglColor3f(1, 1, 1);
-		qglPointSize(4);
-		qglBegin(GL_POINTS);
-		qglVertex3fv(optTri->midpoint.ToFloatPtr());
-		qglEnd();
-		qglFlush();
+		glColor3f(1, 1, 1);
+		glPointSize(4);
+		glBegin(GL_POINTS);
+		glVertex3fv(optTri->midpoint.ToFloatPtr());
+		glEnd();
+		glFlush();
 	}
 
 	// find the midpoint, and scan through all the original triangles to
@@ -1116,23 +1116,23 @@ static void CreateOptTri(optVertex_t *first, optEdge_t *e1, optEdge_t *e2, optIs
 
 	if (dmapGlobals.drawflag) {
 		if (optTri->filled) {
-			qglColor3f((128 + orandom.RandomInt(127))/ 255.0, 0, 0);
+			glColor3f((128 + orandom.RandomInt(127))/ 255.0, 0, 0);
 		} else {
-			qglColor3f(0, (128 + orandom.RandomInt(127)) / 255.0, 0);
+			glColor3f(0, (128 + orandom.RandomInt(127)) / 255.0, 0);
 		}
 
-		qglBegin(GL_TRIANGLES);
-		qglVertex3fv(optTri->v[0]->pv.ToFloatPtr());
-		qglVertex3fv(optTri->v[1]->pv.ToFloatPtr());
-		qglVertex3fv(optTri->v[2]->pv.ToFloatPtr());
-		qglEnd();
-		qglColor3f(1, 1, 1);
-		qglBegin(GL_LINE_LOOP);
-		qglVertex3fv(optTri->v[0]->pv.ToFloatPtr());
-		qglVertex3fv(optTri->v[1]->pv.ToFloatPtr());
-		qglVertex3fv(optTri->v[2]->pv.ToFloatPtr());
-		qglEnd();
-		qglFlush();
+		glBegin(GL_TRIANGLES);
+		glVertex3fv(optTri->v[0]->pv.ToFloatPtr());
+		glVertex3fv(optTri->v[1]->pv.ToFloatPtr());
+		glVertex3fv(optTri->v[2]->pv.ToFloatPtr());
+		glEnd();
+		glColor3f(1, 1, 1);
+		glBegin(GL_LINE_LOOP);
+		glVertex3fv(optTri->v[0]->pv.ToFloatPtr());
+		glVertex3fv(optTri->v[1]->pv.ToFloatPtr());
+		glVertex3fv(optTri->v[2]->pv.ToFloatPtr());
+		glEnd();
+		glFlush();
 	}
 
 	// link the triangle to it's edges
@@ -1201,12 +1201,12 @@ static void BuildOptTriangles(optIsland_t *island)
 
 		if (dmapGlobals.drawflag && ov == (optVertex_t *)0x1845a60) {
 			for (e1 = ov->edges ; e1 ; e1 = e1Next) {
-				qglBegin(GL_LINES);
-				qglColor3f(0,1,0);
-				qglVertex3fv(e1->v1->pv.ToFloatPtr());
-				qglVertex3fv(e1->v2->pv.ToFloatPtr());
-				qglEnd();
-				qglFlush();
+				glBegin(GL_LINES);
+				glColor3f(0,1,0);
+				glVertex3fv(e1->v1->pv.ToFloatPtr());
+				glVertex3fv(e1->v2->pv.ToFloatPtr());
+				glEnd();
+				glFlush();
 
 				if (e1->v1 == ov) {
 					e1Next = e1->v1link;
@@ -1463,17 +1463,17 @@ static void DrawOriginalEdges(int numOriginalEdges, originalEdges_t *originalEdg
 
 	Draw_ClearWindow();
 
-	qglBegin(GL_LINES);
+	glBegin(GL_LINES);
 
 	for (i = 0 ; i < numOriginalEdges ; i++) {
-		qglColor3f(1, 0, 0);
-		qglVertex3fv(originalEdges[i].v1->pv.ToFloatPtr());
-		qglColor3f(0, 0, 0);
-		qglVertex3fv(originalEdges[i].v2->pv.ToFloatPtr());
+		glColor3f(1, 0, 0);
+		glVertex3fv(originalEdges[i].v1->pv.ToFloatPtr());
+		glColor3f(0, 0, 0);
+		glVertex3fv(originalEdges[i].v2->pv.ToFloatPtr());
 	}
 
-	qglEnd();
-	qglFlush();
+	glEnd();
+	glFlush();
 }
 
 
@@ -1598,13 +1598,13 @@ void SplitOriginalEdgesAtCrossings(optimizeGroup_t *opt)
 	for (i = 0 ; i < numOriginalEdges ; i++) {
 		if (dmapGlobals.drawflag) {
 			DrawOriginalEdges(numOriginalEdges, originalEdges);
-			qglBegin(GL_LINES);
-			qglColor3f(0, 1, 0);
-			qglVertex3fv(originalEdges[i].v1->pv.ToFloatPtr());
-			qglColor3f(0, 0, 1);
-			qglVertex3fv(originalEdges[i].v2->pv.ToFloatPtr());
-			qglEnd();
-			qglFlush();
+			glBegin(GL_LINES);
+			glColor3f(0, 1, 0);
+			glVertex3fv(originalEdges[i].v1->pv.ToFloatPtr());
+			glColor3f(0, 0, 1);
+			glVertex3fv(originalEdges[i].v2->pv.ToFloatPtr());
+			glEnd();
+			glFlush();
 		}
 
 		for (j = i+1 ; j < numOriginalEdges ; j++) {
