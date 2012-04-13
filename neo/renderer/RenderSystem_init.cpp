@@ -31,11 +31,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "tr_local.h"
 
-// Vista OpenGL wrapper check
-#ifdef _WIN32
-#include "../sys/win32/win_local.h"
-#endif
-
 // functions that are not called every frame
 
 glconfig_t	glConfig;
@@ -77,7 +72,6 @@ idCVar r_znear("r_znear", "3", CVAR_RENDERER | CVAR_FLOAT, "near Z clip plane di
 
 idCVar r_ignoreGLErrors("r_ignoreGLErrors", "1", CVAR_RENDERER | CVAR_BOOL, "ignore GL errors");
 idCVar r_finish("r_finish", "0", CVAR_RENDERER | CVAR_BOOL, "force a call to glFinish() every frame");
-idCVar r_swapInterval("r_swapInterval", "0", CVAR_RENDERER | CVAR_ARCHIVE | CVAR_INTEGER, "changes wglSwapIntarval");
 
 idCVar r_gamma("r_gamma", "1", CVAR_RENDERER | CVAR_ARCHIVE | CVAR_FLOAT, "changes gamma tables", 0.5f, 3.0f);
 idCVar r_brightness("r_brightness", "1", CVAR_RENDERER | CVAR_ARCHIVE | CVAR_FLOAT, "changes gamma tables", 0.5f, 2.0f);
@@ -631,34 +625,6 @@ void R_InitOpenGL(void)
 
 	// Reset our gamma
 	R_SetColorMappings();
-
-#ifdef _WIN32
-	static bool glCheck = false;
-
-	if (!glCheck && win32.osversion.dwMajorVersion == 6) {
-		glCheck = true;
-
-		if (!idStr::Icmp(glConfig.vendor_string, "Microsoft") && idStr::FindText(glConfig.renderer_string, "OpenGL-D3D") != -1) {
-			if (cvarSystem->GetCVarBool("r_fullscreen")) {
-				cmdSystem->BufferCommandText(CMD_EXEC_NOW, "vid_restart partial windowed\n");
-				Sys_GrabMouseCursor(false);
-			}
-
-			int ret = MessageBox(NULL, "Please install OpenGL drivers from your graphics hardware vendor to run " GAME_NAME ".\nYour OpenGL functionality is limited.",
-			                     "Insufficient OpenGL capabilities", MB_OKCANCEL | MB_ICONWARNING | MB_TASKMODAL);
-
-			if (ret == IDCANCEL) {
-				cmdSystem->BufferCommandText(CMD_EXEC_APPEND, "quit\n");
-				cmdSystem->ExecuteCommandBuffer();
-			}
-
-			if (cvarSystem->GetCVarBool("r_fullscreen")) {
-				cmdSystem->BufferCommandText(CMD_EXEC_APPEND, "vid_restart\n");
-			}
-		}
-	}
-
-#endif
 }
 
 /*
@@ -1794,11 +1760,6 @@ void GfxInfo_f(const idCmdArgs &args)
 	common->Printf("GL_RENDERER: %s\n", glConfig.renderer_string);
 	common->Printf("GL_VERSION: %s\n", glConfig.version_string);
 	common->Printf("GL_EXTENSIONS: %s\n", glConfig.extensions_string);
-
-	if (glConfig.wgl_extensions_string) {
-		common->Printf("WGL_EXTENSIONS: %s\n", glConfig.wgl_extensions_string);
-	}
-
 	common->Printf("GL_MAX_TEXTURE_SIZE: %d\n", glConfig.maxTextureSize);
 	common->Printf("GL_MAX_TEXTURE_UNITS_ARB: %d\n", glConfig.maxTextureUnits);
 	common->Printf("GL_MAX_TEXTURE_COORDS_ARB: %d\n", glConfig.maxTextureCoords);
@@ -1823,19 +1784,6 @@ void GfxInfo_f(const idCmdArgs &args)
 	} else {
 		common->Printf("glFinish not forced\n");
 	}
-
-#ifdef _WIN32
-// WGL_EXT_swap_interval
-	typedef BOOL (WINAPI * PFNWGLSWAPINTERVALEXTPROC)(int interval);
-	extern	PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT;
-
-	if (r_swapInterval.GetInteger() && wglSwapIntervalEXT) {
-		common->Printf("Forcing swapInterval %i\n", r_swapInterval.GetInteger());
-	} else {
-		common->Printf("swapInterval not forced\n");
-	}
-
-#endif
 
 	bool tss = glConfig.twoSidedStencilAvailable || glConfig.atiTwoSidedStencilAvailable;
 

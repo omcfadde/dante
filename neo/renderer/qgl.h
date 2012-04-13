@@ -32,45 +32,8 @@ If you have questions concerning this license or the applicable additional terms
 #ifndef __QGL_H__
 #define __QGL_H__
 
-#if defined( _WIN32 )
-
-#include <gl/gl.h>
-
-#elif defined( MACOS_X )
-
-// magic flag to keep tiger gl.h from loading glext.h
-#define GL_GLEXT_LEGACY
-#include <OpenGL/gl.h>
-
-#elif defined( __linux__ )
-
-// using our local glext.h
-// http://oss.sgi.com/projects/ogl-sample/ABI/
-#define GL_GLEXT_LEGACY
-#define GLX_GLXEXT_LEGACY
 #include <GL/gl.h>
 #include <GL/glx.h>
-
-#else
-
-#include <gl.h>
-
-#endif
-
-#ifndef APIENTRY
-#define APIENTRY
-#endif
-#ifndef WINAPI
-#define WINAPI
-#endif
-
-// only use local glext.h if we are not using the system one already
-// http://oss.sgi.com/projects/ogl-sample/ABI/
-#ifndef GL_GLEXT_VERSION
-
-#include "glext.h"
-
-#endif
 
 typedef void (*GLExtension_t)(void);
 
@@ -136,14 +99,15 @@ extern PFNGLDEPTHBOUNDSEXTPROC              qglDepthBoundsEXT;
 
 //===========================================================================
 
-// non-windows systems will just redefine qgl* to gl*
 #if defined( __APPLE__ ) || defined( ID_GL_HARDLINK )
+
+// just redefine qgl* to gl*
 
 #include "qgl_linked.h"
 
 #else
 
-// windows systems use a function pointer for each call so we can do our log file intercepts
+// use a function pointer for each call so we can do our log file intercepts
 
 extern  void (APIENTRY *qglAccum)(GLenum op, GLfloat value);
 extern  void (APIENTRY *qglAlphaFunc)(GLenum func, GLclampf ref);
@@ -482,41 +446,6 @@ extern  void (APIENTRY *qglVertex4sv)(const GLshort *v);
 extern  void (APIENTRY *qglVertexPointer)(GLint size, GLenum type, GLsizei stride, const GLvoid *pointer);
 extern  void (APIENTRY *qglViewport)(GLint x, GLint y, GLsizei width, GLsizei height);
 
-#if defined( _WIN32 )
-
-extern  int (WINAPI *qwglChoosePixelFormat)(HDC, CONST PIXELFORMATDESCRIPTOR *);
-extern  int (WINAPI *qwglDescribePixelFormat)(HDC, int, UINT, LPPIXELFORMATDESCRIPTOR);
-extern  int (WINAPI *qwglGetPixelFormat)(HDC);
-extern  BOOL (WINAPI *qwglSetPixelFormat)(HDC, int, CONST PIXELFORMATDESCRIPTOR *);
-extern  BOOL (WINAPI *qwglSwapBuffers)(HDC);
-
-extern BOOL (WINAPI *qwglCopyContext)(HGLRC, HGLRC, UINT);
-extern HGLRC(WINAPI *qwglCreateContext)(HDC);
-extern HGLRC(WINAPI *qwglCreateLayerContext)(HDC, int);
-extern BOOL (WINAPI *qwglDeleteContext)(HGLRC);
-extern HGLRC(WINAPI *qwglGetCurrentContext)(VOID);
-extern HDC(WINAPI *qwglGetCurrentDC)(VOID);
-extern PROC(WINAPI *qwglGetProcAddress)(LPCSTR);
-extern BOOL (WINAPI *qwglMakeCurrent)(HDC, HGLRC);
-extern BOOL (WINAPI *qwglShareLists)(HGLRC, HGLRC);
-extern BOOL (WINAPI *qwglUseFontBitmaps)(HDC, DWORD, DWORD, DWORD);
-
-extern BOOL (WINAPI *qwglUseFontOutlines)(HDC, DWORD, DWORD, DWORD, FLOAT,
-                FLOAT, int, LPGLYPHMETRICSFLOAT);
-
-extern BOOL (WINAPI *qwglDescribeLayerPlane)(HDC, int, int, UINT,
-                LPLAYERPLANEDESCRIPTOR);
-extern int (WINAPI *qwglSetLayerPaletteEntries)(HDC, int, int, int,
-                CONST COLORREF *);
-extern int (WINAPI *qwglGetLayerPaletteEntries)(HDC, int, int, int,
-                COLORREF *);
-extern BOOL (WINAPI *qwglRealizeLayerPalette)(HDC, int, BOOL);
-extern BOOL (WINAPI *qwglSwapLayerBuffers)(HDC, UINT);
-
-#endif	// _WIN32
-
-#if defined( __linux__ )
-
 //GLX Functions
 extern XVisualInfo *(*qglXChooseVisual)(Display *dpy, int screen, int *attribList);
 extern GLXContext(*qglXCreateContext)(Display *dpy, XVisualInfo *vis, GLXContext shareList, Bool direct);
@@ -530,8 +459,6 @@ extern GLExtension_t (*qglXGetProcAddressARB)(const GLubyte *procname);
 #if !defined( GLIMP )
 #include "../sys/linux/qgl_enforce.h"
 #endif
-
-#endif // __linux__
 
 #endif	// hardlinlk vs dlopen
 
