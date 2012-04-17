@@ -417,7 +417,7 @@ class idFileSystemLocal : public idFileSystem
 		static void				TouchFileList_f(const idCmdArgs &args);
 
 	private:
-		friend dword 			BackgroundDownloadThread(void *parms);
+		friend void			*BackgroundDownloadThread(void *parms);
 
 		searchpath_t 			*searchPaths;
 		int						readCount;			// total bytes read
@@ -4020,7 +4020,7 @@ BackgroundDownload
 Reads part of a file from a background thread.
 ===================
 */
-dword BackgroundDownloadThread(void *parms)
+void *BackgroundDownloadThread(void *parms)
 {
 	while (1) {
 		Sys_EnterCriticalSection();
@@ -4157,7 +4157,7 @@ dword BackgroundDownloadThread(void *parms)
 		}
 	}
 
-	return 0;
+	return NULL;
 }
 
 /*
@@ -4168,7 +4168,7 @@ idFileSystemLocal::StartBackgroundReadThread
 void idFileSystemLocal::StartBackgroundDownloadThread()
 {
 	if (!backgroundThread.threadHandle) {
-		Sys_CreateThread((xthread_t)BackgroundDownloadThread, NULL, THREAD_NORMAL, backgroundThread, "backgroundDownload", g_threads, &g_thread_count);
+		Sys_CreateThread(BackgroundDownloadThread, NULL, THREAD_NORMAL, backgroundThread, "backgroundDownload", g_threads, &g_thread_count);
 
 		if (!backgroundThread.threadHandle) {
 			common->Warning("idFileSystemLocal::StartBackgroundDownloadThread: failed");
