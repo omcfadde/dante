@@ -298,8 +298,6 @@ void RB_FinishStageTexturing(const shaderStage_t *pStage, const drawSurf_t *surf
 			glDisableClientState(GL_NORMAL_ARRAY);
 			glDisable(GL_FRAGMENT_PROGRAM_ARB);
 			glDisable(GL_VERTEX_PROGRAM_ARB);
-			// Fixme: Hack to get around an apparent bug in ATI drivers.  Should remove as soon as it gets fixed.
-			glBindProgramARB(GL_VERTEX_PROGRAM_ARB, 0);
 		} else {
 			glDisable(GL_TEXTURE_GEN_S);
 			glDisable(GL_TEXTURE_GEN_T);
@@ -874,8 +872,6 @@ void RB_STD_T_RenderShaderPasses(const drawSurf_t *surf)
 
 			glDisable(GL_VERTEX_PROGRAM_ARB);
 			glDisable(GL_FRAGMENT_PROGRAM_ARB);
-			// Fixme: Hack to get around an apparent bug in ATI drivers.  Should remove as soon as it gets fixed.
-			glBindProgramARB(GL_VERTEX_PROGRAM_ARB, 0);
 
 			glDisableClientState(GL_COLOR_ARRAY);
 			glDisableVertexAttribArrayARB(9);
