@@ -154,98 +154,77 @@ void RB_PrepareStageTexturing(const shaderStage_t *pStage,  const drawSurf_t *su
 		glTexGenfv(GL_Q, GL_OBJECT_PLANE, plane);
 	}
 
-	if (pStage->texture.texgen == TG_GLASSWARP) {
-		if (tr.backEndRenderer == BE_ARB2) {
-			glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, FPROG_GLASSWARP);
-			glEnable(GL_FRAGMENT_PROGRAM_ARB);
+	if (pStage->texture.texgen == TG_GLASSWARP && tr.backEndRenderer == BE_ARB2) {
+		glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, FPROG_GLASSWARP);
+		glEnable(GL_FRAGMENT_PROGRAM_ARB);
 
-			GL_SelectTexture(2);
-			globalImages->scratchImage->Bind();
+		GL_SelectTexture(2);
+		globalImages->scratchImage->Bind();
 
-			GL_SelectTexture(1);
-			globalImages->scratchImage2->Bind();
+		GL_SelectTexture(1);
+		globalImages->scratchImage2->Bind();
 
-			glEnable(GL_TEXTURE_GEN_S);
-			glEnable(GL_TEXTURE_GEN_T);
-			glEnable(GL_TEXTURE_GEN_Q);
+		glEnable(GL_TEXTURE_GEN_S);
+		glEnable(GL_TEXTURE_GEN_T);
+		glEnable(GL_TEXTURE_GEN_Q);
 
-			float	mat[16], plane[4];
-			myGlMultMatrix(surf->space->modelViewMatrix, backEnd.viewDef->projectionMatrix, mat);
+		float	mat[16], plane[4];
+		myGlMultMatrix(surf->space->modelViewMatrix, backEnd.viewDef->projectionMatrix, mat);
 
-			plane[0] = mat[0];
-			plane[1] = mat[4];
-			plane[2] = mat[8];
-			plane[3] = mat[12];
-			glTexGenfv(GL_S, GL_OBJECT_PLANE, plane);
+		plane[0] = mat[0];
+		plane[1] = mat[4];
+		plane[2] = mat[8];
+		plane[3] = mat[12];
+		glTexGenfv(GL_S, GL_OBJECT_PLANE, plane);
 
-			plane[0] = mat[1];
-			plane[1] = mat[5];
-			plane[2] = mat[9];
-			plane[3] = mat[13];
-			glTexGenfv(GL_T, GL_OBJECT_PLANE, plane);
+		plane[0] = mat[1];
+		plane[1] = mat[5];
+		plane[2] = mat[9];
+		plane[3] = mat[13];
+		glTexGenfv(GL_T, GL_OBJECT_PLANE, plane);
 
-			plane[0] = mat[3];
-			plane[1] = mat[7];
-			plane[2] = mat[11];
-			plane[3] = mat[15];
-			glTexGenfv(GL_Q, GL_OBJECT_PLANE, plane);
+		plane[0] = mat[3];
+		plane[1] = mat[7];
+		plane[2] = mat[11];
+		plane[3] = mat[15];
+		glTexGenfv(GL_Q, GL_OBJECT_PLANE, plane);
 
-			GL_SelectTexture(0);
-		}
+		GL_SelectTexture(0);
 	}
 
-	if (pStage->texture.texgen == TG_REFLECT_CUBE) {
-		if (tr.backEndRenderer == BE_ARB2) {
-			// see if there is also a bump map specified
-			const shaderStage_t *bumpStage = surf->material->GetBumpStage();
+	if (pStage->texture.texgen == TG_REFLECT_CUBE && tr.backEndRenderer == BE_ARB2) {
+		// see if there is also a bump map specified
+		const shaderStage_t *bumpStage = surf->material->GetBumpStage();
 
-			if (bumpStage) {
-				// per-pixel reflection mapping with bump mapping
-				GL_SelectTexture(1);
-				bumpStage->texture.image->Bind();
-				GL_SelectTexture(0);
+		if (bumpStage) {
+			// per-pixel reflection mapping with bump mapping
+			GL_SelectTexture(1);
+			bumpStage->texture.image->Bind();
+			GL_SelectTexture(0);
 
-				glNormalPointer(GL_FLOAT, sizeof(idDrawVert), ac->normal.ToFloatPtr());
-				glVertexAttribPointerARB(10, 3, GL_FLOAT, false, sizeof(idDrawVert), ac->tangents[1].ToFloatPtr());
-				glVertexAttribPointerARB(9, 3, GL_FLOAT, false, sizeof(idDrawVert), ac->tangents[0].ToFloatPtr());
-
-				glEnableVertexAttribArrayARB(9);
-				glEnableVertexAttribArrayARB(10);
-				glEnableClientState(GL_NORMAL_ARRAY);
-
-				// Program env 5, 6, 7, 8 have been set in RB_SetProgramEnvironmentSpace
-
-				glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, FPROG_BUMPY_ENVIRONMENT);
-				glEnable(GL_FRAGMENT_PROGRAM_ARB);
-				glBindProgramARB(GL_VERTEX_PROGRAM_ARB, VPROG_BUMPY_ENVIRONMENT);
-				glEnable(GL_VERTEX_PROGRAM_ARB);
-			} else {
-				// per-pixel reflection mapping without a normal map
-				glNormalPointer(GL_FLOAT, sizeof(idDrawVert), ac->normal.ToFloatPtr());
-				glEnableClientState(GL_NORMAL_ARRAY);
-
-				glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, FPROG_ENVIRONMENT);
-				glEnable(GL_FRAGMENT_PROGRAM_ARB);
-				glBindProgramARB(GL_VERTEX_PROGRAM_ARB, VPROG_ENVIRONMENT);
-				glEnable(GL_VERTEX_PROGRAM_ARB);
-			}
-		} else {
-			glEnable(GL_TEXTURE_GEN_S);
-			glEnable(GL_TEXTURE_GEN_T);
-			glEnable(GL_TEXTURE_GEN_R);
-			glTexGenf(GL_S, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP_EXT);
-			glTexGenf(GL_T, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP_EXT);
-			glTexGenf(GL_R, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP_EXT);
-			glEnableClientState(GL_NORMAL_ARRAY);
 			glNormalPointer(GL_FLOAT, sizeof(idDrawVert), ac->normal.ToFloatPtr());
+			glVertexAttribPointerARB(10, 3, GL_FLOAT, false, sizeof(idDrawVert), ac->tangents[1].ToFloatPtr());
+			glVertexAttribPointerARB(9, 3, GL_FLOAT, false, sizeof(idDrawVert), ac->tangents[0].ToFloatPtr());
 
-			glMatrixMode(GL_TEXTURE);
-			float	mat[16];
+			glEnableVertexAttribArrayARB(9);
+			glEnableVertexAttribArrayARB(10);
+			glEnableClientState(GL_NORMAL_ARRAY);
 
-			R_TransposeGLMatrix(backEnd.viewDef->worldSpace.modelViewMatrix, mat);
+			// Program env 5, 6, 7, 8 have been set in RB_SetProgramEnvironmentSpace
 
-			glLoadMatrixf(mat);
-			glMatrixMode(GL_MODELVIEW);
+			glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, FPROG_BUMPY_ENVIRONMENT);
+			glEnable(GL_FRAGMENT_PROGRAM_ARB);
+			glBindProgramARB(GL_VERTEX_PROGRAM_ARB, VPROG_BUMPY_ENVIRONMENT);
+			glEnable(GL_VERTEX_PROGRAM_ARB);
+		} else {
+			// per-pixel reflection mapping without a normal map
+			glNormalPointer(GL_FLOAT, sizeof(idDrawVert), ac->normal.ToFloatPtr());
+			glEnableClientState(GL_NORMAL_ARRAY);
+
+			glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, FPROG_ENVIRONMENT);
+			glEnable(GL_FRAGMENT_PROGRAM_ARB);
+			glBindProgramARB(GL_VERTEX_PROGRAM_ARB, VPROG_ENVIRONMENT);
+			glEnable(GL_VERTEX_PROGRAM_ARB);
 		}
 	}
 }
