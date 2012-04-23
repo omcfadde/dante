@@ -76,8 +76,8 @@ class idVertexCache
 		// but it will be an int offset cast to a pointer of ARB_vertex_buffer_object
 		void 			*Position(vertCache_t *buffer);
 
-		// if r_useIndexBuffers is enabled, but you need to draw something without
-		// an indexCache, this must be called to reset GL_ELEMENT_ARRAY_BUFFER_ARB
+		// if you need to draw something without an indexCache, this
+		// must be called to reset GL_ELEMENT_ARRAY_BUFFER_ARB
 		void			UnbindIndex();
 
 		// automatically freed at the end of the next frame
@@ -121,8 +121,6 @@ class idVertexCache
 
 		int				currentFrame;			// for purgable block tracking
 		int				listNum;				// currentFrame % NUM_VERTEX_FRAMES, determines which tempBuffers to use
-
-		bool			virtualMemory;			// not fast stuff
 
 		bool			allocatingTempBuffer;	// force GL_STREAM_DRAW_ARB
 

@@ -62,9 +62,6 @@ idCVar r_useTwoSidedStencil("r_useTwoSidedStencil", "1", CVAR_RENDERER | CVAR_BO
 idCVar r_useDeferredTangents("r_useDeferredTangents", "1", CVAR_RENDERER | CVAR_BOOL, "defer tangents calculations after deform");
 idCVar r_useCachedDynamicModels("r_useCachedDynamicModels", "1", CVAR_RENDERER | CVAR_BOOL, "cache snapshots of dynamic models");
 
-idCVar r_useVertexBuffers("r_useVertexBuffers", "1", CVAR_RENDERER | CVAR_INTEGER, "use ARB_vertex_buffer_object for vertexes", 0, 1, idCmdSystem::ArgCompletion_Integer<0,1>);
-idCVar r_useIndexBuffers("r_useIndexBuffers", "0", CVAR_RENDERER | CVAR_ARCHIVE | CVAR_INTEGER, "use ARB_vertex_buffer_object for indexes", 0, 1, idCmdSystem::ArgCompletion_Integer<0,1>);
-
 idCVar r_useStateCaching("r_useStateCaching", "1", CVAR_RENDERER | CVAR_BOOL, "avoid redundant state changes in GL_*() calls");
 idCVar r_useInfiniteFarZ("r_useInfiniteFarZ", "1", CVAR_RENDERER | CVAR_BOOL, "use the no-far-clip-plane trick");
 

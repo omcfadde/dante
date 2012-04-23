@@ -944,7 +944,7 @@ void R_AddLightSurfaces(void)
 			// touch the shadow surface so it won't get purged
 			vertexCache.Touch(tri->shadowCache);
 
-			if (!tri->indexCache && r_useIndexBuffers.GetBool()) {
+			if (!tri->indexCache) {
 				vertexCache.Alloc(tri->indexes, tri->numIndexes * sizeof(tri->indexes[0]), &tri->indexCache, true);
 			}
 
@@ -1337,7 +1337,7 @@ static void R_AddAmbientDrawsurfs(viewEntity_t *vEntity)
 			// touch it so it won't get purged
 			vertexCache.Touch(tri->ambientCache);
 
-			if (r_useIndexBuffers.GetBool() && !tri->indexCache) {
+			if (!tri->indexCache) {
 				vertexCache.Alloc(tri->indexes, tri->numIndexes * sizeof(tri->indexes[0]), &tri->indexCache, true);
 			}
 
