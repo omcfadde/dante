@@ -980,6 +980,7 @@ RenderBumpTriangles
 */
 static void RenderBumpTriangles(srfTriangles_t *lowMesh, renderBump_t *rb)
 {
+#if 0
 	int		i, j;
 
 	RB_SetGL2D();
@@ -1047,6 +1048,7 @@ static void RenderBumpTriangles(srfTriangles_t *lowMesh, renderBump_t *rb)
 	}
 
 	Mem_Free(lowMeshNormals);
+#endif
 }
 
 
@@ -1234,6 +1236,7 @@ RenderBump_f
 */
 void RenderBump_f(const idCmdArgs &args)
 {
+#if 0
 	idRenderModel	*lowPoly;
 	idStr	source;
 	int		i, j;
@@ -1400,6 +1403,7 @@ void RenderBump_f(const idCmdArgs &args)
 
 	// stop updating the screen as we print
 	common->SetRefreshOnPrint(false);
+#endif
 }
 
 
@@ -1423,6 +1427,7 @@ RenderBumpFlat_f
 */
 void RenderBumpFlat_f(const idCmdArgs &args)
 {
+#if 0
 	int		width, height;
 	idStr	source;
 	int		i;
@@ -1721,4 +1726,5 @@ void RenderBumpFlat_f(const idCmdArgs &args)
 	common->SetRefreshOnPrint(false);
 
 	common->Error("Completed.");
+#endif
 }

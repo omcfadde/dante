@@ -33,10 +33,13 @@ If you have questions concerning this license or the applicable additional terms
 #ifndef __QGL_H__
 #define __QGL_H__
 
-#define GL_GLEXT_PROTOTYPES
+//#define GL_GLEXT_PROTOTYPES
 
-#include <GL/gl.h>
-#include <GL/glx.h>
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
+#include "esUtil.h"
 
 typedef void (*GLExtension_t)(void);
 
@@ -51,13 +54,15 @@ extern "C" {
 #endif
 
 // GL_EXT_stencil_two_side
-extern void (APIENTRY *qglActiveStencilFaceEXT)(GLenum face);
+extern void (GL_APIENTRY *qglActiveStencilFaceEXT)(GLenum face);
 
 // GL_ATI_separate_stencil
-extern void (APIENTRY *qglStencilOpSeparateATI)(GLenum face, GLenum sfail, GLenum dpfail, GLenum dppass);
-extern void (APIENTRY *qglStencilFuncSeparateATI)(GLenum frontfunc, GLenum backfunc, GLint ref, GLuint mask);
+extern void (GL_APIENTRY *qglStencilOpSeparateATI)(GLenum face, GLenum sfail, GLenum dpfail, GLenum dppass);
+extern void (GL_APIENTRY *qglStencilFuncSeparateATI)(GLenum frontfunc, GLenum backfunc, GLint ref, GLuint mask);
 
+#if !defined(GL_ES_VERSION_2_0)
 // GL_EXT_depth_bounds_test
-extern void (APIENTRY *qglDepthBoundsEXT)(GLclampd zmin, GLclampd zmax);
+extern void (GL_APIENTRY *qglDepthBoundsEXT)(GLclampd zmin, GLclampd zmax);
+#endif
 
 #endif

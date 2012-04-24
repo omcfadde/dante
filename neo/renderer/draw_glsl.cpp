@@ -33,6 +33,8 @@ If you have questions concerning this license or the applicable additional terms
 
 shaderProgram_t	interactionShader;
 shaderProgram_t	shadowShader;
+shaderProgram_t	defaultShader;
+shaderProgram_t	depthFillShader;
 
 /*
 =========================================================================================
@@ -50,54 +52,8 @@ GL_SelectTextureNoClient
 static void GL_SelectTextureNoClient(int unit)
 {
 	backEnd.glState.currenttmu = unit;
-	glActiveTextureARB(GL_TEXTURE0_ARB + unit);
-	RB_LogComment("glActiveTextureARB( %i )\n", unit);
-}
-
-
-/*
-====================
-RB_GLSL_SelectInteractionUniforms
-====================
-*/
-static void RB_GLSL_SelectInteractionUniforms(const drawInteraction_t *din,
-		shaderProgram_t *shader)
-{
-	static const float zero[4] = { 0, 0, 0, 0 };
-	static const float one[4] = { 1, 1, 1, 1 };
-	static const float negOne[4] = { -1, -1, -1, -1 };
-
-	glUniform4fvARB(shader->localLightOrigin, 1, din->localLightOrigin.ToFloatPtr());
-	glUniform4fvARB(shader->localViewOrigin, 1, din->localViewOrigin.ToFloatPtr());
-	glUniform4fvARB(shader->lightProjectionS, 1, din->lightProjection[0].ToFloatPtr());
-	glUniform4fvARB(shader->lightProjectionT, 1, din->lightProjection[1].ToFloatPtr());
-	glUniform4fvARB(shader->lightProjectionQ, 1, din->lightProjection[2].ToFloatPtr());
-	glUniform4fvARB(shader->lightFalloff , 1, din->lightProjection[3].ToFloatPtr());
-	glUniform4fvARB(shader->bumpMatrixS, 1, din->bumpMatrix[0].ToFloatPtr());
-	glUniform4fvARB(shader->bumpMatrixT, 1, din->bumpMatrix[1].ToFloatPtr());
-	glUniform4fvARB(shader->diffuseMatrixS, 1, din->diffuseMatrix[0].ToFloatPtr());
-	glUniform4fvARB(shader->diffuseMatrixT, 1, din->diffuseMatrix[1].ToFloatPtr());
-	glUniform4fvARB(shader->specularMatrixS, 1, din->specularMatrix[0].ToFloatPtr());
-	glUniform4fvARB(shader->specularMatrixT, 1, din->specularMatrix[1].ToFloatPtr());
-
-	switch (din->vertexColor) {
-		case SVC_IGNORE:
-			glUniform4fvARB(shader->colorModulate, 1, zero);
-			glUniform4fvARB(shader->colorAdd, 1, one);
-			break;
-		case SVC_MODULATE:
-			glUniform4fvARB(shader->colorModulate, 1, one);
-			glUniform4fvARB(shader->colorAdd, 1, zero);
-			break;
-		case SVC_INVERSE_MODULATE:
-			glUniform4fvARB(shader->colorModulate, 1, negOne);
-			glUniform4fvARB(shader->colorAdd, 1, one);
-			break;
-	}
-
-	// set the constant colors
-	glUniform4fvARB(shader->diffuseColor, 1, din->diffuseColor.ToFloatPtr());
-	glUniform4fvARB(shader->specularColor, 1, din->specularColor.ToFloatPtr());
+	glActiveTexture(GL_TEXTURE0 + unit);
+	RB_LogComment("glActiveTexture( %i )\n", unit);
 }
 
 /*
@@ -107,8 +63,42 @@ RB_GLSL_DrawInteraction
 */
 void	RB_GLSL_DrawInteraction(const drawInteraction_t *din)
 {
+	static const float zero[4] = { 0, 0, 0, 0 };
+	static const float one[4] = { 1, 1, 1, 1 };
+	static const float negOne[4] = { -1, -1, -1, -1 };
+
 	// load all the vertex program parameters
-	RB_GLSL_SelectInteractionUniforms(din, &interactionShader);
+	GL_Uniform4fv(offsetof(shaderProgram_t, localLightOrigin), din->localLightOrigin.ToFloatPtr());
+	GL_Uniform4fv(offsetof(shaderProgram_t, localViewOrigin), din->localViewOrigin.ToFloatPtr());
+	GL_Uniform4fv(offsetof(shaderProgram_t, lightProjectionS), din->lightProjection[0].ToFloatPtr());
+	GL_Uniform4fv(offsetof(shaderProgram_t, lightProjectionT), din->lightProjection[1].ToFloatPtr());
+	GL_Uniform4fv(offsetof(shaderProgram_t, lightProjectionQ), din->lightProjection[2].ToFloatPtr());
+	GL_Uniform4fv(offsetof(shaderProgram_t, lightFalloff), din->lightProjection[3].ToFloatPtr());
+	GL_Uniform4fv(offsetof(shaderProgram_t, bumpMatrixS), din->bumpMatrix[0].ToFloatPtr());
+	GL_Uniform4fv(offsetof(shaderProgram_t, bumpMatrixT), din->bumpMatrix[1].ToFloatPtr());
+	GL_Uniform4fv(offsetof(shaderProgram_t, diffuseMatrixS), din->diffuseMatrix[0].ToFloatPtr());
+	GL_Uniform4fv(offsetof(shaderProgram_t, diffuseMatrixT), din->diffuseMatrix[1].ToFloatPtr());
+	GL_Uniform4fv(offsetof(shaderProgram_t, specularMatrixS), din->specularMatrix[0].ToFloatPtr());
+	GL_Uniform4fv(offsetof(shaderProgram_t, specularMatrixT), din->specularMatrix[1].ToFloatPtr());
+
+	switch (din->vertexColor) {
+		case SVC_IGNORE:
+			GL_Uniform4fv(offsetof(shaderProgram_t, colorModulate), zero);
+			GL_Uniform4fv(offsetof(shaderProgram_t, colorAdd), one);
+			break;
+		case SVC_MODULATE:
+			GL_Uniform4fv(offsetof(shaderProgram_t, colorModulate), one);
+			GL_Uniform4fv(offsetof(shaderProgram_t, colorAdd), zero);
+			break;
+		case SVC_INVERSE_MODULATE:
+			GL_Uniform4fv(offsetof(shaderProgram_t, colorModulate), negOne);
+			GL_Uniform4fv(offsetof(shaderProgram_t, colorAdd), one);
+			break;
+	}
+
+	// set the constant colors
+	GL_Uniform4fv(offsetof(shaderProgram_t, diffuseColor), din->diffuseColor.ToFloatPtr());
+	GL_Uniform4fv(offsetof(shaderProgram_t, specularColor), din->specularColor.ToFloatPtr());
 
 	// set the textures
 
@@ -153,14 +143,15 @@ void RB_GLSL_CreateDrawInteractions(const drawSurf_t *surf)
 	GL_State(GLS_SRCBLEND_ONE | GLS_DSTBLEND_ONE | GLS_DEPTHMASK | backEnd.depthFunc);
 
 	// bind the vertex and fragment shader
-	glUseProgramObjectARB(interactionShader.program);
+	GL_UseProgram(&interactionShader);
 
 	// enable the vertex arrays
-	glEnableVertexAttribArrayARB(8);
-	glEnableVertexAttribArrayARB(9);
-	glEnableVertexAttribArrayARB(10);
-	glEnableVertexAttribArrayARB(11);
-	glEnableClientState(GL_COLOR_ARRAY);
+	GL_EnableVertexAttribArray(offsetof(shaderProgram_t, attr_TexCoord));
+	GL_EnableVertexAttribArray(offsetof(shaderProgram_t, attr_Tangent));
+	GL_EnableVertexAttribArray(offsetof(shaderProgram_t, attr_Bitangent));
+	GL_EnableVertexAttribArray(offsetof(shaderProgram_t, attr_Normal));
+	GL_EnableVertexAttribArray(offsetof(shaderProgram_t, attr_Vertex));	// gl_Vertex
+	GL_EnableVertexAttribArray(offsetof(shaderProgram_t, attr_Color));	// gl_Color
 
 	// texture 5 is the specular lookup table
 	GL_SelectTextureNoClient(5);
@@ -169,27 +160,33 @@ void RB_GLSL_CreateDrawInteractions(const drawSurf_t *surf)
 	for (; surf ; surf=surf->nextOnLight) {
 		// perform setup here that will not change over multiple interaction passes
 
+		// set the modelview matrix for the viewer
+		float   mat[16];
+		myGlMultMatrix(surf->space->modelViewMatrix, backEnd.viewDef->projectionMatrix, mat);
+		GL_UniformMatrix4fv(offsetof(shaderProgram_t, modelViewProjectionMatrix), mat);
+
 		// set the vertex pointers
 		idDrawVert	*ac = (idDrawVert *)vertexCache.Position(surf->geo->ambientCache);
-		glColorPointer(4, GL_UNSIGNED_BYTE, sizeof(idDrawVert), ac->color);
-		glVertexAttribPointerARB(11, 3, GL_FLOAT, false, sizeof(idDrawVert), ac->normal.ToFloatPtr());
-		glVertexAttribPointerARB(10, 3, GL_FLOAT, false, sizeof(idDrawVert), ac->tangents[1].ToFloatPtr());
-		glVertexAttribPointerARB(9, 3, GL_FLOAT, false, sizeof(idDrawVert), ac->tangents[0].ToFloatPtr());
-		glVertexAttribPointerARB(8, 2, GL_FLOAT, false, sizeof(idDrawVert), ac->st.ToFloatPtr());
-		glVertexPointer(3, GL_FLOAT, sizeof(idDrawVert), ac->xyz.ToFloatPtr());
 
-		glUniformMatrix4fvARB(interactionShader.modelMatrix, 1, false, surf->space->modelMatrix);
+		GL_VertexAttribPointer(offsetof(shaderProgram_t, attr_Normal), 3, GL_FLOAT, false, sizeof(idDrawVert), ac->normal.ToFloatPtr());
+		GL_VertexAttribPointer(offsetof(shaderProgram_t, attr_Bitangent), 3, GL_FLOAT, false, sizeof(idDrawVert), ac->tangents[1].ToFloatPtr());
+		GL_VertexAttribPointer(offsetof(shaderProgram_t, attr_Tangent), 3, GL_FLOAT, false, sizeof(idDrawVert), ac->tangents[0].ToFloatPtr());
+		GL_VertexAttribPointer(offsetof(shaderProgram_t, attr_TexCoord), 2, GL_FLOAT, false, sizeof(idDrawVert), ac->st.ToFloatPtr());
+
+		GL_VertexAttribPointer(offsetof(shaderProgram_t, attr_Vertex), 3, GL_FLOAT, false, sizeof(idDrawVert), ac->xyz.ToFloatPtr());
+		GL_VertexAttribPointer(offsetof(shaderProgram_t, attr_Color), 4, GL_UNSIGNED_BYTE, false, sizeof(idDrawVert), ac->color);
 
 		// this may cause RB_GLSL_DrawInteraction to be exacuted multiple
 		// times with different colors and images if the surface or light have multiple layers
 		RB_CreateSingleDrawInteractions(surf, RB_GLSL_DrawInteraction);
 	}
 
-	glDisableVertexAttribArrayARB(8);
-	glDisableVertexAttribArrayARB(9);
-	glDisableVertexAttribArrayARB(10);
-	glDisableVertexAttribArrayARB(11);
-	glDisableClientState(GL_COLOR_ARRAY);
+	GL_DisableVertexAttribArray(offsetof(shaderProgram_t, attr_TexCoord));
+	GL_DisableVertexAttribArray(offsetof(shaderProgram_t, attr_Tangent));
+	GL_DisableVertexAttribArray(offsetof(shaderProgram_t, attr_Bitangent));
+	GL_DisableVertexAttribArray(offsetof(shaderProgram_t, attr_Normal));
+	GL_DisableVertexAttribArray(offsetof(shaderProgram_t, attr_Vertex));	// gl_Vertex
+	GL_DisableVertexAttribArray(offsetof(shaderProgram_t, attr_Color));	// gl_Color
 
 	// disable features
 	GL_SelectTextureNoClient(5);
@@ -210,7 +207,7 @@ void RB_GLSL_CreateDrawInteractions(const drawSurf_t *surf)
 	backEnd.glState.currenttmu = -1;
 	GL_SelectTexture(0);
 
-	glUseProgramObjectARB(0);
+	GL_UseProgram(NULL);
 }
 
 
@@ -225,7 +222,9 @@ void RB_GLSL_DrawInteractions(void)
 	const idMaterial	*lightShader;
 
 	GL_SelectTexture(0);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	/*
+	GL_DisableVertexAttribArray(offsetof(shaderProgram_t, attr_TexCoord));
+	*/
 
 	//
 	// for each light, perform adding and shadowing
@@ -255,9 +254,9 @@ void RB_GLSL_DrawInteractions(void)
 
 			if (r_useScissor.GetBool()) {
 				glScissor(backEnd.viewDef->viewport.x1 + backEnd.currentScissor.x1,
-				           backEnd.viewDef->viewport.y1 + backEnd.currentScissor.y1,
-				           backEnd.currentScissor.x2 + 1 - backEnd.currentScissor.x1,
-				           backEnd.currentScissor.y2 + 1 - backEnd.currentScissor.y1);
+				          backEnd.viewDef->viewport.y1 + backEnd.currentScissor.y1,
+				          backEnd.currentScissor.x2 + 1 - backEnd.currentScissor.x1,
+				          backEnd.currentScissor.y2 + 1 - backEnd.currentScissor.y1);
 			}
 
 			glClear(GL_STENCIL_BUFFER_BIT);
@@ -268,21 +267,13 @@ void RB_GLSL_DrawInteractions(void)
 			glStencilFunc(GL_ALWAYS, 128, 255);
 		}
 
-		if (r_useShadowVertexProgram.GetBool()) {
-			glUseProgramObjectARB(shadowShader.program);
-			RB_StencilShadowPass(vLight->globalShadows);
-			RB_GLSL_CreateDrawInteractions(vLight->localInteractions);
-
-			glUseProgramObjectARB(shadowShader.program);
-			RB_StencilShadowPass(vLight->localShadows);
-			RB_GLSL_CreateDrawInteractions(vLight->globalInteractions);
-			glUseProgramObjectARB(0);	// if there weren't any globalInteractions, it would have stayed on
-		} else {
-			RB_StencilShadowPass(vLight->globalShadows);
-			RB_GLSL_CreateDrawInteractions(vLight->localInteractions);
-			RB_StencilShadowPass(vLight->localShadows);
-			RB_GLSL_CreateDrawInteractions(vLight->globalInteractions);
-		}
+		GL_UseProgram(&shadowShader);
+		RB_StencilShadowPass(vLight->globalShadows);
+		RB_GLSL_CreateDrawInteractions(vLight->localInteractions);
+		GL_UseProgram(&shadowShader);
+		RB_StencilShadowPass(vLight->localShadows);
+		RB_GLSL_CreateDrawInteractions(vLight->globalInteractions);
+		GL_UseProgram(NULL);	// if there weren't any globalInteractions, it would have stayed on
 
 		// translucent surfaces never get stencil shadowed
 		if (r_skipTranslucent.GetBool()) {
@@ -301,7 +292,9 @@ void RB_GLSL_DrawInteractions(void)
 	glStencilFunc(GL_ALWAYS, 128, 255);
 
 	GL_SelectTexture(0);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	/*
+	GL_EnableVertexAttribArray(offsetof(shaderProgram_t, attr_TexCoord));
+	*/
 }
 
 //===================================================================================
@@ -342,17 +335,17 @@ static void R_LoadGLSLShader(const char *name, shaderProgram_t *shaderProgram, G
 	}
 
 	switch (type) {
-		case GL_VERTEX_SHADER_ARB:
+		case GL_VERTEX_SHADER:
 			// create vertex shader
-			shaderProgram->vertexShader = glCreateShaderObjectARB(GL_VERTEX_SHADER_ARB);
-			glShaderSourceARB(shaderProgram->vertexShader, 1, (const GLcharARB **)&buffer, 0);
-			glCompileShaderARB(shaderProgram->vertexShader);
+			shaderProgram->vertexShader = glCreateShader(GL_VERTEX_SHADER);
+			glShaderSource(shaderProgram->vertexShader, 1, (const GLchar **)&buffer, 0);
+			glCompileShader(shaderProgram->vertexShader);
 			break;
-		case GL_FRAGMENT_SHADER_ARB:
+		case GL_FRAGMENT_SHADER:
 			// create fragment shader
-			shaderProgram->fragmentShader = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
-			glShaderSourceARB(shaderProgram->fragmentShader, 1, (const GLcharARB **)&buffer, 0);
-			glCompileShaderARB(shaderProgram->fragmentShader);
+			shaderProgram->fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+			glShaderSource(shaderProgram->fragmentShader, 1, (const GLchar **)&buffer, 0);
+			glCompileShader(shaderProgram->fragmentShader);
 			break;
 		default:
 			common->Printf("R_LoadGLSLShader: no type\n");
@@ -371,26 +364,38 @@ links the GLSL vertex and fragment shaders together to form a GLSL program
 */
 static bool R_LinkGLSLShader(shaderProgram_t *shaderProgram, bool needsAttributes)
 {
+	char buf[BUFSIZ];
+	int len;
+	GLint status;
 	GLint linked;
 
-	shaderProgram->program = glCreateProgramObjectARB();
+	shaderProgram->program = glCreateProgram();
 
-	glAttachObjectARB(shaderProgram->program, shaderProgram->vertexShader);
-	glAttachObjectARB(shaderProgram->program, shaderProgram->fragmentShader);
+	glAttachShader(shaderProgram->program, shaderProgram->vertexShader);
+	glAttachShader(shaderProgram->program, shaderProgram->fragmentShader);
 
 	if (needsAttributes) {
-		glBindAttribLocationARB(shaderProgram->program, 8, "attr_TexCoord");
-		glBindAttribLocationARB(shaderProgram->program, 9, "attr_Tangent");
-		glBindAttribLocationARB(shaderProgram->program, 10, "attr_Bitangent");
-		glBindAttribLocationARB(shaderProgram->program, 11, "attr_Normal");
+		glBindAttribLocation(shaderProgram->program, 8, "attr_TexCoord");
+		glBindAttribLocation(shaderProgram->program, 9, "attr_Tangent");
+		glBindAttribLocation(shaderProgram->program, 10, "attr_Bitangent");
+		glBindAttribLocation(shaderProgram->program, 11, "attr_Normal");
+		glBindAttribLocation(shaderProgram->program, 12, "attr_Vertex");
+		glBindAttribLocation(shaderProgram->program, 13, "attr_Color");
 	}
 
-	glLinkProgramARB(shaderProgram->program);
+	glLinkProgram(shaderProgram->program);
 
-	glGetObjectParameterivARB(shaderProgram->program, GL_OBJECT_LINK_STATUS_ARB, &linked);
+	glGetProgramiv(shaderProgram->program, GL_LINK_STATUS, &linked);
+
+	if (com_developer.GetBool()) {
+		glGetShaderInfoLog(shaderProgram->vertexShader, sizeof(buf), &len, buf);
+		common->Printf("VS:\n%.*s\n", len, buf);
+		glGetShaderInfoLog(shaderProgram->fragmentShader, sizeof(buf), &len, buf);
+		common->Printf("FS:\n%.*s\n", len, buf);
+	}
 
 	if (!linked) {
-		common->Printf("R_LinkGLSLShader: program failed to link\n");
+		common->Error("R_LinkGLSLShader: program failed to link\n");
 		return false;
 	}
 
@@ -408,9 +413,9 @@ static bool R_ValidateGLSLProgram(shaderProgram_t *shaderProgram)
 {
 	GLint validProgram;
 
-	glValidateProgramARB(shaderProgram->program);
+	glValidateProgram(shaderProgram->program);
 
-	glGetObjectParameterivARB(shaderProgram->program, GL_OBJECT_VALIDATE_STATUS_ARB, &validProgram);
+	glGetProgramiv(shaderProgram->program, GL_VALIDATE_STATUS, &validProgram);
 
 	if (!validProgram) {
 		common->Printf("R_ValidateGLSLProgram: program invalid\n");
@@ -423,50 +428,70 @@ static bool R_ValidateGLSLProgram(shaderProgram_t *shaderProgram)
 
 static void RB_GLSL_GetUniformLocations(shaderProgram_t *shader)
 {
-	shader->localLightOrigin = glGetUniformLocationARB(shader->program, "u_lightOrigin");
-	shader->localViewOrigin = glGetUniformLocationARB(shader->program, "u_viewOrigin");
-	shader->lightProjectionS = glGetUniformLocationARB(shader->program, "u_lightProjectionS");
-	shader->lightProjectionT = glGetUniformLocationARB(shader->program, "u_lightProjectionT");
-	shader->lightProjectionQ = glGetUniformLocationARB(shader->program, "u_lightProjectionQ");
-	shader->lightFalloff = glGetUniformLocationARB(shader->program, "u_lightFalloff");
-	shader->bumpMatrixS = glGetUniformLocationARB(shader->program, "u_bumpMatrixS");
-	shader->bumpMatrixT = glGetUniformLocationARB(shader->program, "u_bumpMatrixT");
-	shader->diffuseMatrixS = glGetUniformLocationARB(shader->program, "u_diffuseMatrixS");
-	shader->diffuseMatrixT = glGetUniformLocationARB(shader->program, "u_diffuseMatrixT");
-	shader->specularMatrixS = glGetUniformLocationARB(shader->program, "u_specularMatrixS");
-	shader->specularMatrixT = glGetUniformLocationARB(shader->program, "u_specularMatrixT");
-	shader->colorModulate = glGetUniformLocationARB(shader->program, "u_colorModulate");
-	shader->colorAdd = glGetUniformLocationARB(shader->program, "u_colorAdd");
-	shader->diffuseColor = glGetUniformLocationARB(shader->program, "u_diffuseColor");
-	shader->specularColor = glGetUniformLocationARB(shader->program, "u_specularColor");
+	shader->localLightOrigin = glGetUniformLocation(shader->program, "u_lightOrigin");
+	shader->localViewOrigin = glGetUniformLocation(shader->program, "u_viewOrigin");
+	shader->lightProjectionS = glGetUniformLocation(shader->program, "u_lightProjectionS");
+	shader->lightProjectionT = glGetUniformLocation(shader->program, "u_lightProjectionT");
+	shader->lightProjectionQ = glGetUniformLocation(shader->program, "u_lightProjectionQ");
+	shader->lightFalloff = glGetUniformLocation(shader->program, "u_lightFalloff");
+	shader->bumpMatrixS = glGetUniformLocation(shader->program, "u_bumpMatrixS");
+	shader->bumpMatrixT = glGetUniformLocation(shader->program, "u_bumpMatrixT");
+	shader->diffuseMatrixS = glGetUniformLocation(shader->program, "u_diffuseMatrixS");
+	shader->diffuseMatrixT = glGetUniformLocation(shader->program, "u_diffuseMatrixT");
+	shader->specularMatrixS = glGetUniformLocation(shader->program, "u_specularMatrixS");
+	shader->specularMatrixT = glGetUniformLocation(shader->program, "u_specularMatrixT");
+	shader->colorModulate = glGetUniformLocation(shader->program, "u_colorModulate");
+	shader->colorAdd = glGetUniformLocation(shader->program, "u_colorAdd");
+	shader->diffuseColor = glGetUniformLocation(shader->program, "u_diffuseColor");
+	shader->specularColor = glGetUniformLocation(shader->program, "u_specularColor");
+	shader->glColor = glGetUniformLocation(shader->program, "u_glColor");
+	shader->alphaTest = glGetUniformLocation(shader->program, "u_alphaTest");
 
-	shader->u_bumpTexture = glGetUniformLocationARB(shader->program, "u_bumpTexture");
-	shader->u_lightFalloffTexture = glGetUniformLocationARB(shader->program, "u_lightFalloffTexture");
-	shader->u_lightProjectionTexture = glGetUniformLocationARB(shader->program, "u_lightProjectionTexture");
-	shader->u_diffuseTexture = glGetUniformLocationARB(shader->program, "u_diffuseTexture");
-	shader->u_specularTexture = glGetUniformLocationARB(shader->program, "u_specularTexture");
-	shader->u_specularFalloffTexture = glGetUniformLocationARB(shader->program, "u_specularFalloffTexture");
+	shader->eyeOrigin = glGetUniformLocation(shader->program, "u_eyeOrigin");
+	shader->localEyeOrigin = glGetUniformLocation(shader->program, "u_localEyeOrigin");
+	shader->nonPowerOfTwo = glGetUniformLocation(shader->program, "u_nonPowerOfTwo");
+	shader->windowCoords = glGetUniformLocation(shader->program, "u_windowCoords");
 
-	shader->modelMatrix = glGetUniformLocationARB(shader->program, "u_modelMatrix");
+	shader->u_bumpTexture = glGetUniformLocation(shader->program, "u_bumpTexture");
+	shader->u_lightFalloffTexture = glGetUniformLocation(shader->program, "u_lightFalloffTexture");
+	shader->u_lightProjectionTexture = glGetUniformLocation(shader->program, "u_lightProjectionTexture");
+	shader->u_diffuseTexture = glGetUniformLocation(shader->program, "u_diffuseTexture");
+	shader->u_specularTexture = glGetUniformLocation(shader->program, "u_specularTexture");
+	shader->u_specularFalloffTexture = glGetUniformLocation(shader->program, "u_specularFalloffTexture");
 
-	shader->modelMatrix = glGetUniformLocationARB(shader->program, "u_modelMatrix");
+	shader->modelViewProjectionMatrix = glGetUniformLocation(shader->program, "u_modelViewProjectionMatrix");
+
+	shader->modelMatrix = glGetUniformLocation(shader->program, "u_modelMatrix");
+	shader->textureMatrix = glGetUniformLocation(shader->program, "u_textureMatrix");
+
+	shader->attr_TexCoord = glGetAttribLocation(shader->program, "attr_TexCoord");
+	shader->attr_Tangent = glGetAttribLocation(shader->program, "attr_Tangent");
+	shader->attr_Bitangent = glGetAttribLocation(shader->program, "attr_Bitangent");
+	shader->attr_Normal = glGetAttribLocation(shader->program, "attr_Normal");
+	shader->attr_Vertex = glGetAttribLocation(shader->program, "attr_Vertex");
+	shader->attr_Color = glGetAttribLocation(shader->program, "attr_Color");
 
 	// set texture locations
-	glUseProgramObjectARB(shader->program);
-	glUniform1iARB(shader->u_bumpTexture, 0);
-	glUniform1iARB(shader->u_lightFalloffTexture, 1);
-	glUniform1iARB(shader->u_lightProjectionTexture, 2);
-	glUniform1iARB(shader->u_diffuseTexture, 3);
-	glUniform1iARB(shader->u_specularTexture, 4);
-	glUniform1iARB(shader->u_specularFalloffTexture, 5);
-	glUseProgramObjectARB(0);
+	GL_UseProgram(shader);
+	glUniform1i(shader->u_bumpTexture, 0);
+	glUniform1i(shader->u_lightFalloffTexture, 1);
+	glUniform1i(shader->u_lightProjectionTexture, 2);
+	glUniform1i(shader->u_diffuseTexture, 3);
+	glUniform1i(shader->u_specularTexture, 4);
+	glUniform1i(shader->u_specularFalloffTexture, 5);
+	GL_UseProgram(NULL);
 }
 
 static bool RB_GLSL_InitShaders(void)
 {
+	memset(&interactionShader, 0, sizeof(shaderProgram_t));
+	memset(&shadowShader, 0, sizeof(shaderProgram_t));
+	memset(&defaultShader, 0, sizeof(shaderProgram_t));
+	memset(&depthFillShader, 0, sizeof(shaderProgram_t));
+
 	// load interation shaders
-	R_LoadGLSLShader("interaction.vert", &interactionShader, GL_VERTEX_SHADER_ARB);
-	R_LoadGLSLShader("interaction.frag", &interactionShader, GL_FRAGMENT_SHADER_ARB);
+	R_LoadGLSLShader("interaction.vert", &interactionShader, GL_VERTEX_SHADER);
+	R_LoadGLSLShader("interaction.frag", &interactionShader, GL_FRAGMENT_SHADER);
 
 	if (!R_LinkGLSLShader(&interactionShader, true) && !R_ValidateGLSLProgram(&interactionShader)) {
 		return false;
@@ -475,13 +500,33 @@ static bool RB_GLSL_InitShaders(void)
 	}
 
 	// load stencil shadow extrusion shaders
-	R_LoadGLSLShader("shadow.vert", &shadowShader, GL_VERTEX_SHADER_ARB);
-	R_LoadGLSLShader("shadow.frag", &shadowShader, GL_FRAGMENT_SHADER_ARB);
+	R_LoadGLSLShader("shadow.vert", &shadowShader, GL_VERTEX_SHADER);
+	R_LoadGLSLShader("shadow.frag", &shadowShader, GL_FRAGMENT_SHADER);
 
-	if (!R_LinkGLSLShader(&shadowShader, false) && !R_ValidateGLSLProgram(&shadowShader)) {
+	if (!R_LinkGLSLShader(&shadowShader, true) && !R_ValidateGLSLProgram(&shadowShader)) {
 		return false;
 	} else {
-		shadowShader.localLightOrigin = glGetUniformLocationARB(shadowShader.program, "u_lightOrigin");
+		RB_GLSL_GetUniformLocations(&shadowShader);
+	}
+
+	// load default interation shaders
+	R_LoadGLSLShader("default.vert", &defaultShader, GL_VERTEX_SHADER);
+	R_LoadGLSLShader("default.frag", &defaultShader, GL_FRAGMENT_SHADER);
+
+	if (!R_LinkGLSLShader(&defaultShader, true) && !R_ValidateGLSLProgram(&defaultShader)) {
+		return false;
+	} else {
+		RB_GLSL_GetUniformLocations(&defaultShader);
+	}
+
+	// load default interation shaders
+	R_LoadGLSLShader("zfill.vert", &depthFillShader, GL_VERTEX_SHADER);
+	R_LoadGLSLShader("zfill.frag", &depthFillShader, GL_FRAGMENT_SHADER);
+
+	if (!R_LinkGLSLShader(&depthFillShader, true) && !R_ValidateGLSLProgram(&depthFillShader)) {
+		return false;
+	} else {
+		RB_GLSL_GetUniformLocations(&depthFillShader);
 	}
 
 	return true;
@@ -513,10 +558,14 @@ void R_GLSL_Init(void)
 
 	common->Printf("---------- R_GLSL_Init ----------\n");
 
+#if !defined(GL_ES_VERSION_2_0)
+
 	if (!glConfig.GLSLAvailable) {
 		common->Printf("Not available.\n");
 		return;
 	}
+
+#endif
 
 	common->Printf("Available.\n");
 

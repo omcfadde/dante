@@ -49,51 +49,48 @@ void RB_SetDefaultGLState(void)
 
 	RB_LogComment("--- R_SetDefaultGLState ---\n");
 
-	glClearDepth(1.0f);
-	glColor4f(1,1,1,1);
-
-	// the vertex array is always enabled
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
-
 	//
 	// make sure our GL state vector is set correctly
 	//
 	memset(&backEnd.glState, 0, sizeof(backEnd.glState));
 	backEnd.glState.forceGlState = true;
 
+	GL_UseProgram(NULL);
+
+	glClearDepthf(1.0f);
+	glClear(GL_DEPTH_BUFFER_BIT);
+#if !defined(GL_ES_VERSION_2_0)
+	glColor4f(1,1,1,1);
+#endif
+
 	glColorMask(1, 1, 1, 1);
 
 	glEnable(GL_DEPTH_TEST);
+
 	glEnable(GL_BLEND);
 	glEnable(GL_SCISSOR_TEST);
 	glEnable(GL_CULL_FACE);
+#if !defined(GL_ES_VERSION_2_0)
 	glDisable(GL_LIGHTING);
-	glDisable(GL_LINE_STIPPLE);
+#endif
 	glDisable(GL_STENCIL_TEST);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glDepthMask(GL_TRUE);
 	glDepthFunc(GL_ALWAYS);
 
 	glCullFace(GL_FRONT_AND_BACK);
+#if !defined(GL_ES_VERSION_2_0)
 	glShadeModel(GL_SMOOTH);
+#endif
 
 	if (r_useScissor.GetBool()) {
 		glScissor(0, 0, glConfig.vidWidth, glConfig.vidHeight);
 	}
 
+#if !defined(GL_ES_VERSION_2_0)
 	for (i = glConfig.maxTextureUnits - 1 ; i >= 0 ; i--) {
 		GL_SelectTexture(i);
 
-		// object linear texgen is our default
-		glTexGenf(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-		glTexGenf(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-		glTexGenf(GL_R, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-		glTexGenf(GL_Q, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-
-		GL_TexEnv(GL_MODULATE);
 		glDisable(GL_TEXTURE_2D);
 
 		if (glConfig.texture3DAvailable) {
@@ -101,9 +98,10 @@ void RB_SetDefaultGLState(void)
 		}
 
 		if (glConfig.cubeMapAvailable) {
-			glDisable(GL_TEXTURE_CUBE_MAP_EXT);
+			glDisable(GL_TEXTURE_CUBE_MAP);
 		}
 	}
+#endif
 }
 
 
@@ -142,18 +140,167 @@ void GL_SelectTexture(int unit)
 		return;
 	}
 
+#if 0
 	if (unit < 0 || unit >= glConfig.maxTextureUnits && unit >= glConfig.maxTextureImageUnits) {
 		common->Warning("GL_SelectTexture: unit = %i", unit);
 		return;
 	}
+#endif
 
-	glActiveTextureARB(GL_TEXTURE0_ARB + unit);
-	glClientActiveTextureARB(GL_TEXTURE0_ARB + unit);
+	glActiveTexture(GL_TEXTURE0 + unit);
+#if !defined(GL_ES_VERSION_2_0)
+	glClientActiveTexture(GL_TEXTURE0 + unit);
+#endif
 	RB_LogComment("glActiveTextureARB( %i );\nglClientActiveTextureARB( %i );\n", unit, unit);
 
 	backEnd.glState.currenttmu = unit;
 }
 
+/*
+====================
+GL_UseProgram
+====================
+*/
+void GL_UseProgram(shaderProgram_t *program)
+{
+	if (backEnd.glState.currentProgram == program) {
+		return;
+	}
+
+	glUseProgram(program ? program->program : 0);
+	backEnd.glState.currentProgram = program;
+
+	GL_CheckErrors();
+}
+
+/*
+====================
+GL_Uniform1fv
+====================
+*/
+void GL_Uniform1fv(GLint location, const GLfloat *value)
+{
+	if (!backEnd.glState.currentProgram) {
+		common->Printf("GL_Uniform1fv: no current program object\n");
+		__builtin_trap();
+		return;
+	}
+
+	glUniform1fv(*(GLint *)((char *)backEnd.glState.currentProgram + location), 1, value);
+
+	GL_CheckErrors();
+}
+
+/*
+====================
+GL_Uniform4fv
+====================
+*/
+void GL_Uniform4fv(GLint location, const GLfloat *value)
+{
+	if (!backEnd.glState.currentProgram) {
+		common->Printf("GL_Uniform4fv: no current program object\n");
+		__builtin_trap();
+		return;
+	}
+
+	glUniform4fv(*(GLint *)((char *)backEnd.glState.currentProgram + location), 1, value);
+
+	GL_CheckErrors();
+}
+
+/*
+====================
+GL_UniformMatrix4fv
+====================
+*/
+void GL_UniformMatrix4fv(GLint location, const GLfloat *value)
+{
+	if (!backEnd.glState.currentProgram) {
+		common->Printf("GL_Uniform4fv: no current program object\n");
+		__builtin_trap();
+		return;
+	}
+
+	glUniformMatrix4fv(*(GLint *)((char *)backEnd.glState.currentProgram + location), 1, GL_FALSE, value);
+
+	GL_CheckErrors();
+}
+
+/*
+====================
+GL_EnableVertexAttribArray
+====================
+*/
+void GL_EnableVertexAttribArray(GLuint index)
+{
+	if (!backEnd.glState.currentProgram) {
+		common->Printf("GL_EnableVertexAttribArray: no current program object\n");
+		__builtin_trap();
+		return;
+	}
+
+	if ((*(GLint *)((char *)backEnd.glState.currentProgram + index)) == -1) {
+		common->Printf("GL_EnableVertexAttribArray: unbound attribute index\n");
+		__builtin_trap();
+		return;
+	}
+
+	glEnableVertexAttribArray(*(GLint *)((char *)backEnd.glState.currentProgram + index));
+
+	GL_CheckErrors();
+}
+
+/*
+====================
+GL_DisableVertexAttribArray
+====================
+*/
+void GL_DisableVertexAttribArray(GLuint index)
+{
+	if (!backEnd.glState.currentProgram) {
+		common->Printf("GL_DisableVertexAttribArray: no current program object\n");
+		__builtin_trap();
+		return;
+	}
+
+	if ((*(GLint *)((char *)backEnd.glState.currentProgram + index)) == -1) {
+		common->Printf("GL_DisableVertexAttribArray: unbound attribute index\n");
+		__builtin_trap();
+		return;
+	}
+
+	glDisableVertexAttribArray(*(GLint *)((char *)backEnd.glState.currentProgram + index));
+
+	GL_CheckErrors();
+}
+
+/*
+====================
+GL_VertexAttribPointer
+====================
+*/
+void GL_VertexAttribPointer(GLuint index, GLint size, GLenum type,
+			    GLboolean normalized, GLsizei stride,
+			    const GLvoid *pointer)
+{
+	if (!backEnd.glState.currentProgram) {
+		common->Printf("GL_VertexAttribPointer: no current program object\n");
+		__builtin_trap();
+		return;
+	}
+
+	if ((*(GLint *)((char *)backEnd.glState.currentProgram + index)) == -1) {
+		common->Printf("GL_VertexAttribPointer: unbound attribute index\n");
+		__builtin_trap();
+		return;
+	}
+
+	glVertexAttribPointer(*(GLint *)((char *)backEnd.glState.currentProgram + index),
+	                      size, type, normalized, stride, pointer);
+
+	GL_CheckErrors();
+}
 
 /*
 ====================
@@ -192,37 +339,6 @@ void GL_Cull(int cullType)
 	}
 
 	backEnd.glState.faceCulling = cullType;
-}
-
-/*
-====================
-GL_TexEnv
-====================
-*/
-void GL_TexEnv(int env)
-{
-	tmu_t	*tmu;
-
-	tmu = &backEnd.glState.tmu[backEnd.glState.currenttmu];
-
-	if (env == tmu->texEnv) {
-		return;
-	}
-
-	tmu->texEnv = env;
-
-	switch (env) {
-		case GL_COMBINE_EXT:
-		case GL_MODULATE:
-		case GL_REPLACE:
-		case GL_DECAL:
-		case GL_ADD:
-			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, env);
-			break;
-		default:
-			common->Error("GL_TexEnv: invalid env '%d' passed\n", env);
-			break;
-	}
 }
 
 /*
@@ -376,6 +492,7 @@ void GL_State(int stateBits)
 	//
 	// fill/line mode
 	//
+#if !defined(GL_ES_VERSION_2_0)
 	if (diff & GLS_POLYMODE_LINE) {
 		if (stateBits & GLS_POLYMODE_LINE) {
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -383,10 +500,12 @@ void GL_State(int stateBits)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 	}
+#endif
 
 	//
 	// alpha test
 	//
+#if !defined(GL_ES_VERSION_2_0)
 	if (diff & GLS_ATEST_BITS) {
 		switch (stateBits & GLS_ATEST_BITS) {
 			case 0:
@@ -409,6 +528,7 @@ void GL_State(int stateBits)
 				break;
 		}
 	}
+#endif
 
 	backEnd.glState.glStateBits = stateBits;
 }
@@ -440,11 +560,13 @@ void RB_SetGL2D(void)
 		glScissor(0, 0, glConfig.vidWidth, glConfig.vidHeight);
 	}
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0, 640, 480, 0, 0, 1);		// always assume 640x480 virtual coordinates
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	// always assume 640x480 virtual coordinates
+	esOrtho((ESMatrix *)backEnd.viewDef->projectionMatrix, 0, 640, 480, 0, 0, 1);
+	esMatrixLoadIdentity((ESMatrix *)backEnd.viewDef->worldSpace.modelViewMatrix);
+
+	float	mat[16];
+	myGlMultMatrix(backEnd.viewDef->worldSpace.modelViewMatrix, backEnd.viewDef->projectionMatrix, mat);
+	GL_UniformMatrix4fv(offsetof(shaderProgram_t, modelViewProjectionMatrix), mat);
 
 	GL_State(GLS_DEPTHFUNC_ALWAYS |
 	         GLS_SRCBLEND_SRC_ALPHA |
@@ -474,7 +596,9 @@ static void	RB_SetBuffer(const void *data)
 
 	backEnd.frameCount = cmd->frameCount;
 
+#if !defined(GL_ES_VERSION_2_0)
 	glDrawBuffer(cmd->buffer);
+#endif
 
 	// clear screen for debugging
 	// automatically enable this with several other debug tools
@@ -506,6 +630,7 @@ was there.  This is used to test for texture thrashing.
 */
 void RB_ShowImages(void)
 {
+#if !defined(GL_ES_VERSION_2_0)
 	int		i;
 	idImage	*image;
 	float	x, y, w, h;
@@ -555,6 +680,7 @@ void RB_ShowImages(void)
 
 	end = Sys_Milliseconds();
 	common->Printf("%i msec to draw all images\n", end - start);
+#endif
 }
 
 

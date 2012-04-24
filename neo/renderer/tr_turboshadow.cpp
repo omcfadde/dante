@@ -190,9 +190,9 @@ srfTriangles_t *R_CreateVertexProgramTurboShadowVolume(const idRenderEntityLocal
 R_CreateTurboShadowVolume
 =====================
 */
-srfTriangles_t *R_CreateTurboShadowVolume(const idRenderEntityLocal *ent,
-                const srfTriangles_t *tri, const idRenderLightLocal *light,
-                srfCullInfo_t &cullInfo)
+static srfTriangles_t *R_CreateTurboShadowVolume(const idRenderEntityLocal *ent,
+                       const srfTriangles_t *tri, const idRenderLightLocal *light,
+                       srfCullInfo_t &cullInfo)
 {
 	int		i, j;
 	idVec3	localLightOrigin;

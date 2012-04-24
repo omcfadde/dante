@@ -9,17 +9,29 @@ import scons_utils
 Import( 'GLOBALS' )
 Import( GLOBALS )
 
+
+#	MegaTexture.cpp \
+#	draw_arb2.cpp \
+#
+#
+
 renderer_string = ' \
-	Cinematic.cpp \
-	GuiModel.cpp \
+	esTransform.c \
+	draw_glsl.cpp \
+	draw_common.cpp \
+	tr_backend.cpp \
+	tr_render.cpp \
+	tr_rendertools.cpp \
+	tr_trace.cpp \
+	Image_load.cpp \
 	Image_files.cpp \
 	Image_init.cpp \
-	Image_load.cpp \
 	Image_process.cpp \
 	Image_program.cpp \
+	Cinematic.cpp \
+	GuiModel.cpp \
 	Interaction.cpp \
 	Material.cpp \
-	MegaTexture.cpp \
 	Model.cpp \
 	ModelDecal.cpp \
 	ModelManager.cpp \
@@ -41,10 +53,6 @@ renderer_string = ' \
 	RenderWorld_load.cpp \
 	RenderWorld_portals.cpp \
 	VertexCache.cpp \
-	draw_arb2.cpp \
-	draw_glsl.cpp \
-	draw_common.cpp \
-	tr_backend.cpp \
 	tr_deform.cpp \
 	tr_font.cpp \
 	tr_guisurf.cpp \
@@ -53,12 +61,9 @@ renderer_string = ' \
 	tr_main.cpp \
 	tr_orderIndexes.cpp \
 	tr_polytope.cpp \
-	tr_render.cpp \
-	tr_rendertools.cpp \
 	tr_shadowbounds.cpp \
 	tr_stencilshadow.cpp \
 	tr_subview.cpp \
-	tr_trace.cpp \
 	tr_trisurf.cpp \
 	tr_turboshadow.cpp'
 
@@ -198,9 +203,12 @@ sys_string = ' \
 	linux/main.cpp \
 	stub/util_stub.cpp'
 
+#		linux/glimp.cpp \
+#
+
 if ( local_dedicated == 0 ):
 	sys_string += ' \
-		linux/glimp.cpp \
+		linux/gles2.cpp \
 		posix/posix_input.cpp \
 		linux/input.cpp \
 		linux/gl_extensions.cpp'
@@ -250,9 +258,9 @@ else:
 	sound_env.Append( CPPDEFINES = 'NO_ALSA' )
 sound_lib = sound_env.StaticLibrary( 'sound', sound_list )
 
-local_env.Append( LIBS = [ 'pthread', 'dl', 'vorbisfile', 'jpeg', 'GL' ] )
+local_env.Append( LIBS = [ 'pthread', 'dl', 'vorbisfile', 'jpeg', 'GLESv2', 'EGL' ] )
 if ( local_dedicated == 0 ):
-	local_env.Append( LIBS = [ 'X11', 'Xext', 'Xxf86vm' ] ) # 'Xxf86dga', 
+	local_env.Append( LIBS = [ 'X11' ] )	#, 'Xext', 'Xxf86vm' ] ) # 'Xxf86dga', 
 	local_env.Append( LIBPATH = [ '/usr/X11R6/lib' ] )
 #	local_env.Append( LIBS = [ 'openal' ] )
 

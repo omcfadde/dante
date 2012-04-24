@@ -250,6 +250,7 @@ DrawAllEdges
 */
 static	void DrawAllEdges(void)
 {
+#if 0
 	int		i;
 
 	if (!dmapGlobals.drawflag) {
@@ -275,6 +276,7 @@ static	void DrawAllEdges(void)
 	glFlush();
 
 //	GLimp_SwapBuffers();
+#endif
 }
 
 /*
@@ -284,6 +286,7 @@ DrawVerts
 */
 static void DrawVerts(optIsland_t *island)
 {
+#if 0
 	optVertex_t	*vert;
 
 	if (!dmapGlobals.drawflag) {
@@ -303,6 +306,7 @@ static void DrawVerts(optIsland_t *island)
 	glEnd();
 	glDisable(GL_BLEND);
 	glFlush();
+#endif
 }
 
 /*
@@ -312,6 +316,7 @@ DrawEdges
 */
 static	void DrawEdges(optIsland_t *island)
 {
+#if 0
 	optEdge_t	*edge;
 
 	if (!dmapGlobals.drawflag) {
@@ -337,6 +342,7 @@ static	void DrawEdges(optIsland_t *island)
 	glFlush();
 
 //	GLimp_SwapBuffers();
+#endif
 }
 
 //=================================================================
@@ -522,6 +528,7 @@ static	bool TryAddNewEdge(optVertex_t *v1, optVertex_t *v2, optIsland_t *island)
 		}
 	}
 
+#if 0
 	if (dmapGlobals.drawflag) {
 		glBegin(GL_LINES);
 		glColor3f(0, (128 + orandom.RandomInt(127))/ 255.0, 0);
@@ -530,6 +537,7 @@ static	bool TryAddNewEdge(optVertex_t *v1, optVertex_t *v2, optIsland_t *island)
 		glEnd();
 		glFlush();
 	}
+#endif
 
 	// add it
 	e = AllocEdge();
@@ -742,6 +750,7 @@ static	void RemoveIfColinear(optVertex_t *ov, optIsland_t *island)
 		return;
 	}
 
+#if 0
 	if (dmapGlobals.drawflag) {
 		glBegin(GL_LINES);
 		glColor3f(1, 1, 0);
@@ -756,6 +765,7 @@ static	void RemoveIfColinear(optVertex_t *ov, optIsland_t *island)
 		glEnd();
 		glFlush();
 	}
+#endif
 
 	// replace the two edges with a single edge
 	UnlinkEdge(e1, island);
@@ -1038,6 +1048,7 @@ static void CreateOptTri(optVertex_t *first, optEdge_t *e1, optEdge_t *e2, optIs
 
 //DrawEdges( island );
 
+#if 0
 	// identify the third edge
 	if (dmapGlobals.drawflag) {
 		glColor3f(1,1,0);
@@ -1053,6 +1064,7 @@ static void CreateOptTri(optVertex_t *first, optEdge_t *e1, optEdge_t *e2, optIs
 		glEnd();
 		glFlush();
 	}
+#endif
 
 	for (opposite = second->edges ; opposite ;) {
 		if (opposite != e1 && (opposite->v1 == third || opposite->v2 == third)) {
@@ -1073,6 +1085,7 @@ static void CreateOptTri(optVertex_t *first, optEdge_t *e1, optEdge_t *e2, optIs
 		return;
 	}
 
+#if 0
 	if (dmapGlobals.drawflag) {
 		glColor3f(1,0,1);
 		glBegin(GL_LINES);
@@ -1081,6 +1094,7 @@ static void CreateOptTri(optVertex_t *first, optEdge_t *e1, optEdge_t *e2, optIs
 		glEnd();
 		glFlush();
 	}
+#endif
 
 	// create new triangle
 	optTri = (optTri_t *)Mem_Alloc(sizeof(*optTri));
@@ -1091,6 +1105,7 @@ static void CreateOptTri(optVertex_t *first, optEdge_t *e1, optEdge_t *e2, optIs
 	optTri->next = island->tris;
 	island->tris = optTri;
 
+#if 0
 	if (dmapGlobals.drawflag) {
 		glColor3f(1, 1, 1);
 		glPointSize(4);
@@ -1099,6 +1114,7 @@ static void CreateOptTri(optVertex_t *first, optEdge_t *e1, optEdge_t *e2, optIs
 		glEnd();
 		glFlush();
 	}
+#endif
 
 	// find the midpoint, and scan through all the original triangles to
 	// see if it is inside any of them
@@ -1114,6 +1130,7 @@ static void CreateOptTri(optVertex_t *first, optEdge_t *e1, optEdge_t *e2, optIs
 		optTri->filled = false;
 	}
 
+#if 0
 	if (dmapGlobals.drawflag) {
 		if (optTri->filled) {
 			glColor3f((128 + orandom.RandomInt(127))/ 255.0, 0, 0);
@@ -1134,6 +1151,7 @@ static void CreateOptTri(optVertex_t *first, optEdge_t *e1, optEdge_t *e2, optIs
 		glEnd();
 		glFlush();
 	}
+#endif
 
 	// link the triangle to it's edges
 	LinkTriToEdge(optTri, e1);
@@ -1448,6 +1466,7 @@ void AddEdgeIfNotAlready(optVertex_t *v1, optVertex_t *v2)
 
 
 
+#if 0
 /*
 =================
 DrawOriginalEdges
@@ -1475,6 +1494,7 @@ static void DrawOriginalEdges(int numOriginalEdges, originalEdges_t *originalEdg
 	glEnd();
 	glFlush();
 }
+#endif
 
 
 typedef struct edgeCrossing_s {
@@ -1596,6 +1616,7 @@ void SplitOriginalEdgesAtCrossings(optimizeGroup_t *opt)
 	crossings = (edgeCrossing_t **)Mem_ClearedAlloc(numOriginalEdges * sizeof(*crossings));
 
 	for (i = 0 ; i < numOriginalEdges ; i++) {
+#if 0
 		if (dmapGlobals.drawflag) {
 			DrawOriginalEdges(numOriginalEdges, originalEdges);
 			glBegin(GL_LINES);
@@ -1606,6 +1627,7 @@ void SplitOriginalEdgesAtCrossings(optimizeGroup_t *opt)
 			glEnd();
 			glFlush();
 		}
+#endif
 
 		for (j = i+1 ; j < numOriginalEdges ; j++) {
 			optVertex_t	*v1, *v2, *v3, *v4;

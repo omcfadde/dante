@@ -1305,11 +1305,7 @@ srfTriangles_t *R_CreateShadowVolume(const idRenderEntityLocal *ent,
 	// trades somewhat more overdraw and no cap optimizations for
 	// a very simple generation process
 	if (optimize == SG_DYNAMIC && r_useTurboShadow.GetBool()) {
-		if (r_useShadowVertexProgram.GetBool()) {
-			return R_CreateVertexProgramTurboShadowVolume(ent, tri, light, cullInfo);
-		} else {
-			return R_CreateTurboShadowVolume(ent, tri, light, cullInfo);
-		}
+		return R_CreateVertexProgramTurboShadowVolume(ent, tri, light, cullInfo);
 	}
 
 	R_CalcInteractionFacing(ent, tri, light, cullInfo);

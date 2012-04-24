@@ -307,6 +307,7 @@ RB_DrawExpandedTriangles
 */
 void RB_DrawExpandedTriangles(const srfTriangles_t *tri, const float radius, const idVec3 &vieworg)
 {
+#if !defined(GL_ES_VERSION_2_0)
 	int i, j, k;
 	idVec3 dir[6], normal, point;
 
@@ -364,6 +365,7 @@ void RB_DrawExpandedTriangles(const srfTriangles_t *tri, const float radius, con
 
 		glEnd();
 	}
+#endif
 }
 
 /*
@@ -375,6 +377,7 @@ Debug visualization
 */
 void RB_ShowTrace(drawSurf_t **drawSurfs, int numDrawSurfs)
 {
+#if !defined(GL_ES_VERSION_2_0)
 	int						i;
 	const srfTriangles_t	*tri;
 	const drawSurf_t		*surf;
@@ -449,4 +452,5 @@ void RB_ShowTrace(drawSurf_t **drawSurfs, int numDrawSurfs)
 			RB_DrawBounds(idBounds(hit.point).Expand(1));
 		}
 	}
+#endif
 }

@@ -32,6 +32,8 @@ If you have questions concerning this license or the applicable additional terms
 #include "Image.h"
 #include "MegaTexture.h"
 
+struct shaderProgram_s;
+
 class idRenderWorldLocal;
 
 // everything that is needed by the backend needs
@@ -612,6 +614,8 @@ typedef struct {
 	int			faceCulling;
 	int			glStateBits;
 	bool		forceGlState;		// the next GL_State will ignore glStateBits and set everything
+
+	shaderProgram_s	*currentProgram;
 } glstate_t;
 
 
@@ -866,11 +870,9 @@ extern idCVar r_usePreciseTriangleInteractions;	// 1 = do winding clipping to de
 extern idCVar r_useTurboShadow;			// 1 = use the infinite projection with W technique for dynamic shadows
 extern idCVar r_useExternalShadows;		// 1 = skip drawing caps when outside the light volume
 extern idCVar r_useOptimizedShadows;	// 1 = use the dmap generated static shadow volumes
-extern idCVar r_useShadowVertexProgram;	// 1 = do the shadow projection in the vertex program on capable cards
 extern idCVar r_useShadowProjectedCull;	// 1 = discard triangles outside light volume before shadowing
 extern idCVar r_useDeferredTangents;	// 1 = don't always calc tangents after deform
 extern idCVar r_useCachedDynamicModels;	// 1 = cache snapshots of dynamic models
-extern idCVar r_useTwoSidedStencil;		// 1 = do stencil shadows in one pass with different ops on each side
 extern idCVar r_useInfiniteFarZ;		// 1 = use the no-far-clip-plane trick
 extern idCVar r_useScissor;				// 1 = scissor clip as portals and lights are processed
 extern idCVar r_usePortals;				// 1 = use portals to perform area culling, otherwise draw everything
@@ -990,6 +992,13 @@ GL wrapper/helper functions
 */
 
 void	GL_SelectTexture(int unit);
+void	GL_UseProgram(shaderProgram_s *program);
+void	GL_Uniform1fv(GLint location, const GLfloat *value);
+void	GL_Uniform4fv(GLint location, const GLfloat *value);
+void	GL_UniformMatrix4fv(GLint location, const GLfloat *value);
+void	GL_EnableVertexAttribArray(GLuint index);
+void	GL_DisableVertexAttribArray(GLuint index);
+void	GL_VertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer);
 void	GL_CheckErrors(void);
 void	GL_ClearStateDelta(void);
 void	GL_State(int stateVector);
@@ -1236,9 +1245,9 @@ RENDER
 ============================================================
 */
 
-void RB_EnterWeaponDepthHack();
-void RB_EnterModelDepthHack(float depth);
-void RB_LeaveDepthHack();
+void RB_EnterWeaponDepthHack(const drawSurf_t *surf);
+void RB_EnterModelDepthHack(const drawSurf_t *surf);
+void RB_LeaveDepthHack(const drawSurf_t *surf);
 void RB_DrawElementsImmediate(const srfTriangles_t *tri);
 void RB_RenderTriangleSurface(const srfTriangles_t *tri);
 void RB_T_RenderTriangleSurface(const drawSurf_t *surf);
@@ -1368,10 +1377,10 @@ DRAW_GLSL
 
 
 typedef struct shaderProgram_s {
-	GLhandleARB	program;
+	GLuint		program;
 
-	GLhandleARB	vertexShader;
-	GLhandleARB	fragmentShader;
+	GLuint		vertexShader;
+	GLuint		fragmentShader;
 
 	GLint		u_bumpTexture;
 	GLint		u_lightFalloffTexture;
@@ -1380,8 +1389,16 @@ typedef struct shaderProgram_s {
 	GLint		u_specularTexture;
 	GLint		u_specularFalloffTexture;
 
-	GLint		modelMatrix;
+	GLint		glColor;
+	GLint		alphaTest;
 
+	GLint		modelViewProjectionMatrix;
+	GLint		modelMatrix;
+	GLint		textureMatrix;
+
+	GLint		windowCoords;
+	GLint		eyeOrigin;
+	GLint		localEyeOrigin;
 	GLint		localLightOrigin;
 	GLint		localViewOrigin;
 
@@ -1402,6 +1419,16 @@ typedef struct shaderProgram_s {
 
 	GLint		diffuseColor;
 	GLint		specularColor;
+
+	/* gl_... */
+	GLint		attr_TexCoord;
+	GLint		attr_Tangent;
+	GLint		attr_Bitangent;
+	GLint		attr_Normal;
+	GLint		attr_Vertex;
+	GLint		attr_Color;
+
+	GLint		nonPowerOfTwo;
 } shaderProgram_t;
 
 
@@ -1413,6 +1440,8 @@ void RB_GLSL_CreateDrawInteractions(const drawSurf_t *surf);
 void RB_GLSL_DrawInteraction(const drawInteraction_t *din);
 extern shaderProgram_t shadowShader;
 extern shaderProgram_t interactionShader;
+extern shaderProgram_t defaultShader;
+extern shaderProgram_t depthFillShader;
 
 
 /*
@@ -1454,9 +1483,11 @@ srfTriangles_t *R_CreateVertexProgramTurboShadowVolume(const idRenderEntityLocal
                 const srfTriangles_t *tri, const idRenderLightLocal *light,
                 srfCullInfo_t &cullInfo);
 
+/*
 srfTriangles_t *R_CreateTurboShadowVolume(const idRenderEntityLocal *ent,
                 const srfTriangles_t *tri, const idRenderLightLocal *light,
                 srfCullInfo_t &cullInfo);
+*/
 
 /*
 ============================================================

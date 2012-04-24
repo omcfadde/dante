@@ -42,7 +42,7 @@ typedef struct vertCache_s {
 	void			*virtMem;			// only one of vbo / virtMem will be set
 	bool			indexBuffer;		// holds indexes instead of vertexes
 
-	int				offset;
+	intptr_t			offset;
 	int				size;				// may be larger than the amount asked for, due
 	// to round up and minimum fragment sizes
 	int				tag;				// a tag of 0 is a free block
@@ -57,9 +57,6 @@ class idVertexCache
 	public:
 		void			Init();
 		void			Shutdown();
-
-		// just for gfxinfo printing
-		bool			IsFast();
 
 		// called when vertex programs are enabled or disabled, because
 		// the cached data is no longer valid

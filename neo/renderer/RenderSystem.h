@@ -71,13 +71,9 @@ typedef struct glconfig_s {
 	bool				ARBVertexBufferObjectAvailable;
 	bool				ARBVertexProgramAvailable;
 	bool				ARBFragmentProgramAvailable;
-	bool				twoSidedStencilAvailable;
 	bool				textureNonPowerOfTwoAvailable;
 	bool				depthBoundsTestAvailable;
 	bool				GLSLAvailable;
-
-	// ati r300
-	bool				atiTwoSidedStencilAvailable;
 
 	int					vidWidth, vidHeight;	// passed to R_BeginFrame
 

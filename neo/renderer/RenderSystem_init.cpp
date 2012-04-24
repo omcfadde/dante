@@ -54,11 +54,9 @@ idCVar r_useTripleTextureARB("r_useTripleTextureARB", "1", CVAR_RENDERER | CVAR_
 idCVar r_useSilRemap("r_useSilRemap", "1", CVAR_RENDERER | CVAR_BOOL, "consider verts with the same XYZ, but different ST the same for shadows");
 idCVar r_useNodeCommonChildren("r_useNodeCommonChildren", "1", CVAR_RENDERER | CVAR_BOOL, "stop pushing reference bounds early when possible");
 idCVar r_useShadowProjectedCull("r_useShadowProjectedCull", "1", CVAR_RENDERER | CVAR_BOOL, "discard triangles outside light volume before shadowing");
-idCVar r_useShadowVertexProgram("r_useShadowVertexProgram", "1", CVAR_RENDERER | CVAR_BOOL, "do the shadow projection in the vertex program on capable cards");
 idCVar r_useShadowSurfaceScissor("r_useShadowSurfaceScissor", "1", CVAR_RENDERER | CVAR_BOOL, "scissor shadows by the scissor rect of the interaction surfaces");
 idCVar r_useInteractionTable("r_useInteractionTable", "1", CVAR_RENDERER | CVAR_BOOL, "create a full entityDefs * lightDefs table to make finding interactions faster");
 idCVar r_useTurboShadow("r_useTurboShadow", "1", CVAR_RENDERER | CVAR_BOOL, "use the infinite projection with W technique for dynamic shadows");
-idCVar r_useTwoSidedStencil("r_useTwoSidedStencil", "1", CVAR_RENDERER | CVAR_BOOL, "do stencil shadows in one pass with different ops on each side");
 idCVar r_useDeferredTangents("r_useDeferredTangents", "1", CVAR_RENDERER | CVAR_BOOL, "defer tangents calculations after deform");
 idCVar r_useCachedDynamicModels("r_useCachedDynamicModels", "1", CVAR_RENDERER | CVAR_BOOL, "cache snapshots of dynamic models");
 
@@ -206,15 +204,10 @@ idCVar r_materialOverride("r_materialOverride", "", CVAR_RENDERER, "overrides al
 
 idCVar r_debugRenderToTexture("r_debugRenderToTexture", "0", CVAR_RENDERER | CVAR_INTEGER, "");
 
-// GL_EXT_stencil_two_side
-void (APIENTRY *qglActiveStencilFaceEXT)(GLenum face);
-
-// GL_ATI_separate_stencil
-void (APIENTRY *qglStencilOpSeparateATI)(GLenum face, GLenum sfail, GLenum dpfail, GLenum dppass);
-void (APIENTRY *qglStencilFuncSeparateATI)(GLenum frontfunc, GLenum backfunc, GLint ref, GLuint mask);
-
+#if !defined(GL_ES_VERSION_2_0)
 // GL_EXT_depth_bounds_test
-void (APIENTRY *qglDepthBoundsEXT)(GLclampd zmin, GLclampd zmax);
+void (GL_APIENTRY *qglDepthBoundsEXT)(GLclampd zmin, GLclampd zmax);
+#endif
 
 /*
 =================
@@ -241,15 +234,24 @@ R_CheckPortableExtensions
 static void R_CheckPortableExtensions(void)
 {
 	glConfig.glVersion = atof(glConfig.version_string);
+#if !defined(GL_ES_VERSION_2_0)
 	if (!glConfig.glVersion >= 3.0) {
 		common->Error(common->GetLanguageDict()->GetString("#str_06780"));
 	}
+#endif
 
 	// GL_ARB_multitexture
 	glConfig.multitextureAvailable = R_CheckExtension("GL_ARB_multitexture");
 
-	if (glConfig.multitextureAvailable) {
+#if !defined(GL_ES_VERSION_2_0)
+	if (glConfig.multitextureAvailable)
+#endif
+	{
+#if !defined(GL_ES_VERSION_2_0)
 		glGetIntegerv(GL_MAX_TEXTURE_UNITS_ARB, (GLint *)&glConfig.maxTextureUnits);
+#else
+		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, (GLint *)&glConfig.maxTextureUnits);
+#endif
 
 		if (glConfig.maxTextureUnits > MAX_MULTITEXTURE_UNITS) {
 			glConfig.maxTextureUnits = MAX_MULTITEXTURE_UNITS;
@@ -259,8 +261,13 @@ static void R_CheckPortableExtensions(void)
 			glConfig.multitextureAvailable = false;	// shouldn't ever happen
 		}
 
+#if !defined(GL_ES_VERSION_2_0)
 		glGetIntegerv(GL_MAX_TEXTURE_COORDS_ARB, (GLint *)&glConfig.maxTextureCoords);
 		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS_ARB, (GLint *)&glConfig.maxTextureImageUnits);
+#else
+		glGetIntegerv(GL_MAX_TEXTURE_SIZE, (GLint *)&glConfig.maxTextureCoords);
+		glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, (GLint *)&glConfig.maxTextureImageUnits);
+#endif
 	}
 
 	// GL_ARB_texture_env_combine
@@ -286,6 +293,7 @@ static void R_CheckPortableExtensions(void)
 		glConfig.textureCompressionAvailable = false;
 	}
 
+#if !defined(GL_ES_VERSION_2_0)
 	// GL_EXT_texture_filter_anisotropic
 	glConfig.anisotropicAvailable = R_CheckExtension("GL_EXT_texture_filter_anisotropic");
 
@@ -295,6 +303,7 @@ static void R_CheckPortableExtensions(void)
 	} else {
 		glConfig.maxTextureAnisotropy = 1;
 	}
+#endif
 
 	// GL_EXT_texture_lod_bias
 	// The actual extension is broken as specificed, storing the state in the texture unit instead
@@ -314,32 +323,8 @@ static void R_CheckPortableExtensions(void)
 	glConfig.texture3DAvailable = R_CheckExtension("GL_EXT_texture3D");
 
 	// EXT_stencil_wrap
-	// This isn't very important, but some pathological case might cause a clamp error and give a shadow bug.
-	// Nvidia also believes that future hardware may be able to run faster with this enabled to avoid the
-	// serialization of clamping.
-	if (R_CheckExtension("GL_EXT_stencil_wrap")) {
-		tr.stencilIncr = GL_INCR_WRAP_EXT;
-		tr.stencilDecr = GL_DECR_WRAP_EXT;
-	} else {
-		tr.stencilIncr = GL_INCR;
-		tr.stencilDecr = GL_DECR;
-	}
-
-	// GL_EXT_stencil_two_side
-	glConfig.twoSidedStencilAvailable = R_CheckExtension("GL_EXT_stencil_two_side");
-
-	if (glConfig.twoSidedStencilAvailable) {
-		qglActiveStencilFaceEXT = (void (APIENTRY *)(GLenum))GLimp_ExtensionPointer("glActiveStencilFaceEXT");
-	} else {
-		// GL_ATI_separate_stencil
-		glConfig.atiTwoSidedStencilAvailable = R_CheckExtension("GL_ATI_separate_stencil");
-
-		if (glConfig.atiTwoSidedStencilAvailable) {
-			qglStencilFuncSeparateATI  = (void (APIENTRY *)(GLenum, GLenum, GLint, GLuint))GLimp_ExtensionPointer("glStencilFuncSeparateATI");
-			qglStencilOpSeparateATI = (void (APIENTRY *)(GLenum, GLenum, GLenum, GLenum))GLimp_ExtensionPointer("glStencilOpSeparateATI");
-		}
-	}
-
+	tr.stencilIncr = GL_INCR_WRAP;
+	tr.stencilDecr = GL_DECR_WRAP;
 
 	// ARB_vertex_buffer_object
 	glConfig.ARBVertexBufferObjectAvailable = R_CheckExtension("GL_ARB_vertex_buffer_object");
@@ -357,12 +342,14 @@ static void R_CheckPortableExtensions(void)
 	// GL_ARB_shading_language_100
 	glConfig.GLSLAvailable = R_CheckExtension("GL_ARB_shading_language_100");
 
+#if !defined(GL_ES_VERSION_2_0)
 	// GL_EXT_depth_bounds_test
 	glConfig.depthBoundsTestAvailable = R_CheckExtension("EXT_depth_bounds_test");
 
 	if (glConfig.depthBoundsTestAvailable) {
-		qglDepthBoundsEXT = (void (APIENTRY *)(GLclampd, GLclampd))GLimp_ExtensionPointer("glDepthBoundsEXT");
+		qglDepthBoundsEXT = (void (GL_APIENTRY *)(GLclampd, GLclampd))GLimp_ExtensionPointer("glDepthBoundsEXT");
 	}
+#endif
 }
 
 
@@ -520,11 +507,15 @@ void R_InitOpenGL(void)
 
 	// parse our vertex and fragment programs, possibly disably support for
 	// one of the paths if there was an error
+#if !defined(GL_ES_VERSION_2_0)
 	R_ARB2_Init();
+#endif
 	R_GLSL_Init();
 
+#if !defined(GL_ES_VERSION_2_0)
 	cmdSystem->AddCommand("reloadARBprograms", R_ReloadARBPrograms_f, CMD_FL_RENDERER, "reloads ARB programs");
 	R_ReloadARBPrograms_f(idCmdArgs());
+#endif
 
 	cmdSystem->AddCommand("reloadGLSLprograms", R_ReloadGLSLPrograms_f, CMD_FL_RENDERER, "reloads GLSL programs");
 	R_ReloadGLSLPrograms_f(idCmdArgs());
@@ -572,12 +563,14 @@ void GL_CheckErrors(void)
 			case GL_INVALID_OPERATION:
 				strcpy(s, "GL_INVALID_OPERATION");
 				break;
+#if !defined(GL_ES_VERSION_2_0)
 			case GL_STACK_OVERFLOW:
 				strcpy(s, "GL_STACK_OVERFLOW");
 				break;
 			case GL_STACK_UNDERFLOW:
 				strcpy(s, "GL_STACK_UNDERFLOW");
 				break;
+#endif
 			case GL_OUT_OF_MEMORY:
 				strcpy(s, "GL_OUT_OF_MEMORY");
 				break;
@@ -1038,7 +1031,9 @@ void R_ReadTiledPixels(int width, int height, byte *buffer, renderView_t *ref = 
 				h = height - yo;
 			}
 
+#if !defined(GL_ES_VERSION_2_0)
 			glReadBuffer(GL_FRONT);
+#endif
 			glReadPixels(0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, temp);
 
 			int	row = (w * 3 + 3) & ~3;		// OpenGL pads to dword boundaries
@@ -1289,7 +1284,7 @@ void R_StencilShot(void)
 
 	byte *byteBuffer = (byte *)Mem_Alloc(pix);
 
-	glReadPixels(0, 0, width, height, GL_STENCIL_INDEX , GL_UNSIGNED_BYTE, byteBuffer);
+	glReadPixels(0, 0, width, height, GL_STENCIL_INDEX4_OES , GL_UNSIGNED_BYTE, byteBuffer);
 
 	for (i = 0 ; i < pix ; i++) {
 		buffer[18+i*3] =
@@ -1702,22 +1697,6 @@ static void GfxInfo_f(const idCmdArgs &args)
 	} else {
 		common->Printf("glFinish not forced\n");
 	}
-
-	bool tss = glConfig.twoSidedStencilAvailable || glConfig.atiTwoSidedStencilAvailable;
-
-	if (!r_useTwoSidedStencil.GetBool() && tss) {
-		common->Printf("Two sided stencil available but disabled\n");
-	} else if (!tss) {
-		common->Printf("Two sided stencil not available\n");
-	} else if (tss) {
-		common->Printf("Using two sided stencil\n");
-	}
-
-	if (vertexCache.IsFast()) {
-		common->Printf("Vertex cache is fast\n");
-	} else {
-		common->Printf("Vertex cache is SLOW\n");
-	}
 }
 
 /*
@@ -1913,7 +1892,9 @@ R_InitCommands
 */
 void R_InitCommands(void)
 {
+#if !defined(GL_ES_VERSION_2_0)
 	cmdSystem->AddCommand("MakeMegaTexture", idMegaTexture::MakeMegaTexture_f, CMD_FL_RENDERER|CMD_FL_CHEAT, "processes giant images");
+#endif
 	cmdSystem->AddCommand("sizeUp", R_SizeUp_f, CMD_FL_RENDERER, "makes the rendered view larger");
 	cmdSystem->AddCommand("sizeDown", R_SizeDown_f, CMD_FL_RENDERER, "makes the rendered view smaller");
 	cmdSystem->AddCommand("reloadGuis", R_ReloadGuis_f, CMD_FL_RENDERER, "reloads guis");
