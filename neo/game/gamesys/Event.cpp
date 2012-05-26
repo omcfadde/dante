@@ -96,15 +96,15 @@ idEventDef::idEventDef(const char *command, const char *formatspec, char returnT
 		switch (formatspec[ i ]) {
 			case D_EVENT_FLOAT :
 				bits |= 1 << i;
-				argsize += sizeof(float);
+				argsize += sizeof(intptr_t);
 				break;
 
 			case D_EVENT_INTEGER :
-				argsize += sizeof(int);
+				argsize += sizeof(intptr_t);
 				break;
 
 			case D_EVENT_VECTOR :
-				argsize += sizeof(idVec3);
+				argsize += round_up(sizeof(idVec3), sizeof(intptr_t));
 				break;
 
 			case D_EVENT_STRING :
@@ -355,7 +355,7 @@ idEvent *idEvent::Alloc(const idEventDef *evdef, int numargs, va_list args)
 idEvent::CopyArgs
 ================
 */
-void idEvent::CopyArgs(const idEventDef *evdef, int numargs, va_list args, int data[ D_EVENT_MAXARGS ])
+void idEvent::CopyArgs(const idEventDef *evdef, int numargs, va_list args, intptr_t data[ D_EVENT_MAXARGS ])
 {
 	int			i;
 	const char	*format;
@@ -495,7 +495,7 @@ void idEvent::ServiceEvents(void)
 {
 	idEvent		*event;
 	int			num;
-	int			args[ D_EVENT_MAXARGS ];
+	intptr_t		args[ D_EVENT_MAXARGS ];
 	int			offset;
 	int			i;
 	int			numargs;
@@ -664,6 +664,7 @@ void idEvent::Save(idSaveGame *savefile)
 	byte *dataPtr;
 	bool validTrace;
 	const char	*format;
+	idStr s;
 
 	savefile->WriteInt(EventQueue.Num());
 
@@ -694,6 +695,12 @@ void idEvent::Save(idSaveGame *savefile)
 				case D_EVENT_VECTOR :
 					savefile->WriteVec3(*reinterpret_cast<idVec3 *>(dataPtr));
 					size += sizeof(idVec3);
+					break;
+				case D_EVENT_STRING :
+					s.Clear();
+					s.Append(reinterpret_cast<char *>(dataPtr));
+					savefile->WriteString(s);
+					size += MAX_STRING_LEN;
 					break;
 				case D_EVENT_TRACE :
 					validTrace = *reinterpret_cast<bool *>(dataPtr);
@@ -736,6 +743,7 @@ void idEvent::Restore(idRestoreGame *savefile)
 	byte *dataPtr;
 	idEvent	*event;
 	const char	*format;
+	idStr s;
 
 	savefile->ReadInt(num);
 
@@ -797,6 +805,11 @@ void idEvent::Restore(idRestoreGame *savefile)
 					case D_EVENT_VECTOR :
 						savefile->ReadVec3(*reinterpret_cast<idVec3 *>(dataPtr));
 						size += sizeof(idVec3);
+						break;
+					case D_EVENT_STRING :
+						savefile->ReadString(s);
+						idStr::Copynz(reinterpret_cast<char *>(dataPtr), s, MAX_STRING_LEN);
+						size += MAX_STRING_LEN;
 						break;
 					case D_EVENT_TRACE :
 						savefile->ReadBool(*reinterpret_cast<bool *>(dataPtr));
@@ -918,7 +931,7 @@ void CreateEventCallbackHandler(void)
 					string1 += "const float";
 					string2 += va("*( float * )&data[ %d ]", k);
 				} else {
-					string1 += "const int";
+					string1 += "const intptr_t";
 					string2 += va("data[ %d ]", k);
 				}
 

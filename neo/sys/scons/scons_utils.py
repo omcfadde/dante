@@ -2,6 +2,20 @@
 import sys, os, string, time, commands, re, pickle, StringIO, popen2, commands, pdb, zipfile, tempfile
 import SCons
 
+# system detection -------------------------------
+
+# CPU type
+cpu = commands.getoutput('uname -m')
+exp = re.compile('i?86')
+if exp.match(cpu):
+	cpu = 'x86'
+else:
+	if (commands.getoutput('uname -p') == 'powerpc'):
+		cpu = 'ppc'
+g_os = 'Linux'
+
+# end system detection ---------------------------
+
 # need an Environment and a matching buffered_spawn API .. encapsulate
 class idBuffering:
 	silent = False
@@ -141,10 +155,10 @@ class idGamePaks( idSetupBase ):
 	def BuildGamePak( self, target = None, source = None, env = None ):
 		# NOTE: ew should have done with zipfile module
 		temp_dir = tempfile.mkdtemp( prefix = 'gamepak' )
-		self.SimpleCommand( 'cp %s %s' % ( source[0].abspath, os.path.join( temp_dir, 'gamex86.so' ) ) )
-		self.SimpleCommand( 'strip %s' % os.path.join( temp_dir, 'gamex86.so' ) )
+		self.SimpleCommand( 'cp %s %s' % ( source[0].abspath, os.path.join( temp_dir, 'game%s.so' % ( cpu ) ) ) )
+		#self.SimpleCommand( 'strip %s' % os.path.join( temp_dir, 'game%s.so' % ( cpu ) ) )
 		self.SimpleCommand( 'echo 2 > %s' % ( os.path.join( temp_dir, 'binary.conf' ) ) )
-		self.SimpleCommand( 'cd %s ; zip %s gamex86.so binary.conf' % ( temp_dir, os.path.join( temp_dir, target[0].abspath ) ) )
+		self.SimpleCommand( 'cd %s ; zip %s game%s.so binary.conf' % ( temp_dir, os.path.join( temp_dir, target[0].abspath ), cpu ) )
 		self.SimpleCommand( 'rm -r %s' % temp_dir )
 		return None
 

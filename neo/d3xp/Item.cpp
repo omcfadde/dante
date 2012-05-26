@@ -310,7 +310,7 @@ void idItem::Spawn(void)
 			gameLocal.Error("Item couldn't find owner '%s'", giveTo.c_str());
 		}
 
-		PostEventMS(&EV_Touch, 0, ent, NULL);
+		PostEventMS(&EV_Touch, 0, ent, 0);
 	}
 
 #ifdef CTF

@@ -54,31 +54,31 @@ class idCinematicLocal : public idCinematic
 		virtual void			ResetTime(int time);
 
 	private:
-		unsigned int			mcomp[256];
+		intptr_t			mcomp[256];
 		byte 					**qStatus[2];
 		idStr					fileName;
 		int						CIN_WIDTH, CIN_HEIGHT;
 		idFile 				*iFile;
 		cinStatus_t				status;
-		long					tfps;
-		long					RoQPlayed;
-		long					ROQSize;
+		int					tfps;
+		int					RoQPlayed;
+		int					ROQSize;
 		unsigned int			RoQFrameSize;
-		long					onQuad;
-		long					numQuads;
-		long					samplesPerLine;
+		int					onQuad;
+		int					numQuads;
+		int					samplesPerLine;
 		unsigned int			roq_id;
-		long					screenDelta;
+		int					screenDelta;
 		byte 					*buf;
-		long					samplesPerPixel;				// defaults to 2
+		int					samplesPerPixel;				// defaults to 2
 		unsigned int			xsize, ysize, maxsize, minsize;
-		long					normalBuffer0;
-		long					roq_flags;
-		long					roqF0;
-		long					roqF1;
-		long					t[2];
-		long					roqFPS;
-		long					drawX, drawY;
+		int					normalBuffer0;
+		int					roq_flags;
+		int					roqF0;
+		int					roqF1;
+		int					t[2];
+		int					roqFPS;
+		int					drawX, drawY;
 
 		int						animationLength;
 		int						startTime;
@@ -103,14 +103,14 @@ class idCinematicLocal : public idCinematic
 		void					blit4_32(byte *src, byte *dst, int spl);
 		void					blit2_32(byte *src, byte *dst, int spl);
 
-		unsigned short			yuv_to_rgb(long y, long u, long v);
-		unsigned int			yuv_to_rgb24(long y, long u, long v);
+		unsigned short			yuv_to_rgb(int y, int u, int v);
+		unsigned int			yuv_to_rgb24(int y, int u, int v);
 
 		void					decodeCodeBook(byte *input, unsigned short roq_flags);
-		void					recurseQuad(long startX, long startY, long quadSize, long xOff, long yOff);
-		void					setupQuad(long xOff, long yOff);
+		void					recurseQuad(int startX, int startY, int quadSize, int xOff, int yOff);
+		void					setupQuad(int xOff, int yOff);
 		void					readQuadInfo(byte *qData);
-		void					RoQPrepMcomp(long xoff, long yoff);
+		void					RoQPrepMcomp(int xoff, int yoff);
 		void					RoQReset();
 };
 
@@ -131,11 +131,11 @@ const int ZA_SOUND_MONO			= 0x1020;
 const int ZA_SOUND_STEREO		= 0x1021;
 
 // temporary buffers used by all cinematics
-static long				ROQ_YY_tab[256];
-static long				ROQ_UB_tab[256];
-static long				ROQ_UG_tab[256];
-static long				ROQ_VG_tab[256];
-static long				ROQ_VR_tab[256];
+static int				ROQ_YY_tab[256];
+static int				ROQ_UB_tab[256];
+static int				ROQ_UG_tab[256];
+static int				ROQ_VG_tab[256];
+static int				ROQ_VR_tab[256];
 static byte 			*file = NULL;
 static unsigned short 	*vq2 = NULL;
 static unsigned short 	*vq4 = NULL;
@@ -153,7 +153,7 @@ idCinematicLocal::InitCinematic
 void idCinematic::InitCinematic(void)
 {
 	float t_ub,t_vr,t_ug,t_vg;
-	long i;
+	int i;
 
 	// generate YUV tables
 	t_ub = (1.77200f/2.0f) * (float)(1<<6) + 0.5f;
@@ -164,11 +164,11 @@ void idCinematic::InitCinematic(void)
 	for (i = 0; i < 256; i++) {
 		float x = (float)(2 * i - 255);
 
-		ROQ_UB_tab[i] = (long)((t_ub * x) + (1<<5));
-		ROQ_VR_tab[i] = (long)((t_vr * x) + (1<<5));
-		ROQ_UG_tab[i] = (long)((-t_ug * x));
-		ROQ_VG_tab[i] = (long)((-t_vg * x) + (1<<5));
-		ROQ_YY_tab[i] = (long)((i << 6) | (i >> 2));
+		ROQ_UB_tab[i] = (int)((t_ub * x) + (1<<5));
+		ROQ_VR_tab[i] = (int)((t_vr * x) + (1<<5));
+		ROQ_UG_tab[i] = (int)((-t_ug * x));
+		ROQ_VG_tab[i] = (int)((-t_vg * x) + (1<<5));
+		ROQ_YY_tab[i] = (int)((i << 6) | (i >> 2));
 	}
 
 	file = (byte *)Mem_Alloc(65536);
@@ -1042,9 +1042,9 @@ void idCinematicLocal::blitVQQuad32fs(byte **status, unsigned char *data)
 idCinematicLocal::yuv_to_rgb
 ==============
 */
-unsigned short idCinematicLocal::yuv_to_rgb(long y, long u, long v)
+unsigned short idCinematicLocal::yuv_to_rgb(int y, int u, int v)
 {
-	long r,g,b,YY = (long)(ROQ_YY_tab[(y)]);
+	int r,g,b,YY = (int)(ROQ_YY_tab[(y)]);
 
 	r = (YY + ROQ_VR_tab[v]) >> 9;
 	g = (YY + ROQ_UG_tab[u] + ROQ_VG_tab[v]) >> 8;
@@ -1070,9 +1070,9 @@ unsigned short idCinematicLocal::yuv_to_rgb(long y, long u, long v)
 idCinematicLocal::yuv_to_rgb24
 ==============
 */
-unsigned int idCinematicLocal::yuv_to_rgb24(long y, long u, long v)
+unsigned int idCinematicLocal::yuv_to_rgb24(int y, int u, int v)
 {
-	long r,g,b,YY = (long)(ROQ_YY_tab[(y)]);
+	int r,g,b,YY = (int)(ROQ_YY_tab[(y)]);
 
 	r = (YY + ROQ_VR_tab[v]) >> 6;
 	g = (YY + ROQ_UG_tab[u] + ROQ_VG_tab[v]) >> 6;
@@ -1100,9 +1100,9 @@ idCinematicLocal::decodeCodeBook
 */
 void idCinematicLocal::decodeCodeBook(byte *input, unsigned short roq_flags)
 {
-	long	i, j, two, four;
+	int	i, j, two, four;
 	unsigned short	*aptr, *bptr, *cptr, *dptr;
-	long	y0,y1,y2,y3,cr,cb;
+	int	y0,y1,y2,y3,cr,cb;
 	unsigned int *iaptr, *ibptr, *icptr, *idptr;
 
 	if (!roq_flags) {
@@ -1126,12 +1126,12 @@ void idCinematicLocal::decodeCodeBook(byte *input, unsigned short roq_flags)
 //
 			if (samplesPerPixel==2) {
 				for (i=0; i<two; i++) {
-					y0 = (long)*input++;
-					y1 = (long)*input++;
-					y2 = (long)*input++;
-					y3 = (long)*input++;
-					cr = (long)*input++;
-					cb = (long)*input++;
+					y0 = (int)*input++;
+					y1 = (int)*input++;
+					y2 = (int)*input++;
+					y3 = (int)*input++;
+					cr = (int)*input++;
+					cb = (int)*input++;
 					*bptr++ = yuv_to_rgb(y0, cr, cb);
 					*bptr++ = yuv_to_rgb(y1, cr, cb);
 					*bptr++ = yuv_to_rgb(y2, cr, cb);
@@ -1152,12 +1152,12 @@ void idCinematicLocal::decodeCodeBook(byte *input, unsigned short roq_flags)
 				ibptr = (unsigned int *)bptr;
 
 				for (i=0; i<two; i++) {
-					y0 = (long)*input++;
-					y1 = (long)*input++;
-					y2 = (long)*input++;
-					y3 = (long)*input++;
-					cr = (long)*input++;
-					cb = (long)*input++;
+					y0 = (int)*input++;
+					y1 = (int)*input++;
+					y2 = (int)*input++;
+					y3 = (int)*input++;
+					cr = (int)*input++;
+					cb = (int)*input++;
 					*ibptr++ = yuv_to_rgb24(y0, cr, cb);
 					*ibptr++ = yuv_to_rgb24(y1, cr, cb);
 					*ibptr++ = yuv_to_rgb24(y2, cr, cb);
@@ -1181,12 +1181,12 @@ void idCinematicLocal::decodeCodeBook(byte *input, unsigned short roq_flags)
 //
 			if (samplesPerPixel==2) {
 				for (i=0; i<two; i++) {
-					y0 = (long)*input++;
-					y1 = (long)*input++;
-					y2 = (long)*input++;
-					y3 = (long)*input++;
-					cr = (long)*input++;
-					cb = (long)*input++;
+					y0 = (int)*input++;
+					y1 = (int)*input++;
+					y2 = (int)*input++;
+					y3 = (int)*input++;
+					cr = (int)*input++;
+					cb = (int)*input++;
 					*bptr++ = yuv_to_rgb(y0, cr, cb);
 					*bptr++ = yuv_to_rgb(y1, cr, cb);
 					*bptr++ = yuv_to_rgb(((y0*3)+y2)/4, cr, cb);
@@ -1213,12 +1213,12 @@ void idCinematicLocal::decodeCodeBook(byte *input, unsigned short roq_flags)
 				ibptr = (unsigned int *)bptr;
 
 				for (i=0; i<two; i++) {
-					y0 = (long)*input++;
-					y1 = (long)*input++;
-					y2 = (long)*input++;
-					y3 = (long)*input++;
-					cr = (long)*input++;
-					cb = (long)*input++;
+					y0 = (int)*input++;
+					y1 = (int)*input++;
+					y2 = (int)*input++;
+					y3 = (int)*input++;
+					cr = (int)*input++;
+					cb = (int)*input++;
 					*ibptr++ = yuv_to_rgb24(y0, cr, cb);
 					*ibptr++ = yuv_to_rgb24(y1, cr, cb);
 					*ibptr++ = yuv_to_rgb24(((y0*3)+y2)/4, cr, cb);
@@ -1249,12 +1249,12 @@ void idCinematicLocal::decodeCodeBook(byte *input, unsigned short roq_flags)
 //
 		if (samplesPerPixel==2) {
 			for (i=0; i<two; i++) {
-				y0 = (long)*input;
+				y0 = (int)*input;
 				input+=2;
-				y2 = (long)*input;
+				y2 = (int)*input;
 				input+=2;
-				cr = (long)*input++;
-				cb = (long)*input++;
+				cr = (int)*input++;
+				cb = (int)*input++;
 				*bptr++ = yuv_to_rgb(y0, cr, cb);
 				*bptr++ = yuv_to_rgb(y2, cr, cb);
 			}
@@ -1274,12 +1274,12 @@ void idCinematicLocal::decodeCodeBook(byte *input, unsigned short roq_flags)
 			ibptr = (unsigned int *) bptr;
 
 			for (i=0; i<two; i++) {
-				y0 = (long)*input;
+				y0 = (int)*input;
 				input+=2;
-				y2 = (long)*input;
+				y2 = (int)*input;
 				input+=2;
-				cr = (long)*input++;
-				cb = (long)*input++;
+				cr = (int)*input++;
+				cb = (int)*input++;
 				*ibptr++ = yuv_to_rgb24(y0, cr, cb);
 				*ibptr++ = yuv_to_rgb24(y2, cr, cb);
 			}
@@ -1304,11 +1304,11 @@ void idCinematicLocal::decodeCodeBook(byte *input, unsigned short roq_flags)
 idCinematicLocal::recurseQuad
 ==============
 */
-void idCinematicLocal::recurseQuad(long startX, long startY, long quadSize, long xOff, long yOff)
+void idCinematicLocal::recurseQuad(int startX, int startY, int quadSize, int xOff, int yOff)
 {
 	byte *scroff;
-	long bigx, bigy, lowx, lowy, useY;
-	long offset;
+	int bigx, bigy, lowx, lowy, useY;
+	int offset;
 
 	offset = screenDelta;
 
@@ -1342,9 +1342,9 @@ void idCinematicLocal::recurseQuad(long startX, long startY, long quadSize, long
 idCinematicLocal::setupQuad
 ==============
 */
-void idCinematicLocal::setupQuad(long xOff, long yOff)
+void idCinematicLocal::setupQuad(int xOff, int yOff)
 {
-	long numQuadCels, i,x,y;
+	int numQuadCels, i,x,y;
 	byte *temp;
 
 	numQuadCels  = (CIN_WIDTH*CIN_HEIGHT) / (16);
@@ -1357,8 +1357,8 @@ void idCinematicLocal::setupQuad(long xOff, long yOff)
 
 	onQuad = 0;
 
-	for (y=0; y<(long)ysize; y+=16)
-		for (x=0; x<(long)xsize; x+=16)
+	for (y=0; y<(int)ysize; y+=16)
+		for (x=0; x<(int)xsize; x+=16)
 			recurseQuad(x, y, 16, xOff, yOff);
 
 	temp = NULL;
@@ -1394,8 +1394,8 @@ void idCinematicLocal::readQuadInfo(byte *qData)
 	half = false;
 	smootheddouble = false;
 
-	t[0] = (0 - (unsigned int)image)+(unsigned int)image+screenDelta;
-	t[1] = (0 - ((unsigned int)image + screenDelta))+(unsigned int)image;
+	t[0] = (0 - (intptr_t)image)+(intptr_t)image+screenDelta;
+	t[1] = (0 - ((intptr_t)image + screenDelta))+(intptr_t)image;
 
 	drawX = CIN_WIDTH;
 	drawY = CIN_HEIGHT;
@@ -1406,9 +1406,9 @@ void idCinematicLocal::readQuadInfo(byte *qData)
 idCinematicLocal::RoQPrepMcomp
 ==============
 */
-void idCinematicLocal::RoQPrepMcomp(long xoff, long yoff)
+void idCinematicLocal::RoQPrepMcomp(int xoff, int yoff)
 {
-	long i, j, x, y, temp, temp2;
+	int i, j, x, y, temp, temp2;
 
 	i=samplesPerLine;
 	j=samplesPerPixel;

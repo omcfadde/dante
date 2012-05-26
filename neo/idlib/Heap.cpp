@@ -43,9 +43,9 @@ If you have questions concerning this license or the applicable additional terms
 //
 //===============================================================
 
-#define SMALL_HEADER_SIZE		( (int) ( sizeof( byte ) + sizeof( byte ) ) )
-#define MEDIUM_HEADER_SIZE		( (int) ( sizeof( mediumHeapEntry_s ) + sizeof( byte ) ) )
-#define LARGE_HEADER_SIZE		( (int) ( sizeof( dword * ) + sizeof( byte ) ) )
+#define SMALL_HEADER_SIZE		( (intptr_t) ( sizeof( byte ) + sizeof( byte ) ) )
+#define MEDIUM_HEADER_SIZE		( (intptr_t) ( sizeof( mediumHeapEntry_s ) + sizeof( byte ) ) )
+#define LARGE_HEADER_SIZE		( (intptr_t) ( sizeof( intptr_t * ) + sizeof( byte ) ) )
 
 #define ALIGN_SIZE( bytes )		( ( (bytes) + ALIGN - 1 ) & ~(ALIGN - 1) )
 #define SMALL_ALIGN( bytes )	( ALIGN_SIZE( (bytes) + SMALL_HEADER_SIZE ) - SMALL_HEADER_SIZE )
@@ -344,14 +344,14 @@ void *idHeap::Allocate16(const dword bytes)
 {
 	byte *ptr, *alignedPtr;
 
-	ptr = (byte *) malloc(bytes + 16 + 4);
+	ptr = (byte *) malloc(bytes + 16 + sizeof(intptr_t));
 
 	if (!ptr) {
 		if (defragBlock) {
 			idLib::common->Printf("Freeing defragBlock on alloc of %i.\n", bytes);
 			free(defragBlock);
 			defragBlock = NULL;
-			ptr = (byte *) malloc(bytes + 16 + 4);
+			ptr = (byte *) malloc(bytes + 16 + sizeof(intptr_t));
 			AllocDefragBlock();
 		}
 
@@ -360,13 +360,13 @@ void *idHeap::Allocate16(const dword bytes)
 		}
 	}
 
-	alignedPtr = (byte *)(((int) ptr) + 15 & ~15);
+	alignedPtr = (byte *)((((intptr_t) ptr) + 15) & ~15);
 
-	if (alignedPtr - ptr < 4) {
+	if (alignedPtr - ptr < sizeof(intptr_t)) {
 		alignedPtr += 16;
 	}
 
-	*((int *)(alignedPtr - 4)) = (int) ptr;
+	*((intptr_t *)(alignedPtr - sizeof(intptr_t))) = (intptr_t) ptr;
 	return (void *) alignedPtr;
 }
 
@@ -377,7 +377,7 @@ idHeap::Free16
 */
 void idHeap::Free16(void *p)
 {
-	free((void *) *((int *)(((byte *) p) - 4)));
+	free((void *) *((intptr_t *)(((byte *) p) - sizeof(intptr_t))));
 }
 
 /*
@@ -413,7 +413,7 @@ dword idHeap::Msize(void *p)
 			return ((mediumHeapEntry_s *)(((byte *)(p)) - ALIGN_SIZE(MEDIUM_HEADER_SIZE)))->size - ALIGN_SIZE(MEDIUM_HEADER_SIZE);
 		}
 		case LARGE_ALLOC: {
-			return ((idHeap::page_s *)(*((dword *)(((byte *)p) - ALIGN_SIZE(LARGE_HEADER_SIZE)))))->dataSize - ALIGN_SIZE(LARGE_HEADER_SIZE);
+			return ((idHeap::page_s *)(*((intptr_t *)(((byte *)p) - ALIGN_SIZE(LARGE_HEADER_SIZE)))))->dataSize - ALIGN_SIZE(LARGE_HEADER_SIZE);
 		}
 		default: {
 			idLib::common->FatalError("idHeap::Msize: invalid memory block (%s)", idLib::sys->GetCallStackCurStr(4));
@@ -528,7 +528,7 @@ idHeap::page_s *idHeap::AllocatePage(dword bytes)
 			}
 		}
 
-		p->data		= (void *) ALIGN_SIZE((int)((byte *)(p)) + sizeof(idHeap::page_s));
+		p->data		= (void *) ALIGN_SIZE((intptr_t)((byte *)(p)) + sizeof(idHeap::page_s));
 		p->dataSize	= size - sizeof(idHeap::page_s);
 		p->firstFree = NULL;
 		p->largestFree = 0;
@@ -581,9 +581,9 @@ idHeap::SmallAllocate
 */
 void *idHeap::SmallAllocate(dword bytes)
 {
-	// we need the at least sizeof( dword ) bytes for the free list
-	if (bytes < sizeof(dword)) {
-		bytes = sizeof(dword);
+	// we need the at least sizeof( intptr_t ) bytes for the free list
+	if (bytes < sizeof(intptr_t)) {
+		bytes = sizeof(intptr_t);
 	}
 
 	// increase the number of bytes if necessary to make sure the next small allocation is aligned
@@ -592,13 +592,13 @@ void *idHeap::SmallAllocate(dword bytes)
 	byte *smallBlock = (byte *)(smallFirstFree[bytes / ALIGN]);
 
 	if (smallBlock) {
-		dword *link = (dword *)(smallBlock + SMALL_HEADER_SIZE);
+		intptr_t *link = (intptr_t *)(smallBlock + SMALL_HEADER_SIZE);
 		smallBlock[1] = SMALL_ALLOC;					// allocation identifier
 		smallFirstFree[bytes / ALIGN] = (void *)(*link);
 		return (void *)(link);
 	}
 
-	dword bytesLeft = (long)(pageSize) - smallCurPageOffset;
+	dword bytesLeft = (intptr_t)(pageSize) - smallCurPageOffset;
 
 	// if we need to allocate a new page
 	if (bytes >= bytesLeft) {
@@ -635,7 +635,7 @@ void idHeap::SmallFree(void *ptr)
 	((byte *)(ptr))[-1] = INVALID_ALLOC;
 
 	byte *d = ((byte *)ptr) - SMALL_HEADER_SIZE;
-	dword *dt = (dword *)ptr;
+	intptr_t *dt = (intptr_t *)ptr;
 	// index into the table with free small memory blocks
 	dword ix = *d;
 
@@ -644,7 +644,7 @@ void idHeap::SmallFree(void *ptr)
 		idLib::common->FatalError("SmallFree: invalid memory block");
 	}
 
-	*dt = (dword)smallFirstFree[ix];	// write next index
+	*dt = (intptr_t)smallFirstFree[ix];	// write next index
 	smallFirstFree[ix] = (void *)d;		// link
 }
 
@@ -991,8 +991,8 @@ void *idHeap::LargeAllocate(dword bytes)
 	}
 
 	byte 	*d	= (byte *)(p->data) + ALIGN_SIZE(LARGE_HEADER_SIZE);
-	dword 	*dw	= (dword *)(d - ALIGN_SIZE(LARGE_HEADER_SIZE));
-	dw[0]		= (dword)p;				// write pointer back to page table
+	intptr_t *dw	= (intptr_t *)(d - ALIGN_SIZE(LARGE_HEADER_SIZE));
+	dw[0]		= (intptr_t)p;				// write pointer back to page table
 	d[-1]		= LARGE_ALLOC;			// allocation identifier
 
 	// link to 'large used page list'
@@ -1023,7 +1023,7 @@ void idHeap::LargeFree(void *ptr)
 	((byte *)(ptr))[-1] = INVALID_ALLOC;
 
 	// get page pointer
-	pg = (idHeap::page_s *)(*((dword *)(((byte *)ptr) - ALIGN_SIZE(LARGE_HEADER_SIZE))));
+	pg = (idHeap::page_s *)(*((intptr_t *)(((byte *)ptr) - ALIGN_SIZE(LARGE_HEADER_SIZE))));
 
 	// unlink from doubly linked list
 	if (pg->prev) {
@@ -1149,7 +1149,7 @@ void *Mem_Alloc(const int size)
 
 	if (!mem_heap) {
 #ifdef CRASH_ON_STATIC_ALLOCATION
-		*((int *)0x0) = 1;
+		*((intptr_t *)0x0) = 1;
 #endif
 		return malloc(size);
 	}
@@ -1172,7 +1172,7 @@ void Mem_Free(void *ptr)
 
 	if (!mem_heap) {
 #ifdef CRASH_ON_STATIC_ALLOCATION
-		*((int *)0x0) = 1;
+		*((intptr_t *)0x0) = 1;
 #endif
 		free(ptr);
 		return;
@@ -1195,14 +1195,14 @@ void *Mem_Alloc16(const int size)
 
 	if (!mem_heap) {
 #ifdef CRASH_ON_STATIC_ALLOCATION
-		*((int *)0x0) = 1;
+		*((intptr_t *)0x0) = 1;
 #endif
 		return malloc(size);
 	}
 
 	void *mem = mem_heap->Allocate16(size);
 	// make sure the memory is 16 byte aligned
-	assert((((int)mem) & 15) == 0);
+	assert((((intptr_t)mem) & 15) == 0);
 	return mem;
 }
 
@@ -1219,14 +1219,14 @@ void Mem_Free16(void *ptr)
 
 	if (!mem_heap) {
 #ifdef CRASH_ON_STATIC_ALLOCATION
-		*((int *)0x0) = 1;
+		*((intptr_t *)0x0) = 1;
 #endif
 		free(ptr);
 		return;
 	}
 
 	// make sure the memory is 16 byte aligned
-	assert((((int)ptr) & 15) == 0);
+	assert((((intptr_t)ptr) & 15) == 0);
 	mem_heap->Free16(ptr);
 }
 
@@ -1707,7 +1707,7 @@ void *Mem_AllocDebugMemory(const int size, const char *fileName, const int lineN
 
 	if (!mem_heap) {
 #ifdef CRASH_ON_STATIC_ALLOCATION
-		*((int *)0x0) = 1;
+		*((intptr_t *)0x0) = 1;
 #endif
 		// NOTE: set a breakpoint here to find memory allocations before mem_heap is initialized
 		return malloc(size);
@@ -1754,7 +1754,7 @@ void Mem_FreeDebugMemory(void *p, const char *fileName, const int lineNumber, co
 
 	if (!mem_heap) {
 #ifdef CRASH_ON_STATIC_ALLOCATION
-		*((int *)0x0) = 1;
+		*((intptr_t *)0x0) = 1;
 #endif
 		// NOTE: set a breakpoint here to find memory being freed before mem_heap is initialized
 		free(p);
