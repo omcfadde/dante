@@ -59,7 +59,7 @@ void Sys_InitScanTable(void)
 Sys_AsyncThread
 =================
 */
-void Sys_AsyncThread(void)
+void *Sys_AsyncThread(void *)
 {
 	int now;
 	int next;
@@ -119,6 +119,8 @@ void Sys_AsyncThread(void)
 		// thread exit
 		pthread_testcancel();
 	}
+
+	return NULL;
 }
 
 /*

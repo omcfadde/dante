@@ -184,7 +184,7 @@ void Sys_CreateThread(xthread_t function, void *parms, xthreadPriority priority,
 		common->Error("ERROR: pthread_attr_setdetachstate %s failed\n", name);
 	}
 
-	if (pthread_create((pthread_t *)&info.threadHandle, &attr, (pthread_function_t)function, parms) != 0) {
+	if (pthread_create((pthread_t *)&info.threadHandle, &attr, function, parms) != 0) {
 		common->Error("ERROR: pthread_create %s failed\n", name);
 	}
 
@@ -232,8 +232,7 @@ void Sys_DestroyThread(xthreadInfo &info)
 
 			g_threads[ j-1 ] = NULL;
 			g_thread_count--;
-			Sys_LeaveCriticalSection();
-			return;
+			break;
 		}
 	}
 
@@ -286,7 +285,7 @@ Posix_StartAsyncThread
 void Posix_StartAsyncThread()
 {
 	if (asyncThread.threadHandle == 0) {
-		Sys_CreateThread((xthread_t)Sys_AsyncThread, NULL, THREAD_NORMAL, asyncThread, "Async", g_threads, &g_thread_count);
+		Sys_CreateThread(Sys_AsyncThread, NULL, THREAD_NORMAL, asyncThread, "Async", g_threads, &g_thread_count);
 	} else {
 		common->Printf("Async thread already running\n");
 	}
