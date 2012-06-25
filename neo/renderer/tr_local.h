@@ -1049,8 +1049,6 @@ void R_SetColorMappings(void);
 void R_ScreenShot_f(const idCmdArgs &args);
 void R_StencilShot(void);
 
-bool R_CheckExtension(char *name);
-
 
 /*
 ====================================================================

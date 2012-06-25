@@ -1806,7 +1806,7 @@ idProgram::DisassembleStatement
 */
 void idProgram::DisassembleStatement(idFile *file, int instructionPointer) const
 {
-	opcode_t			*op;
+	const opcode_t			*op;
 	const statement_t	*statement;
 
 	statement = &statements[ instructionPointer ];

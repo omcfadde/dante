@@ -4742,7 +4742,7 @@ idMultiplayerGame::GetTeamFlag
 */
 void idMultiplayerGame::FindTeamFlags(void)
 {
-	char *flagDefs[2] = {
+	const char *flagDefs[2] = {
 		"team_CTF_redflag",
 		"team_CTF_blueflag"
 	};
