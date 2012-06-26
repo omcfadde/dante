@@ -287,36 +287,37 @@ void idSimpleWindow::Redraw(float x, float y)
 	textRect.Offset(-x, -y);
 }
 
-int idSimpleWindow::GetWinVarOffset(idWinVar *wv, drawWin_t *owner)
+
+intptr_t idSimpleWindow::GetWinVarOffset(idWinVar *wv, drawWin_t *owner)
 {
-	int ret = -1;
+	intptr_t ret = -1;
 
 	if (wv == &rect) {
-		ret = (int)&((idSimpleWindow *) 0)->rect;
+		ret = (intptr_t)&this->rect - (intptr_t)this;
 	}
 
 	if (wv == &backColor) {
-		ret = (int)&((idSimpleWindow *) 0)->backColor;
+		ret = (intptr_t)&this->backColor - (intptr_t)this;
 	}
 
 	if (wv == &matColor) {
-		ret = (int)&((idSimpleWindow *) 0)->matColor;
+		ret = (intptr_t)&this->matColor - (intptr_t)this;
 	}
 
 	if (wv == &foreColor) {
-		ret = (int)&((idSimpleWindow *) 0)->foreColor;
+		ret = (intptr_t)&this->foreColor - (intptr_t)this;
 	}
 
 	if (wv == &borderColor) {
-		ret = (int)&((idSimpleWindow *) 0)->borderColor;
+		ret = (intptr_t)&this->borderColor - (intptr_t)this;
 	}
 
 	if (wv == &textScale) {
-		ret = (int)&((idSimpleWindow *) 0)->textScale;
+		ret = (intptr_t)&this->textScale - (intptr_t)this;
 	}
 
 	if (wv == &rotate) {
-		ret = (int)&((idSimpleWindow *) 0)->rotate;
+		ret = (intptr_t)&this->rotate - (intptr_t)this;
 	}
 
 	if (ret != -1) {
