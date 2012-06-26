@@ -35,7 +35,7 @@ If you have questions concerning this license or the applicable additional terms
 
 glconfig_t	glConfig;
 
-static void GfxInfo_f(void);
+static void GfxInfo_f(const idCmdArgs &args);
 
 idCVar r_inhibitFragmentProgram("r_inhibitFragmentProgram", "0", CVAR_RENDERER | CVAR_BOOL, "ignore the fragment program extension");
 idCVar r_glDriver("r_glDriver", "", CVAR_RENDERER, "\"opengl32\", etc.");
@@ -1660,7 +1660,7 @@ void R_SetColorMappings(void)
 GfxInfo_f
 ================
 */
-void GfxInfo_f(const idCmdArgs &args)
+static void GfxInfo_f(const idCmdArgs &args)
 {
 	const char *fsstrings[] = {
 		"windowed",
