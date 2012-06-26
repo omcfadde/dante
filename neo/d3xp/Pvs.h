@@ -108,9 +108,9 @@ class idPVS
 		mutable pvsCurrent_t currentPVS[MAX_CURRENT_PVS];
 		// used to create PVS
 		int					portalVisBytes;
-		int					portalVisLongs;
+		int					portalVisInts;
 		int					areaVisBytes;
-		int					areaVisLongs;
+		int					areaVisInts;
 		struct pvsPortal_s *pvsPortals;
 		struct pvsArea_s 	*pvsAreas;
 
