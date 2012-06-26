@@ -1742,11 +1742,7 @@ PurgeImage
 void idImage::PurgeImage()
 {
 	if (texnum != TEXTURE_NOT_LOADED) {
-		// sometimes is NULL when exiting with an error
-		if (glDeleteTextures) {
-			glDeleteTextures(1, &texnum);	// this should be the ONLY place it is ever called!
-		}
-
+		glDeleteTextures(1, &texnum);	// this should be the ONLY place it is ever called!
 		texnum = TEXTURE_NOT_LOADED;
 	}
 
