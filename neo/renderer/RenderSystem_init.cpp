@@ -35,7 +35,7 @@ If you have questions concerning this license or the applicable additional terms
 
 glconfig_t	glConfig;
 
-static void GfxInfo_f(void);
+static void GfxInfo_f(const idCmdArgs &args);
 
 idCVar r_inhibitFragmentProgram("r_inhibitFragmentProgram", "0", CVAR_RENDERER | CVAR_BOOL, "ignore the fragment program extension");
 idCVar r_glDriver("r_glDriver", "", CVAR_RENDERER, "\"opengl32\", etc.");
@@ -221,7 +221,7 @@ void (APIENTRY *qglDepthBoundsEXT)(GLclampd zmin, GLclampd zmax);
 R_CheckExtension
 =================
 */
-bool R_CheckExtension(char *name)
+static bool R_CheckExtension(const char *name)
 {
 	if (!strstr(glConfig.extensions_string, name)) {
 		common->Printf("X..%s not found\n", name);
@@ -1314,6 +1314,7 @@ envshot <basename>
 Saves out env/<basename>_ft.tga, etc
 ==================
 */
+
 void R_EnvShot_f(const idCmdArgs &args)
 {
 	idStr		fullname;
@@ -1323,9 +1324,9 @@ void R_EnvShot_f(const idCmdArgs &args)
 	renderView_t	ref;
 	viewDef_t	primary;
 	int			blends;
-	char	*extensions[6] =  { "_px.tga", "_nx.tga", "_py.tga", "_ny.tga",
-	                            "_pz.tga", "_nz.tga"
-	                       };
+	const char	*extensions[6] =  { "_px.tga", "_nx.tga", "_py.tga", "_ny.tga",
+	                                    "_pz.tga", "_nz.tga"
+	                             };
 	int			size;
 
 	if (args.Argc() != 2 && args.Argc() != 3 && args.Argc() != 4) {
@@ -1462,6 +1463,7 @@ R_MakeAmbientMap_f <basename> [size]
 Saves out env/<basename>_amb_ft.tga, etc
 ==================
 */
+
 void R_MakeAmbientMap_f(const idCmdArgs &args)
 {
 	idStr fullname;
@@ -1470,9 +1472,9 @@ void R_MakeAmbientMap_f(const idCmdArgs &args)
 	renderView_t	ref;
 	viewDef_t	primary;
 	int			downSample;
-	char	*extensions[6] =  { "_px.tga", "_nx.tga", "_py.tga", "_ny.tga",
-	                            "_pz.tga", "_nz.tga"
-	                       };
+	const char	*extensions[6] =  { "_px.tga", "_nx.tga", "_py.tga", "_ny.tga",
+	                                    "_pz.tga", "_nz.tga"
+	                             };
 	int			outSize;
 	byte		*buffers[6];
 	int			width, height;
@@ -1658,7 +1660,7 @@ void R_SetColorMappings(void)
 GfxInfo_f
 ================
 */
-void GfxInfo_f(const idCmdArgs &args)
+static void GfxInfo_f(const idCmdArgs &args)
 {
 	const char *fsstrings[] = {
 		"windowed",

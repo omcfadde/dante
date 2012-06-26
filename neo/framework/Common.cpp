@@ -229,7 +229,7 @@ idCommonLocal::idCommonLocal(void)
 	rd_buffersize = 0;
 	rd_flush = NULL;
 
-	gameDLL = NULL;
+	gameDLL = 0;
 
 #ifdef ID_WRITE_VERSION
 	config_compressor = NULL;
@@ -366,7 +366,7 @@ void idCommonLocal::VPrintf(const char *fmt, va_list args)
 	if (idStr::vsnPrintf(msg+timeLength, MAX_PRINT_MSG_SIZE-timeLength-1, fmt, args) < 0) {
 		msg[sizeof(msg)-2] = '\n';
 		msg[sizeof(msg)-1] = '\0'; // avoid output garbling
-		Sys_Printf("idCommon::VPrintf: truncated to %d characters\n", strlen(msg)-1);
+		Sys_Printf("idCommon::VPrintf: truncated to %zd characters\n", strlen(msg)-1);
 	}
 
 	if (rd_buffer) {
@@ -2846,7 +2846,7 @@ void idCommonLocal::LoadGameDLL(void)
 
 	if (!GetGameAPI) {
 		Sys_DLL_Unload(gameDLL);
-		gameDLL = NULL;
+		gameDLL = 0;
 		common->FatalError("couldn't find game DLL API");
 		return;
 	}
@@ -2870,7 +2870,7 @@ void idCommonLocal::LoadGameDLL(void)
 
 	if (gameExport.version != GAME_API_VERSION) {
 		Sys_DLL_Unload(gameDLL);
-		gameDLL = NULL;
+		gameDLL = 0;
 		common->FatalError("wrong game DLL API version");
 		return;
 	}
@@ -2903,7 +2903,7 @@ void idCommonLocal::UnloadGameDLL(void)
 
 	if (gameDLL) {
 		Sys_DLL_Unload(gameDLL);
-		gameDLL = NULL;
+		gameDLL = 0;
 	}
 
 	game = NULL;

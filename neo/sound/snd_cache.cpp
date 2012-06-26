@@ -286,6 +286,8 @@ void idSoundCache::PrintMemInfo(MemInfo_t *mi)
 		f->Printf("%s %s\n", idStr::FormatNumber(sample->objectMemSize).c_str(), sample->name.c_str());
 	}
 
+	delete[] sortIndex;
+
 	mi->soundAssetsTotal = total;
 
 	f->Printf("\nTotal sound bytes allocated: %s\n", idStr::FormatNumber(total).c_str());
@@ -313,7 +315,7 @@ idSoundSample::idSoundSample()
 	objectMemSize = 0;
 	nonCacheData = NULL;
 	amplitudeData = NULL;
-	openalBuffer = NULL;
+	openalBuffer = 0;
 	hardwareBuffer = false;
 	defaultSound = false;
 	onDemand = false;

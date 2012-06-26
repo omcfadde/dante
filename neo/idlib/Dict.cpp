@@ -512,7 +512,7 @@ int idDict::FindKeyIndex(const char *key) const
 
 	if (key == NULL || key[0] == '\0') {
 		idLib::common->DWarning("idDict::FindKeyIndex: empty key");
-		return NULL;
+		return -1;
 	}
 
 	int hash = argHash.GenerateKey(key, false);
@@ -704,8 +704,8 @@ idDict::ShowMemoryUsage_f
 */
 void idDict::ShowMemoryUsage_f(const idCmdArgs &args)
 {
-	idLib::common->Printf("%5d KB in %d keys\n", globalKeys.Size() >> 10, globalKeys.Num());
-	idLib::common->Printf("%5d KB in %d values\n", globalValues.Size() >> 10, globalValues.Num());
+	idLib::common->Printf("%5zd KB in %d keys\n", globalKeys.Size() >> 10, globalKeys.Num());
+	idLib::common->Printf("%5zd KB in %d values\n", globalValues.Size() >> 10, globalValues.Num());
 }
 
 /*

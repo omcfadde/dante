@@ -106,7 +106,7 @@ typedef enum {
 
 typedef struct {
 	wexpOpType_t opType;
-	int	a, b, c, d;
+	intptr_t a, b, c, d;
 } wexpOp_t;
 
 struct idRegEntry {
@@ -236,7 +236,7 @@ class idWindow
 
 		virtual idWinVar *GetWinVarByName(const char *_name, bool winLookup = false, drawWin_t **owner = NULL);
 
-		int  GetWinVarOffset(idWinVar *wv, drawWin_t *dw);
+		intptr_t GetWinVarOffset(idWinVar *wv, drawWin_t *dw);
 		float GetMaxCharHeight();
 		float GetMaxCharWidth();
 		void SetFont();

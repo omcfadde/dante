@@ -90,7 +90,7 @@ void Cmd_EntityList_f(const idCmdArgs &args)
 		size += check->spawnArgs.Allocated();
 	}
 
-	gameLocal.Printf("...%d entities\n...%d bytes of spawnargs\n", count, size);
+	gameLocal.Printf("...%d entities\n...%zd bytes of spawnargs\n", count, size);
 }
 
 /*
@@ -479,7 +479,7 @@ argv(0) god
 */
 void Cmd_God_f(const idCmdArgs &args)
 {
-	char		*msg;
+	const char	*msg;
 	idPlayer	*player;
 
 	player = gameLocal.GetLocalPlayer();
@@ -510,7 +510,7 @@ argv(0) notarget
 */
 void Cmd_Notarget_f(const idCmdArgs &args)
 {
-	char		*msg;
+	const char	*msg;
 	idPlayer	*player;
 
 	player = gameLocal.GetLocalPlayer();
@@ -539,7 +539,7 @@ argv(0) noclip
 */
 void Cmd_Noclip_f(const idCmdArgs &args)
 {
-	char		*msg;
+	const char	*msg;
 	idPlayer	*player;
 
 	player = gameLocal.GetLocalPlayer();
@@ -1643,7 +1643,7 @@ static void Cmd_ListAnims_f(const idCmdArgs &args)
 			}
 		}
 
-		gameLocal.Printf("%d memory used in %d entity animators\n", size, num);
+		gameLocal.Printf("%zd memory used in %d entity animators\n", size, num);
 	}
 }
 
