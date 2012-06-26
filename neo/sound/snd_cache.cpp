@@ -313,7 +313,7 @@ idSoundSample::idSoundSample()
 	objectMemSize = 0;
 	nonCacheData = NULL;
 	amplitudeData = NULL;
-	openalBuffer = NULL;
+	openalBuffer = 0;
 	hardwareBuffer = false;
 	defaultSound = false;
 	onDemand = false;
