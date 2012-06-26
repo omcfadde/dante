@@ -308,6 +308,7 @@ bool idAudioHardwareALSA::Flush(void)
 	}
 
 	Write(true);
+	return true;
 }
 
 /*
