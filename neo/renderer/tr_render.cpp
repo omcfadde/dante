@@ -430,13 +430,9 @@ void RB_FinishStageTexture(const textureStage_t *texture, const drawSurf_t *surf
 	}
 #endif
 
-#if !defined(GL_ES_VERSION_2_0)
 	if (texture->hasMatrix) {
-		glMatrixMode(GL_TEXTURE);
-		glLoadIdentity();
-		glMatrixMode(GL_MODELVIEW);
+		GL_UniformMatrix4fv(offsetof(shaderProgram_t, textureMatrix), mat4_identity.ToFloatPtr());
 	}
-#endif
 }
 
 
