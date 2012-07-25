@@ -561,6 +561,14 @@ void RB_SetGL2D(void)
 	}
 
 	// always assume 640x480 virtual coordinates
+#if !defined(GL_ES_VERSION_2_0)
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, 640, 480, 0, 0, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+#endif
+
 	esOrtho((ESMatrix *)backEnd.viewDef->projectionMatrix, 0, 640, 480, 0, 0, 1);
 	esMatrixLoadIdentity((ESMatrix *)backEnd.viewDef->worldSpace.modelViewMatrix);
 

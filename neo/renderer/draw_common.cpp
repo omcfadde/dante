@@ -1675,7 +1675,11 @@ void RB_STD_LightScale(void)
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
+#if !defined(GL_ES_VERSION_2_0)
+	glOrtho(0, 1, 0, 1, -1, 1);
+#else
 	glOrthof(0, 1, 0, 1, -1, 1);
+#endif
 
 	GL_State(GLS_SRCBLEND_DST_COLOR | GLS_DSTBLEND_SRC_COLOR);
 	GL_Cull(CT_TWO_SIDED);	// so mirror views also get it

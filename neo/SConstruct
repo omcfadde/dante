@@ -15,7 +15,7 @@ conf_filename='site.conf'
 serialized=['CC', 'CXX', 'JOBS', 'BUILD', 'IDNET_HOST', 'DEDICATED',
 	'DEBUG_MEMORY', 'LIBC_MALLOC', 'ID_NOLANADDRESS', 'ID_MCHECK', 'ALSA',
 	'TARGET_CORE', 'TARGET_GAME', 'TARGET_D3XP', 'TARGET_MONO', 'TARGET_DEMO', 'NOCURL',
-	'BUILD_ROOT', 'BUILD_GAMEPAK', 'BASEFLAGS', 'SILENT' ]
+	'BUILD_ROOT', 'BUILD_GAMEPAK', 'BASEFLAGS', 'SILENT', 'TARGET_OPENGL' ]
 
 # global build mode ------------------------------
 
@@ -91,6 +91,10 @@ TARGET_DEMO (default 0)
 	Build demo client ( both a core and game, no mono )
 	NOTE: if you *only* want the demo client, set TARGET_CORE and TARGET_GAME to 0
 
+TARGET_OPENGL (default 0)
+	Build an OpenGL renderer instead of OpenGL ES2.0; GLSL shaders are
+	compatible.
+
 IDNET_HOST (default to source hardcoded)
 	Override builtin IDNET_HOST with your own settings
 
@@ -161,6 +165,7 @@ TARGET_GAME = '1'
 TARGET_D3XP = '1'
 TARGET_MONO = '0'
 TARGET_DEMO = '0'
+TARGET_OPENGL = '0'
 IDNET_HOST = ''
 DEBUG_MEMORY = '0'
 LIBC_MALLOC = '1'
@@ -368,8 +373,10 @@ local_curl = 0
 local_idlibpic = 0
 # switch between base game build and d3xp game build
 local_d3xp = 0
+# OpenGL
+local_opengl = 0
 
-GLOBALS = 'g_env g_env_noopt g_game_env g_os ID_MCHECK ALSA idlib_objects game_objects local_dedicated local_gamedll local_demo local_idlibpic local_curl local_d3xp OPTCPPFLAGS'
+GLOBALS = 'g_env g_env_noopt g_game_env g_os ID_MCHECK ALSA idlib_objects game_objects local_dedicated local_gamedll local_demo local_idlibpic local_curl local_d3xp local_opengl OPTCPPFLAGS'
 
 # end general configuration ----------------------
 
@@ -383,6 +390,10 @@ game = None
 doom_mono = None
 doom_demo = None
 game_demo = None
+
+if ( TARGET_OPENGL != '0' ):
+	local_opengl = 1
+	Export( 'GLOBALS ' + GLOBALS )
 
 # build curl if needed
 if ( NOCURL == '0' and ( TARGET_CORE == '1' or TARGET_MONO == '1' ) ):

@@ -20,7 +20,19 @@
 ///
 //  Includes
 //
+//#include <GLES2/gl2.h>
+
+#ifdef ID_TARGET_OPENGL
+#include <GL/gl.h>
+#include <GL/glext.h>
+#include <GL/glx.h>
+#define GL_APIENTRY	GLAPIENTRY
+#else
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
 #include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
+#endif
 
 #ifdef __cplusplus
 

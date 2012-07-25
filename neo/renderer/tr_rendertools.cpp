@@ -457,7 +457,11 @@ void RB_ShowIntensity(void)
 	GL_State(GLS_DEPTHFUNC_ALWAYS);
 	glPushMatrix();
 	glLoadIdentity();
+#if !defined(GL_ES_VERSION_2_0)
+	glOrtho(0, 1, 0, 1, -1, 1);
+#else
 	glOrthof(0, 1, 0, 1, -1, 1);
+#endif
 	glRasterPos2f(0, 0);
 	glPopMatrix();
 	glColor3f(1, 1, 1);
@@ -492,7 +496,11 @@ void RB_ShowDepthBuffer(void)
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
+#if !defined(GL_ES_VERSION_2_0)
+	glOrtho(0, 1, 0, 1, -1, 1);
+#else
 	glOrthof(0, 1, 0, 1, -1, 1);
+#endif
 	glRasterPos2f(0, 0);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
@@ -2439,7 +2447,11 @@ void RB_TestGamma(void)
 	glPushMatrix();
 	glLoadIdentity();
 	glDisable(GL_TEXTURE_2D);
+#if !defined(GL_ES_VERSION_2_0)
+	glOrtho(0, 1, 0, 1, -1, 1);
+#else
 	glOrthof(0, 1, 0, 1, -1, 1);
+#endif
 	glRasterPos2f(0.01f, 0.01f);
 	glDrawPixels(G_WIDTH, G_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, image);
 	glPopMatrix();
@@ -2496,7 +2508,11 @@ static void RB_TestGammaBias(void)
 	glPushMatrix();
 	glLoadIdentity();
 	glDisable(GL_TEXTURE_2D);
+#if !defined(GL_ES_VERSION_2_0)
+	glOrtho(0, 1, 0, 1, -1, 1);
+#else
 	glOrthof(0, 1, 0, 1, -1, 1);
+#endif
 	glRasterPos2f(0.01f, 0.01f);
 	glDrawPixels(G_WIDTH, G_HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, image);
 	glPopMatrix();
@@ -2555,7 +2571,11 @@ void RB_TestImage(void)
 	glColor3f(1, 1, 1);
 	glPushMatrix();
 	glLoadIdentity();
+#if !defined(GL_ES_VERSION_2_0)
+	glOrtho(0, 1, 0, 1, -1, 1);
+#else
 	glOrthof(0, 1, 0, 1, -1, 1);
+#endif
 
 	tr.testImage->Bind();
 	glBegin(GL_QUADS);

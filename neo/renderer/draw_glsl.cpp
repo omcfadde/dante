@@ -558,14 +558,10 @@ void R_GLSL_Init(void)
 
 	common->Printf("---------- R_GLSL_Init ----------\n");
 
-#if !defined(GL_ES_VERSION_2_0)
-
 	if (!glConfig.GLSLAvailable) {
 		common->Printf("Not available.\n");
 		return;
 	}
-
-#endif
 
 	common->Printf("Available.\n");
 

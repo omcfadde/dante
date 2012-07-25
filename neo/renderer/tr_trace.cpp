@@ -377,6 +377,7 @@ Debug visualization
 */
 void RB_ShowTrace(drawSurf_t **drawSurfs, int numDrawSurfs)
 {
+#if 0	/* RB_DrawElementsImmediate() */
 #if !defined(GL_ES_VERSION_2_0)
 	int						i;
 	const srfTriangles_t	*tri;
@@ -452,5 +453,6 @@ void RB_ShowTrace(drawSurf_t **drawSurfs, int numDrawSurfs)
 			RB_DrawBounds(idBounds(hit.point).Expand(1));
 		}
 	}
+#endif
 #endif
 }

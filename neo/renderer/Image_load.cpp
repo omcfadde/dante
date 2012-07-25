@@ -30,10 +30,13 @@ If you have questions concerning this license or the applicable additional terms
 #pragma hdrstop
 
 #include "tr_local.h"
+
+#if defined(GL_ES_VERSION_2_0)
 #define GL_RGB8	GL_RGBA
 #define GL_RGBA8	GL_RGBA
 #define GL_ALPHA8 GL_ALPHA
 #define GL_RGB5	GL_RGBA
+#endif
 
 /*
 PROBLEM: compressed textures may break the zero clamp rule!
@@ -1338,7 +1341,7 @@ void idImage::WritePrecompressedImage()
 		}
 
 		if (FormatIsDXT(altInternalFormat)) {
-			glGetCompressedTexImageARB(GL_TEXTURE_2D, level, data);
+			qglGetCompressedTexImageARB(GL_TEXTURE_2D, level, data);
 		} else {
 			glGetTexImage(GL_TEXTURE_2D, level, altInternalFormat, GL_UNSIGNED_BYTE, data);
 		}
@@ -1656,7 +1659,7 @@ void idImage::UploadPrecompressedImage(byte *data, int len)
 			skipMip++;
 		} else {
 			if (FormatIsDXT(internalFormat)) {
-				glCompressedTexImage2DARB(GL_TEXTURE_2D, i - skipMip, internalFormat, uw, uh, 0, size, imagedata);
+				qglCompressedTexImage2DARB(GL_TEXTURE_2D, i - skipMip, internalFormat, uw, uh, 0, size, imagedata);
 			} else {
 				glTexImage2D(GL_TEXTURE_2D, i - skipMip, internalFormat, uw, uh, 0, externalFormat, GL_UNSIGNED_BYTE, imagedata);
 			}
@@ -2068,6 +2071,12 @@ void idImage::CopyDepthbuffer(int x, int y, int imageWidth, int imageHeight)
 	// if the size isn't a power of 2, the image must be increased in size
 	int	potWidth, potHeight;
 
+#if !defined(GL_ES_VERSION_2_0)
+	GLenum depthComponent = GL_DEPTH_COMPONENT24;
+#else
+	GLenum depthComponent = GL_DEPTH_COMPONENT24_OES;
+#endif
+
 	potWidth = MakePowerOfTwo(imageWidth);
 	potHeight = MakePowerOfTwo(imageHeight);
 
@@ -2076,11 +2085,11 @@ void idImage::CopyDepthbuffer(int x, int y, int imageWidth, int imageHeight)
 		uploadHeight = potHeight;
 
 		if (potWidth == imageWidth && potHeight == imageHeight) {
-			glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24_OES, x, y, imageWidth, imageHeight, 0);
+			glCopyTexImage2D(GL_TEXTURE_2D, 0, depthComponent, x, y, imageWidth, imageHeight, 0);
 		} else {
 			// we need to create a dummy image with power of two dimensions,
 			// then do a glCopyTexSubImage2D of the data we want
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24_OES, potWidth, potHeight, 0, GL_DEPTH_COMPONENT24_OES, GL_UNSIGNED_BYTE, NULL);
+			glTexImage2D(GL_TEXTURE_2D, 0, depthComponent, potWidth, potHeight, 0, depthComponent, GL_UNSIGNED_BYTE, NULL);
 			glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, x, y, imageWidth, imageHeight);
 		}
 	} else {

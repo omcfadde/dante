@@ -31,6 +31,14 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "tr_local.h"
 
+#if !defined(GL_ES_VERSION_2_0)
+#define glBindBuffer	glBindBufferARB
+#define glBufferData	glBufferDataARB
+
+#define GL_ARRAY_BUFFER	GL_ARRAY_BUFFER_ARB
+#define GL_DYNAMIC_DRAW	GL_DYNAMIC_DRAW_ARB
+#endif
+
 static const int	FRAME_MEMORY_BYTES = 0x200000;
 static const int	EXPAND_HEADERS = 1024;
 

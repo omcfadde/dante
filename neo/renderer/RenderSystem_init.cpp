@@ -205,6 +205,10 @@ idCVar r_materialOverride("r_materialOverride", "", CVAR_RENDERER, "overrides al
 idCVar r_debugRenderToTexture("r_debugRenderToTexture", "0", CVAR_RENDERER | CVAR_INTEGER, "");
 
 #if !defined(GL_ES_VERSION_2_0)
+// GL_ARB_texture_compression + GL_S3_s3tc
+void (GL_APIENTRY *qglCompressedTexImage2DARB)(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data);
+void (GL_APIENTRY *qglGetCompressedTexImageARB)(GLenum target, GLint level, GLvoid *img);
+
 // GL_EXT_depth_bounds_test
 void (GL_APIENTRY *qglDepthBoundsEXT)(GLclampd zmin, GLclampd zmax);
 #endif
@@ -287,9 +291,14 @@ static void R_CheckPortableExtensions(void)
 
 	// GL_ARB_texture_compression + GL_S3_s3tc
 	// DRI drivers may have GL_ARB_texture_compression but no GL_EXT_texture_compression_s3tc
+#if !defined(GL_ES_VERSION_2_0)
 	if (R_CheckExtension("GL_ARB_texture_compression") && R_CheckExtension("GL_EXT_texture_compression_s3tc")) {
 		glConfig.textureCompressionAvailable = true;
-	} else {
+		qglCompressedTexImage2DARB = (void (GL_APIENTRY *)(GLenum, GLint, GLenum, GLsizei, GLsizei, GLint, GLsizei, const GLvoid *))GLimp_ExtensionPointer("glCompressedTexImage2DARB");
+		qglGetCompressedTexImageARB = (void (GL_APIENTRY *)(GLenum, GLint, GLvoid *))GLimp_ExtensionPointer("glGetCompressedTexImageARB");
+	} else
+#endif
+	{
 		glConfig.textureCompressionAvailable = false;
 	}
 
@@ -1284,7 +1293,13 @@ void R_StencilShot(void)
 
 	byte *byteBuffer = (byte *)Mem_Alloc(pix);
 
-	glReadPixels(0, 0, width, height, GL_STENCIL_INDEX4_OES , GL_UNSIGNED_BYTE, byteBuffer);
+#if !defined(GL_ES_VERSION_2_0)
+	GLenum stencilIndex = GL_STENCIL_INDEX;
+#else
+	GLenum stencilIndex = GL_STENCIL_INDEX4_OES;
+#endif
+
+	glReadPixels(0, 0, width, height, stencilIndex, GL_UNSIGNED_BYTE, byteBuffer);
 
 	for (i = 0 ; i < pix ; i++) {
 		buffer[18+i*3] =

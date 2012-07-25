@@ -33,12 +33,20 @@ If you have questions concerning this license or the applicable additional terms
 #ifndef __QGL_H__
 #define __QGL_H__
 
-//#define GL_GLEXT_PROTOTYPES
+#define GL_GLEXT_PROTOTYPES
 
+#ifdef ID_TARGET_OPENGL
+#include <GL/gl.h>
+#include <GL/glext.h>
+#include <GL/glx.h>
+#define GL_APIENTRY	GLAPIENTRY
+#else
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
+#endif
+
 #include "esUtil.h"
 
 typedef void (*GLExtension_t)(void);
@@ -61,6 +69,10 @@ extern void (GL_APIENTRY *qglStencilOpSeparateATI)(GLenum face, GLenum sfail, GL
 extern void (GL_APIENTRY *qglStencilFuncSeparateATI)(GLenum frontfunc, GLenum backfunc, GLint ref, GLuint mask);
 
 #if !defined(GL_ES_VERSION_2_0)
+// GL_ARB_texture_compression + GL_S3_s3tc
+extern void (GL_APIENTRY *qglCompressedTexImage2DARB)(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data);
+extern void (GL_APIENTRY *qglGetCompressedTexImageARB)(GLenum target, GLint level, GLvoid *img);
+
 // GL_EXT_depth_bounds_test
 extern void (GL_APIENTRY *qglDepthBoundsEXT)(GLclampd zmin, GLclampd zmax);
 #endif
