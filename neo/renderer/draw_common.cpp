@@ -91,7 +91,6 @@ void RB_PrepareStageTexturing(const shaderStage_t *pStage,  const drawSurf_t *su
 		RB_LoadShaderTextureMatrix(surf->shaderRegisters, &pStage->texture);
 	}
 
-#if !defined(GL_ES_VERSION_2_0)
 	// texgens
 	if (pStage->texture.texgen == TG_DIFFUSE_CUBE) {
 		GL_VertexAttribPointer(offsetof(shaderProgram_t, attr_TexCoord), 3, GL_FLOAT, false, sizeof(idDrawVert),
@@ -103,6 +102,7 @@ void RB_PrepareStageTexturing(const shaderStage_t *pStage,  const drawSurf_t *su
 		                       vertexCache.Position(surf->dynamicTexCoords));
 	}
 
+#if !defined(GL_ES_VERSION_2_0)
 	if (pStage->texture.texgen == TG_SCREEN) {
 		glEnable(GL_TEXTURE_GEN_S);
 		glEnable(GL_TEXTURE_GEN_T);
@@ -245,12 +245,12 @@ void RB_FinishStageTexturing(const shaderStage_t *pStage, const drawSurf_t *surf
 		glDisable(GL_POLYGON_OFFSET_FILL);
 	}
 
-#if !defined(GL_ES_VERSION_2_0)
 	if (pStage->texture.texgen == TG_DIFFUSE_CUBE || pStage->texture.texgen == TG_SKYBOX_CUBE
 	    || pStage->texture.texgen == TG_WOBBLESKY_CUBE) {
 		GL_VertexAttribPointer(offsetof(shaderProgram_t, attr_TexCoord), 2, GL_FLOAT, false, sizeof(idDrawVert), (void *)&ac->st);
 	}
 
+#if !defined(GL_ES_VERSION_2_0)
 	if (pStage->texture.texgen == TG_SCREEN) {
 		glDisable(GL_TEXTURE_GEN_S);
 		glDisable(GL_TEXTURE_GEN_T);
