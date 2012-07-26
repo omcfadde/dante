@@ -103,6 +103,7 @@ void RB_PrepareStageTexturing(const shaderStage_t *pStage,  const drawSurf_t *su
 	}
 
 #if !defined(GL_ES_VERSION_2_0)
+#if 0
 	if (pStage->texture.texgen == TG_SCREEN) {
 		glEnable(GL_TEXTURE_GEN_S);
 		glEnable(GL_TEXTURE_GEN_T);
@@ -157,7 +158,7 @@ void RB_PrepareStageTexturing(const shaderStage_t *pStage,  const drawSurf_t *su
 		glTexGenfv(GL_Q, GL_OBJECT_PLANE, plane);
 	}
 
-	if (pStage->texture.texgen == TG_GLASSWARP && tr.backEndRenderer == BE_ARB2) {
+	if (pStage->texture.texgen == TG_GLASSWARP) {
 		glBindProgramARB(GL_FRAGMENT_PROGRAM_ARB, FPROG_GLASSWARP);
 		glEnable(GL_FRAGMENT_PROGRAM_ARB);
 
@@ -195,7 +196,7 @@ void RB_PrepareStageTexturing(const shaderStage_t *pStage,  const drawSurf_t *su
 		GL_SelectTexture(0);
 	}
 
-	if (pStage->texture.texgen == TG_REFLECT_CUBE && tr.backEndRenderer == BE_ARB2) {
+	if (pStage->texture.texgen == TG_REFLECT_CUBE) {
 		// see if there is also a bump map specified
 		const shaderStage_t *bumpStage = surf->material->GetBumpStage();
 
@@ -231,6 +232,7 @@ void RB_PrepareStageTexturing(const shaderStage_t *pStage,  const drawSurf_t *su
 		}
 	}
 #endif
+#endif
 }
 
 /*
@@ -251,6 +253,7 @@ void RB_FinishStageTexturing(const shaderStage_t *pStage, const drawSurf_t *surf
 	}
 
 #if !defined(GL_ES_VERSION_2_0)
+#if 0
 	if (pStage->texture.texgen == TG_SCREEN) {
 		glDisable(GL_TEXTURE_GEN_S);
 		glDisable(GL_TEXTURE_GEN_T);
@@ -264,59 +267,44 @@ void RB_FinishStageTexturing(const shaderStage_t *pStage, const drawSurf_t *surf
 	}
 
 	if (pStage->texture.texgen == TG_GLASSWARP) {
-		if (tr.backEndRenderer == BE_ARB2) {
-			GL_SelectTexture(2);
-			globalImages->BindNull();
+		GL_SelectTexture(2);
+		globalImages->BindNull();
 
-			GL_SelectTexture(1);
+		GL_SelectTexture(1);
 
-			if (pStage->texture.hasMatrix) {
-				RB_LoadShaderTextureMatrix(surf->shaderRegisters, &pStage->texture);
-			}
-
-			glDisable(GL_TEXTURE_GEN_S);
-			glDisable(GL_TEXTURE_GEN_T);
-			glDisable(GL_TEXTURE_GEN_Q);
-			glDisable(GL_FRAGMENT_PROGRAM_ARB);
-			globalImages->BindNull();
-			GL_SelectTexture(0);
+		if (pStage->texture.hasMatrix) {
+			RB_LoadShaderTextureMatrix(surf->shaderRegisters, &pStage->texture);
 		}
+
+		glDisable(GL_TEXTURE_GEN_S);
+		glDisable(GL_TEXTURE_GEN_T);
+		glDisable(GL_TEXTURE_GEN_Q);
+		glDisable(GL_FRAGMENT_PROGRAM_ARB);
+		globalImages->BindNull();
+		GL_SelectTexture(0);
 	}
 
 	if (pStage->texture.texgen == TG_REFLECT_CUBE) {
-		if (tr.backEndRenderer == BE_ARB2) {
-			// see if there is also a bump map specified
-			const shaderStage_t *bumpStage = surf->material->GetBumpStage();
+		// see if there is also a bump map specified
+		const shaderStage_t *bumpStage = surf->material->GetBumpStage();
 
-			if (bumpStage) {
-				// per-pixel reflection mapping with bump mapping
-				GL_SelectTexture(1);
-				globalImages->BindNull();
-				GL_SelectTexture(0);
+		if (bumpStage) {
+			// per-pixel reflection mapping with bump mapping
+			GL_SelectTexture(1);
+			globalImages->BindNull();
+			GL_SelectTexture(0);
 
-				GL_DisableVertexAttribArray(offsetof(shaderProgram_t, attr_Tangent));
-				GL_DisableVertexAttribArray(offsetof(shaderProgram_t, attr_Bitangent));
-			} else {
-				// per-pixel reflection mapping without bump mapping
-			}
-
-			GL_DisableVertexAttribArray(offsetof(shaderProgram_t, attr_Normal));
-			glDisable(GL_FRAGMENT_PROGRAM_ARB);
-			glDisable(GL_VERTEX_PROGRAM_ARB);
+			GL_DisableVertexAttribArray(offsetof(shaderProgram_t, attr_Tangent));
+			GL_DisableVertexAttribArray(offsetof(shaderProgram_t, attr_Bitangent));
 		} else {
-			glDisable(GL_TEXTURE_GEN_S);
-			glDisable(GL_TEXTURE_GEN_T);
-			glDisable(GL_TEXTURE_GEN_R);
-			glTexGenf(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-			glTexGenf(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-			glTexGenf(GL_R, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-			GL_DisableVertexAttribArray(offsetof(shaderProgram_t, attr_Normal));
-
-			glMatrixMode(GL_TEXTURE);
-			glLoadIdentity();
-			glMatrixMode(GL_MODELVIEW);
+			// per-pixel reflection mapping without bump mapping
 		}
+
+		GL_DisableVertexAttribArray(offsetof(shaderProgram_t, attr_Normal));
+		glDisable(GL_FRAGMENT_PROGRAM_ARB);
+		glDisable(GL_VERTEX_PROGRAM_ARB);
 	}
+#endif
 #endif
 
 	if (pStage->texture.hasMatrix) {
@@ -1748,7 +1736,7 @@ void	RB_STD_DrawView(void)
 
 	// main light renderer
 	switch (tr.backEndRenderer) {
-#if 0
+#if !defined(GL_ES_VERSION_2_0)
 		case BE_ARB2:
 			RB_ARB2_DrawInteractions();
 			break;
