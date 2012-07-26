@@ -264,13 +264,13 @@ void idSoundWorldLocal::ProcessDemoCommand(idDemoFile *readDemo)
 		return;
 	}
 
-	soundDemoCommand_t	dc;
+	int	dc;
 
-	if (!readDemo->ReadInt((int &)dc)) {
+	if (!readDemo->ReadInt(dc)) {
 		return;
 	}
 
-	switch (dc) {
+	switch ((soundDemoCommand_t) dc) {
 		case SCMD_STATE:
 			// we need to protect this from the async thread
 			// other instances of calling idSoundWorldLocal::ReadFromSaveGame do this while the sound code is muted
@@ -1363,7 +1363,7 @@ void idSoundWorldLocal::ReadFromSaveGame(idFile *savefile)
 
 			idSoundChannel *chan = &def->channels[channel];
 
-			if (chan->decoder != NULL) {
+			if (!chan->decoder) {
 				// The pointer in the save file is not valid, so we grab a new one
 				chan->decoder = idSampleDecoder::Alloc();
 			}
