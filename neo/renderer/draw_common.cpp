@@ -1261,7 +1261,7 @@ RB_T_BlendLight
 static void RB_T_BlendLight(const drawSurf_t *surf)
 {
 #warning RB_T_BlendLight
-#if !defined(GL_ES_VERSION_2_0)
+#if 0	//!defined(GL_ES_VERSION_2_0)
 	const srfTriangles_t *tri;
 
 	tri = surf->geo;
@@ -1308,7 +1308,7 @@ mode to the framebuffer, instead of interacting with the surface texture
 static void RB_BlendLight(const drawSurf_t *drawSurfs,  const drawSurf_t *drawSurfs2)
 {
 #warning RB_BlendLight
-#if !defined(GL_ES_VERSION_2_0)
+#if 0	//!defined(GL_ES_VERSION_2_0)
 	const idMaterial	*lightShader;
 	const shaderStage_t	*stage;
 	int					i;
@@ -1397,7 +1397,7 @@ RB_T_BasicFog
 static void RB_T_BasicFog(const drawSurf_t *surf)
 {
 #warning
-#if !defined(GL_ES_VERSION_2_0)
+#if 0	//!defined(GL_ES_VERSION_2_0)
 	if (backEnd.currentSpace != surf->space) {
 		idPlane	local;
 
@@ -1438,7 +1438,7 @@ RB_FogPass
 static void RB_FogPass(const drawSurf_t *drawSurfs,  const drawSurf_t *drawSurfs2)
 {
 #warning
-#if !defined(GL_ES_VERSION_2_0)
+#if 0	//!defined(GL_ES_VERSION_2_0)
 	const srfTriangles_t *frustumTris;
 	drawSurf_t			ds;
 	const idMaterial	*lightShader;
@@ -1561,7 +1561,7 @@ RB_STD_FogAllLights
 void RB_STD_FogAllLights(void)
 {
 #warning
-#if !defined(GL_ES_VERSION_2_0)
+#if 0	//!defined(GL_ES_VERSION_2_0)
 	viewLight_t	*vLight;
 
 	if (r_skipFogLights.GetBool() || r_showOverDraw.GetInteger() != 0
@@ -1636,7 +1636,7 @@ a floating point value
 void RB_STD_LightScale(void)
 {
 #warning
-#if !defined(GL_ES_VERSION_2_0)
+#if 0	//!defined(GL_ES_VERSION_2_0)
 	float	v, f;
 
 	if (backEnd.overBright == 1.0f) {
