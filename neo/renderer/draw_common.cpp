@@ -87,9 +87,7 @@ void RB_PrepareStageTexturing(const shaderStage_t *pStage,  const drawSurf_t *su
 	}
 
 	// set the texture matrix if needed
-	if (pStage->texture.hasMatrix) {
-		RB_LoadShaderTextureMatrix(surf->shaderRegisters, &pStage->texture);
-	}
+	RB_LoadShaderTextureMatrix(surf->shaderRegisters, &pStage->texture);
 
 	// texgens
 	if (pStage->texture.texgen == TG_DIFFUSE_CUBE) {
@@ -272,9 +270,7 @@ void RB_FinishStageTexturing(const shaderStage_t *pStage, const drawSurf_t *surf
 
 		GL_SelectTexture(1);
 
-		if (pStage->texture.hasMatrix) {
-			RB_LoadShaderTextureMatrix(surf->shaderRegisters, &pStage->texture);
-		}
+		RB_LoadShaderTextureMatrix(surf->shaderRegisters, &pStage->texture);
 
 		glDisable(GL_TEXTURE_GEN_S);
 		glDisable(GL_TEXTURE_GEN_T);
@@ -1353,9 +1349,7 @@ static void RB_BlendLight(const drawSurf_t *drawSurfs,  const drawSurf_t *drawSu
 		GL_SelectTexture(0);
 		stage->texture.image->Bind();
 
-		if (stage->texture.hasMatrix) {
-			RB_LoadShaderTextureMatrix(regs, &stage->texture);
-		}
+		RB_LoadShaderTextureMatrix(regs, &stage->texture);
 
 		// get the modulate values from the light, including alpha, unlike normal lights
 		backEnd.lightColor[0] = regs[ stage->color.registers[0] ];

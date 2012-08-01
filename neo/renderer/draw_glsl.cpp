@@ -68,6 +68,7 @@ void	RB_GLSL_DrawInteraction(const drawInteraction_t *din)
 	static const float negOne[4] = { -1, -1, -1, -1 };
 
 	// load all the vertex program parameters
+	GL_UniformMatrix4fv(offsetof(shaderProgram_t, textureMatrix), mat4_identity.ToFloatPtr());
 	GL_Uniform4fv(offsetof(shaderProgram_t, localLightOrigin), din->localLightOrigin.ToFloatPtr());
 	GL_Uniform4fv(offsetof(shaderProgram_t, localViewOrigin), din->localViewOrigin.ToFloatPtr());
 	GL_Uniform4fv(offsetof(shaderProgram_t, lightProjectionS), din->lightProjection[0].ToFloatPtr());
