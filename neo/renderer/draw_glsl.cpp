@@ -101,6 +101,27 @@ void	RB_GLSL_DrawInteraction(const drawInteraction_t *din)
 	GL_Uniform4fv(offsetof(shaderProgram_t, diffuseColor), din->diffuseColor.ToFloatPtr());
 	GL_Uniform4fv(offsetof(shaderProgram_t, specularColor), din->specularColor.ToFloatPtr());
 
+	// material may be NULL for shadow volumes
+	float f;
+	switch (din->surf->material->GetSurfaceType()) {
+		case SURFTYPE_METAL:
+		case SURFTYPE_RICOCHET:
+			f = 4.0f;
+			break;
+		case SURFTYPE_STONE:
+		case SURFTYPE_FLESH:
+		case SURFTYPE_WOOD:
+		case SURFTYPE_CARDBOARD:
+		case SURFTYPE_LIQUID:
+		case SURFTYPE_GLASS:
+		case SURFTYPE_PLASTIC:
+		case SURFTYPE_NONE:
+		default:
+			f = 4.0f;
+			break;
+	}
+	GL_Uniform1fv(offsetof(shaderProgram_t, specularExponent), &f);
+
 	// set the textures
 
 	// texture 0 will be the per-surface bump map
@@ -447,6 +468,7 @@ static void RB_GLSL_GetUniformLocations(shaderProgram_t *shader)
 	shader->specularColor = glGetUniformLocation(shader->program, "u_specularColor");
 	shader->glColor = glGetUniformLocation(shader->program, "u_glColor");
 	shader->alphaTest = glGetUniformLocation(shader->program, "u_alphaTest");
+	shader->specularExponent = glGetUniformLocation(shader->program, "u_specularExponent");
 
 	shader->eyeOrigin = glGetUniformLocation(shader->program, "u_eyeOrigin");
 	shader->localEyeOrigin = glGetUniformLocation(shader->program, "u_localEyeOrigin");
