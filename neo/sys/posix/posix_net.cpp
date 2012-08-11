@@ -357,8 +357,12 @@ void Sys_InitNetworking(void)
 	ifc.ifc_buf = buf;
 
 	if (ioctl(s, SIOCGIFCONF, &ifc) < 0) {
+#if defined(__ANDROID__)
+		common->Printf("InitNetworking: SIOCGIFCONF error - %s\n", strerror(errno));
+#else
 		common->FatalError("InitNetworking: SIOCGIFCONF error - %s\n", strerror(errno));
 		return;
+#endif
 	}
 
 	ifindex = 0;

@@ -44,6 +44,11 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "posix_public.h"
 
+#if defined(__ANDROID__)
+#include <android/log.h>
+#define vprintf(msg, argptr)	__android_log_vprint(ANDROID_LOG_INFO, "Dante", msg, argptr);
+#endif
+
 #define					MAX_OSPATH 256
 #define					COMMAND_HISTORY 64
 

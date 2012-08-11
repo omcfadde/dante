@@ -2827,6 +2827,9 @@ void idCommonLocal::LoadGameDLL(void)
 	gameExport_t	gameExport;
 	GetGameAPI_t	GetGameAPI;
 
+#if defined(__ANDROID__)
+	gameDLL = sys->DLL_Load("/data/data/com.game.dante/lib/libgame-base.so");
+#else
 	fileSystem->FindDLL("game", dllPath, true);
 
 	if (!dllPath[ 0 ]) {
@@ -2836,6 +2839,7 @@ void idCommonLocal::LoadGameDLL(void)
 
 	common->DPrintf("Loading game DLL: '%s'\n", dllPath);
 	gameDLL = sys->DLL_Load(dllPath);
+#endif
 
 	if (!gameDLL) {
 		common->FatalError("couldn't load game dynamic library");

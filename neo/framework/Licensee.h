@@ -104,6 +104,8 @@ If you have questions concerning this license or the applicable additional terms
 #define LINUX_DEFAULT_PATH			"/usr/local/games/doom3"
 #endif
 
+#define ANDROID_DEFAULT_PATH			"/sdcard/Android/data/com.game.dante"
+
 // CD Key file info
 // goes into BASE_GAMEDIR whatever the fs_game is set to
 // two distinct files for easier win32 installer job
