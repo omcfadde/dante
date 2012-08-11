@@ -30,8 +30,10 @@ If you have questions concerning this license or the applicable additional terms
 #pragma hdrstop
 
 #include "snd_local.h"
+#if !defined(__ANDROID__)
 #include <vorbis/codec.h>
 #include <vorbis/vorbisfile.h>
+#endif
 
 
 /*
@@ -91,6 +93,7 @@ void _decoder_free(void *memblock)
 ===================================================================================
 */
 
+#if !defined(__ANDROID__)
 /*
 ====================
 FS_ReadOGG
@@ -163,6 +166,7 @@ int ov_openFile(idFile *f, OggVorbis_File *vf)
 	callbacks.tell_func = FS_TellOGG;
 	return ov_open_callbacks((void *)f, vf, NULL, -1, callbacks);
 }
+#endif
 
 /*
 ====================
@@ -171,6 +175,7 @@ idWaveFile::OpenOGG
 */
 int idWaveFile::OpenOGG(const char *strFileName, waveformatex_t *pwfx)
 {
+#if !defined(__ANDROID__)
 	OggVorbis_File *ov;
 
 	memset(pwfx, 0, sizeof(waveformatex_t));
@@ -229,6 +234,9 @@ int idWaveFile::OpenOGG(const char *strFileName, waveformatex_t *pwfx)
 	isOgg = true;
 
 	return 0;
+#else
+	return -1;
+#endif
 }
 
 /*
@@ -238,6 +246,7 @@ idWaveFile::ReadOGG
 */
 int idWaveFile::ReadOGG(byte *pBuffer, int dwSizeToRead, int *pdwSizeRead)
 {
+#if !defined(__ANDROID__)
 	int total = dwSizeToRead;
 	char *bufferPtr = (char *)pBuffer;
 	OggVorbis_File *ov = (OggVorbis_File *) ogg;
@@ -264,6 +273,9 @@ int idWaveFile::ReadOGG(byte *pBuffer, int dwSizeToRead, int *pdwSizeRead)
 	}
 
 	return dwSizeToRead;
+#else
+	return -1;
+#endif
 }
 
 /*
@@ -273,6 +285,7 @@ idWaveFile::CloseOGG
 */
 int idWaveFile::CloseOGG(void)
 {
+#if !defined(__ANDROID__)
 	OggVorbis_File *ov = (OggVorbis_File *) ogg;
 
 	if (ov != NULL) {
@@ -285,6 +298,7 @@ int idWaveFile::CloseOGG(void)
 		ogg = NULL;
 		return 0;
 	}
+#endif
 
 	return -1;
 }
@@ -318,7 +332,9 @@ class idSampleDecoderLocal : public idSampleDecoder
 		int						lastDecodeTime;		// last time decoding sound
 		idFile_Memory			file;				// encoded file in memory
 
+#if !defined(__ANDROID__)
 		OggVorbis_File			ogg;				// OggVorbis file
+#endif
 };
 
 idBlockAlloc<idSampleDecoderLocal, 64>		sampleDecoderAllocator;
@@ -417,11 +433,13 @@ void idSampleDecoderLocal::ClearDecoder(void)
 		case WAVE_FORMAT_TAG_PCM: {
 			break;
 		}
+#if !defined(__ANDROID__)
 		case WAVE_FORMAT_TAG_OGG: {
 			ov_clear(&ogg);
 			memset(&ogg, 0, sizeof(ogg));
 			break;
 		}
+#endif
 	}
 
 	Clear();
@@ -562,15 +580,21 @@ int idSampleDecoderLocal::DecodeOGG(idSoundSample *sample, int sampleOffset44k, 
 
 		file.SetData((const char *)sample->nonCacheData, sample->objectMemSize);
 
+#if !defined(__ANDROID__)
 		if (ov_openFile(&file, &ogg) < 0) {
 			failed = true;
 			return 0;
 		}
+#else
+		failed = true;
+		return 0;
+#endif
 
 		lastFormat = WAVE_FORMAT_TAG_OGG;
 		lastSample = sample;
 	}
 
+#if !defined(__ANDROID__)
 	// seek to the right offset if necessary
 	if (sampleOffset != lastSampleOffset) {
 		if (ov_pcm_seek(&ogg, sampleOffset / sample->objectInfo.nChannels) != 0) {
@@ -578,6 +602,7 @@ int idSampleDecoderLocal::DecodeOGG(idSoundSample *sample, int sampleOffset44k, 
 			return 0;
 		}
 	}
+#endif
 
 	lastSampleOffset = sampleOffset;
 
@@ -585,6 +610,7 @@ int idSampleDecoderLocal::DecodeOGG(idSoundSample *sample, int sampleOffset44k, 
 	totalSamples = sampleCount;
 	readSamples = 0;
 
+#if !defined(__ANDROID__)
 	do {
 		float **samples;
 		int ret = ov_read_float(&ogg, &samples, totalSamples / sample->objectInfo.nChannels, NULL);
@@ -606,6 +632,7 @@ int idSampleDecoderLocal::DecodeOGG(idSoundSample *sample, int sampleOffset44k, 
 		readSamples += ret;
 		totalSamples -= ret;
 	} while (totalSamples > 0);
+#endif
 
 	lastSampleOffset += readSamples;
 

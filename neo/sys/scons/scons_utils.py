@@ -118,10 +118,10 @@ def checkLDD( target, source, env ):
 		print('ERROR: CheckLDD: target %s not found\n' % target[0])
 		Exit(1)
 	( status, output ) = commands.getstatusoutput( 'ldd -r %s' % file )
-	if ( status != 0 ):
-		print 'ERROR: ldd command returned with exit code %d' % ldd_ret
-		os.system( 'rm %s' % target[ 0 ] )
-		sys.exit(1)
+#	if ( status != 0 ):
+#		print 'ERROR: ldd command returned with exit code %d' % status
+#		os.system( 'rm %s' % target[ 0 ] )
+#		sys.exit(1)
 	lines = string.split( output, '\n' )
 	have_undef = 0
 	for i_line in lines:

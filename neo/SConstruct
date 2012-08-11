@@ -15,7 +15,8 @@ conf_filename='site.conf'
 serialized=['CC', 'CXX', 'JOBS', 'BUILD', 'IDNET_HOST', 'DEDICATED',
 	'DEBUG_MEMORY', 'LIBC_MALLOC', 'ID_NOLANADDRESS', 'ID_MCHECK', 'ALSA',
 	'TARGET_CORE', 'TARGET_GAME', 'TARGET_D3XP', 'TARGET_MONO', 'TARGET_DEMO', 'NOCURL',
-	'BUILD_ROOT', 'BUILD_GAMEPAK', 'BASEFLAGS', 'SILENT', 'TARGET_OPENGL' ]
+	'BUILD_ROOT', 'BUILD_GAMEPAK', 'BASEFLAGS', 'SILENT', 'TARGET_OPENGL',
+	'TARGET_ANDROID', 'NDK' ]
 
 # global build mode ------------------------------
 
@@ -92,8 +93,14 @@ TARGET_DEMO (default 0)
 	NOTE: if you *only* want the demo client, set TARGET_CORE and TARGET_GAME to 0
 
 TARGET_OPENGL (default 0)
-	Build an OpenGL renderer instead of OpenGL ES2.0; GLSL shaders are
-	compatible.
+	Build an OpenGL renderer instead of OpenGL ES2.0.
+	GLSL shaders are compatible.
+
+TARGET_ANDROID (default 0)
+	Build the Android version.
+
+NDK (default '')
+	Directory containing the Android NDK (Native Development Kit)
 
 IDNET_HOST (default to source hardcoded)
 	Override builtin IDNET_HOST with your own settings
@@ -151,6 +158,9 @@ else:
 		cpu = 'ppc'
 g_os = 'Linux'
 
+if ARGUMENTS.has_key( 'ARCH' ):
+	cpu = ARGUMENTS['ARCH']
+
 # end system detection ---------------------------
 
 # default settings -------------------------------
@@ -166,6 +176,8 @@ TARGET_D3XP = '1'
 TARGET_MONO = '0'
 TARGET_DEMO = '0'
 TARGET_OPENGL = '0'
+TARGET_ANDROID = '0'
+NDK = ''
 IDNET_HOST = ''
 DEBUG_MEMORY = '0'
 LIBC_MALLOC = '1'
@@ -271,13 +283,14 @@ CORELINKFLAGS = [ ]
 # for release build, further optimisations that may not work on all files
 OPTCPPFLAGS = [ ]
 
-BASECPPFLAGS.append( BASEFLAGS )
+BASECPPFLAGS.append( BASEFLAGS.split() )
 BASECPPFLAGS.append( '-pipe' )
 # warn all
 BASECPPFLAGS.append( '-Wall' )
 #BASECPPFLAGS.append( '-Wextra' )
 BASECPPFLAGS.append( '-Wno-sign-compare' )
 BASECPPFLAGS.append( '-Wno-unknown-pragmas' )
+BASECPPFLAGS.append( '-Wno-psabi' )
 # this define is necessary to make sure threading support is enabled in X
 CORECPPFLAGS.append( '-DXTHREADS' )
 # don't wrap gcc messages
@@ -288,6 +301,10 @@ BASECPPFLAGS.append( '-fpermissive' )
 if ( g_os == 'Linux' ):
 	# gcc 4.x option only - only export what we mean to from the game SO
 	BASECPPFLAGS.append( '-fvisibility=hidden' )
+
+if ( TARGET_ANDROID == '1' ):
+	BASECPPFLAGS.append( '-D__ANDROID__')
+	g_os = 'Android'
 
 if ( g_sdk or SDK != '0' ):
 	BASECPPFLAGS.append( '-D_D3SDK' )
@@ -306,7 +323,10 @@ elif ( BUILD == 'release' ):
 	# -finline-functions: implicit at -O3
 	# -fschedule-insns2: implicit at -O2
 	# no-unsafe-math-optimizations: that should be on by default really. hit some wonko bugs in physics code because of that
-	OPTCPPFLAGS = [ '-O3', '-march=pentium3', '-ffast-math', '-fno-unsafe-math-optimizations', '-fomit-frame-pointer' ]
+	if ( g_os == 'Android' ):
+		OPTCPPFLAGS = [ '-marm', '-march=armv7-a', '-mfloat-abi=softfp', '-mfpu=neon', '-ffast-math', '-O3', '-fomit-frame-pointer' ]
+	else:
+		OPTCPPFLAGS = [ '-O3', '-march=pentium3', '-ffast-math', '-fno-unsafe-math-optimizations', '-fomit-frame-pointer' ]
 	if ( ID_MCHECK == '0' ):
 		ID_MCHECK = '2'
 else:
@@ -329,7 +349,7 @@ if ( ID_MCHECK == '1' ):
 	BASECPPFLAGS.append( '-DID_MCHECK' )
 	
 # create the build environements
-g_base_env = Environment( ENV = os.environ, CC = CC, CXX = CXX, LINK = LINK, CPPFLAGS = BASECPPFLAGS, LINKFLAGS = BASELINKFLAGS, CPPPATH = CORECPPPATH, LIBPATH = CORELIBPATH )
+g_base_env = Environment( ENV = os.environ, CC = CC, CXX = CXX, LINK = LINK, CPPFLAGS = BASECPPFLAGS, LINKFLAGS = BASELINKFLAGS, CPPPATH = CORECPPPATH, LIBPATH = CORELIBPATH, NDK = NDK )
 scons_utils.SetupUtils( g_base_env )
 
 g_env = g_base_env.Clone()
@@ -376,7 +396,7 @@ local_d3xp = 0
 # OpenGL
 local_opengl = 0
 
-GLOBALS = 'g_env g_env_noopt g_game_env g_os ID_MCHECK ALSA idlib_objects game_objects local_dedicated local_gamedll local_demo local_idlibpic local_curl local_d3xp local_opengl OPTCPPFLAGS'
+GLOBALS = 'g_env g_env_noopt g_game_env g_os ID_MCHECK ALSA idlib_objects game_objects local_dedicated local_gamedll local_demo local_idlibpic local_curl local_d3xp local_opengl OPTCPPFLAGS NDK'
 
 # end general configuration ----------------------
 
@@ -393,6 +413,12 @@ game_demo = None
 
 if ( TARGET_OPENGL != '0' ):
 	local_opengl = 1
+	Export( 'GLOBALS ' + GLOBALS )
+
+if ( TARGET_ANDROID != '0' ):
+	Export( 'GLOBALS ' + GLOBALS )
+
+if ( TARGET_ANDROID != '' ):
 	Export( 'GLOBALS ' + GLOBALS )
 
 # build curl if needed

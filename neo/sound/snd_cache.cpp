@@ -381,6 +381,7 @@ void idSoundSample::MakeDefault(void)
 		ncd[i*2+1] = sample;
 	}
 
+#if !defined(__ANDROID__)
 	if (idSoundSystemLocal::useOpenAL) {
 		alGetError();
 		alGenBuffers(1, &openalBuffer);
@@ -398,6 +399,7 @@ void idSoundSample::MakeDefault(void)
 			hardwareBuffer = true;
 		}
 	}
+#endif
 
 	defaultSound = true;
 }
@@ -472,6 +474,7 @@ void idSoundSample::Load(void)
 	purged = false;
 	hardwareBuffer = false;
 
+#if !defined(__ANDROID__)
 	timestamp = GetNewTimeStamp();
 
 	if (timestamp == FILE_NOT_FOUND_TIMESTAMP) {
@@ -666,6 +669,7 @@ void idSoundSample::Load(void)
 	}
 
 	fh.Close();
+#endif
 }
 
 /*
@@ -677,6 +681,7 @@ void idSoundSample::PurgeSoundSample()
 {
 	purged = true;
 
+#if !defined(__ANDROID__)
 	if (hardwareBuffer && idSoundSystemLocal::useOpenAL) {
 		alGetError();
 		alDeleteBuffers(1, &openalBuffer);
@@ -688,6 +693,7 @@ void idSoundSample::PurgeSoundSample()
 			hardwareBuffer = false;
 		}
 	}
+#endif
 
 	if (amplitudeData) {
 		soundCacheAllocator.Free(amplitudeData);

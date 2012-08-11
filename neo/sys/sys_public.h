@@ -100,7 +100,21 @@ If you have questions concerning this license or the applicable additional terms
 // Linux
 #ifdef __linux__
 
-#ifdef __i386__
+#if defined(__ANDROID__)
+
+#if defined(__i386__)
+#define	BUILD_STRING				"android-x86"
+#define BUILD_OS_ID					2
+#define CPUSTRING					"x86"
+#elif defined(__arm__)
+#define	BUILD_STRING				"android-arm"
+#define CPUSTRING					"arm"
+#define BUILD_OS_ID					2
+#endif
+
+#else
+
+#if defined(__i386__)
 #define	BUILD_STRING				"linux-x86"
 #define BUILD_OS_ID					2
 #define CPUSTRING					"x86"
@@ -111,6 +125,8 @@ If you have questions concerning this license or the applicable additional terms
 #elif defined(__ppc__)
 #define	BUILD_STRING				"linux-ppc"
 #define CPUSTRING					"ppc"
+#endif
+
 #endif
 
 #define _alloca							alloca
@@ -494,6 +510,9 @@ typedef struct {
 	const char 	*name;
 	intptr_t	threadHandle;
 	size_t		threadId;
+#if defined(__ANDROID__)
+	bool		threadCancel;
+#endif
 } xthreadInfo;
 
 const int MAX_THREADS				= 10;
