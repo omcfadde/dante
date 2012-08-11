@@ -434,6 +434,7 @@ for AVIdemo writing
 */
 void idSoundWorldLocal::MixLoop(int current44kHz, int numSpeakers, float *finalMixBuffer)
 {
+#if !defined(__ANDROID__)
 	int i, j;
 	idSoundEmitterLocal *sound;
 
@@ -559,6 +560,7 @@ void idSoundWorldLocal::MixLoop(int current44kHz, int numSpeakers, float *finalM
 	if (!idSoundSystemLocal::useOpenAL && enviroSuitActive) {
 		soundSystemLocal.DoEnviroSuit(finalMixBuffer, MIXBUFFER_SAMPLES, numSpeakers);
 	}
+#endif
 }
 
 //==============================================================================
@@ -1661,6 +1663,7 @@ finalMixBuffer
 void idSoundWorldLocal::AddChannelContribution(idSoundEmitterLocal *sound, idSoundChannel *chan,
                 int current44kHz, int numSpeakers, float *finalMixBuffer)
 {
+#if !defined(__ANDROID__)
 	int j;
 	float volume;
 
@@ -2017,6 +2020,7 @@ void idSoundWorldLocal::AddChannelContribution(idSoundEmitterLocal *sound, idSou
 
 	soundSystemLocal.soundStats.activeSounds++;
 
+#endif
 }
 
 /*

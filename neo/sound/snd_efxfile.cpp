@@ -30,6 +30,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "snd_local.h"
 
+#if !defined(__ANDROID__)
 /*
 ===============
 idEFXFile::idEFXFile
@@ -240,3 +241,4 @@ void idEFXFile::UnloadFile(void)
 {
 	Clear();
 }
+#endif

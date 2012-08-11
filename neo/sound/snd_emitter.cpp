@@ -245,6 +245,7 @@ idSoundChannel::ALStop
 */
 void idSoundChannel::ALStop(void)
 {
+#if !defined(__ANDROID__)
 	if (idSoundSystemLocal::useOpenAL) {
 
 		if (alIsSource(openalSource)) {
@@ -271,6 +272,7 @@ void idSoundChannel::ALStop(void)
 			}
 		}
 	}
+#endif
 }
 
 /*
@@ -472,6 +474,7 @@ Sets the playing and shakes bools.
 */
 void idSoundEmitterLocal::CheckForCompletion(int current44kHzTime)
 {
+#if !defined(__ANDROID__)
 	bool hasActive;
 	int i;
 
@@ -550,6 +553,7 @@ void idSoundEmitterLocal::CheckForCompletion(int current44kHzTime)
 			removeStatus = REMOVE_STATUS_SAMPLEFINISHED;
 		}
 	}
+#endif
 }
 
 /*

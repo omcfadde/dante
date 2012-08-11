@@ -29,6 +29,8 @@ If you have questions concerning this license or the applicable additional terms
 #ifndef __SND_LOCAL_H__
 #define __SND_LOCAL_H__
 
+#if !defined(__ANDROID__)
+
 // you need the OpenAL headers for build, even if AL is not enabled - http://www.openal.org/
 #ifdef _WIN32
 #include "../openal/include/al.h"
@@ -46,6 +48,37 @@ If you have questions concerning this license or the applicable additional terms
 #define ID_ALCHAR
 #endif
 #include "../openal/include/efxlib.h"
+
+#else
+
+/** 8-bit boolean */
+typedef char ALboolean;
+/** character */
+typedef char ALchar;
+/** signed 8-bit 2's complement integer */
+typedef signed char ALbyte;
+/** unsigned 8-bit integer */
+typedef unsigned char ALubyte;
+/** signed 16-bit 2's complement integer */
+typedef short ALshort;
+/** unsigned 16-bit integer */
+typedef unsigned short ALushort;
+/** signed 32-bit 2's complement integer */
+typedef int ALint;
+/** unsigned 32-bit integer */
+typedef unsigned int ALuint;
+/** non-negative 32-bit binary integer size */
+typedef int ALsizei;
+/** enumerated 32-bit value */
+typedef int ALenum;
+/** 32-bit IEEE754 floating-point */
+typedef float ALfloat;
+/** 64-bit IEEE754 floating-point */
+typedef double ALdouble;
+/** void type (for opaque pointers only) */
+typedef void ALvoid;
+
+#endif
 
 // demo sound commands
 typedef enum {
@@ -818,6 +851,7 @@ class idSoundSystemLocal : public idSoundSystem
 
 		idList<SoundFX *>		fxList;
 
+#if !defined(__ANDROID__)
 		ALCdevice				*openalDevice;
 		ALCcontext				*openalContext;
 		ALsizei					openalSourceCount;
@@ -827,6 +861,7 @@ class idSoundSystemLocal : public idSoundSystem
 		EAXSetBufferMode		alEAXSetBufferMode;
 		EAXGetBufferMode		alEAXGetBufferMode;
 		idEFXFile				EFXDatabase;
+#endif
 		bool					efxloaded;
 		// latches
 		static bool				useOpenAL;

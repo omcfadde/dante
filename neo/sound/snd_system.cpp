@@ -357,6 +357,7 @@ void idSoundSystemLocal::Init()
 	common->StartupVariable("s_useOpenAL", true);
 	common->StartupVariable("s_useEAXReverb", true);
 
+#if !defined(__ANDROID__)
 	if (idSoundSystemLocal::s_useOpenAL.GetBool() || idSoundSystemLocal::s_useEAXReverb.GetBool()) {
 		if (!Sys_LoadOpenAL()) {
 			idSoundSystemLocal::s_useOpenAL.SetBool(false);
@@ -441,6 +442,7 @@ void idSoundSystemLocal::Init()
 
 	useOpenAL = idSoundSystemLocal::s_useOpenAL.GetBool();
 	useEAXReverb = idSoundSystemLocal::s_useEAXReverb.GetBool();
+#endif
 
 	cmdSystem->AddCommand("listSounds", ListSounds_f, CMD_FL_SOUND, "lists all sounds");
 	cmdSystem->AddCommand("listSoundDecoders", ListSoundDecoders_f, CMD_FL_SOUND, "list active sound decoders");
@@ -461,6 +463,7 @@ void idSoundSystemLocal::Shutdown()
 {
 	ShutdownHW();
 
+#if !defined(__ANDROID__)
 	// EAX or not, the list needs to be cleared
 	EFXDatabase.Clear();
 
@@ -489,11 +492,13 @@ void idSoundSystemLocal::Shutdown()
 
 		}
 	}
+#endif
 
 	// destroy all the sounds (hardware buffers as well)
 	delete soundCache;
 	soundCache = NULL;
 
+#if !defined(__ANDROID__)
 	// destroy openal device and context
 	if (useOpenAL) {
 		alcMakeContextCurrent(NULL);
@@ -506,6 +511,7 @@ void idSoundSystemLocal::Shutdown()
 	}
 
 	Sys_FreeOpenAL();
+#endif
 
 	idSampleDecoder::Shutdown();
 }
@@ -517,6 +523,7 @@ idSoundSystemLocal::InitHW
 */
 bool idSoundSystemLocal::InitHW()
 {
+#if !defined(__ANDROID__)
 
 	if (s_noSound.GetBool()) {
 		return false;
@@ -543,11 +550,16 @@ bool idSoundSystemLocal::InitHW()
 		// put the real number in there
 		s_numberOfSpeakers.SetInteger(snd_audio_hw->GetNumberOfSpeakers());
 	}
+#endif
 
 	isInitialized = true;
 	shutdown = false;
 
+#if !defined(__ANDROID__)
 	return true;
+#else
+	return false;
+#endif
 }
 
 /*
@@ -656,6 +668,7 @@ called from async sound thread when com_asyncSound == 1 ( Windows )
 */
 int idSoundSystemLocal::AsyncUpdate(int inTime)
 {
+#if !defined(__ANDROID__)
 
 	if (!isInitialized || shutdown || !snd_audio_hw) {
 		return 0;
@@ -771,6 +784,9 @@ int idSoundSystemLocal::AsyncUpdate(int inTime)
 	soundStats.timeinprocess = Sys_Milliseconds() - inTime;
 
 	return soundStats.timeinprocess;
+#else
+	return 0;
+#endif
 }
 
 /*
@@ -783,6 +799,7 @@ called by the sound thread when com_asyncSound is 3 ( Linux )
 */
 int idSoundSystemLocal::AsyncUpdateWrite(int inTime)
 {
+#if !defined(__ANDROID__)
 
 	if (!isInitialized || shutdown || !snd_audio_hw) {
 		return 0;
@@ -849,6 +866,9 @@ int idSoundSystemLocal::AsyncUpdateWrite(int inTime)
 	CurrentSoundTime = sampleTime;
 
 	return Sys_Milliseconds() - inTime;
+#else
+	return 0;
+#endif
 }
 
 /*
@@ -1196,10 +1216,12 @@ void idSoundSystemLocal::BeginLevelLoad()
 
 	soundCache->BeginLevelLoad();
 
+#if !defined(__ANDROID__)
 	if (efxloaded) {
 		EFXDatabase.UnloadFile();
 		efxloaded = false;
 	}
+#endif
 }
 
 /*
@@ -1209,6 +1231,7 @@ idSoundSystemLocal::EndLevelLoad
 */
 void idSoundSystemLocal::EndLevelLoad(const char *mapstring)
 {
+#if !defined(__ANDROID__)
 	if (!isInitialized) {
 		return;
 	}
@@ -1229,6 +1252,7 @@ void idSoundSystemLocal::EndLevelLoad(const char *mapstring)
 	} else {
 		common->Printf("sound: missing %s\n", efxname.c_str());
 	}
+#endif
 }
 
 /*
@@ -1238,6 +1262,7 @@ idSoundSystemLocal::AllocOpenALSource
 */
 ALuint idSoundSystemLocal::AllocOpenALSource(idSoundChannel *chan, bool looping, bool stereo)
 {
+#if !defined(__ANDROID__)
 	int timeOldestZeroVolSingleShot = Sys_Milliseconds();
 	int timeOldestZeroVolLooping = Sys_Milliseconds();
 	int timeOldestSingle = Sys_Milliseconds();
@@ -1313,6 +1338,9 @@ ALuint idSoundSystemLocal::AllocOpenALSource(idSoundChannel *chan, bool looping,
 	} else {
 		return 0;
 	}
+#else
+	return 0;
+#endif
 }
 
 /*
@@ -1322,6 +1350,7 @@ idSoundSystemLocal::FreeOpenALSource
 */
 void idSoundSystemLocal::FreeOpenALSource(ALuint handle)
 {
+#if !defined(__ANDROID__)
 	ALsizei i;
 
 	for (i = 0; i < openalSourceCount; i++) {
@@ -1347,6 +1376,7 @@ void idSoundSystemLocal::FreeOpenALSource(ALuint handle)
 			openalSources[i].stereo = false;
 		}
 	}
+#endif
 }
 
 /*

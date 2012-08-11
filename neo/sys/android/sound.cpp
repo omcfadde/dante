@@ -35,16 +35,16 @@ If you have questions concerning this license or the applicable additional terms
 #include <sys/mman.h>
 
 #include "../../idlib/precompiled.h"
+#include "../../sound/snd_local.h"
 #include "../posix/posix_public.h"
 #include "sound.h"
-
-#include "../../android_sound/snd_local.h"
 
 const char	*s_driverArgs[]	= { NULL };
 
 
 idAudioHardware *idAudioHardware::Alloc()
 {
+	return NULL;
 }
 
 /*
