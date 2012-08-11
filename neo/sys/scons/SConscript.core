@@ -316,6 +316,9 @@ sound_env = local_env.Clone()
 if g_os == 'Android':
 	sound_list = [ '../android/sound.cpp' ]
 else:
+	sound_env.Append( CPPPATH = '/usr/local/lib/oss/include' )
+	# store a local copy of the include headers as well for holy build
+	sound_env.Append( CPPPATH = '../linux/oss/include' )
 	sound_list = [ '../linux/sound.cpp' ]
 if ( ALSA != '0' ):
 	if (g_os == 'Linux' ):
