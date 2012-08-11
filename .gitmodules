@@ -1,0 +1,3 @@
+[submodule "jpeg-8d"]
+	path = jpeg-8d
+	url = git@github.com:omcfadde/jpeg-8d.git
