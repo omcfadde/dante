@@ -40,6 +40,7 @@ If you have questions concerning this license or the applicable additional terms
 #include <fcntl.h>
 
 #include <android/sensor.h>
+#include <android/window.h>
 #include <android_native_app_glue.h>
 
 #ifdef ID_MCHECK
