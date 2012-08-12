@@ -683,6 +683,10 @@ void android_main(struct android_app *state)
 	state->onAppCmd = handleCmd;
 	state->onInputEvent = handleInput;
 
+	if (state->activity) {
+		ANativeActivity_setWindowFlags(state->activity, AWINDOW_FLAG_FULLSCREEN|AWINDOW_FLAG_KEEP_SCREEN_ON, 0);
+	}
+
 	Sys_Printf("main loop started");
 
 	while (!engine.isExiting()) {
