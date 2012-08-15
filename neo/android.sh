@@ -8,6 +8,7 @@ export CC=$ARCH-gcc
 
 scons \
 	ARCH='arm' \
+	BUILD='release' \
 	\
 	CC=$CC \
 	CXX=$CXX \

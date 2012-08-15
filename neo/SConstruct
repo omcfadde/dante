@@ -324,7 +324,7 @@ elif ( BUILD == 'release' ):
 	# -fschedule-insns2: implicit at -O2
 	# no-unsafe-math-optimizations: that should be on by default really. hit some wonko bugs in physics code because of that
 	if ( g_os == 'Android' ):
-		OPTCPPFLAGS = [ '-marm', '-march=armv7-a', '-mfloat-abi=softfp', '-mfpu=neon', '-ffast-math', '-O3', '-fomit-frame-pointer' ]
+		OPTCPPFLAGS = [ '-O3', '-marm', '-march=armv7-a', '-mfloat-abi=softfp', '-mfpu=neon', '-ffast-math', '-fno-unsafe-math-optimizations', '-fomit-frame-pointer' ]
 	else:
 		OPTCPPFLAGS = [ '-O3', '-march=pentium3', '-ffast-math', '-fno-unsafe-math-optimizations', '-fomit-frame-pointer' ]
 	if ( ID_MCHECK == '0' ):
