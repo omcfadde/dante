@@ -45,6 +45,7 @@ If you have questions concerning this license or the applicable additional terms
 
 #if defined(__ANDROID__)
 #include <android/sensor.h>
+#include <android/window.h>
 #include <android_native_app_glue.h>
 #endif
 
@@ -820,6 +821,12 @@ void android_main(struct android_app *state)
 	state->userData = &engine;
 	state->onAppCmd = handleCmd;
 	state->onInputEvent = handleInput;
+
+	if (state->activity) {
+		ANativeActivity_setWindowFlags(state->activity,
+		                               AWINDOW_FLAG_FULLSCREEN |
+		                               AWINDOW_FLAG_KEEP_SCREEN_ON, 0);
+	}
 
 	Sys_Printf("main loop started");
 
