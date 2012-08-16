@@ -66,7 +66,7 @@ GLExtension_t GLimp_ExtensionPointer(const char *name)
 #endif
 	GLExtension_t ret;
 
-#ifdef ID_TARGET_OPENGL
+#ifdef ID_TARGET_OPENGL_GLX
 	ret = glXGetProcAddressARB(name);
 #else
 	ret = eglGetProcAddress(name);
