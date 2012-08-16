@@ -395,8 +395,9 @@ local_idlibpic = 0
 local_d3xp = 0
 # OpenGL
 local_opengl = 0
+local_opengl_egl = 0
 
-GLOBALS = 'g_env g_env_noopt g_game_env g_os ID_MCHECK ALSA idlib_objects game_objects local_dedicated local_gamedll local_demo local_idlibpic local_curl local_d3xp local_opengl OPTCPPFLAGS NDK'
+GLOBALS = 'g_env g_env_noopt g_game_env g_os ID_MCHECK ALSA idlib_objects game_objects local_dedicated local_gamedll local_demo local_idlibpic local_curl local_d3xp local_opengl local_opengl_egl OPTCPPFLAGS NDK'
 
 # end general configuration ----------------------
 
@@ -415,6 +416,10 @@ if ( TARGET_OPENGL != '0' ):
 	local_opengl = 1
 	Export( 'GLOBALS ' + GLOBALS )
 
+if ( TARGET_OPENGL_EGL != '0' ):
+	local_opengl_egl = local_opengl = 1
+	Export( 'GLOBALS ' + GLOBALS )
+	
 if ( TARGET_ANDROID != '0' ):
 	Export( 'GLOBALS ' + GLOBALS )
 

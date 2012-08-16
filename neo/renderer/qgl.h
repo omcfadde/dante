@@ -38,7 +38,12 @@ If you have questions concerning this license or the applicable additional terms
 #ifdef ID_TARGET_OPENGL
 #include <GL/gl.h>
 #include <GL/glext.h>
+#ifdef ID_TARGET_OPENGL_GLX
 #include <GL/glx.h>
+#else
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+#endif
 #define GL_APIENTRY	GLAPIENTRY
 #else
 #include <EGL/egl.h>

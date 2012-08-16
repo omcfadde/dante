@@ -311,7 +311,8 @@ else:
 
 if ( local_opengl == 1 ):
 	local_env.Append( CPPDEFINES = [ 'ID_TARGET_OPENGL' ] )
-
+	if ( local_opengl_egl == 0 ):
+		local_env.Append( CPPDEFINES = [ 'ID_TARGET_OPENGL_GLX' ] )
 sound_env = local_env.Clone()
 if g_os == 'Android':
 	sound_list = [ '../android/sound.cpp' ]
@@ -358,6 +359,8 @@ if ( local_dedicated == 0 ):
 		local_env.Append( LIBS = [ 'GLESv2', 'EGL' ] )
 	else:
 		local_env.Append( LIBS = [ 'GL' ] )
+		if ( local_opengl_egl == 1 ):
+			local_env.Append( LIBS = [ 'EGL' ] )
 
 source_list = core_list
 source_list += idlib_objects

@@ -91,6 +91,12 @@ bool GLimp_SpawnRenderThread(void (*a)())
 
 void GLimp_ActivateContext()
 {
+#if ID_TARGET_OPENGL
+	assert(eglDisplay);
+	assert(eglSurface);
+	assert(eglContext);
+	eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext);
+#endif
 #if 0
 	assert(dpy);
 	assert(ctx);
@@ -100,6 +106,10 @@ void GLimp_ActivateContext()
 
 void GLimp_DeactivateContext()
 {
+#if ID_TARGET_OPENGL
+	assert(eglDisplay);
+	eglMakeCurrent(eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+#endif
 #if 0
 	assert(dpy);
 	glXMakeCurrent(dpy, None, NULL);
@@ -336,13 +346,13 @@ bool GLimp_OpenDisplay(void)
 
 /*
 ===============
-GLX_Init
+EGL_Init
 ===============
 */
 	EGLConfig eglConfig;
 	EGLint eglNumConfig;
 
-int GLX_Init(glimpParms_t a)
+int EGL_Init(glimpParms_t a)
 {
 	EGLint attrib[] = {
 		EGL_RED_SIZE, 8,	//  1,  2
@@ -352,7 +362,11 @@ int GLX_Init(glimpParms_t a)
 		EGL_DEPTH_SIZE, 24,	//  9, 10
 		EGL_STENCIL_SIZE, 8,	// 11, 12
 		EGL_BUFFER_SIZE, 24,	// 13, 14
+#ifdef ID_TARGET_OPENGL
+		EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,	// 15, 16
+#else		
 		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,	// 15, 16
+#endif
 		EGL_NONE,	// 17
 	};
 	// these match in the array
@@ -448,9 +462,14 @@ int GLX_Init(glimpParms_t a)
 #endif
 
 	// color, depth and stencil
+
 	colorbits = 24;
 	depthbits = 24;
 	stencilbits = 8;
+
+#ifdef ID_TARGET_OPENGL
+	colorbits = 32;
+#endif
 
 	for (i = 0; i < 16; i++) {
 		// 0 - default
@@ -546,7 +565,7 @@ int GLX_Init(glimpParms_t a)
 	}
 
 	visinfo = malloc(sizeof(XVisualInfo));
-	if (!(XMatchVisualInfo(dpy, scrnum, glConfig.depthBits, TrueColor, visinfo))) {
+	if (!(XMatchVisualInfo(dpy, scrnum, glConfig.depthBits, TrueColor, (XVisualInfo*)visinfo))) {
 		common->Printf("Couldn't get a visual\n");
 		return false;
 	}
@@ -618,7 +637,9 @@ int GLX_Init(glimpParms_t a)
 	}
 
 	EGLint ctxattrib[] = {
+#ifndef ID_TARGET_OPENGL
 		EGL_CONTEXT_CLIENT_VERSION, 2,
+#endif
 		EGL_NONE
 	};
 
@@ -669,7 +690,7 @@ bool GLimp_Init(glimpParms_t a)
 		return false;
 	}
 
-	if (!GLX_Init(a)) {
+	if (!EGL_Init(a)) {
 		return false;
 	}
 
