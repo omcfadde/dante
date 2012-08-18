@@ -650,7 +650,15 @@ int EGL_Init(glimpParms_t a)
 	}
 
 	eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext);
-
+	glstring = (const char *) eglQueryString(eglDisplay,EGL_VENDOR);
+	common->Printf("EGL_VENDOR: %s\n", (glstring)?glstring:"NULL");
+	glstring = (const char *) eglQueryString(eglDisplay,EGL_VERSION);
+	common->Printf("EGL_VERSION: %s\n", (glstring)?glstring:"NULL");
+	glstring = (const char *) eglQueryString(eglDisplay,EGL_CLIENT_APIS);
+	common->Printf("EGL_CLIENT_APIS: %s\n", (glstring)?glstring:"NULL");
+	
+	glstring = (const char *) eglQueryString(eglDisplay,EGL_EXTENSIONS);
+	common->Printf("EGL_EXTENSIONS: %s\n", glstring);
 	glstring = (const char *) glGetString(GL_RENDERER);
 	common->Printf("GL_RENDERER: %s\n", glstring);
 
