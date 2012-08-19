@@ -377,6 +377,7 @@ int EGL_Init(glimpParms_t a)
 #define ATTR_DEPTH_IDX	9
 #define ATTR_STENCIL_IDX	11
 #define ATTR_BUFFER_SIZE_IDX	13
+#define ATTR_RENDERABLE_TYPE	15
 	Window root;
 	XVisualInfo *visinfo;
 	XSetWindowAttributes attr;
@@ -405,7 +406,8 @@ int EGL_Init(glimpParms_t a)
 	glstring = (const char *) eglQueryString(eglDisplay,EGL_EXTENSIONS);
 	common->Printf("EGL_EXTENSIONS: %s\n", (glstring)?glstring:"NULL");
 
-	common->Printf("Initializing OpenGL display\n");
+	glstring = (attrib[ATTR_RENDERABLE_TYPE]==EGL_OPENGL_ES2_BIT)?"OpenGL ES": "OpenGL";
+	common->Printf("Initializing %s display\n",glstring);
 
 	root = RootWindow(dpy, scrnum);
 
@@ -664,6 +666,26 @@ int EGL_Init(glimpParms_t a)
 
 	eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext);
 
+	EGLint Context_RendererType;
+	     
+	eglQueryContext(eglDisplay, eglContext,EGL_CONTEXT_CLIENT_TYPE,&Context_RendererType);
+
+	switch (Context_RendererType)
+	{
+		case EGL_OPENGL_API:
+			glstring = "OpenGL";
+			break;
+		case EGL_OPENGL_ES_API:
+			glstring = "OpenGL ES";
+			break;
+		case EGL_OPENVG_API:
+			common->Printf("Context Query Returned OpenVG. This is Unsupported\n");
+			return false;
+		default:
+			common->Printf("Unknown Context Type. %04X\n",Context_RendererType);
+			return false;
+	}
+	common->Printf("EGL_CONTEXT_CLIENT_TYPE: %s\n", glstring);
 	glstring = (const char *) glGetString(GL_RENDERER);
 	common->Printf("GL_RENDERER: %s\n", glstring);
 
