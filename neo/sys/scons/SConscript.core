@@ -264,7 +264,7 @@ if ( local_dedicated == 0 ):
 		sys_string += ' android/input.cpp'
 	else:
 		sys_string += ' linux/input.cpp'
-	if ( local_opengl == 0 ):
+	if ( local_opengl == 0 or local_opengl_egl == 1):
 		if g_os == 'Android':
 			sys_string += ' android/gles2.cpp'
 		else:
@@ -361,6 +361,8 @@ if ( local_dedicated == 0 ):
 		local_env.Append( LIBS = [ 'GL' ] )
 		if ( local_opengl_egl == 1 ):
 			local_env.Append( LIBS = [ 'EGL' ] )
+		else:
+			local_env.Append( LIBS = [ 'Xxf86vm' ] )
 
 source_list = core_list
 source_list += idlib_objects
