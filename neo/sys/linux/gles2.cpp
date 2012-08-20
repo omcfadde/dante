@@ -252,12 +252,13 @@ void GLimp_Shutdown()
 void GLimp_SwapBuffers()
 {
 	assert(eglDisplay && eglSurface);
+
 #ifdef ID_TARGET_OPENGL
-       if (r_swapInterval.IsModified()) {
-               // Allow disabling of Vertical Sync.
-               r_swapInterval.ClearModified();
-               eglSwapInterval(eglDisplay, r_swapInterval.GetInteger());
-       }
+	if (r_swapInterval.IsModified()) {
+		// Allow disabling of Vertical Sync.
+		r_swapInterval.ClearModified();
+		eglSwapInterval(eglDisplay, r_swapInterval.GetInteger());
+	}
 #endif
 
 	eglSwapBuffers(eglDisplay, eglSurface);
