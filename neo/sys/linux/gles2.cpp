@@ -658,6 +658,17 @@ int EGL_Init(glimpParms_t a)
 		EGL_NONE
 	};
 
+
+#ifdef ID_TARGET_OPENGL
+	// Not all EGL Implementations will bind the current API to OpenGL
+	// automatically. Simply calling eglChooseConfig with EGL_RENDERABLE_TYPE
+	// set to EGL_OPENGL_BIT.
+	if(!eglBindAPI(EGL_OPENGL_API))
+	{
+		common->Printf("Couldn't Bind OpenGL API\n");
+		return false;		
+	}
+#endif
 	eglContext = eglCreateContext(eglDisplay, eglConfig, EGL_NO_CONTEXT, ctxattrib);
 	if (eglContext == EGL_NO_CONTEXT) {
 		common->Printf("Couldn't get a EGL context\n");
