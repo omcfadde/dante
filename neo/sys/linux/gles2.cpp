@@ -41,26 +41,9 @@ static int scrnum = 0;
 
 Window win = 0;
 
-bool dga_found = false;
-
-#if 0
-static GLXContext ctx = NULL;
-#endif
-
-static bool vidmode_ext = false;
-static int vidmode_MajorVersion = 0, vidmode_MinorVersion = 0;	// major and minor of XF86VidExtensions
-
-static XF86VidModeModeInfo **vidmodes;
-static int num_vidmodes;
-static bool vidmode_active = false;
-
 static EGLDisplay eglDisplay = EGL_NO_DISPLAY;
 static EGLContext eglContext = EGL_NO_CONTEXT;
 static EGLSurface eglSurface = EGL_NO_SURFACE;
-
-// backup gamma ramp
-static int save_rampsize = 0;
-static unsigned short *save_red, *save_green, *save_blue;
 
 void GLimp_WakeBackEnd(void *a)
 {
@@ -115,19 +98,6 @@ save and restore the original gamma of the system
 */
 void GLimp_SaveGamma()
 {
-	if (save_rampsize) {
-		return;
-	}
-
-#if 0
-	assert(dpy);
-
-	XF86VidModeGetGammaRampSize(dpy, scrnum, &save_rampsize);
-	save_red = (unsigned short *)malloc(save_rampsize*sizeof(unsigned short));
-	save_green = (unsigned short *)malloc(save_rampsize*sizeof(unsigned short));
-	save_blue = (unsigned short *)malloc(save_rampsize*sizeof(unsigned short));
-	XF86VidModeGetGammaRamp(dpy, scrnum, save_rampsize, save_red, save_green, save_blue);
-#endif
 }
 
 /*
@@ -139,17 +109,6 @@ save and restore the original gamma of the system
 */
 void GLimp_RestoreGamma()
 {
-#if 0
-	if (!save_rampsize)
-		return;
-
-	XF86VidModeSetGammaRamp(dpy, scrnum, save_rampsize, save_red, save_green, save_blue);
-
-	free(save_red);
-	free(save_green);
-	free(save_blue);
-	save_rampsize = 0;
-#endif
 }
 
 /*
@@ -162,46 +121,6 @@ the size of the gamma ramp can not be changed on X (I need to confirm this)
 */
 void GLimp_SetGamma(unsigned short red[256], unsigned short green[256], unsigned short blue[256])
 {
-#if 0
-	if (dpy) {
-		int size;
-
-		GLimp_SaveGamma();
-		XF86VidModeGetGammaRampSize(dpy, scrnum, &size);
-		common->DPrintf("XF86VidModeGetGammaRampSize: %d\n", size);
-
-		if (size > 256) {
-			// silly generic resample
-			int i;
-			unsigned short *l_red, *l_green, *l_blue;
-			l_red = (unsigned short *)malloc(size*sizeof(unsigned short));
-			l_green = (unsigned short *)malloc(size*sizeof(unsigned short));
-			l_blue = (unsigned short *)malloc(size*sizeof(unsigned short));
-			//int r_size = 256;
-			int r_i;
-			float r_f;
-
-			for (i=0; i<size-1; i++) {
-				r_f = (float)i*255.0f/(float)(size-1);
-				r_i = (int)floor(r_f);
-				r_f -= (float)r_i;
-				l_red[i] = (int)round((1.0f-r_f)*(float)red[r_i]+r_f*(float)red[r_i+1]);
-				l_green[i] = (int)round((1.0f-r_f)*(float)green[r_i]+r_f*(float)green[r_i+1]);
-				l_blue[i] = (int)round((1.0f-r_f)*(float)blue[r_i]+r_f*(float)blue[r_i+1]);
-			}
-
-			l_red[size-1] = red[255];
-			l_green[size-1] = green[255];
-			l_blue[size-1] = blue[255];
-			XF86VidModeSetGammaRamp(dpy, scrnum, size, l_red, l_green, l_blue);
-			free(l_red);
-			free(l_green);
-			free(l_blue);
-		} else {
-			XF86VidModeSetGammaRamp(dpy, scrnum, size, red, green, blue);
-		}
-	}
-#endif
 }
 
 void GLimp_Shutdown()
@@ -218,18 +137,11 @@ void GLimp_Shutdown()
 
 		XDestroyWindow(dpy, win);
 
-#if 0
-		if (vidmode_active) {
-			XF86VidModeSwitchToMode(dpy, scrnum, vidmodes[0]);
-		}
-#endif
-
 		XFlush(dpy);
 
 		// FIXME: that's going to crash
 		//XCloseDisplay( dpy );
 
-		vidmode_active = false;
 		dpy = NULL;
 		win = 0;
 
@@ -243,34 +155,6 @@ void GLimp_SwapBuffers()
 {
 	assert(eglDisplay && eglSurface);
 	eglSwapBuffers(eglDisplay, eglSurface);
-}
-
-/*
-GLX_TestDGA
-Check for DGA	- update in_dgamouse if needed
-*/
-void GLX_TestDGA()
-{
-	int dga_MajorVersion = 0, dga_MinorVersion = 0;
-
-	assert(dpy);
-
-#if defined( ID_ENABLE_DGA )
-
-	if (!XF86DGAQueryVersion(dpy, &dga_MajorVersion, &dga_MinorVersion)) {
-		// unable to query, probalby not supported
-		common->Printf("Failed to detect DGA DirectVideo Mouse\n");
-		cvarSystem->SetCVarBool("in_dgamouse", false);
-		dga_found = false;
-	} else {
-		common->Printf("DGA DirectVideo Mouse (Version %d.%d) initialized\n",
-		               dga_MajorVersion, dga_MinorVersion);
-		dga_found = true;
-	}
-
-#else
-	dga_found = false;
-#endif
 }
 
 /*
@@ -367,7 +251,6 @@ int GLX_Init(glimpParms_t a)
 	XVisualInfo *visinfo;
 	XSetWindowAttributes attr;
 	XSizeHints sizehints;
-	unsigned long mask;
 	int colorbits, depthbits, stencilbits;
 	int tcolorbits, tdepthbits, tstencilbits;
 	int actualWidth, actualHeight;
@@ -384,68 +267,6 @@ int GLX_Init(glimpParms_t a)
 
 	actualWidth = glConfig.vidWidth;
 	actualHeight = glConfig.vidHeight;
-
-#if 0
-	// Get video mode list
-	if (!XF86VidModeQueryVersion(dpy, &vidmode_MajorVersion, &vidmode_MinorVersion)) {
-		vidmode_ext = false;
-		common->Printf("XFree86-VidModeExtension not available\n");
-	} else {
-		vidmode_ext = true;
-		common->Printf("Using XFree86-VidModeExtension Version %d.%d\n",
-		               vidmode_MajorVersion, vidmode_MinorVersion);
-	}
-
-	GLX_TestDGA();
-
-	if (vidmode_ext) {
-		int best_fit, best_dist, dist, x, y;
-
-		XF86VidModeGetAllModeLines(dpy, scrnum, &num_vidmodes, &vidmodes);
-
-		// Are we going fullscreen?  If so, let's change video mode
-		if (a.fullScreen) {
-			best_dist = 9999999;
-			best_fit = -1;
-
-			for (i = 0; i < num_vidmodes; i++) {
-				if (a.width > vidmodes[i]->hdisplay ||
-				    a.height > vidmodes[i]->vdisplay)
-					continue;
-
-				x = a.width - vidmodes[i]->hdisplay;
-				y = a.height - vidmodes[i]->vdisplay;
-				dist = (x * x) + (y * y);
-
-				if (dist < best_dist) {
-					best_dist = dist;
-					best_fit = i;
-				}
-			}
-
-			if (best_fit != -1) {
-				actualWidth = vidmodes[best_fit]->hdisplay;
-				actualHeight = vidmodes[best_fit]->vdisplay;
-
-				// change to the mode
-				XF86VidModeSwitchToMode(dpy, scrnum, vidmodes[best_fit]);
-				vidmode_active = true;
-
-				// Move the viewport to top left
-				// FIXME: center?
-				XF86VidModeSetViewPort(dpy, scrnum, 0, 0);
-
-				common->Printf("Free86-VidModeExtension Activated at %dx%d\n", actualWidth, actualHeight);
-
-			} else {
-				a.fullScreen = false;
-				common->Printf("Free86-VidModeExtension: No acceptable modes found\n");
-			}
-		} else {
-			common->Printf("XFree86-VidModeExtension: not fullscreen, ignored\n");
-		}
-	}
-#endif
 
 	// color, depth and stencil
 	colorbits = 24;
@@ -557,29 +378,12 @@ int GLX_Init(glimpParms_t a)
 	attr.colormap = XCreateColormap(dpy, root, visinfo->visual, AllocNone);
 	attr.event_mask = X_MASK;
 
-#if 0
-	if (vidmode_active) {
-		mask = CWBackPixel | CWColormap | CWSaveUnder | CWBackingStore |
-		       CWEventMask | CWOverrideRedirect;
-		attr.override_redirect = True;
-		attr.backing_store = NotUseful;
-		attr.save_under = False;
-	} else
-#endif
-	{
-		mask = CWBackPixel | CWBorderPixel | CWColormap | CWEventMask;
-	}
-
-	/*
 	win = XCreateWindow(dpy, root, 0, 0,
-	                    actualWidth, actualHeight,
-	                    0, tdepthbits, InputOutput,
-	                    ClopyFromParent, mask, &attr);
-			    */
-	win = XCreateWindow(dpy, root, 0, 0,
-	                    actualWidth, actualHeight,
-	                    0, visinfo->depth, InputOutput,
-	                    visinfo->visual, mask, &attr);
+			    actualWidth, actualHeight,
+			    0, visinfo->depth, InputOutput,
+			    visinfo->visual,
+			    CWBackPixel | CWBorderPixel | CWColormap | CWEventMask,
+			    &attr);
 
 	XStoreName(dpy, win, GAME_NAME);
 
@@ -592,21 +396,6 @@ int GLX_Init(glimpParms_t a)
 	XSetWMNormalHints(dpy, win, &sizehints);
 
 	XMapWindow(dpy, win);
-
-#if 0
-	if (vidmode_active) {
-		XMoveWindow(dpy, win, 0, 0);
-	}
-#endif
-
-#if 0
-	XFlush(dpy);
-	XSync(dpy, False);
-	ctx = glXCreateContext(dpy, visinfo, NULL, True);
-	XSync(dpy, False);
-
-	glXMakeCurrent(dpy, win, ctx);
-#endif
 
 	// Free the visinfo after we're done with it
 	XFree(visinfo);

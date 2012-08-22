@@ -29,6 +29,8 @@ If you have questions concerning this license or the applicable additional terms
 #include "../../renderer/tr_local.h"
 #include "local.h"
 
+#include <X11/extensions/xf86vmode.h>
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
