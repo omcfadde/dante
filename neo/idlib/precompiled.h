@@ -97,6 +97,7 @@ If you have questions concerning this license or the applicable additional terms
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <stddef.h>
 #include <string.h>
 #include <assert.h>
 #include <time.h>
