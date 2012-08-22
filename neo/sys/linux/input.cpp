@@ -172,7 +172,10 @@ static void Sys_XInstallGrabs(void)
 
 	mouse_reset_time = Sys_Milliseconds();
 
-	if (in_dgamouse.GetBool() && !dga_found) {
+#if defined( ID_ENABLE_DGA )
+	if (in_dgamouse.GetBool() && !dga_found)
+#endif
+	{
 		common->Printf("XF86DGA not available, forcing DGA mouse off\n");
 		in_dgamouse.SetBool(false);
 	}
