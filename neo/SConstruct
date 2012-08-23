@@ -18,12 +18,6 @@ serialized=['CC', 'CXX', 'JOBS', 'BUILD', 'IDNET_HOST', 'DEDICATED',
 	'BUILD_ROOT', 'BUILD_GAMEPAK', 'BASEFLAGS', 'SILENT', 'TARGET_OPENGL',
 	'TARGET_ANDROID', 'NDK' ]
 
-# global build mode ------------------------------
-
-g_sdk = not os.path.exists( 'sys/scons/SConscript.core' )
-
-# ------------------------------------------------
-
 # help -------------------------------------------
 
 help_string = """
@@ -72,10 +66,7 @@ NOCONF (default 0, not saved)
 	
 SILENT ( default 0, saved )
 	hide the compiler output, unless error
-"""
 
-if ( not g_sdk ):
-	help_string += """
 DEDICATED (default 0)
 	Control regular / dedicated type of build:
 	0 - client
@@ -126,12 +117,6 @@ ID_MCHECK (default 2)
 ALSA (default 1)
 	enable ALSA sound backend support
 	
-SETUP (default 0, not saved)
-    build a setup. implies release build
-
-SDK (default 0, not saved)
-	build an SDK release
-
 NOCURL (default 0)
 	set to 1 to disable usage of libcurl and http/ftp downloads feature
 """
@@ -185,8 +170,6 @@ ID_NOLANADDRESS = '0'
 ID_MCHECK = '2'
 BUILD_ROOT = 'build'
 ALSA = '1'
-SETUP = '0'
-SDK = '0'
 NOCONF = '0'
 NOCURL = '0'
 BUILD_GAMEPAK = '0'
@@ -235,21 +218,6 @@ if ( not ARGUMENTS.has_key( 'NOCONF' ) or ARGUMENTS['NOCONF'] != '1' ):
 	site_file.close()
 
 # end save site configuration ------------------
-
-# configuration rules --------------------------
-
-if ( SETUP != '0' ):
-	DEDICATED	= '2'
-	BUILD		= 'release'
-
-if ( g_sdk or SDK != '0' ):
-	TARGET_CORE = '0'
-	TARGET_GAME = '1'
-	TARGET_D3XP = '1'
-	TARGET_MONO = '0'
-	TARGET_DEMO = '0'
-
-# end configuration rules ----------------------
 
 # general configuration, target selection --------
 
@@ -305,9 +273,6 @@ if ( g_os == 'Linux' ):
 if ( TARGET_ANDROID == '1' ):
 	BASECPPFLAGS.append( '-D__ANDROID__')
 	g_os = 'Android'
-
-if ( g_sdk or SDK != '0' ):
-	BASECPPFLAGS.append( '-D_D3SDK' )
 
 if ( BUILD == 'debug-all' ):
 	OPTCPPFLAGS = [ '-g', '-D_DEBUG' ]
@@ -458,13 +423,7 @@ if ( TARGET_GAME == '1' or TARGET_D3XP == '1' ):
 	local_dedicated = 0
 	local_idlibpic = 1
 	Export( 'GLOBALS ' + GLOBALS )
-	dupe = 0
-	if ( SDK == '1' ):
-		# building an SDK, use scons for dependencies walking
-		# clear the build directory to be safe
-		g_env.PreBuildSDK( [ g_build + '/game', g_build + '/d3xp' ] )
-		dupe = 1
-	VariantDir( g_build + '/game', '.', duplicate = dupe )
+	VariantDir( g_build + '/game', '.', duplicate = 0 )
 	idlib_objects = SConscript( g_build + '/game/sys/scons/SConscript.idlib' )
 	if ( TARGET_GAME == '1' ):
 		local_d3xp = 0
@@ -476,7 +435,7 @@ if ( TARGET_GAME == '1' or TARGET_D3XP == '1' ):
 	if ( TARGET_D3XP == '1' ):
 		# uses idlib as compiled for game/
 		local_d3xp = 1
-		VariantDir( g_build + '/d3xp', '.', duplicate = dupe )
+		VariantDir( g_build + '/d3xp', '.', duplicate = 0 )
 		Export( 'GLOBALS ' + GLOBALS )
 		d3xp = SConscript( g_build + '/d3xp/sys/scons/SConscript.game' )
 		game_d3xp = InstallAs( '#game%s-d3xp.so' % cpu, d3xp )
@@ -522,25 +481,5 @@ if ( TARGET_DEMO == '1' ):
 	game_demo = SConscript( g_build + '/demo/game/sys/scons/SConscript.game' )
 
 	InstallAs( '#game%s-demo.so' % cpu, game_demo )
-
-if ( SETUP != '0' ):
-	brandelf = Program( 'brandelf', 'sys/linux/setup/brandelf.c' )
-	if ( TARGET_CORE == '1' and TARGET_GAME == '1' and TARGET_D3XP == '1' ):
-		setup = Command( 'setup', [ brandelf, doom, doomded, game, d3xp ], Action( g_env.BuildSetup ) )
-	else:
-		print 'Skipping main setup: TARGET_CORE == 0 or TARGET_GAME == 0'
-	if ( TARGET_DEMO == '1' ):
-		setup_demo = Command( 'setup-demo', [ brandelf, doom_demo, game_demo ], Action( g_env.BuildSetup ) )
-		# if building two setups, make sure JOBS doesn't parallelize them
-		try:
-			g_env.Depends( setup_demo, setup )
-		except:
-			pass
-	else:
-		print 'Skipping demo setup ( TARGET_DEMO == 0 )'
-
-if ( SDK != '0' ):
-	setup_sdk = Command( 'sdk', [ ], Action( g_env.BuildSDK ) )
-	g_env.Depends( setup_sdk, [ game, d3xp ] )
 
 # end targets ------------------------------------

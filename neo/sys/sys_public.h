@@ -60,43 +60,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #endif
 
-// Mac OSX
-#if defined(MACOS_X) || defined(__APPLE__)
-
-#define BUILD_STRING				"MacOSX-universal"
-#define BUILD_OS_ID					1
-#ifdef __ppc__
-#define	CPUSTRING					"ppc"
-#elif defined(__i386__)
-#define	CPUSTRING					"x86"
-#endif
-
-#define ALIGN16( x )					x __attribute__ ((aligned (16)))
-
-#ifdef __MWERKS__
-#define PACKED
-#include <alloca.h>
-#else
-#define PACKED							__attribute__((packed))
-#endif
-
-#define _alloca							alloca
-#define _alloca16( x )					((void *)((((intptr_t)alloca( (x)+15 )) + 15) & ~15))
-
-#define PATHSEPERATOR_STR				"/"
-#define PATHSEPERATOR_CHAR				'/'
-
-#define __cdecl
-#define ASSERT							assert
-
-#define ID_INLINE						inline
-#define ID_STATIC_TEMPLATE
-
-#define assertmem( x, y )
-
-#endif
-
-
 // Linux
 #ifdef __linux__
 

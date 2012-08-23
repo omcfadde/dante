@@ -39,7 +39,6 @@ If you have questions concerning this license or the applicable additional terms
 
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// prevent auto literal to string conversion
 
-#ifndef _D3SDK
 #ifndef GAME_DLL
 
 #define WINVER				0x501
@@ -73,7 +72,6 @@ If you have questions concerning this license or the applicable additional terms
 #include <dinput.h>
 
 #endif /* !GAME_DLL */
-#endif /* !_D3SDK */
 
 #pragma warning(disable : 4100)				// unreferenced formal parameter
 #pragma warning(disable : 4244)				// conversion to smaller type, possible loss of data
@@ -177,8 +175,6 @@ const int MAX_EXPRESSION_REGISTERS = 4096;
 
 //-----------------------------------------------------
 
-#ifndef _D3SDK
-
 #ifdef GAME_DLL
 
 #if defined(_D3XP)
@@ -211,8 +207,6 @@ const int MAX_EXPRESSION_REGISTERS = 4096;
 #include "../tools/compilers/compiler_public.h"
 
 #endif /* !GAME_DLL */
-
-#endif /* !_D3SDK */
 
 //-----------------------------------------------------
 
