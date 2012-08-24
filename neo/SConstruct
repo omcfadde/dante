@@ -326,7 +326,7 @@ elif ( BUILD == 'release' ):
 	if ( g_os == 'Android' ):
 		OPTCPPFLAGS = [ '-O3', '-marm', '-march=armv7-a', '-mfpu=neon', '-ffast-math', '-fno-unsafe-math-optimizations', '-fomit-frame-pointer' ]
 	else:
-		OPTCPPFLAGS = [ '-O3', '-march=pentium3', '-ffast-math', '-fno-unsafe-math-optimizations', '-fomit-frame-pointer' ]
+		OPTCPPFLAGS = [ '-O3', '-march=native', '-ffast-math', '-fno-unsafe-math-optimizations', '-fomit-frame-pointer' ]
 	if ( ID_MCHECK == '0' ):
 		ID_MCHECK = '2'
 else:
