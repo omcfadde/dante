@@ -337,10 +337,21 @@ int GLX_Init(glimpParms_t a)
 	int i;
 	const char *glstring;
 
+	common->Printf("Initializing GLX\n");
+
 	if (!GLimp_OpenDisplay()) {
 		return false;
 	}
 
+	glstring = glXQueryExtensionsString( dpy, GLX_VENDOR);
+	common->Printf("GLX_VENDOR: %s\n", (glstring)?glstring:"NULL");
+
+	glstring = glXQueryExtensionsString( dpy, GLX_VERSION);
+	common->Printf("GLX_VERSION: %s\n", (glstring)?glstring:"NULL");
+
+	glstring = glXQueryExtensionsString( dpy, GLX_EXTENSIONS);
+	common->Printf("GLX_EXTENSIONS: %s\n", (glstring)?glstring:"NULL");
+	
 	common->Printf("Initializing OpenGL display\n");
 
 	root = RootWindow(dpy, scrnum);

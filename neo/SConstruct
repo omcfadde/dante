@@ -15,7 +15,7 @@ conf_filename='site.conf'
 serialized=['CC', 'CXX', 'JOBS', 'BUILD', 'IDNET_HOST', 'DEDICATED',
 	'DEBUG_MEMORY', 'LIBC_MALLOC', 'ID_NOLANADDRESS', 'ID_MCHECK', 'ALSA',
 	'TARGET_CORE', 'TARGET_GAME', 'TARGET_D3XP', 'TARGET_MONO', 'TARGET_DEMO', 'NOCURL',
-	'BUILD_ROOT', 'BUILD_GAMEPAK', 'BASEFLAGS', 'SILENT', 'TARGET_OPENGL',
+	'BUILD_ROOT', 'BUILD_GAMEPAK', 'BASEFLAGS', 'SILENT', 'TARGET_OPENGL', 'TARGET_OPENGL_EGL',
 	'TARGET_ANDROID', 'NDK' ]
 
 # help -------------------------------------------
@@ -86,7 +86,13 @@ TARGET_DEMO (default 0)
 TARGET_OPENGL (default 0)
 	Build an OpenGL renderer instead of OpenGL ES2.0.
 	GLSL shaders are compatible.
+	NOTE: This default Contexts to Enable OpenGL. For Linux, This is GLX.
 
+TARGET_OPENGL_EGL (default 0)
+	Build an OpenGL renderer instead of OpenGL ES2.0.
+	GLSL shaders are compatible.
+	NOTE: This use EGL contexts to activate OpenGL.
+	
 TARGET_ANDROID (default 0)
 	Build the Android version.
 
@@ -161,6 +167,7 @@ TARGET_D3XP = '1'
 TARGET_MONO = '0'
 TARGET_DEMO = '0'
 TARGET_OPENGL = '0'
+TARGET_OPENGL_EGL = '0'
 TARGET_ANDROID = '0'
 NDK = ''
 IDNET_HOST = ''
@@ -360,8 +367,9 @@ local_idlibpic = 0
 local_d3xp = 0
 # OpenGL
 local_opengl = 0
+local_opengl_egl = 0
 
-GLOBALS = 'g_env g_env_noopt g_game_env g_os ID_MCHECK ALSA idlib_objects game_objects local_dedicated local_gamedll local_demo local_idlibpic local_curl local_d3xp local_opengl OPTCPPFLAGS NDK'
+GLOBALS = 'g_env g_env_noopt g_game_env g_os ID_MCHECK ALSA idlib_objects game_objects local_dedicated local_gamedll local_demo local_idlibpic local_curl local_d3xp local_opengl local_opengl_egl OPTCPPFLAGS NDK'
 
 # end general configuration ----------------------
 
@@ -380,6 +388,10 @@ if ( TARGET_OPENGL != '0' ):
 	local_opengl = 1
 	Export( 'GLOBALS ' + GLOBALS )
 
+if ( TARGET_OPENGL_EGL != '0' ):
+	local_opengl_egl = local_opengl = 1
+	Export( 'GLOBALS ' + GLOBALS )
+	
 if ( TARGET_ANDROID != '0' ):
 	Export( 'GLOBALS ' + GLOBALS )
 

@@ -74,6 +74,12 @@ bool GLimp_SpawnRenderThread(void (*a)())
 
 void GLimp_ActivateContext()
 {
+#if ID_TARGET_OPENGL
+	assert(eglDisplay);
+	assert(eglSurface);
+	assert(eglContext);
+	eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext);
+#endif
 #if 0
 	assert(dpy);
 	assert(ctx);
@@ -83,6 +89,10 @@ void GLimp_ActivateContext()
 
 void GLimp_DeactivateContext()
 {
+#if ID_TARGET_OPENGL
+	assert(eglDisplay);
+	eglMakeCurrent(eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+#endif
 #if 0
 	assert(dpy);
 	glXMakeCurrent(dpy, None, NULL);
@@ -154,6 +164,15 @@ void GLimp_Shutdown()
 void GLimp_SwapBuffers()
 {
 	assert(eglDisplay && eglSurface);
+
+#ifdef ID_TARGET_OPENGL
+	if (r_swapInterval.IsModified()) {
+		// Allow disabling of Vertical Sync.
+		r_swapInterval.ClearModified();
+		eglSwapInterval(eglDisplay, r_swapInterval.GetInteger());
+	}
+#endif
+
 	eglSwapBuffers(eglDisplay, eglSurface);
 }
 
@@ -220,13 +239,13 @@ bool GLimp_OpenDisplay(void)
 
 /*
 ===============
-GLX_Init
+EGL_Init
 ===============
 */
 	EGLConfig eglConfig;
 	EGLint eglNumConfig;
 
-int GLX_Init(glimpParms_t a)
+int EGL_Init(glimpParms_t a)
 {
 	EGLint attrib[] = {
 		EGL_RED_SIZE, 8,	//  1,  2
@@ -236,7 +255,11 @@ int GLX_Init(glimpParms_t a)
 		EGL_DEPTH_SIZE, 24,	//  9, 10
 		EGL_STENCIL_SIZE, 8,	// 11, 12
 		EGL_BUFFER_SIZE, 24,	// 13, 14
+#ifdef ID_TARGET_OPENGL
+		EGL_RENDERABLE_TYPE, EGL_OPENGL_BIT,	// 15, 16
+#else		
 		EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,	// 15, 16
+#endif
 		EGL_NONE,	// 17
 	};
 	// these match in the array
@@ -247,6 +270,7 @@ int GLX_Init(glimpParms_t a)
 #define ATTR_DEPTH_IDX	9
 #define ATTR_STENCIL_IDX	11
 #define ATTR_BUFFER_SIZE_IDX	13
+#define ATTR_RENDERABLE_TYPE	15
 	Window root;
 	XVisualInfo *visinfo;
 	XSetWindowAttributes attr;
@@ -257,11 +281,25 @@ int GLX_Init(glimpParms_t a)
 	int i;
 	const char *glstring;
 
+	common->Printf("Initializing EGL\n");
 	if (!GLimp_OpenDisplay()) {
 		return false;
 	}
 
-	common->Printf("Initializing OpenGL display\n");
+	glstring = (const char *) eglQueryString(eglDisplay,EGL_VENDOR);
+	common->Printf("EGL_VENDOR: %s\n", (glstring)?glstring:"NULL");
+
+	glstring = (const char *) eglQueryString(eglDisplay,EGL_VERSION);
+	common->Printf("EGL_VERSION: %s\n", (glstring)?glstring:"NULL");
+
+	glstring = (const char *) eglQueryString(eglDisplay,EGL_CLIENT_APIS);
+	common->Printf("EGL_CLIENT_APIS: %s\n", (glstring)?glstring:"NULL");
+	
+	glstring = (const char *) eglQueryString(eglDisplay,EGL_EXTENSIONS);
+	common->Printf("EGL_EXTENSIONS: %s\n", (glstring)?glstring:"NULL");
+
+	glstring = (attrib[ATTR_RENDERABLE_TYPE]==EGL_OPENGL_ES2_BIT)?"OpenGL ES": "OpenGL";
+	common->Printf("Initializing %s display\n",glstring);
 
 	root = RootWindow(dpy, scrnum);
 
@@ -269,9 +307,14 @@ int GLX_Init(glimpParms_t a)
 	actualHeight = glConfig.vidHeight;
 
 	// color, depth and stencil
+
 	colorbits = 24;
 	depthbits = 24;
 	stencilbits = 8;
+
+#ifdef ID_TARGET_OPENGL
+	colorbits = 32;
+#endif
 
 	for (i = 0; i < 16; i++) {
 		// 0 - default
@@ -367,7 +410,7 @@ int GLX_Init(glimpParms_t a)
 	}
 
 	visinfo = malloc(sizeof(XVisualInfo));
-	if (!(XMatchVisualInfo(dpy, scrnum, glConfig.depthBits, TrueColor, visinfo))) {
+	if (!(XMatchVisualInfo(dpy, scrnum, glConfig.depthBits, TrueColor, (XVisualInfo*)visinfo))) {
 		common->Printf("Couldn't get a visual\n");
 		return false;
 	}
@@ -407,10 +450,23 @@ int GLX_Init(glimpParms_t a)
 	}
 
 	EGLint ctxattrib[] = {
+#ifndef ID_TARGET_OPENGL
 		EGL_CONTEXT_CLIENT_VERSION, 2,
+#endif
 		EGL_NONE
 	};
 
+
+#ifdef ID_TARGET_OPENGL
+	// Not all EGL Implementations will bind the current API to OpenGL
+	// automatically. Simply calling eglChooseConfig with EGL_RENDERABLE_TYPE
+	// set to EGL_OPENGL_BIT.
+	if(!eglBindAPI(EGL_OPENGL_API))
+	{
+		common->Printf("Couldn't Bind OpenGL API\n");
+		return false;		
+	}
+#endif
 	eglContext = eglCreateContext(eglDisplay, eglConfig, EGL_NO_CONTEXT, ctxattrib);
 	if (eglContext == EGL_NO_CONTEXT) {
 		common->Printf("Couldn't get a EGL context\n");
@@ -419,11 +475,37 @@ int GLX_Init(glimpParms_t a)
 
 	eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext);
 
+	EGLint Context_RendererType;
+	     
+	eglQueryContext(eglDisplay, eglContext,EGL_CONTEXT_CLIENT_TYPE,&Context_RendererType);
+
+	switch (Context_RendererType)
+	{
+		case EGL_OPENGL_API:
+			glstring = "OpenGL";
+			break;
+		case EGL_OPENGL_ES_API:
+			glstring = "OpenGL ES";
+			break;
+		case EGL_OPENVG_API:
+			common->Printf("Context Query Returned OpenVG. This is Unsupported\n");
+			return false;
+		default:
+			common->Printf("Unknown Context Type. %04X\n",Context_RendererType);
+			return false;
+	}
+	common->Printf("EGL_CONTEXT_CLIENT_TYPE: %s\n", glstring);
 	glstring = (const char *) glGetString(GL_RENDERER);
 	common->Printf("GL_RENDERER: %s\n", glstring);
 
 	glstring = (const char *) glGetString(GL_EXTENSIONS);
 	common->Printf("GL_EXTENSIONS: %s\n", glstring);
+
+
+#ifdef ID_TARGET_OPENGL
+	// force Update of Vertical Sync setting on next frame
+	r_swapInterval.SetModified();
+#endif
 
 	// FIXME: here, software GL test
 
@@ -458,7 +540,7 @@ bool GLimp_Init(glimpParms_t a)
 		return false;
 	}
 
-	if (!GLX_Init(a)) {
+	if (!EGL_Init(a)) {
 		return false;
 	}
 
