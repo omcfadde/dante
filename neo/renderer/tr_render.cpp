@@ -361,10 +361,19 @@ RB_LoadShaderTextureMatrix
 void RB_LoadShaderTextureMatrix(const float *shaderRegisters, const textureStage_t *texture)
 {
 	float	matrix[16];
+	float	tmp[16];
+	int i, j;
 
 	if (texture->hasMatrix) {
 		RB_GetShaderTextureMatrix(shaderRegisters, texture, matrix);
-		GL_UniformMatrix4fv(offsetof(shaderProgram_t, textureMatrix), matrix);
+
+		for (i = 0; i < 4; i++) {
+			for (j = 0; j < 4; j++) {
+				tmp[i * 4 + j] = matrix[j * 4 + i];
+			}
+		}
+
+		GL_UniformMatrix4fv(offsetof(shaderProgram_t, textureMatrix), tmp);
 	} else {
 		GL_UniformMatrix4fv(offsetof(shaderProgram_t, textureMatrix), mat4_identity.ToFloatPtr());
 	}
