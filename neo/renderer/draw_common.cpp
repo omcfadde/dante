@@ -35,42 +35,42 @@ If you have questions concerning this license or the applicable additional terms
 RB_BakeTextureMatrixIntoTexgen
 =====================
 */
-void RB_BakeTextureMatrixIntoTexgen(idPlane lightProject[3], const float *textureMatrix)
+void RB_BakeTextureMatrixIntoTexgen(idPlane lightProject[3])
 {
 	float	genMatrix[16];
 	float	final[16];
 
 	genMatrix[0] = lightProject[0][0];
-	genMatrix[4] = lightProject[0][1];
-	genMatrix[8] = lightProject[0][2];
-	genMatrix[12] = lightProject[0][3];
+	genMatrix[1] = lightProject[0][1];
+	genMatrix[2] = lightProject[0][2];
+	genMatrix[3] = lightProject[0][3];
 
-	genMatrix[1] = lightProject[1][0];
+	genMatrix[4] = lightProject[1][0];
 	genMatrix[5] = lightProject[1][1];
-	genMatrix[9] = lightProject[1][2];
-	genMatrix[13] = lightProject[1][3];
+	genMatrix[6] = lightProject[1][2];
+	genMatrix[7] = lightProject[1][3];
 
-	genMatrix[2] = 0;
-	genMatrix[6] = 0;
+	genMatrix[8] = 0;
+	genMatrix[9] = 0;
 	genMatrix[10] = 0;
-	genMatrix[14] = 0;
+	genMatrix[11] = 0;
 
-	genMatrix[3] = lightProject[2][0];
-	genMatrix[7] = lightProject[2][1];
-	genMatrix[11] = lightProject[2][2];
+	genMatrix[12] = lightProject[2][0];
+	genMatrix[13] = lightProject[2][1];
+	genMatrix[14] = lightProject[2][2];
 	genMatrix[15] = lightProject[2][3];
 
 	myGlMultMatrix(genMatrix, backEnd.lightTextureMatrix, final);
 
 	lightProject[0][0] = final[0];
-	lightProject[0][1] = final[4];
-	lightProject[0][2] = final[8];
-	lightProject[0][3] = final[12];
+	lightProject[0][1] = final[1];
+	lightProject[0][2] = final[2];
+	lightProject[0][3] = final[3];
 
-	lightProject[1][0] = final[1];
+	lightProject[1][0] = final[4];
 	lightProject[1][1] = final[5];
-	lightProject[1][2] = final[9];
-	lightProject[1][3] = final[13];
+	lightProject[1][2] = final[6];
+	lightProject[1][3] = final[7];
 }
 
 /*

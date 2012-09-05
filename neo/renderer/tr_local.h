@@ -1284,7 +1284,7 @@ void RB_FinishStageTexture(const textureStage_t *texture, const drawSurf_t *surf
 void RB_StencilShadowPass(const drawSurf_t *drawSurfs);
 void RB_STD_DrawView(void);
 void RB_STD_FogAllLights(void);
-void RB_BakeTextureMatrixIntoTexgen(idPlane lightProject[3], const float textureMatrix[16]);
+void RB_BakeTextureMatrixIntoTexgen(idPlane lightProject[3]);
 
 /*
 ============================================================

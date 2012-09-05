@@ -323,33 +323,33 @@ void RB_GetShaderTextureMatrix(const float *shaderRegisters,
                                const textureStage_t *texture, float matrix[16])
 {
 	matrix[0] = shaderRegisters[ texture->matrix[0][0] ];
-	matrix[4] = shaderRegisters[ texture->matrix[0][1] ];
-	matrix[8] = 0;
-	matrix[12] = shaderRegisters[ texture->matrix[0][2] ];
+	matrix[1] = shaderRegisters[ texture->matrix[0][1] ];
+	matrix[2] = 0;
+	matrix[3] = shaderRegisters[ texture->matrix[0][2] ];
 
 	// we attempt to keep scrolls from generating incredibly large texture values, but
 	// center rotations and center scales can still generate offsets that need to be > 1
-	if (matrix[12] < -40 || matrix[12] > 40) {
-		matrix[12] -= (int)matrix[12];
+	if (matrix[3] < -40 || matrix[3] > 40) {
+		matrix[3] -= (int)matrix[3];
 	}
 
-	matrix[1] = shaderRegisters[ texture->matrix[1][0] ];
+	matrix[4] = shaderRegisters[ texture->matrix[1][0] ];
 	matrix[5] = shaderRegisters[ texture->matrix[1][1] ];
-	matrix[9] = 0;
-	matrix[13] = shaderRegisters[ texture->matrix[1][2] ];
+	matrix[6] = 0;
+	matrix[7] = shaderRegisters[ texture->matrix[1][2] ];
 
-	if (matrix[13] < -40 || matrix[13] > 40) {
-		matrix[13] -= (int)matrix[13];
+	if (matrix[7] < -40 || matrix[7] > 40) {
+		matrix[7] -= (int)matrix[7];
 	}
 
-	matrix[2] = 0;
-	matrix[6] = 0;
+	matrix[8] = 0;
+	matrix[9] = 0;
 	matrix[10] = 1;
-	matrix[14] = 0;
-
-	matrix[3] = 0;
-	matrix[7] = 0;
 	matrix[11] = 0;
+
+	matrix[12] = 0;
+	matrix[13] = 0;
+	matrix[14] = 0;
 	matrix[15] = 1;
 }
 
@@ -361,12 +361,10 @@ RB_LoadShaderTextureMatrix
 void RB_LoadShaderTextureMatrix(const float *shaderRegisters, const textureStage_t *texture)
 {
 	float	matrix[16];
-	float	tmp[16];
 
 	if (texture->hasMatrix) {
 		RB_GetShaderTextureMatrix(shaderRegisters, texture, matrix);
-		R_TransposeGLMatrix(matrix, tmp);
-		GL_UniformMatrix4fv(offsetof(shaderProgram_t, textureMatrix), tmp);
+		GL_UniformMatrix4fv(offsetof(shaderProgram_t, textureMatrix), matrix);
 	} else {
 		GL_UniformMatrix4fv(offsetof(shaderProgram_t, textureMatrix), mat4_identity.ToFloatPtr());
 	}
@@ -738,7 +736,7 @@ void RB_CreateSingleDrawInteractions(const drawSurf_t *surf, void (*DrawInteract
 		// now multiply the texgen by the light texture matrix
 		if (lightStage->texture.hasMatrix) {
 			RB_GetShaderTextureMatrix(lightRegs, &lightStage->texture, backEnd.lightTextureMatrix);
-			RB_BakeTextureMatrixIntoTexgen(reinterpret_cast<class idPlane *>(inter.lightProjection), backEnd.lightTextureMatrix);
+			RB_BakeTextureMatrixIntoTexgen(reinterpret_cast<class idPlane *>(inter.lightProjection));
 		}
 
 		inter.bumpImage = NULL;
