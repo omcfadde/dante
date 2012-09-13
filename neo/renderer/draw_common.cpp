@@ -466,8 +466,6 @@ void RB_T_FillDepthBuffer(const drawSurf_t *surf)
 			RB_FinishStageTexturing(pStage, surf, ac);
 		}
 
-		GL_Uniform1fv(offsetof(shaderProgram_t, alphaTest), one);
-
 		if (!didDraw) {
 			drawSolid = true;
 		}
