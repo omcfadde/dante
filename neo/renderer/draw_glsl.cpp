@@ -450,6 +450,11 @@ static bool R_ValidateGLSLProgram(shaderProgram_t *shaderProgram)
 
 static void RB_GLSL_GetUniformLocations(shaderProgram_t *shader)
 {
+	int	i;
+	char	buffer[32];
+
+	GL_UseProgram(shader);
+
 	shader->localLightOrigin = glGetUniformLocation(shader->program, "u_lightOrigin");
 	shader->localViewOrigin = glGetUniformLocation(shader->program, "u_viewOrigin");
 	shader->lightProjectionS = glGetUniformLocation(shader->program, "u_lightProjectionS");
@@ -475,13 +480,6 @@ static void RB_GLSL_GetUniformLocations(shaderProgram_t *shader)
 	shader->nonPowerOfTwo = glGetUniformLocation(shader->program, "u_nonPowerOfTwo");
 	shader->windowCoords = glGetUniformLocation(shader->program, "u_windowCoords");
 
-	shader->u_bumpTexture = glGetUniformLocation(shader->program, "u_bumpTexture");
-	shader->u_lightFalloffTexture = glGetUniformLocation(shader->program, "u_lightFalloffTexture");
-	shader->u_lightProjectionTexture = glGetUniformLocation(shader->program, "u_lightProjectionTexture");
-	shader->u_diffuseTexture = glGetUniformLocation(shader->program, "u_diffuseTexture");
-	shader->u_specularTexture = glGetUniformLocation(shader->program, "u_specularTexture");
-	shader->u_specularFalloffTexture = glGetUniformLocation(shader->program, "u_specularFalloffTexture");
-
 	shader->modelViewProjectionMatrix = glGetUniformLocation(shader->program, "u_modelViewProjectionMatrix");
 
 	shader->modelMatrix = glGetUniformLocation(shader->program, "u_modelMatrix");
@@ -494,14 +492,19 @@ static void RB_GLSL_GetUniformLocations(shaderProgram_t *shader)
 	shader->attr_Vertex = glGetAttribLocation(shader->program, "attr_Vertex");
 	shader->attr_Color = glGetAttribLocation(shader->program, "attr_Color");
 
-	// set texture locations
-	GL_UseProgram(shader);
-	glUniform1i(shader->u_bumpTexture, 0);
-	glUniform1i(shader->u_lightFalloffTexture, 1);
-	glUniform1i(shader->u_lightProjectionTexture, 2);
-	glUniform1i(shader->u_diffuseTexture, 3);
-	glUniform1i(shader->u_specularTexture, 4);
-	glUniform1i(shader->u_specularFalloffTexture, 5);
+	for (i = 0; i < MAX_VERTEX_PARMS; i++) {
+		idStr::snPrintf(buffer, sizeof(buffer), "u_vertexParm%d", i);
+		shader->u_vertexParm[i] = glGetAttribLocation(shader->program, buffer);
+	}
+
+	for (i = 0; i < MAX_FRAGMENT_IMAGES; i++) {
+		idStr::snPrintf(buffer, sizeof(buffer), "u_fragmentMap%d", i);
+		shader->u_fragmentMap[i] = glGetUniformLocation(shader->program, buffer);
+		glUniform1i(shader->u_fragmentMap[i], i);
+	}
+
+	GL_CheckErrors();
+
 	GL_UseProgram(NULL);
 }
 
