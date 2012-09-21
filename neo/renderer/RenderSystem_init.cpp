@@ -67,6 +67,7 @@ idCVar r_znear("r_znear", "3", CVAR_RENDERER | CVAR_FLOAT, "near Z clip plane di
 
 idCVar r_ignoreGLErrors("r_ignoreGLErrors", "1", CVAR_RENDERER | CVAR_BOOL, "ignore GL errors");
 idCVar r_finish("r_finish", "0", CVAR_RENDERER | CVAR_BOOL, "force a call to glFinish() every frame");
+idCVar r_swapInterval("r_swapInterval", "0", CVAR_RENDERER | CVAR_ARCHIVE | CVAR_INTEGER, "changes swap interval");
 
 idCVar r_gamma("r_gamma", "1", CVAR_RENDERER | CVAR_ARCHIVE | CVAR_FLOAT, "changes gamma tables", 0.5f, 3.0f);
 idCVar r_brightness("r_brightness", "1", CVAR_RENDERER | CVAR_ARCHIVE | CVAR_FLOAT, "changes gamma tables", 0.5f, 2.0f);
@@ -1712,6 +1713,13 @@ static void GfxInfo_f(const idCmdArgs &args)
 	} else {
 		common->Printf("glFinish not forced\n");
 	}
+
+	if (r_swapInterval.GetInteger() > -1) {
+		common->Printf("Forcing swapInterval %i\n", r_swapInterval.GetInteger());
+	} else {
+		common->Printf("swapInterval not forced\n");
+	}
+
 }
 
 /*

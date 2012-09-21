@@ -419,6 +419,13 @@ int GLX_Init(glimpParms_t a)
 
 	eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext);
 
+	if (cvarSystem->GetCVarInteger("r_swapInterval") > -1) {
+		if (eglSwapInterval(eglDisplay, 0) != EGL_TRUE) {
+			common->Printf("Couldn't set EGL swap interval\n");
+			return false;
+		}
+	}
+
 	glstring = (const char *) glGetString(GL_RENDERER);
 	common->Printf("GL_RENDERER: %s\n", glstring);
 
