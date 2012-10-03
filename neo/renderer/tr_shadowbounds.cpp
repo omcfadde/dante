@@ -615,6 +615,7 @@ idScreenRect R_CalcIntersectionScissor(const idRenderLightLocal *lightDef,
 	float y = viewDef->viewport.y1;
 
 	idScreenRect rect;
+	rect.Clear();
 	rect.x1 = outbounds[0].x * w2 + w2 + x;
 	rect.x2 = outbounds[1].x * w2 + w2 + x;
 	rect.y1 = outbounds[0].y * h2 + h2 + y;
