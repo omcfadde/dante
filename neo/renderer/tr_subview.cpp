@@ -500,6 +500,7 @@ bool	R_GenerateSurfaceSubview(drawSurf_t *drawSurf)
 	idScreenRect	scissor;
 
 	idScreenRect	*v = &tr.viewDef->viewport;
+	scissor.Clear();
 	scissor.x1 = v->x1 + (int)((v->x2 - v->x1 + 1) * 0.5f * (ndcBounds[0][0] + 1.0f));
 	scissor.y1 = v->y1 + (int)((v->y2 - v->y1 + 1) * 0.5f * (ndcBounds[0][1] + 1.0f));
 	scissor.x2 = v->x1 + (int)((v->x2 - v->x1 + 1) * 0.5f * (ndcBounds[1][0] + 1.0f));
