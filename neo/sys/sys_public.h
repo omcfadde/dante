@@ -38,28 +38,6 @@ If you have questions concerning this license or the applicable additional terms
 */
 
 
-// Win32
-#if defined(WIN32) || defined(_WIN32)
-
-#define	BUILD_STRING					"win-x86"
-#define BUILD_OS_ID						0
-#define	CPUSTRING						"x86"
-
-#define ALIGN16( x )					__declspec(align(16)) x
-#define PACKED
-
-#define _alloca16( x )					((void *)((((intptr_t)_alloca( (x)+15 )) + 15) & ~15))
-
-#define PATHSEPERATOR_STR				"\\"
-#define PATHSEPERATOR_CHAR				'\\'
-
-#define ID_INLINE						__forceinline
-#define ID_STATIC_TEMPLATE				static
-
-#define assertmem( x, y )				assert( _CrtIsValidPointer( x, y, true ) )
-
-#endif
-
 // Linux
 #ifdef __linux__
 
@@ -97,7 +75,6 @@ If you have questions concerning this license or the applicable additional terms
 #endif
 
 #define _alloca							alloca
-#define _alloca16( x )					((void *)((((intptr_t)alloca( (x)+15 )) + 15) & ~15))
 
 #define ALIGN16( x )					x
 #define PACKED							__attribute__((packed))
@@ -120,6 +97,11 @@ If you have questions concerning this license or the applicable additional terms
 #else
 #define id_attribute(x)
 #endif
+
+ID_INLINE void *_alloca16(size_t size)
+{
+	return ((void *)((((intptr_t)alloca((size)+15)) + 15) & ~15));
+}
 
 typedef enum {
 	CPUID_NONE							= 0x00000,
