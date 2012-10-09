@@ -2874,6 +2874,7 @@ idWindow::AddTransition
 void idWindow::AddTransition(idWinVar *dest, idVec4 from, idVec4 to, int time, float accelTime, float decelTime)
 {
 	idTransitionData data;
+	memset(&data, 0, sizeof(idTransitionData));
 	data.data = dest;
 	data.interp.Init(gui->GetTime(), accelTime * time, decelTime * time, time, from, to);
 	transitions.Append(data);
