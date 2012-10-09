@@ -50,6 +50,7 @@ class idListWindow : public idWindow
 	public:
 		idListWindow(idUserInterfaceLocal *gui);
 		idListWindow(idDeviceContext *d, idUserInterfaceLocal *gui);
+		virtual ~idListWindow();
 
 		virtual const char	*HandleEvent(const sysEvent_t *event, bool *updateVisuals);
 		virtual void		PostParse();
