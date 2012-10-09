@@ -439,6 +439,7 @@ idGameBustOutWindow::idGameBustOutWindow(idUserInterfaceLocal *g) : idWindow(g)
 
 idGameBustOutWindow::~idGameBustOutWindow()
 {
+	delete paddle;
 	entities.DeleteContents(true);
 
 	Mem_Free(levelBoardData);
