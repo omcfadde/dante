@@ -2594,12 +2594,12 @@ bool idWindow::Parse(idParser *src, bool rebuild)
 #endif
 			namedEvents.Append(ev);
 		} else if (token == "onTime") {
-			idTimeLineEvent *ev = new idTimeLineEvent;
-
 			if (!src->ReadToken(&token)) {
 				src->Error("Unexpected end of file");
 				return false;
 			}
+
+			idTimeLineEvent *ev = new idTimeLineEvent;
 
 			ev->time = atoi(token.c_str());
 
