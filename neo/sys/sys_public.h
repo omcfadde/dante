@@ -75,6 +75,7 @@ If you have questions concerning this license or the applicable additional terms
 #endif
 
 #define _alloca							alloca
+#define _alloca16( x )					((void *)((((intptr_t)alloca( (x)+15 )) + 15) & ~15))
 
 #define ALIGN16( x )					x
 #define PACKED							__attribute__((packed))
@@ -97,11 +98,6 @@ If you have questions concerning this license or the applicable additional terms
 #else
 #define id_attribute(x)
 #endif
-
-ID_INLINE void *_alloca16(size_t size)
-{
-	return ((void *)((((intptr_t)alloca((size)+15)) + 15) & ~15));
-}
 
 typedef enum {
 	CPUID_NONE							= 0x00000,
