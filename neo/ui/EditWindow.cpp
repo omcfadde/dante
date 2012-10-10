@@ -140,7 +140,7 @@ idEditWindow::idEditWindow(idUserInterfaceLocal *g) : idWindow(g)
 
 idEditWindow::~idEditWindow()
 {
-	delete scroller;
+
 }
 
 void idEditWindow::GainFocus()

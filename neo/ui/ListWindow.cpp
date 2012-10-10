@@ -72,11 +72,6 @@ idListWindow::idListWindow(idUserInterfaceLocal *g) : idWindow(g)
 	CommonInit();
 }
 
-idListWindow::~idListWindow()
-{
-	delete scroller;
-}
-
 void idListWindow::SetCurrentSel(int sel)
 {
 	currentSel.Clear();
