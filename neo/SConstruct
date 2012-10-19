@@ -180,6 +180,8 @@ SILENT = '0'
 
 # site settings ----------------------------------
 
+printed_config = False
+
 def getKeyValue(k, v):
 	return k + '=\'' + v + '\''
 
@@ -190,11 +192,12 @@ if ( not ARGUMENTS.has_key( 'NOCONF' ) or ARGUMENTS['NOCONF'] != '1' ):
 		p = pickle.Unpickler(site_file)
 		site_dict = p.load()
 		print 'Loading build configuration from ' + conf_filename + ':'
+		printed_config = True
 		for k, v in site_dict.items():
 			print '  ' + getKeyValue(k, v)
 			globals()[k] = v
 else:
-	print 'Site settings ignored'
+	print 'Site settings ignored - using default'
 
 # end site settings ------------------------------
 
