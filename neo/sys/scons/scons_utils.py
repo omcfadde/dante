@@ -116,7 +116,7 @@ def checkLDD( target, source, env ):
 	file = target[0]
 	if (not os.path.isfile(file.abspath)):
 		print('ERROR: CheckLDD: target %s not found\n' % target[0])
-		Exit(1)
+		sys.exit(1)
 	( status, output ) = commands.getstatusoutput( 'ldd -r %s' % file )
 #	if ( status != 0 ):
 #		print 'ERROR: ldd command returned with exit code %d' % status
