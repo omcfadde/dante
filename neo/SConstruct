@@ -180,6 +180,9 @@ SILENT = '0'
 
 # site settings ----------------------------------
 
+def getKeyValue(k, v):
+	return k + '=\'' + v + '\''
+
 if ( not ARGUMENTS.has_key( 'NOCONF' ) or ARGUMENTS['NOCONF'] != '1' ):
 	site_dict = {}
 	if (os.path.exists(conf_filename)):
