@@ -191,8 +191,7 @@ if ( not ARGUMENTS.has_key( 'NOCONF' ) or ARGUMENTS['NOCONF'] != '1' ):
 		site_dict = p.load()
 		print 'Loading build configuration from ' + conf_filename + ':'
 		for k, v in site_dict.items():
-			exec_cmd = k + '=\'' + v + '\''
-			print '  ' + exec_cmd
+			print '  ' + getKeyValue(k, v)
 			globals()[k] = v
 else:
 	print 'Site settings ignored'
@@ -203,8 +202,7 @@ else:
 
 for k in ARGUMENTS.keys():
 	value = ARGUMENTS[k]
-	exec_cmd = k + '=\'' + ARGUMENTS[k] + '\''
-	print 'Command line: ' + exec_cmd
+	print 'Command line: ' + getKeyValue(k, value);
 	globals()[k] = value
 
 # end command line settings ----------------------
