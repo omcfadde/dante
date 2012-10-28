@@ -180,6 +180,11 @@ SILENT = '0'
 
 # site settings ----------------------------------
 
+printed_config = False
+
+def getKeyValue(k, v):
+	return k + '=\'' + v + '\''
+
 if ( not ARGUMENTS.has_key( 'NOCONF' ) or ARGUMENTS['NOCONF'] != '1' ):
 	site_dict = {}
 	if (os.path.exists(conf_filename)):
@@ -187,21 +192,21 @@ if ( not ARGUMENTS.has_key( 'NOCONF' ) or ARGUMENTS['NOCONF'] != '1' ):
 		p = pickle.Unpickler(site_file)
 		site_dict = p.load()
 		print 'Loading build configuration from ' + conf_filename + ':'
+		printed_config = True
 		for k, v in site_dict.items():
-			exec_cmd = k + '=\'' + v + '\''
-			print '  ' + exec_cmd
-			exec(exec_cmd)
+			print '  ' + getKeyValue(k, v)
+			globals()[k] = v
 else:
-	print 'Site settings ignored'
+	print 'Site settings ignored - using default'
 
 # end site settings ------------------------------
 
 # command line settings --------------------------
 
 for k in ARGUMENTS.keys():
-	exec_cmd = k + '=\'' + ARGUMENTS[k] + '\''
-	print 'Command line: ' + exec_cmd
-	exec( exec_cmd )
+	value = ARGUMENTS[k]
+	print 'Command line: ' + getKeyValue(k, value);
+	globals()[k] = value
 
 # end command line settings ----------------------
 
@@ -209,8 +214,7 @@ for k in ARGUMENTS.keys():
 
 if ( not ARGUMENTS.has_key( 'NOCONF' ) or ARGUMENTS['NOCONF'] != '1' ):
 	for k in serialized:
-		exec_cmd = 'site_dict[\'' + k + '\'] = ' + k
-		exec(exec_cmd)
+		site_dict[k] = globals()[k]
 
 	site_file = open(conf_filename, 'w')
 	p = pickle.Pickler(site_file)

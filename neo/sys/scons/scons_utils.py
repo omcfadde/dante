@@ -116,7 +116,7 @@ def checkLDD( target, source, env ):
 	file = target[0]
 	if (not os.path.isfile(file.abspath)):
 		print('ERROR: CheckLDD: target %s not found\n' % target[0])
-		Exit(1)
+		sys.exit(1)
 	( status, output ) = commands.getstatusoutput( 'ldd -r %s' % file )
 #	if ( status != 0 ):
 #		print 'ERROR: ldd command returned with exit code %d' % status
@@ -178,7 +178,12 @@ def SetupUtils( env ):
 	env.SharedLibrarySafe = SharedLibrarySafe
 
 def BuildList( s_prefix, s_string ):
-	s_list = string.split( s_string )
+	try:
+		s_list = string.split( s_string )
+	except:
+		# Assume already list
+		s_list = s_string
+
 	for i in range( len( s_list ) ):
 		s_list[ i ] = s_prefix + '/' + s_list[ i ]
 	return s_list
