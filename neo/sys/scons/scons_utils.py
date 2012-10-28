@@ -178,7 +178,12 @@ def SetupUtils( env ):
 	env.SharedLibrarySafe = SharedLibrarySafe
 
 def BuildList( s_prefix, s_string ):
-	s_list = string.split( s_string )
+	try:
+		s_list = string.split( s_string )
+	except:
+		# Assume already list
+		s_list = s_string
+
 	for i in range( len( s_list ) ):
 		s_list[ i ] = s_prefix + '/' + s_list[ i ]
 	return s_list
