@@ -30,6 +30,10 @@ If you have questions concerning this license or the applicable additional terms
 
 #include "codec.h"
 
+#ifndef HUGE
+#define HUGE HUGE_VAL
+#endif //!HUGE
+
 float glimit(const float val)
 {
 	if (val<0) return 0;
